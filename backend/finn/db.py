@@ -2,10 +2,12 @@
 
 from __future__ import annotations
 
+import json
 import sqlite3
 from datetime import date, datetime
 from pathlib import Path
 
+from finn.ingest.xbrl import QuarterFinancials
 from finn.models import IST, Classification, Filing, PriceBar
 
 _SCHEMA = """
@@ -56,6 +58,18 @@ CREATE TABLE IF NOT EXISTS llm_calls (
     output_tokens INTEGER,
     latency_ms INTEGER,
     usd_list_price REAL
+);
+CREATE TABLE IF NOT EXISTS financials (
+    symbol TEXT NOT NULL,
+    period_end TEXT NOT NULL,
+    basis TEXT NOT NULL,
+    format TEXT NOT NULL,
+    period_start TEXT NOT NULL,
+    audited INTEGER,
+    filed_at TEXT NOT NULL,
+    xbrl_url TEXT NOT NULL,
+    facts_json TEXT NOT NULL,
+    PRIMARY KEY (symbol, period_end, basis)
 );
 """
 
@@ -236,3 +250,68 @@ def get_filing(
 ) -> tuple[Filing, Classification | None] | None:
     row = conn.execute("SELECT * FROM filings WHERE seq_id=?", (seq_id,)).fetchone()
     return (_filing(row), _classification(row)) if row else None
+
+
+def upsert_financials(
+    conn: sqlite3.Connection, q: QuarterFinancials, filed_at: datetime, xbrl_url: str
+) -> None:
+    conn.execute(
+        """INSERT OR REPLACE INTO financials
+           (symbol, period_end, basis, format, period_start, audited, filed_at,
+            xbrl_url, facts_json)
+           VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)""",
+        (
+            q.symbol,
+            q.period_end.isoformat(),
+            q.basis,
+            q.format,
+            q.period_start.isoformat(),
+            None if q.audited is None else int(q.audited),
+            _ts(filed_at),
+            xbrl_url,
+            json.dumps(q.facts),
+        ),
+    )
+    conn.commit()
+
+
+def get_financials(
+    conn: sqlite3.Connection, symbol: str, period_end: date, basis: str
+) -> tuple[QuarterFinancials, datetime, str] | None:
+    r = conn.execute(
+        "SELECT * FROM financials WHERE symbol = ? AND period_end = ? AND basis = ?",
+        (symbol, period_end.isoformat(), basis),
+    ).fetchone()
+    if r is None:
+        return None
+    q = QuarterFinancials(
+        symbol=r["symbol"],
+        period_start=date.fromisoformat(r["period_start"]),
+        period_end=date.fromisoformat(r["period_end"]),
+        basis=r["basis"],
+        format=r["format"],
+        audited=None if r["audited"] is None else bool(r["audited"]),
+        facts=json.loads(r["facts_json"]),
+    )
+    return q, datetime.fromisoformat(r["filed_at"]), r["xbrl_url"]
+
+
+def stored_financials_urls(conn: sqlite3.Connection, symbol: str) -> set[str]:
+    rows = conn.execute("SELECT xbrl_url FROM financials WHERE symbol = ?", (symbol,))
+    return {r["xbrl_url"] for r in rows}
+
+
+def latest_financials(conn: sqlite3.Connection, symbol: str) -> tuple[date, str, datetime] | None:
+    """(period_end, basis, filed_at) of the newest period; consolidated preferred."""
+    r = conn.execute(
+        """SELECT period_end, basis, filed_at FROM financials WHERE symbol = ?
+           ORDER BY period_end DESC, basis = 'consolidated' DESC LIMIT 1""",
+        (symbol,),
+    ).fetchone()
+    if r is None:
+        return None
+    return (
+        date.fromisoformat(r["period_end"]),
+        r["basis"],
+        datetime.fromisoformat(r["filed_at"]),
+    )

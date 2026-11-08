@@ -1,15 +1,30 @@
-"""Results card math: QoQ/YoY, margins and lender metrics from XBRL facts. No I/O."""
+"""Results cards: QoQ/YoY math from XBRL facts, plus the refresh-time ingest stage."""
 
 from __future__ import annotations
 
 import calendar
+import logging
 import math
+import sqlite3
+import time
 from collections.abc import Callable
-from dataclasses import dataclass
-from datetime import date
+from dataclasses import dataclass, field
+from datetime import date, datetime
 
-from finn.ingest.xbrl import QuarterFinancials, XbrlFormat
+from finn import db
+from finn.ingest.nse import NSEClient
+from finn.ingest.xbrl import (
+    FinancialsFiling,
+    QuarterFinancials,
+    XbrlError,
+    XbrlFormat,
+    parse_filing_list,
+    parse_xbrl,
+)
 from finn.models import MarginRow, MetricRow, ResultsCard
+
+log = logging.getLogger(__name__)
+_sleep = time.sleep  # tests patch this
 
 CRORE = 1e7
 
@@ -271,3 +286,86 @@ def _notes(
             label = quarter_label(quarter_end_shift(cur.period_end, shift))
             notes.append(f"No {name} comparison: {label} figures not on file.")
     return notes
+
+
+@dataclass
+class FinancialsResult:
+    fetched: int = 0
+    skipped: int = 0
+    failed: dict[str, str] = field(default_factory=dict)
+
+
+def _ingest_symbol(
+    conn: sqlite3.Connection, client: NSEClient, symbol: str, res: FinancialsResult
+) -> None:
+    filings = parse_filing_list(client.fetch_integrated_financials(symbol))
+    if not filings:
+        res.failed[symbol] = "no financials filings"
+        return
+    newest = filings[0].period_end
+    basis = (
+        "consolidated"
+        if any(f.period_end == newest and f.basis == "consolidated" for f in filings)
+        else "standalone"
+    )
+    by_period: dict[date, FinancialsFiling] = {f.period_end: f for f in filings if f.basis == basis}
+    stored = db.stored_financials_urls(conn, symbol)
+    errors: list[str] = []
+    for target in (newest, quarter_end_shift(newest, -1), quarter_end_shift(newest, -4)):
+        filing = by_period.get(target)
+        if filing is None:
+            continue
+        if filing.xbrl_url in stored:
+            res.skipped += 1
+            continue
+        try:
+            q = parse_xbrl(client.fetch_bytes(filing.xbrl_url), format_hint=filing.format)
+        except XbrlError as e:
+            errors.append(f"{target}: {type(e).__name__}: {e}")
+            continue
+        # NSE's listing is authoritative for the basis of the filing.
+        q = q.model_copy(update={"basis": filing.basis})
+        db.upsert_financials(conn, q, filing.filed_at, filing.xbrl_url)
+        res.fetched += 1
+    if errors:
+        res.failed[symbol] = "; ".join(errors)
+
+
+def ingest_financials(
+    conn: sqlite3.Connection,
+    client: NSEClient,
+    symbols: list[str],
+    pause_s: float = 0.5,
+) -> FinancialsResult:
+    res = FinancialsResult()
+    for i, symbol in enumerate(symbols):
+        if i:
+            _sleep(pause_s)
+        try:
+            _ingest_symbol(conn, client, symbol, res)
+        except Exception as e:  # noqa: BLE001 - one bad symbol must not stop the stage
+            log.warning("financials ingest failed for %s: %s", symbol, e)
+            res.failed[symbol] = f"{type(e).__name__}: {e}"
+    return res
+
+
+def card_for(
+    conn: sqlite3.Connection, symbol: str, period_end: date | None = None
+) -> tuple[ResultsCard, datetime] | None:
+    if period_end is None:
+        latest = db.latest_financials(conn, symbol)
+        if latest is None:
+            return None
+        period_end, basis, _ = latest
+    else:
+        basis = "consolidated"
+        if db.get_financials(conn, symbol, period_end, basis) is None:
+            basis = "standalone"
+    cur = db.get_financials(conn, symbol, period_end, basis)
+    if cur is None:
+        return None
+    prev = db.get_financials(conn, symbol, quarter_end_shift(period_end, -1), basis)
+    year_ago = db.get_financials(conn, symbol, quarter_end_shift(period_end, -4), basis)
+    sources = [x[2] for x in (cur, prev, year_ago) if x is not None]
+    card = build_card(cur[0], prev[0] if prev else None, year_ago[0] if year_ago else None, sources)
+    return card, cur[1]
