@@ -76,7 +76,7 @@ screener.in ───────┘      │                └─ /research/{t
 | Task | Tier | Provider/model class | Why |
 |---|---|---|---|
 | Filing classification | 0 | Deterministic rules on NSE `desc` + subject keywords | Covers most volume at zero cost |
-| Ambiguous classification + one-liners | 1 | Groq small Llama, batched ~20 filings/call, JSON mode | Fast, free, high daily limits |
+| Ambiguous classification + one-liners | 1 | Groq `openai/gpt-oss-120b`, reasoning effort medium, batched 20 filings/call, JSON mode | Fast, free; 91.3% vs 85.6% for gpt-oss-20b on the eval, ~$0.001/batch at list price (EVALS.md) |
 | Results-PDF number extraction | 2 | Gemini Flash (native PDF; handles scanned filings) | Needs vision/PDF; structured JSON |
 | Transcript guidance extraction (per transcript) | 2 | Gemini Flash-Lite/Flash, chunked by section | Bulk extraction |
 | Ledger judgment, narrative vs numbers, bull/bear | 3 | Gemini Pro-class (or Flash with thinking) | Only place real reasoning is needed; once per company, cached |
@@ -86,6 +86,7 @@ screener.in ───────┘      │                └─ /research/{t
 - **Caching**: content-hash cache for every downloaded doc and every LLM call (`sha256(model + prompt + doc_hash)`), so re-running costs ₹0. Dossiers are cached per (ticker, doc-set hash).
 - **Cost ledger**: every LLM call logs tokens/model/latency. The UI shows "this dossier: N calls, ~₹X, Ys", and README reports the totals — a direct answer to the efficiency criterion.
 - **Rate-limit aware**: token-bucket per provider and backoff on 429. Demo-set dossiers are precomputed so the live demo never burns quota.
+- **Model IDs are checked against each provider's list-models endpoint, never typed from memory** (2026-11-09). That check found Groq had retired its Llama models, so classification moved to gpt-oss-120b. It also found that `gemini-3.8-flash` is listed and priced, but on the free tier only 1 of 7 calls succeeded that day; the rest were 503s or 45-second hangs. `gemini-3.5-flash-lite` answered 5 of 5 in about 1.5 s. Plan 2 therefore gives each Gemini task a fallback chain, so a hang on the primary model moves to the fallback within one short timeout. Plan 2 also picks the primary model from the results-extraction eval, not from the version number.
 
 ### Materiality score (deterministic, explainable)
 `score = category_base × subtype_modifier × user_subscription_boost (+ price-reaction bump)`.
