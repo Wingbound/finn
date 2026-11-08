@@ -142,7 +142,7 @@ def main(argv: list[str] | None = None) -> int:
     if not getattr(settings, key_attr):
         print(f"{key_name} is empty; set it or run with --no-llm")
         return 2
-    conn = db.connect(settings.db_path)  # reuses the LLM response cache across runs
+    conn = db.connect(settings.llm_cache_path)  # LLM cache reused across runs; not serving DB
     try:
         db.init_db(conn)
         router = LLMRouter(conn, settings)

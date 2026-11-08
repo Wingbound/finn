@@ -1,4 +1,5 @@
 import json
+import logging
 import sqlite3
 from datetime import date, datetime, timedelta
 from pathlib import Path
@@ -9,11 +10,11 @@ from fastapi.testclient import TestClient
 from finn import db
 from finn.api import main as api_main
 from finn.api.deps import get_conn, get_now
-from finn.api.main import SEED_PATH, app, copy_seed_if_missing
+from finn.api.main import app, copy_seed_if_empty
 from finn.classify.rules import classify_rules
 from finn.config import Settings
 from finn.ingest.nse import parse_announcement
-from finn.models import IST, PriceBar
+from finn.models import IST, Filing, PriceBar
 from finn.portfolio import load_portfolio
 
 FIX = Path(__file__).parent / "fixtures" / "nse"
@@ -182,41 +183,86 @@ def test_alerts_reject_out_of_range_rules(client):
     assert client.post("/alerts", json=bad).status_code == 422
 
 
+def _store(path: Path, filings: int = 0) -> None:
+    c = db.connect(path)
+    db.init_db(c)
+    db.upsert_filings(c, [
+        Filing(seq_id=str(i), symbol="TRENT", company="Trent", nse_desc="d", subject="s",
+               filed_at=NOW)
+        for i in range(filings)
+    ])
+    c.close()
+
+
+def _filing_count(path: Path) -> int:
+    c = sqlite3.connect(path)
+    try:
+        return c.execute("SELECT COUNT(*) FROM filings").fetchone()[0]
+    finally:
+        c.close()
+
+
 def test_seed_copied_when_db_missing(tmp_path):
     seed = tmp_path / "seed.sqlite"
     seed.write_bytes(b"seed-bytes")
     target = tmp_path / "data" / "nested" / "finn.sqlite"
-    assert copy_seed_if_missing(target, seed) is True
+    assert copy_seed_if_empty(target, seed) is True
     assert target.read_bytes() == b"seed-bytes"
 
 
-def test_seed_never_overwrites_existing_db(tmp_path):
+def test_seed_copied_over_empty_initialised_db(tmp_path):
+    # scripts that open the serving DB leave exactly this behind: tables, no filings
+    seed = tmp_path / "seed.sqlite"
+    _store(seed, filings=3)
+    target = tmp_path / "finn.sqlite"
+    _store(target)
+    assert copy_seed_if_empty(target, seed) is True
+    assert _filing_count(target) == 3
+    assert not (tmp_path / "finn.sqlite-wal").exists()
+
+
+def test_seed_never_overwrites_populated_db(tmp_path):
+    seed = tmp_path / "seed.sqlite"
+    _store(seed, filings=3)
+    target = tmp_path / "finn.sqlite"
+    _store(target, filings=1)
+    assert copy_seed_if_empty(target, seed) is False
+    assert _filing_count(target) == 1
+
+
+def test_seed_never_overwrites_unreadable_db(tmp_path):
     seed = tmp_path / "seed.sqlite"
     seed.write_bytes(b"seed-bytes")
     target = tmp_path / "finn.sqlite"
     target.write_bytes(b"live-data")
-    assert copy_seed_if_missing(target, seed) is False
+    assert copy_seed_if_empty(target, seed) is False
     assert target.read_bytes() == b"live-data"
 
 
-def test_no_seed_no_copy(tmp_path):
+def test_missing_seed_logs_warning(tmp_path, caplog):
     target = tmp_path / "finn.sqlite"
-    assert copy_seed_if_missing(target, tmp_path / "absent.sqlite") is False
+    with caplog.at_level(logging.WARNING, logger="finn.api.main"):
+        assert copy_seed_if_empty(target, tmp_path / "absent.sqlite") is False
     assert not target.exists()
+    assert "absent.sqlite" in caplog.text
 
 
 def test_startup_copies_seed_to_settings_db_path(tmp_path, monkeypatch):
     seed = tmp_path / "seed.sqlite"
     seed.write_bytes(b"seed-bytes")
     target = tmp_path / "data" / "finn.sqlite"
-    monkeypatch.setattr(api_main, "SEED_PATH", seed)
     monkeypatch.setattr(
-        api_main, "get_settings", lambda: Settings(_env_file=None, db_path=target)
+        api_main, "get_settings",
+        lambda: Settings(_env_file=None, db_path=target, seed_path=seed),
     )
     with TestClient(app):
         pass
     assert target.read_bytes() == b"seed-bytes"
 
 
-def test_committed_seed_path_points_at_backend_seed():
-    assert SEED_PATH == Path(__file__).resolve().parent.parent / "seed" / "finn.sqlite"
+def test_seed_path_defaults_to_committed_seed_and_reads_env(monkeypatch):
+    monkeypatch.delenv("SEED_PATH", raising=False)
+    committed = Path(__file__).resolve().parent.parent / "seed" / "finn.sqlite"
+    assert Settings(_env_file=None).seed_path == committed
+    monkeypatch.setenv("SEED_PATH", "/srv/finn/seed.sqlite")
+    assert Settings(_env_file=None).seed_path == Path("/srv/finn/seed.sqlite")

@@ -23,6 +23,8 @@ class Settings(BaseSettings):
     finn_model_bio: str = "gemini-3.8-flash"
     data_dir: Path = Path("data")
     db_path: Path | None = None
+    # Committed snapshot the API copies into an empty store on startup (env SEED_PATH).
+    seed_path: Path = Path(__file__).resolve().parents[1] / "seed" / "finn.sqlite"
     allowed_origins: list[str] = ["*"]
 
     @model_validator(mode="after")
@@ -30,6 +32,11 @@ class Settings(BaseSettings):
         if self.db_path is None:
             self.db_path = self.data_dir / "finn.sqlite"
         return self
+
+    @property
+    def llm_cache_path(self) -> Path:
+        """Scratch store for scripts that call the LLM directly; never the serving DB."""
+        return self.data_dir / "llm_cache.sqlite"
 
 
 # Weekend dates on which NSE ran a full trading session, e.g. a Saturday Union Budget day.

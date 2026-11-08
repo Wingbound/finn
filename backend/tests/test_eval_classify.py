@@ -144,7 +144,8 @@ def test_cli_llm_mode_without_key_exits_with_hint(monkeypatch, capsys):
 
 @respx.mock
 def test_cli_llm_mode_classifies_rule_misses(tmp_path, monkeypatch, capsys):
-    settings = Settings(_env_file=None, groq_api_key="k", db_path=tmp_path / "eval.sqlite")
+    serving = tmp_path / "finn.sqlite"
+    settings = Settings(_env_file=None, groq_api_key="k", data_dir=tmp_path, db_path=serving)
     monkeypatch.setattr(ev, "get_settings", lambda: settings)
 
     def groq(req):
@@ -156,3 +157,5 @@ def test_cli_llm_mode_classifies_rule_misses(tmp_path, monkeypatch, capsys):
     assert ev.main([]) == 0
     out = capsys.readouterr().out
     assert "Rules + LLM (groq/" in out and "LLM calls this run" in out
+    assert not serving.exists()  # the LLM cache lives in its own DB, never the serving one
+    assert settings.llm_cache_path.exists()

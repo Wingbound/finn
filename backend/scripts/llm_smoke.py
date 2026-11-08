@@ -7,7 +7,7 @@ from finn.config import get_settings
 from finn.llm import LLMRouter
 
 settings = get_settings()
-conn = db.connect(settings.db_path)
+conn = db.connect(settings.llm_cache_path)  # never the serving DB
 db.init_db(conn)
 router = LLMRouter(conn, settings)
 for task in ("classify", "extract_pdf"):  # groq, gemini
