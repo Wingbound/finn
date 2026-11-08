@@ -79,9 +79,9 @@ def test_non_json_content_type_is_failure():
 def test_failing_symbol_keeps_the_others_and_holds_as_of(conn, reliance):
     respx.get("https://www.nseindia.com/").respond(403)
     api = respx.get(nse.API_URL).mock(
-        side_effect=lambda req: forbidden()
-        if req.url.params["symbol"] == "TRENT"
-        else json_response(reliance)
+        side_effect=lambda req: (
+            forbidden() if req.url.params["symbol"] == "TRENT" else json_response(reliance)
+        )
     )
     result = ingest_filings(conn, NSEClient(), ["TRENT", "RELIANCE"], START, END)
     assert list(result.failed) == ["TRENT"]

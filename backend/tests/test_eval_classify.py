@@ -17,8 +17,15 @@ ROW_KEYS = {"seq_id", "nse_desc", "subject", "summary", "category", "subtype", "
 
 
 def _gold(seq_id, category, noise=False, subject="subject text"):
-    return {"seq_id": seq_id, "nse_desc": "d", "subject": subject, "summary": None,
-            "category": category, "subtype": None, "noise": noise}
+    return {
+        "seq_id": seq_id,
+        "nse_desc": "d",
+        "subject": subject,
+        "summary": None,
+        "category": category,
+        "subtype": None,
+        "noise": noise,
+    }
 
 
 def _pred(category, noise=False, by="rules"):
@@ -26,16 +33,24 @@ def _pred(category, noise=False, by="rules"):
 
 
 def _filing(seq_id, desc, subject):
-    return Filing(seq_id=seq_id, symbol="X", company="X", nse_desc=desc, subject=subject,
-                  filed_at=datetime(2026, 11, 1, 10, 0, tzinfo=IST))
+    return Filing(
+        seq_id=seq_id,
+        symbol="X",
+        company="X",
+        nse_desc=desc,
+        subject=subject,
+        filed_at=datetime(2026, 11, 1, 10, 0, tzinfo=IST),
+    )
 
 
 # --- gold set integrity ---------------------------------------------------------------
 
+
 def test_gold_set_shape_and_stratification():
     gold = ev.load_gold()
-    fixture = {str(r["seq_id"]): r for r in json.loads((FIX / "nse" / "portfolio_month.json")
-                                                         .read_text())}
+    fixture = {
+        str(r["seq_id"]): r for r in json.loads((FIX / "nse" / "portfolio_month.json").read_text())
+    }
     assert len(gold) >= 80
     assert len({g["seq_id"] for g in gold}) == len(gold)
     for g in gold:
@@ -50,6 +65,7 @@ def test_gold_set_shape_and_stratification():
 
 # --- metrics ----------------------------------------------------------------------------
 
+
 def test_noise_rows_match_on_noise_flag_only():
     assert ev.is_match(_gold("1", "unclassified", noise=True), _pred("unclassified", noise=True))
     assert ev.is_match(_gold("1", "unclassified", noise=True), _pred("results", noise=True))
@@ -63,10 +79,10 @@ def test_other_rows_match_on_category():
 
 def test_evaluate_counts():
     gold = [
-        _gold("1", "results"),                      # material, hit
-        _gold("2", "mna"),                          # material, miss
-        _gold("3", "investor_meetings"),            # not material, hit
-        _gold("4", "unclassified", noise=True),     # noise, hit
+        _gold("1", "results"),  # material, hit
+        _gold("2", "mna"),  # material, miss
+        _gold("3", "investor_meetings"),  # not material, hit
+        _gold("4", "unclassified", noise=True),  # noise, hit
         _gold("5", "insider_trading", subject="x" * 100),  # base 50: material, miss
     ]
     preds = {
@@ -83,8 +99,12 @@ def test_evaluate_counts():
     assert r["rules_coverage"] == 0.6
     assert r["misses"] == [
         {"seq_id": "2", "gold": "mna", "predicted": "unclassified", "subject": "subject text"},
-        {"seq_id": "5", "gold": "insider_trading", "predicted": "press_release",
-         "subject": "x" * 80},
+        {
+            "seq_id": "5",
+            "gold": "insider_trading",
+            "predicted": "press_release",
+            "subject": "x" * 80,
+        },
     ]
 
 
@@ -96,10 +116,10 @@ def test_rules_precision_and_default_matches():
         _gold("4", "unclassified"),
     ]
     preds = {
-        "1": _pred("results"),                        # rule hit, right
-        "2": _pred("press_release"),                  # rule hit, wrong
-        "3": _pred("unclassified", by="default"),     # rule miss, default happens to match
-        "4": _pred("unclassified"),                   # rule hit, right
+        "1": _pred("results"),  # rule hit, right
+        "2": _pred("press_release"),  # rule hit, wrong
+        "3": _pred("unclassified", by="default"),  # rule miss, default happens to match
+        "4": _pred("unclassified"),  # rule hit, right
     }
     r = ev.evaluate(gold, preds, rule_hits={"1", "2", "4"})
     assert (r["rules_correct"], r["rules_hits"]) == (2, 3)
@@ -115,11 +135,13 @@ def test_miss_labels_show_noise():
     preds = {"1": _pred("unclassified"), "2": _pred("unclassified", noise=True)}
     misses = ev.evaluate(gold, preds, rule_hits=set())["misses"]
     assert [(m["gold"], m["predicted"]) for m in misses] == [
-        ("noise", "unclassified"), ("results", "noise")
+        ("noise", "unclassified"),
+        ("results", "noise"),
     ]
 
 
 # --- prediction -------------------------------------------------------------------------
+
 
 def test_predict_rules_only_defaults_the_misses():
     hit = _filing("1", "Copy of Newspaper Publication", "Newspaper ad")
@@ -150,6 +172,7 @@ def test_predict_sends_only_rule_misses_to_llm(conn):
 
 
 # --- CLI --------------------------------------------------------------------------------
+
 
 def test_cli_rules_only_prints_table(capsys):
     assert ev.main(["--no-llm"]) == 0

@@ -45,7 +45,13 @@ def test_batches_of_20():
     assert len(out) == 45
     c = out["0"]
     # capex has no scoring subtypes, so the free-form "new_plant" is dropped
-    assert (c.category, c.subtype, c.by, c.confidence, c.noise) == ("capex", None, "llm", 0.7, False)
+    assert (c.category, c.subtype, c.by, c.confidence, c.noise) == (
+        "capex",
+        None,
+        "llm",
+        0.7,
+        False,
+    )
     assert r.calls[0][0] == "classify"
 
 
@@ -227,7 +233,11 @@ def test_prompt_says_results_with_figures_is_not_an_intimation():
 def test_default_classification_helper():
     c = default_classification()
     assert (c.category, c.subtype, c.noise, c.by, c.confidence) == (
-        "unclassified", None, False, "default", 0.0
+        "unclassified",
+        None,
+        False,
+        "default",
+        0.0,
     )
 
 

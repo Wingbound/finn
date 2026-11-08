@@ -53,7 +53,10 @@ def refresh(conn: sqlite3.Connection, days: int = 30, use_llm: bool = True) -> d
         client = NSEClient()
         try:
             ingest = ingest_filings(
-                conn, client, [h.symbol for h in holdings], (now - timedelta(days=days)).date(),
+                conn,
+                client,
+                [h.symbol for h in holdings],
+                (now - timedelta(days=days)).date(),
                 now.date(),
             )
         finally:

@@ -62,9 +62,7 @@ def tier_for(score: int) -> Tier:
 
 def score_filing(f: Filing, cls: Classification, subscribed: set[Category]) -> ScoredFiling:
     if cls.noise:
-        return ScoredFiling(
-            filing=f, cls=cls, score=0, tier="noise", reasons=["routine paperwork"]
-        )
+        return ScoredFiling(filing=f, cls=cls, score=0, tier="noise", reasons=["routine paperwork"])
 
     base = BASE_SCORES[cls.category]
     reasons = [f"{_label(cls.category)} filing ({base})"]

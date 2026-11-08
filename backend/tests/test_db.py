@@ -69,8 +69,12 @@ def test_naive_datetime_rejected():
 
 
 def test_price_history_ascending_and_limited(conn):
-    bars = [PriceBar(symbol="TRENT", date=date(2026, 11, d), open=1, high=2, low=1, close=1.5, volume=100 + d)
-            for d in range(1, 8)]
+    bars = [
+        PriceBar(
+            symbol="TRENT", date=date(2026, 11, d), open=1, high=2, low=1, close=1.5, volume=100 + d
+        )
+        for d in range(1, 8)
+    ]
     assert db.upsert_prices(conn, bars) == 7
     assert db.upsert_prices(conn, bars) == 0
     hist = db.price_history(conn, "TRENT", limit=3)
@@ -90,8 +94,14 @@ def test_llm_tables_exist(conn):
 
 
 def test_get_filing(conn):
-    f = Filing(seq_id="g1", symbol="TCS", company="TCS", nse_desc="d", subject="s",
-               filed_at=datetime(2026, 11, 1, 10, 0, tzinfo=IST))
+    f = Filing(
+        seq_id="g1",
+        symbol="TCS",
+        company="TCS",
+        nse_desc="d",
+        subject="s",
+        filed_at=datetime(2026, 11, 1, 10, 0, tzinfo=IST),
+    )
     db.upsert_filings(conn, [f])
     got, cls = db.get_filing(conn, "g1")
     assert got == f and cls is None

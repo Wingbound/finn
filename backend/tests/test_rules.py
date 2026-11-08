@@ -28,81 +28,190 @@ def _filing(desc: str, subject: str, summary: str | None = None) -> Filing:
 
 # (nse_desc, subject, category, subtype, noise)
 TABLE = [
-    ("Outcome of Board Meeting",
-     ("In continuation of our letter dated October 27, 2026, we wish to inform you that the "
-     "Board of Directors of the Company, at its meeting held today, has, inter alia:1. approved "
-     "the unaudited Financial Results (Consolidated and Standalone) for the quarter and half "
-     "year ended September 30, 2026"),
-     "results", "results", False),
-    ("Analysts/Institutional Investor Meet/Con. Call Updates",
-     ("Transcript of the discussion on the Unaudited Financial Results (Consolidated and "
-     "Standalone) of the Company for the quarter and half year ended September 30, 2026"),
-     "earnings_call", "transcript", False),
-    ("Analysts/Institutional Investor Meet/Con. Call Updates",
-     "Audio recording of the discussion on the Unaudited Financial Results of the Company",
-     "earnings_call", "audio", False),
-    ("Analysts/Institutional Investor Meet/Con. Call Updates",
-     ("The meeting of the Board of Directors of the Company is scheduled on October 30, 2026, "
-     "inter alia, to consider and approve a. the standalone and consolidated unaudited "
-     "financial results of the Company for the quarter and half year ended September 30, 2026"),
-     "results", "intimation", False),
-    ("Copy of Newspaper Publication",
-     "Mahindra & Mahindra Limited has informed the Exchange about Copy of Newspaper Publication",
-     "unclassified", None, True),
-    ("Appointment",
-     "X has informed the Exchange regarding Appointment of Mr A as Chief Financial Officer",
-     "management_change", "cxo", False),
-    ("Appointment",
-     ("Trent Limited has informed the Exchange regarding Appointment of Mrs Kalpana Merchant "
-     "as Non- Executive Independent Director of the company"),
-     "management_change", "independent", False),
-    ("Appointment",
-     ("Trent Limited has informed the Exchange regarding Appointment of Mr Rajiv Dube as "
-     "Non- Executive Director of the company w.e.f. October 30, 2026."),
-     "management_change", "independent", False),
-    ("Retirement",
-     "Trent Limited has informed the Exchange about Retirement of Mr. Noel N Tata as the Chairman",
-     "management_change", "cxo", False),
-    ("Resignation of Director/KMP/SMP",
-     "Trent Limited has informed the Exchange about Resignation of Director/KMP/SMP",
-     "management_change", "director", False),
-    ("Cessation",
-     ("Mahindra & Mahindra Limited has informed the Exchange regarding Cessation of Ms. Shuchi "
-     "Suri as Senior Management Personnel"),
-     "management_change", "director", False),
-    ("Resignation of Statutory Auditor",
-     "X has informed the Exchange about Resignation of Statutory Auditor",
-     "litigation", "auditor_resignation", False),
-    ("Acquisition",
-     "Mahindra & Mahindra Limited has informed the Exchange about Acquisition",
-     "mna", "acquisition", False),
-    ("Sale or disposal",
-     "Mahindra & Mahindra Limited has informed the Exchange about Sale or disposal",
-     "mna", "divestment", False),
-    ("Credit Rating",
-     "X has informed the Exchange about Credit Rating", "credit_rating", None, False),
-    ("Credit Rating",
-     "CRISIL has upgraded the long-term rating of the Company", "credit_rating", "upgrade", False),
-    ("Investor Presentation",
-     "Reliance Industries Limited has informed the Exchange about Investor Presentation",
-     "results", "presentation", False),
-    ("Allotment of Securities",
-     "Allotment of equity shares pursuant to exercise of employee stock options",
-     "unclassified", "esop", False),
-    ("Allotment of Securities",
-     "Allotment of equity shares on conversion of warrants", "fund_raise", "allotment", False),
-    ("General Updates",
-     ("Mahindra & Mahindra Limited has informed the Exchange Production, Sales and Export "
-     "figures of the Company for October 2026"),
-     "press_release", "business_update", False),
-    ("Monthly Business Updates",
-     ("Mahindra & Mahindra Limited has informed the Exchange regarding Monthly Business "
-     "Updates for the month of October 2026"),
-     "press_release", "business_update", False),
-    ("Analysts/Institutional Investor Meet/Con. Call Updates",
-     ("Mahindra & Mahindra Limited has informed the Exchange about Participation in Investor "
-     "Meeting"),
-     "investor_meetings", None, False),
+    (
+        "Outcome of Board Meeting",
+        (
+            "In continuation of our letter dated October 27, 2026, we wish to inform you that the "
+            "Board of Directors of the Company, at its meeting held today, has, inter alia:1. approved "
+            "the unaudited Financial Results (Consolidated and Standalone) for the quarter and half "
+            "year ended September 30, 2026"
+        ),
+        "results",
+        "results",
+        False,
+    ),
+    (
+        "Analysts/Institutional Investor Meet/Con. Call Updates",
+        (
+            "Transcript of the discussion on the Unaudited Financial Results (Consolidated and "
+            "Standalone) of the Company for the quarter and half year ended September 30, 2026"
+        ),
+        "earnings_call",
+        "transcript",
+        False,
+    ),
+    (
+        "Analysts/Institutional Investor Meet/Con. Call Updates",
+        "Audio recording of the discussion on the Unaudited Financial Results of the Company",
+        "earnings_call",
+        "audio",
+        False,
+    ),
+    (
+        "Analysts/Institutional Investor Meet/Con. Call Updates",
+        (
+            "The meeting of the Board of Directors of the Company is scheduled on October 30, 2026, "
+            "inter alia, to consider and approve a. the standalone and consolidated unaudited "
+            "financial results of the Company for the quarter and half year ended September 30, 2026"
+        ),
+        "results",
+        "intimation",
+        False,
+    ),
+    (
+        "Copy of Newspaper Publication",
+        "Mahindra & Mahindra Limited has informed the Exchange about Copy of Newspaper Publication",
+        "unclassified",
+        None,
+        True,
+    ),
+    (
+        "Appointment",
+        "X has informed the Exchange regarding Appointment of Mr A as Chief Financial Officer",
+        "management_change",
+        "cxo",
+        False,
+    ),
+    (
+        "Appointment",
+        (
+            "Trent Limited has informed the Exchange regarding Appointment of Mrs Kalpana Merchant "
+            "as Non- Executive Independent Director of the company"
+        ),
+        "management_change",
+        "independent",
+        False,
+    ),
+    (
+        "Appointment",
+        (
+            "Trent Limited has informed the Exchange regarding Appointment of Mr Rajiv Dube as "
+            "Non- Executive Director of the company w.e.f. October 30, 2026."
+        ),
+        "management_change",
+        "independent",
+        False,
+    ),
+    (
+        "Retirement",
+        "Trent Limited has informed the Exchange about Retirement of Mr. Noel N Tata as the Chairman",
+        "management_change",
+        "cxo",
+        False,
+    ),
+    (
+        "Resignation of Director/KMP/SMP",
+        "Trent Limited has informed the Exchange about Resignation of Director/KMP/SMP",
+        "management_change",
+        "director",
+        False,
+    ),
+    (
+        "Cessation",
+        (
+            "Mahindra & Mahindra Limited has informed the Exchange regarding Cessation of Ms. Shuchi "
+            "Suri as Senior Management Personnel"
+        ),
+        "management_change",
+        "director",
+        False,
+    ),
+    (
+        "Resignation of Statutory Auditor",
+        "X has informed the Exchange about Resignation of Statutory Auditor",
+        "litigation",
+        "auditor_resignation",
+        False,
+    ),
+    (
+        "Acquisition",
+        "Mahindra & Mahindra Limited has informed the Exchange about Acquisition",
+        "mna",
+        "acquisition",
+        False,
+    ),
+    (
+        "Sale or disposal",
+        "Mahindra & Mahindra Limited has informed the Exchange about Sale or disposal",
+        "mna",
+        "divestment",
+        False,
+    ),
+    (
+        "Credit Rating",
+        "X has informed the Exchange about Credit Rating",
+        "credit_rating",
+        None,
+        False,
+    ),
+    (
+        "Credit Rating",
+        "CRISIL has upgraded the long-term rating of the Company",
+        "credit_rating",
+        "upgrade",
+        False,
+    ),
+    (
+        "Investor Presentation",
+        "Reliance Industries Limited has informed the Exchange about Investor Presentation",
+        "results",
+        "presentation",
+        False,
+    ),
+    (
+        "Allotment of Securities",
+        "Allotment of equity shares pursuant to exercise of employee stock options",
+        "unclassified",
+        "esop",
+        False,
+    ),
+    (
+        "Allotment of Securities",
+        "Allotment of equity shares on conversion of warrants",
+        "fund_raise",
+        "allotment",
+        False,
+    ),
+    (
+        "General Updates",
+        (
+            "Mahindra & Mahindra Limited has informed the Exchange Production, Sales and Export "
+            "figures of the Company for October 2026"
+        ),
+        "press_release",
+        "business_update",
+        False,
+    ),
+    (
+        "Monthly Business Updates",
+        (
+            "Mahindra & Mahindra Limited has informed the Exchange regarding Monthly Business "
+            "Updates for the month of October 2026"
+        ),
+        "press_release",
+        "business_update",
+        False,
+    ),
+    (
+        "Analysts/Institutional Investor Meet/Con. Call Updates",
+        (
+            "Mahindra & Mahindra Limited has informed the Exchange about Participation in Investor "
+            "Meeting"
+        ),
+        "investor_meetings",
+        None,
+        False,
+    ),
     ("General Updates", "Board approves rights issue of equity shares", "fund_raise", None, False),
     ("Trading Window", "Closure of trading window", "unclassified", None, True),
 ]
@@ -119,8 +228,11 @@ def test_rules_table(desc, subject, category, subtype, noise):
 
 def test_summary_carries_signal():
     got = classify_rules(
-        _filing("General Updates", "X has informed the Exchange about General Updates",
-                "The company announced the appointment of a new CFO.")
+        _filing(
+            "General Updates",
+            "X has informed the Exchange about General Updates",
+            "The company announced the appointment of a new CFO.",
+        )
     )
     assert got is not None and got.category == "management_change"
 
@@ -160,14 +272,21 @@ def test_rules_coverage():
 
 
 def test_order_win_requires_win_context():
-    won = _filing("Press Release", 'press release titled "X Secures New Orders Worth Rs 4,001 Crore"')
+    won = _filing(
+        "Press Release", 'press release titled "X Secures New Orders Worth Rs 4,001 Crore"'
+    )
     assert classify_rules(won).subtype == "order_win"
-    stay = _filing("General Updates", "High Court stayed the direction; stay granted via an order dated 6th")
+    stay = _filing(
+        "General Updates", "High Court stayed the direction; stay granted via an order dated 6th"
+    )
     assert classify_rules(stay) is None
 
 
 def test_auditor_appointment_is_not_management_change():
-    f = _filing("General Updates", "Appointment of Statutory Auditors Pursuant to Mandatory Auditor Rotation")
+    f = _filing(
+        "General Updates",
+        "Appointment of Statutory Auditors Pursuant to Mandatory Auditor Rotation",
+    )
     assert classify_rules(f) is None
 
 
@@ -183,7 +302,9 @@ def test_partnership_positive_from_fixtures():
 
 
 def test_partnership_does_not_overmatch():
-    settle = _filing("General Updates", "Company entered into a settlement agreement with the lender")
+    settle = _filing(
+        "General Updates", "Company entered into a settlement agreement with the lender"
+    )
     assert classify_rules(settle) is None
     bare = _filing("General Updates", "Our partner hospitals reported higher occupancy")
     assert classify_rules(bare) is None

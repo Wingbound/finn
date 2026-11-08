@@ -10,7 +10,9 @@ from finn.portfolio import Holding
 
 
 def _bar(d: date, vol: int = 5_000_000, close: float = 100.0, symbol: str = "TCS") -> PriceBar:
-    return PriceBar(symbol=symbol, date=d, open=close, high=close, low=close, close=close, volume=vol)
+    return PriceBar(
+        symbol=symbol, date=d, open=close, high=close, low=close, close=close, volume=vol
+    )
 
 
 def _weekday_bars(n: int, end: date, vol: int = 5_000_000, symbol: str = "TCS") -> list[PriceBar]:
@@ -64,7 +66,9 @@ def test_inprogress_bar_dropped():
 
 def test_fetch_eod_maps_frame_to_bars(monkeypatch):
     idx = pd.to_datetime(["2026-11-05", "2026-11-06", "2026-11-07"])
-    cols = pd.MultiIndex.from_product([["TCS.NS", "M&M.NS"], ["Open", "High", "Low", "Close", "Volume"]])
+    cols = pd.MultiIndex.from_product(
+        [["TCS.NS", "M&M.NS"], ["Open", "High", "Low", "Close", "Volume"]]
+    )
     nan = float("nan")
     rows = [
         [1, 2, 0.5, 1.5, 100, 10, 12, 9, 11, 50],

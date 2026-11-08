@@ -88,8 +88,17 @@ def upsert_filings(conn: sqlite3.Connection, filings: list[Filing]) -> int:
         "INSERT OR IGNORE INTO filings (seq_id, symbol, company, nse_desc, subject, nse_summary,"
         " pdf_url, filed_at, has_xbrl) VALUES (?,?,?,?,?,?,?,?,?)",
         [
-            (f.seq_id, f.symbol, f.company, f.nse_desc, f.subject, f.nse_summary, f.pdf_url,
-             _ts(f.filed_at), int(f.has_xbrl))
+            (
+                f.seq_id,
+                f.symbol,
+                f.company,
+                f.nse_desc,
+                f.subject,
+                f.nse_summary,
+                f.pdf_url,
+                _ts(f.filed_at),
+                int(f.has_xbrl),
+            )
             for f in filings
         ],
     )
@@ -101,7 +110,10 @@ def save_classifications(conn: sqlite3.Connection, items: dict[str, Classificati
     conn.executemany(
         "UPDATE filings SET category=?, subtype=?, noise=?, classified_by=?, confidence=?"
         " WHERE seq_id=?",
-        [(c.category, c.subtype, int(c.noise), c.by, c.confidence, sid) for sid, c in items.items()],
+        [
+            (c.category, c.subtype, int(c.noise), c.by, c.confidence, sid)
+            for sid, c in items.items()
+        ],
     )
     conn.commit()
 
@@ -193,8 +205,13 @@ def price_history(conn: sqlite3.Connection, symbol: str, limit: int = 60) -> lis
     ).fetchall()
     return [
         PriceBar(
-            symbol=r["symbol"], date=date.fromisoformat(r["date"]), open=r["open"],
-            high=r["high"], low=r["low"], close=r["close"], volume=r["volume"],
+            symbol=r["symbol"],
+            date=date.fromisoformat(r["date"]),
+            open=r["open"],
+            high=r["high"],
+            low=r["low"],
+            close=r["close"],
+            volume=r["volume"],
         )
         for r in reversed(rows)
     ]
@@ -214,6 +231,8 @@ def get_meta(conn: sqlite3.Connection, key: str) -> str | None:
     return row["value"] if row else None
 
 
-def get_filing(conn: sqlite3.Connection, seq_id: str) -> tuple[Filing, Classification | None] | None:
+def get_filing(
+    conn: sqlite3.Connection, seq_id: str
+) -> tuple[Filing, Classification | None] | None:
     row = conn.execute("SELECT * FROM filings WHERE seq_id=?", (seq_id,)).fetchone()
     return (_filing(row), _classification(row)) if row else None

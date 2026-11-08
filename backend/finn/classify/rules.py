@@ -27,8 +27,10 @@ NOISE_DESCS: frozenset[str] = frozenset(
         "Structural Digital Database",
         "Registrar & Share Transfer Agent Update",
         "Address Change",
-        ("Quarterly Compliance Report on Corporate governance - within 21 days from the end "
-        "of the quarter"),
+        (
+            "Quarterly Compliance Report on Corporate governance - within 21 days from the end "
+            "of the quarter"
+        ),
         "Integrated Filing- Governance",
     }
 )
@@ -198,36 +200,84 @@ _KEYWORD_RULES: tuple[tuple[re.Pattern[str], Category, str | None], ...] = tuple
         (r"\baudio\b|\brecording", "earnings_call", "audio"),
         (r"\bcon(ference)?[ .-]?calls?\b|\bearnings calls?\b", "earnings_call", "notice"),
         (r"scheduled .*(to consider|inter alia).*results", "results", "intimation"),
-        ((r"(financial )?results.*(approv|unaudited|audited|outcome)"
-         r"|(approv|unaudited|audited|outcome).*(financial )?results"),
-         "results", "results"),
-        (r"submitted to the exchange,? the (unaudited |audited )?financial results",
-         "results", "results"),
+        (
+            (
+                r"(financial )?results.*(approv|unaudited|audited|outcome)"
+                r"|(approv|unaudited|audited|outcome).*(financial )?results"
+            ),
+            "results",
+            "results",
+        ),
+        (
+            r"submitted to the exchange,? the (unaudited |audited )?financial results",
+            "results",
+            "results",
+        ),
         (r"press release.*results", "results", "press_release"),
         (r"\bdividend", "dividend", None),
-        ((r"\bacqui|\bmerger|\bamalgamat|\bdemerg|\bjoint venture|\bstake\b|\btakeover"
-         r"|\bscheme of arrangement"), "mna", None),
-        ((r"\bappoint(?!ment of (statutory|secretarial|internal|cost) auditors?)|\bresign|\bcessation\b|\bre-?designat|\bchief executive"
-         r"|\bchief financial|\bmanaging director"), "management_change", None),
-        ((r"\bqip\b|\binitial public offer|\brights issue|\bpreferential|\bbuy-?back|\bfund ?rais"
-         r"|\bnon-convertible|\bncds?\b|\bcommercial paper"), "fund_raise", None),
+        (
+            (
+                r"\bacqui|\bmerger|\bamalgamat|\bdemerg|\bjoint venture|\bstake\b|\btakeover"
+                r"|\bscheme of arrangement"
+            ),
+            "mna",
+            None,
+        ),
+        (
+            (
+                r"\bappoint(?!ment of (statutory|secretarial|internal|cost) auditors?)|\bresign|\bcessation\b|\bre-?designat|\bchief executive"
+                r"|\bchief financial|\bmanaging director"
+            ),
+            "management_change",
+            None,
+        ),
+        (
+            (
+                r"\bqip\b|\binitial public offer|\brights issue|\bpreferential|\bbuy-?back|\bfund ?rais"
+                r"|\bnon-convertible|\bncds?\b|\bcommercial paper"
+            ),
+            "fund_raise",
+            None,
+        ),
         (r"\bpostal ballot", "postal_ballot", None),
         (r"\bcourt[- ]convened\b", "agm_egm", "court_convened"),
-        (r"\bannual general meeting|\bagm\b|\bextra-?ordinary general meeting|\begm\b",
-         "agm_egm", None),
-        (r"\b(investor|analyst)s?\b.*\bmeet|\b(investor|analyst)s?\b.*\bconference",
-         "investor_meetings", None),
-        ((r"\b(secur\w*|bag\w*|receiv\w*|win|wins|won|awarded|award)\b.{0,40}\b(orders?|contracts?)\b"
-         r"|\b(orders?|contracts?)\b.{0,25}\b(worth|valued|aggregating)\b"),
-         "press_release", "order_win"),
+        (
+            r"\bannual general meeting|\bagm\b|\bextra-?ordinary general meeting|\begm\b",
+            "agm_egm",
+            None,
+        ),
+        (
+            r"\b(investor|analyst)s?\b.*\bmeet|\b(investor|analyst)s?\b.*\bconference",
+            "investor_meetings",
+            None,
+        ),
+        (
+            (
+                r"\b(secur\w*|bag\w*|receiv\w*|win|wins|won|awarded|award)\b.{0,40}\b(orders?|contracts?)\b"
+                r"|\b(orders?|contracts?)\b.{0,25}\b(worth|valued|aggregating)\b"
+            ),
+            "press_release",
+            "order_win",
+        ),
         (r"\blaunch(es|ed)?\b", "press_release", "product"),
-        ((r"\bmou\b|memorandum of understanding|strategic partner|\bpartnership\b"
-         r"|\bpartners? (to|with)\b"
-         r"|\b(signs?|signed|enters?|entered into|executes?|executed)\b"
-         r"(?!.{0,30}\b(settlement|lease|loan|credit|share swap)\b).{0,30}\bagreements?\b"),
-         "press_release", "partnership"),
-        ((r"\bcapacity (addition|expansion)|\bcapex\b|\bcapital expenditure|\bnew (plant|facility)"
-         r"|\bexpansion\b"), "capex", None),
+        (
+            (
+                r"\bmou\b|memorandum of understanding|strategic partner|\bpartnership\b"
+                r"|\bpartners? (to|with)\b"
+                r"|\b(signs?|signed|enters?|entered into|executes?|executed)\b"
+                r"(?!.{0,30}\b(settlement|lease|loan|credit|share swap)\b).{0,30}\bagreements?\b"
+            ),
+            "press_release",
+            "partnership",
+        ),
+        (
+            (
+                r"\bcapacity (addition|expansion)|\bcapex\b|\bcapital expenditure|\bnew (plant|facility)"
+                r"|\bexpansion\b"
+            ),
+            "capex",
+            None,
+        ),
         (r"\bmonthly\b|\bbusiness updates?\b|\bsales\b", "press_release", "business_update"),
     )
 )
@@ -257,9 +307,7 @@ def classify_rules(f: Filing) -> Classification | None:
     text = f"{f.subject} {(f.nse_summary or '')[:SUMMARY_CHARS]}"
 
     if desc in _NOISE_KEYS:
-        return Classification(
-            category="unclassified", noise=True, by="rules", confidence=0.95
-        )
+        return Classification(category="unclassified", noise=True, by="rules", confidence=0.95)
 
     if desc in _MAP_KEYS:
         category, subtype = _MAP_KEYS[desc]

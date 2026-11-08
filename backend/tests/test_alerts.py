@@ -64,7 +64,9 @@ def test_price_up_message():
 
 def test_override_beats_global():
     h = {"TCS": _series(last_vol=10_500_000, last_close=97.0)}
-    assert evaluate_prices(h, Rules()) != [] and all(a.kind == "volume" for a in evaluate_prices(h, Rules()))
+    assert evaluate_prices(h, Rules()) != [] and all(
+        a.kind == "volume" for a in evaluate_prices(h, Rules())
+    )
     rules = Rules(overrides={"TCS": SymbolOverride(volume_multiple=3.0, price_move_pct=2.0)})
     kinds = [a.kind for a in evaluate_prices(h, rules)]
     assert kinds == ["price"]

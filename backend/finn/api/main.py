@@ -127,8 +127,15 @@ def health(conn: Conn) -> dict:
 
 def _holding_row(h, bars) -> dict:
     row = {
-        "symbol": h.symbol, "name": h.name, "sector": h.sector, "size": h.size,
-        "date": None, "close": None, "change_pct": None, "vol_ratio": None, "spark": [],
+        "symbol": h.symbol,
+        "name": h.name,
+        "sector": h.sector,
+        "size": h.size,
+        "date": None,
+        "close": None,
+        "change_pct": None,
+        "vol_ratio": None,
+        "spark": [],
     }
     if not bars:
         return row

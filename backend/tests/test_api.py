@@ -27,7 +27,9 @@ def client(tmp_path):
     path = tmp_path / "api.sqlite"
     seed = db.connect(path)
     db.init_db(seed)
-    filings = [parse_announcement(r) for r in json.loads((FIX / "portfolio_month.json").read_text())]
+    filings = [
+        parse_announcement(r) for r in json.loads((FIX / "portfolio_month.json").read_text())
+    ]
     db.upsert_filings(seed, filings)
     db.save_classifications(
         seed, {f.seq_id: c for f in filings if (c := classify_rules(f)) is not None}
@@ -46,8 +48,17 @@ def client(tmp_path):
         for i, day in enumerate(days):
             last = i == len(days) - 1
             close = 110.0 if last else 100.0
-            bars.append(PriceBar(symbol=h.symbol, date=day, open=100, high=close, low=99,
-                                 close=close, volume=500 if last else 100))
+            bars.append(
+                PriceBar(
+                    symbol=h.symbol,
+                    date=day,
+                    open=100,
+                    high=close,
+                    low=99,
+                    close=close,
+                    volume=500 if last else 100,
+                )
+            )
     db.upsert_prices(seed, bars)
     seed.close()
 
@@ -74,7 +85,13 @@ def test_digest_168h_window_shape(client):
     assert r.status_code == 200
     body = r.json()
     assert set(body) == {
-        "window", "as_of", "latest_filing_at", "counts", "stories", "routine", "hidden"
+        "window",
+        "as_of",
+        "latest_filing_at",
+        "counts",
+        "stories",
+        "routine",
+        "hidden",
     }
     assert body["latest_filing_at"] == LATEST_FILING.isoformat()
     assert body["window"]["end"] == NOW.isoformat()
@@ -92,7 +109,8 @@ def test_digest_defaults_to_24h(client):
     r = client.post("/digest", json={})
     assert r.status_code == 200
     assert r.json()["window"] == {
-        "start": (NOW - timedelta(hours=24)).isoformat(), "end": NOW.isoformat()
+        "start": (NOW - timedelta(hours=24)).isoformat(),
+        "end": NOW.isoformat(),
     }
 
 
@@ -156,7 +174,8 @@ def test_alerts_on_stale_data_anchor_to_the_latest_data_point(client):
     body = client.post("/alerts", json={}).json()
     end = LATEST_FILING  # newer than the end of day of the last bar (Fri 6 Nov)
     assert body["window"] == {
-        "start": (end - timedelta(days=7)).isoformat(), "end": end.isoformat()
+        "start": (end - timedelta(days=7)).isoformat(),
+        "end": end.isoformat(),
     }
     kinds = {a["kind"] for a in body["alerts"]}
     assert {"price", "volume", "filing"} <= kinds  # last week of data, not an empty week
@@ -184,7 +203,15 @@ def test_portfolio_has_18_rows_with_spark(client):
     assert h["vol_ratio"] == 5.0
     assert h["date"] == "2026-11-06"
     assert set(h) == {
-        "symbol", "name", "sector", "size", "date", "close", "change_pct", "vol_ratio", "spark"
+        "symbol",
+        "name",
+        "sector",
+        "size",
+        "date",
+        "close",
+        "change_pct",
+        "vol_ratio",
+        "spark",
     }
 
 
@@ -273,11 +300,20 @@ def test_alerts_reject_out_of_range_rules(client):
 def _store(path: Path, filings: int = 0) -> None:
     c = db.connect(path)
     db.init_db(c)
-    db.upsert_filings(c, [
-        Filing(seq_id=str(i), symbol="TRENT", company="Trent", nse_desc="d", subject="s",
-               filed_at=NOW)
-        for i in range(filings)
-    ])
+    db.upsert_filings(
+        c,
+        [
+            Filing(
+                seq_id=str(i),
+                symbol="TRENT",
+                company="Trent",
+                nse_desc="d",
+                subject="s",
+                filed_at=NOW,
+            )
+            for i in range(filings)
+        ],
+    )
     c.close()
 
 
@@ -339,7 +375,8 @@ def test_startup_copies_seed_to_settings_db_path(tmp_path, monkeypatch):
     seed.write_bytes(b"seed-bytes")
     target = tmp_path / "data" / "finn.sqlite"
     monkeypatch.setattr(
-        api_main, "get_settings",
+        api_main,
+        "get_settings",
         lambda: Settings(_env_file=None, db_path=target, seed_path=seed),
     )
     with TestClient(app):
@@ -368,10 +405,13 @@ def test_long_lookback_loads_enough_history(client, tmp_path):
     days.reverse()
     vols = [100] * 70 + [1_000] * 59 + [1_500]
     c = db.connect(path)
-    db.upsert_prices(c, [
-        PriceBar(symbol="TRENT", date=day, open=100, high=100, low=100, close=100, volume=v)
-        for day, v in zip(days, vols, strict=True)
-    ])
+    db.upsert_prices(
+        c,
+        [
+            PriceBar(symbol="TRENT", date=day, open=100, high=100, low=100, close=100, volume=v)
+            for day, v in zip(days, vols, strict=True)
+        ],
+    )
     c.close()
 
     def _conn():

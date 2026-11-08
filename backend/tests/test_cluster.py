@@ -12,8 +12,13 @@ FIXTURES = Path(__file__).parent / "fixtures" / "nse"
 
 def _scored(seq, ts, subject="s", pdf=None, sym="X", cat="results"):
     f = Filing(
-        seq_id=seq, symbol=sym, company=f"{sym} Ltd", nse_desc="d", subject=subject,
-        pdf_url=pdf, filed_at=ts,
+        seq_id=seq,
+        symbol=sym,
+        company=f"{sym} Ltd",
+        nse_desc="d",
+        subject=subject,
+        pdf_url=pdf,
+        filed_at=ts,
     )
     c = Classification(category=cat, by="rules", confidence=1.0)
     return score_filing(f, c, set())

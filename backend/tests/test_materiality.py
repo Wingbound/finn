@@ -6,7 +6,11 @@ from finn.models import CATEGORIES, Classification, Filing
 
 def _f(seq="1") -> Filing:
     return Filing(
-        seq_id=seq, symbol="X", company="X Ltd", nse_desc="d", subject="s",
+        seq_id=seq,
+        symbol="X",
+        company="X Ltd",
+        nse_desc="d",
+        subject="s",
         filed_at="2026-11-01T10:00:00+05:30",
     )
 
@@ -16,10 +20,23 @@ def _c(cat, subtype=None, noise=False) -> Classification:
 
 
 EXPECTED = {
-    "results": 90, "mna": 85, "management_change": 80, "pledging": 75, "litigation": 75,
-    "credit_rating": 70, "fund_raise": 70, "capex": 60, "insider_trading": 50,
-    "bonus_split": 40, "press_release": 35, "earnings_call": 30, "dividend": 30,
-    "agm_egm": 15, "postal_ballot": 15, "investor_meetings": 10, "unclassified": 5,
+    "results": 90,
+    "mna": 85,
+    "management_change": 80,
+    "pledging": 75,
+    "litigation": 75,
+    "credit_rating": 70,
+    "fund_raise": 70,
+    "capex": 60,
+    "insider_trading": 50,
+    "bonus_split": 40,
+    "press_release": 35,
+    "earnings_call": 30,
+    "dividend": 30,
+    "agm_egm": 15,
+    "postal_ballot": 15,
+    "investor_meetings": 10,
+    "unclassified": 5,
 }
 
 

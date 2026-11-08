@@ -140,8 +140,9 @@ def ingest_filings(
                 filings.append(parse_announcement(raw))
             except (KeyError, TypeError, ValueError) as e:  # ValidationError is a ValueError
                 result.skipped += 1
-                log.warning("skipping malformed NSE row for %s: %s: %s", symbol,
-                            type(e).__name__, e)
+                log.warning(
+                    "skipping malformed NSE row for %s: %s: %s", symbol, type(e).__name__, e
+                )
         result.added += upsert_filings(conn, filings)
     if not result.failed:
         set_meta(conn, "filings_as_of", datetime.now(IST).isoformat())

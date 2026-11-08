@@ -99,9 +99,11 @@ def test_one_symbol_failing_keeps_the_rest_and_holds_filings_as_of(
 ):
     respx.get("https://www.nseindia.com/").respond(200)
     respx.get(NSE_API).mock(
-        side_effect=lambda req: httpx.Response(403)
-        if req.url.params["symbol"] == "TRENT"
-        else httpx.Response(200, json=month_by_symbol.get(req.url.params["symbol"], []))
+        side_effect=lambda req: (
+            httpx.Response(403)
+            if req.url.params["symbol"] == "TRENT"
+            else httpx.Response(200, json=month_by_symbol.get(req.url.params["symbol"], []))
+        )
     )
     monkeypatch.setattr(refresh_mod, "fetch_eod", _bars)
     summary = refresh(conn, use_llm=False)
@@ -169,7 +171,9 @@ def test_empty_price_frame_is_an_error(conn, keyless, month_by_symbol, monkeypat
 
 
 @respx.mock
-def test_use_llm_without_keys_degrades_to_rules(conn, keyless, month_by_symbol, monkeypatch, capsys):
+def test_use_llm_without_keys_degrades_to_rules(
+    conn, keyless, month_by_symbol, monkeypatch, capsys
+):
     _nse_ok(month_by_symbol)
     monkeypatch.setattr(refresh_mod, "fetch_eod", _bars)
     summary = refresh(conn, use_llm=True)
