@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+from datetime import date
+
 from finn.models import IST, Alert, PriceBar, Rules, Story, SymbolOverride
 
 MIN_VOLUME_HISTORY = 10
@@ -10,7 +12,18 @@ ALERT_TIERS = {"critical", "important"}
 MAX_MESSAGE = 140
 
 
-def evaluate_prices(history: dict[str, list[PriceBar]], rules: Rules, sessions: int = 5) -> list[Alert]:
+def evaluate_prices(
+    history: dict[str, list[PriceBar]],
+    rules: Rules,
+    sessions: int = 5,
+    *,
+    start: date | None = None,
+    end: date | None = None,
+) -> list[Alert]:
+    """Alerts for the last `sessions` bars dated up to `end`, keeping those on/after `start`.
+
+    Bars before `start` still serve as the volume baseline and previous close.
+    """
     alerts: list[Alert] = []
     for symbol, raw in history.items():
         ov = rules.overrides.get(symbol, SymbolOverride())
@@ -18,9 +31,11 @@ def evaluate_prices(history: dict[str, list[PriceBar]], rules: Rules, sessions: 
             continue
         vol_mult = ov.volume_multiple if ov.volume_multiple is not None else rules.volume_multiple
         move_pct = ov.price_move_pct if ov.price_move_pct is not None else rules.price_move_pct
-        bars = sorted(raw, key=lambda b: b.date)
+        bars = sorted((b for b in raw if end is None or b.date <= end), key=lambda b: b.date)
         for i in range(max(0, len(bars) - sessions), len(bars)):
             bar = bars[i]
+            if start is not None and bar.date < start:
+                continue
             prior = bars[max(0, i - rules.lookback) : i]
             if len(prior) >= MIN_VOLUME_HISTORY:
                 avg = sum(b.volume for b in prior) / len(prior)

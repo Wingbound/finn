@@ -78,6 +78,14 @@ def test_insufficient_history_no_volume_alert():
     assert [a.kind for a in out] == ["volume"]
 
 
+def test_price_window_limits_the_sessions_evaluated():
+    h = {"TCS": _series(last_close=90.0)}  # 25 daily bars from 1 Oct; the move is on 25 Oct
+    spike = START + timedelta(days=24)
+    assert [a.date for a in evaluate_prices(h, Rules(), start=spike, end=spike)] == [spike]
+    assert evaluate_prices(h, Rules(), end=spike - timedelta(days=1)) == []  # bar after end
+    assert evaluate_prices(h, Rules(), start=spike + timedelta(days=1)) == []  # before start
+
+
 def test_sorted_newest_first():
     a = _series("AAA", last_close=90.0)
     b = _series("BBB", last_close=90.0)

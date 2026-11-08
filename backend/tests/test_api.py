@@ -19,6 +19,7 @@ from finn.portfolio import load_portfolio
 
 FIX = Path(__file__).parent / "fixtures" / "nse"
 NOW = datetime(2026, 11, 8, 20, 0, tzinfo=IST)  # Sunday evening
+LATEST_FILING = datetime(2026, 11, 7, 16, 58, 42, tzinfo=IST)  # newest in portfolio_month.json
 
 
 @pytest.fixture
@@ -72,7 +73,10 @@ def test_digest_default_24h_window_shape(client):
     r = client.post("/digest", json={"hours": 168})
     assert r.status_code == 200
     body = r.json()
-    assert set(body) == {"window", "as_of", "counts", "stories", "routine", "hidden"}
+    assert set(body) == {
+        "window", "as_of", "latest_filing_at", "counts", "stories", "routine", "hidden"
+    }
+    assert body["latest_filing_at"] == LATEST_FILING.isoformat()
     assert body["window"]["end"] == NOW.isoformat()
     assert body["window"]["start"] == (NOW - timedelta(hours=168)).isoformat()
     assert body["as_of"] == "2026-11-08T19:00:00+05:30"
@@ -104,6 +108,22 @@ def test_digest_empty_window(client):
     body = r.json()
     assert body["counts"] == {"shown": 0, "routine": 0, "hidden": 0, "filings": 0}
     assert body["stories"] == [] and body["routine"] == {} and body["hidden"] == []
+    # the newest filing is reported whatever the window, so the UI can say how stale it is
+    assert body["latest_filing_at"] == LATEST_FILING.isoformat()
+
+
+def test_digest_latest_filing_at_null_without_filings(client, tmp_path):
+    _store(tmp_path / "empty.sqlite")
+
+    def _conn():
+        c = db.connect(tmp_path / "empty.sqlite")
+        try:
+            yield c
+        finally:
+            c.close()
+
+    app.dependency_overrides[get_conn] = _conn
+    assert client.post("/digest", json={}).json()["latest_filing_at"] is None
 
 
 def test_alerts_accept_custom_rules(client):
@@ -117,6 +137,35 @@ def test_alerts_accept_custom_rules(client):
     assert {"price", "volume"} <= kinds
     dates = [a["date"] for a in many["alerts"]]
     assert dates == sorted(dates, reverse=True)
+
+
+def _in_window(alert: dict, window: dict) -> bool:
+    start, end = (datetime.fromisoformat(window[k]).date() for k in ("start", "end"))
+    return start <= date.fromisoformat(alert["date"]) <= end
+
+
+def test_alerts_on_stale_data_anchor_to_the_latest_data_point(client):
+    stale_now = LATEST_FILING + timedelta(days=12)
+    app.dependency_overrides[get_now] = lambda: stale_now
+    body = client.post("/alerts", json={}).json()
+    end = LATEST_FILING  # newer than the end of day of the last bar (Fri 6 Nov)
+    assert body["window"] == {
+        "start": (end - timedelta(days=7)).isoformat(), "end": end.isoformat()
+    }
+    kinds = {a["kind"] for a in body["alerts"]}
+    assert {"price", "volume", "filing"} <= kinds  # last week of data, not an empty week
+    assert all(_in_window(a, body["window"]) for a in body["alerts"])
+    filing_dates = {a["date"] for a in body["alerts"] if a["kind"] == "filing"}
+    assert min(filing_dates) >= "2026-10-31"
+
+
+def test_alerts_anchor_is_now_when_data_is_newer(client):
+    early = datetime(2026, 11, 5, 12, 0, tzinfo=IST)  # before the 6 Nov bar and late filings
+    app.dependency_overrides[get_now] = lambda: early
+    body = client.post("/alerts", json={}).json()
+    assert body["window"]["end"] == early.isoformat()
+    assert [a for a in body["alerts"] if a["kind"] != "filing"] == []  # 6 Nov is in the future
+    assert all(_in_window(a, body["window"]) for a in body["alerts"])
 
 
 def test_portfolio_has_18_rows_with_spark(client):

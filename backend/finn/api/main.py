@@ -7,7 +7,7 @@ import shutil
 import sqlite3
 import statistics
 from contextlib import asynccontextmanager
-from datetime import datetime, timedelta
+from datetime import datetime, time, timedelta
 from pathlib import Path
 from typing import Annotated
 
@@ -22,7 +22,7 @@ from finn.classify.materiality import score_filing
 from finn.config import get_settings
 from finn.digest import Floor, build_digest, classification_or_default, stories_in_window
 from finn.ingest.prices import completed_sessions
-from finn.models import IST, Alert, Category, Rules, ScoredFiling
+from finn.models import IST, Alert, Category, PriceBar, Rules, ScoredFiling
 from finn.portfolio import load_portfolio
 
 log = logging.getLogger(__name__)
@@ -85,7 +85,8 @@ Now = Annotated[datetime, Depends(get_now)]
 SPARK_POINTS = 20
 VOL_LOOKBACK = 20
 VOL_MIN_PRIOR = 10
-ALERT_FILING_DAYS = 7
+ALERT_WINDOW_DAYS = 7
+ALERT_SESSIONS = 5
 
 
 class DigestRequest(BaseModel):
@@ -159,17 +160,39 @@ def digest(req: DigestRequest, conn: Conn, now: Now) -> dict:
     return build_digest(conn, symbols, start, end, req.floor, req.subscribed)
 
 
+def _alert_anchor(
+    now: datetime, latest_filing: datetime | None, history: dict[str, list[PriceBar]]
+) -> datetime:
+    """min(now, newest data point): a stale store still alerts on its last week of data.
+
+    The newest data point is the later of the newest filing and the end of day (IST) of the
+    newest completed price bar.
+    """
+    points = [latest_filing] if latest_filing else []
+    last_bar = max((bars[-1].date for bars in history.values() if bars), default=None)
+    if last_bar:
+        points.append(datetime.combine(last_bar, time.max, IST))
+    return min(now, max(points, default=now)).astimezone(IST)
+
+
 @app.post("/alerts")
 def alerts(rules: Rules, conn: Conn, now: Now) -> dict:
     symbols = [h.symbol for h in load_portfolio()]
     history = {s: _completed_history(conn, s, now) for s in symbols}
-    stories = stories_in_window(
-        conn, symbols, now - timedelta(days=ALERT_FILING_DAYS), now, set(rules.categories)
-    )
-    merged: list[Alert] = evaluate_prices(history, rules) + evaluate_filings(stories, rules)
+    end = _alert_anchor(now, db.latest_filed_at(conn, symbols), history)
+    start = end - timedelta(days=ALERT_WINDOW_DAYS)
+    # Both kinds share the window: filing stories in [start, end], sessions dated within it.
+    stories = stories_in_window(conn, symbols, start, end, set(rules.categories))
+    merged: list[Alert] = evaluate_prices(
+        history, rules, ALERT_SESSIONS, start=start.date(), end=end.date()
+    ) + evaluate_filings(stories, rules)
     merged.sort(key=lambda a: a.symbol)
     merged.sort(key=lambda a: a.date, reverse=True)
-    return {"as_of": db.get_meta(conn, "prices_as_of"), "alerts": merged}
+    return {
+        "as_of": db.get_meta(conn, "prices_as_of"),
+        "window": {"start": start.isoformat(), "end": end.isoformat()},
+        "alerts": merged,
+    }
 
 
 @app.get("/filings/{seq_id}")

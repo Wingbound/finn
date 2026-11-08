@@ -83,9 +83,12 @@ def build_digest(
         else:
             routine.setdefault(st.category, []).append(st)
 
+    latest = db.latest_filed_at(conn, symbols)
     return {
         "window": {"start": start.isoformat(), "end": end.isoformat()},
         "as_of": db.get_meta(conn, "filings_as_of"),
+        # newest filing regardless of window, so an empty digest can say how stale the store is
+        "latest_filing_at": latest.isoformat() if latest else None,
         "counts": {
             "shown": len(shown),
             "routine": sum(len(v) for v in routine.values()),

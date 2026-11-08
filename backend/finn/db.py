@@ -162,6 +162,17 @@ def filings_in_window(
     return [(_filing(r), _classification(r)) for r in rows]
 
 
+def latest_filed_at(conn: sqlite3.Connection, symbols: list[str]) -> datetime | None:
+    """When the newest stored filing for any of the symbols was filed, or None."""
+    if not symbols:
+        return None
+    marks = ",".join("?" * len(symbols))
+    (newest,) = conn.execute(
+        f"SELECT MAX(filed_at) FROM filings WHERE symbol IN ({marks})", symbols
+    ).fetchone()
+    return datetime.fromisoformat(newest) if newest else None
+
+
 def upsert_prices(conn: sqlite3.Connection, bars: list[PriceBar]) -> int:
     """Insert or refresh bars; returns the number of newly inserted rows."""
     (before,) = conn.execute("SELECT COUNT(*) FROM prices").fetchone()
