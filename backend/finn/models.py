@@ -5,7 +5,7 @@ from __future__ import annotations
 from datetime import date, datetime, timedelta, timezone
 from typing import Literal, get_args
 
-from pydantic import BaseModel, field_validator
+from pydantic import BaseModel, Field, field_validator
 
 IST = timezone(timedelta(hours=5, minutes=30), "IST")
 
@@ -91,3 +91,37 @@ class Story(BaseModel):
     headline: ScoredFiling
     members: list[ScoredFiling]
     latest_at: datetime
+
+
+class SymbolOverride(BaseModel):
+    volume_multiple: float | None = None
+    price_move_pct: float | None = None
+    muted: bool = False
+
+
+class Rules(BaseModel):
+    volume_multiple: float = 2.0
+    price_move_pct: float = 5.0
+    lookback: int = 20
+    categories: set[Category] = Field(
+        default_factory=lambda: {
+            "results",
+            "mna",
+            "management_change",
+            "credit_rating",
+            "litigation",
+            "pledging",
+            "fund_raise",
+        }
+    )
+    overrides: dict[str, SymbolOverride] = Field(default_factory=dict)
+
+
+class Alert(BaseModel):
+    kind: Literal["volume", "price", "filing"]
+    symbol: str
+    date: date
+    value: float
+    threshold: float
+    message: str
+    story_id: str | None = None
