@@ -1,0 +1,67 @@
+"""Shared data models."""
+
+from __future__ import annotations
+
+from datetime import date, datetime, timedelta, timezone
+from typing import Literal
+
+from pydantic import BaseModel, field_validator
+
+IST = timezone(timedelta(hours=5, minutes=30), "IST")
+
+Category = Literal[
+    "results",
+    "mna",
+    "fund_raise",
+    "management_change",
+    "litigation",
+    "insider_trading",
+    "earnings_call",
+    "investor_meetings",
+    "credit_rating",
+    "dividend",
+    "bonus_split",
+    "capex",
+    "press_release",
+    "postal_ballot",
+    "agm_egm",
+    "pledging",
+    "unclassified",
+]
+
+
+class Filing(BaseModel):
+    seq_id: str
+    symbol: str
+    company: str
+    nse_desc: str
+    subject: str
+    nse_summary: str | None = None
+    pdf_url: str | None = None
+    filed_at: datetime
+    has_xbrl: bool = False
+
+    @field_validator("filed_at")
+    @classmethod
+    def _aware_ist(cls, v: datetime) -> datetime:
+        if v.tzinfo is None or v.utcoffset() is None:
+            raise ValueError("filed_at must be timezone-aware")
+        return v.astimezone(IST)
+
+
+class Classification(BaseModel):
+    category: Category
+    subtype: str | None = None
+    noise: bool = False
+    by: Literal["rules", "llm", "default"]
+    confidence: float
+
+
+class PriceBar(BaseModel):
+    symbol: str
+    date: date
+    open: float
+    high: float
+    low: float
+    close: float
+    volume: int
