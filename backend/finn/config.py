@@ -31,7 +31,7 @@ class Settings(BaseSettings):
         return self
 
 
-ROUTES: dict[str, tuple[Literal["groq", "gemini"], str]] = {
+ROUTES: dict[str, Literal["groq", "gemini"]] = {
     "classify": "groq",
     "oneliner": "groq",
     "extract_pdf": "gemini",
@@ -42,7 +42,11 @@ ROUTES: dict[str, tuple[Literal["groq", "gemini"], str]] = {
 
 
 def route_for(task: str, settings: Settings) -> tuple[str, str]:
-    """Return (provider, model_id) for a task; model IDs come from settings."""
+    """Public way to get the (provider, model_id) pair for a task.
+
+    ROUTES holds only the provider; the model ID is read from settings so it can be
+    overridden per task with FINN_MODEL_<TASK>.
+    """
     if task not in ROUTES:
         raise KeyError(f"unknown LLM task: {task}")
     return ROUTES[task], getattr(settings, f"finn_model_{task}")

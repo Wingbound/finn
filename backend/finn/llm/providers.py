@@ -4,6 +4,11 @@ from __future__ import annotations
 
 import httpx
 
+
+class LLMError(Exception):
+    pass
+
+
 GROQ_URL = "https://api.groq.com/openai/v1/chat/completions"
 GEMINI_URL = "https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent"
 TIMEOUT = 30.0
@@ -52,11 +57,17 @@ def call_gemini(
 
 def parse_gemini(data: dict) -> tuple[str, int, int]:
     usage = data.get("usageMetadata") or {}
-    return (
-        data["candidates"][0]["content"]["parts"][0]["text"],
-        usage.get("promptTokenCount", 0),
-        usage.get("candidatesTokenCount", 0),
-    )
+    block = (data.get("promptFeedback") or {}).get("blockReason")
+    if block:
+        raise LLMError(f"gemini blocked the prompt: {block}")
+    candidates = data.get("candidates") or []
+    parts = ((candidates[0].get("content") or {}).get("parts") or []) if candidates else []
+    if not parts:
+        reason = candidates[0].get("finishReason", "unknown") if candidates else "no candidates"
+        raise LLMError(f"gemini returned no content: {reason}")
+    # Thinking models bill thoughtsTokenCount as output, separately from candidatesTokenCount.
+    out_tokens = usage.get("candidatesTokenCount", 0) + usage.get("thoughtsTokenCount", 0)
+    return parts[0]["text"], usage.get("promptTokenCount", 0), out_tokens
 
 
 PROVIDERS = {

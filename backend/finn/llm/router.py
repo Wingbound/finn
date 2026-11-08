@@ -13,16 +13,12 @@ import httpx
 
 from finn.config import Settings, route_for
 from finn.llm.costs import list_price_usd
-from finn.llm.providers import PROVIDERS, TIMEOUT
+from finn.llm.providers import PROVIDERS, TIMEOUT, LLMError
 from finn.models import IST
 
 MAX_RETRIES = 3
 BACKOFF_S = (1, 2, 4)
 _FENCE = re.compile(r"^\s*```(?:json)?\s*(.*?)\s*```\s*$", re.DOTALL)
-
-
-class LLMError(Exception):
-    pass
 
 
 def _sleep(seconds: float) -> None:  # patched in tests
@@ -72,13 +68,16 @@ class LLMRouter:
 
         start = time.monotonic()
         text, tin, tout = self._request(call, parse, api_key, model, system, user)
-        result = _parse_json(text)
         latency = int((time.monotonic() - start) * 1000)
+        # Log before parsing: a 200 response spent quota even if the JSON is unusable.
+        # (Calls that never got a 200 after retries are not logged.)
+        self._log(task, provider, model, False, tin, tout, latency)
+        result = _parse_json(text)
         self.conn.execute(
             "INSERT OR REPLACE INTO llm_cache(key, response, created_at) VALUES (?,?,?)",
             (key, json.dumps(result), datetime.now(IST).isoformat()),
         )
-        self._log(task, provider, model, False, tin, tout, latency)
+        self.conn.commit()
         return result
 
     def _request(self, call, parse, api_key, model, system, user) -> tuple[str, int, int]:

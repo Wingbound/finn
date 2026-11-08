@@ -128,3 +128,52 @@ def test_unknown_model_costs_zero():
     from finn.llm.costs import list_price_usd
 
     assert list_price_usd("nope", 100, 100) == 0.0
+
+
+def gemini_resp(body):
+    return httpx.Response(200, json=body)
+
+
+@respx.mock
+@pytest.mark.parametrize(
+    ("body", "needle"),
+    [
+        ({"promptFeedback": {"blockReason": "SAFETY"}}, "SAFETY"),
+        ({"candidates": [{"finishReason": "SAFETY"}]}, "SAFETY"),
+    ],
+)
+def test_gemini_safety_block_raises_clear_error(conn, settings, no_sleep, body, needle):
+    route = respx.post(GEMINI).mock(return_value=gemini_resp(body))
+    with pytest.raises(LLMError, match=needle):
+        LLMRouter(conn, settings).complete_json("extract_transcript", "s", "u")
+    assert route.call_count == 1 and no_sleep == []
+
+
+@respx.mock
+def test_invalid_json_still_logs_usage(conn, settings):
+    respx.post(GROQ).mock(return_value=groq_ok("not json"))
+    r = LLMRouter(conn, settings)
+    with pytest.raises(LLMError):
+        r.complete_json("classify", "s", "u")
+    row = conn.execute("SELECT cached, input_tokens, output_tokens FROM llm_calls").fetchone()
+    assert tuple(row) == (0, 11, 7)
+    assert conn.execute("SELECT COUNT(*) FROM llm_cache").fetchone()[0] == 0
+
+
+@respx.mock
+def test_gemini_thinking_tokens_count_as_output(conn, settings):
+    respx.post(GEMINI).mock(
+        return_value=gemini_resp(
+            {
+                "candidates": [{"content": {"parts": [{"text": "{}"}]}}],
+                "usageMetadata": {
+                    "promptTokenCount": 10,
+                    "candidatesTokenCount": 5,
+                    "thoughtsTokenCount": 20,
+                },
+            }
+        )
+    )
+    r = LLMRouter(conn, settings)
+    r.complete_json("extract_transcript", "s", "u")
+    assert r.stats()["output_tokens"] == 25
