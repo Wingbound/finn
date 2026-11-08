@@ -5,6 +5,12 @@
 `backend/scripts/eval_classify.py` scores the classifier against a labelled gold set,
 `backend/tests/fixtures/gold/classification.jsonl`.
 
+**This eval is in-sample.** The rules were tuned on
+`backend/tests/fixtures/nse/portfolio_month.json`, and the gold set is sampled from that same
+file. The numbers below show how well the rules fit the month they were written against.
+They are not an estimate of accuracy on filings the rules have never seen, which will be
+lower. An out-of-sample check needs a gold set drawn from a later month.
+
 ### Gold set
 
 - **Source:** `backend/tests/fixtures/nse/portfolio_month.json`, 323 real NSE announcements
@@ -63,14 +69,26 @@
   fund_raise, capex, insider_trading). That is 46 rows.
 - **Rules coverage:** the share of rows where `classify_rules` returned a classification
   instead of None.
+- **Rules precision:** of the rows the rules labelled, the share they labelled correctly.
+- **Default matches:** correct rows that were rule misses, where the fallback
+  `unclassified` happened to equal the gold label. They count toward overall accuracy
+  without any classifier having recognised them.
 - **Misses:** each miss is listed as seq_id · gold → predicted · subject[:80].
 
 ### Results (run 2026-11-08)
 
-| mode | overall accuracy | material-category accuracy | rules coverage |
-|---|---|---|---|
-| Rules only (`--no-llm`) | 85.6% (89/104) | 84.8% (39/46) | 80.8% (84/104) |
-| Rules + LLM | **pending API keys.** Run `uv run python scripts/eval_classify.py` | target ≥ 90% | 80.8% (same rules) |
+| mode | overall accuracy | material-category accuracy | rules coverage | rules precision |
+|---|---|---|---|---|
+| Rules only (`--no-llm`) | 85.6% (89/104) | 84.8% (39/46) | 80.8% (84/104) | 92.9% (78/84) |
+| Rules + LLM | **pending API keys.** Run `uv run python scripts/eval_classify.py` | target ≥ 90% | 80.8% (same rules) | 92.9% (same rules) |
+
+Two caveats on the rules-only row, both printed by the script:
+
+- **Rules precision is 78/84 = 92.9%.** On the rows the rules chose to label, they were wrong
+  6 times.
+- **11 of the 89 correct rows are default `unclassified` matches.** The rules returned None
+  for those rows and the fallback label happened to be right. Without them, the rules
+  themselves got 78 of 104 rows right (75.0%).
 
 Rules-only misses (15). A row predicted `unclassified` here is a rule miss that took the
 default; in LLM mode, those rows go to the LLM.

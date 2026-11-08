@@ -88,6 +88,28 @@ def test_evaluate_counts():
     ]
 
 
+def test_rules_precision_and_default_matches():
+    gold = [
+        _gold("1", "results"),
+        _gold("2", "mna"),
+        _gold("3", "unclassified"),
+        _gold("4", "unclassified"),
+    ]
+    preds = {
+        "1": _pred("results"),                        # rule hit, right
+        "2": _pred("press_release"),                  # rule hit, wrong
+        "3": _pred("unclassified", by="default"),     # rule miss, default happens to match
+        "4": _pred("unclassified"),                   # rule hit, right
+    }
+    r = ev.evaluate(gold, preds, rule_hits={"1", "2", "4"})
+    assert (r["rules_correct"], r["rules_hits"]) == (2, 3)
+    assert r["rules_precision"] == 2 / 3
+    assert (r["default_matches"], r["correct"]) == (1, 3)
+    out = ev.render("m", r)
+    assert "| rules precision (rows the rules labelled) | 66.7% (2/3) |" in out
+    assert "| correct rows that are default `unclassified` matches | 1 of 3 |" in out
+
+
 def test_miss_labels_show_noise():
     gold = [_gold("1", "unclassified", noise=True), _gold("2", "results")]
     preds = {"1": _pred("unclassified"), "2": _pred("unclassified", noise=True)}
@@ -134,6 +156,7 @@ def test_cli_rules_only_prints_table(capsys):
     out = capsys.readouterr().out
     assert "overall accuracy" in out and "material-category accuracy" in out
     assert "rules coverage" in out and "Misses" in out
+    assert "rules precision" in out and "default `unclassified` matches" in out
 
 
 def test_cli_llm_mode_without_key_exits_with_hint(monkeypatch, capsys):

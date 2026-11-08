@@ -1,4 +1,4 @@
-"""Classification eval against the hand-labelled gold set.
+"""Classification eval against the AI-labelled (Claude) gold set, pending author spot-check.
 
 Run: uv run python scripts/eval_classify.py [--no-llm]
 
@@ -76,6 +76,7 @@ def evaluate(gold: list[dict], preds: dict[str, Classification], rule_hits: set[
     material = [g for g in gold if BASE_SCORES[g["category"]] >= MATERIAL_BASE]
     n, correct = len(gold), sum(hit.values())
     material_correct = sum(hit[g["seq_id"]] for g in material)
+    rules_correct = sum(hit[s] for s in rule_hits)
     return {
         "n": n,
         "correct": correct,
@@ -85,6 +86,12 @@ def evaluate(gold: list[dict], preds: dict[str, Classification], rule_hits: set[
         "material_accuracy": material_correct / len(material) if material else 0.0,
         "rules_hits": len(rule_hits),
         "rules_coverage": len(rule_hits) / n if n else 0.0,
+        "rules_correct": rules_correct,
+        "rules_precision": rules_correct / len(rule_hits) if rule_hits else 0.0,
+        # rule misses whose fallback `unclassified` happens to equal the gold label
+        "default_matches": sum(
+            hit[g["seq_id"]] and preds[g["seq_id"]].by == "default" for g in gold
+        ),
         "misses": [
             {
                 "seq_id": g["seq_id"],
@@ -114,6 +121,11 @@ def render(mode: str, r: dict) -> str:
             f"{pct(r['material_correct'], r['material_n'])} |"
         ),
         f"| rules coverage | {pct(r['rules_hits'], r['n'])} |",
+        f"| rules precision (rows the rules labelled) | {pct(r['rules_correct'], r['rules_hits'])} |",
+        (
+            "| correct rows that are default `unclassified` matches | "
+            f"{r['default_matches']} of {r['correct']} |"
+        ),
         "",
         f"Misses ({len(r['misses'])}): seq_id · gold → predicted · subject",
         "",
