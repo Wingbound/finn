@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 from datetime import date, datetime, timedelta, timezone
-from typing import Literal
+from typing import Literal, get_args
 
 from pydantic import BaseModel, field_validator
 
@@ -28,6 +28,8 @@ Category = Literal[
     "pledging",
     "unclassified",
 ]
+
+CATEGORIES: tuple[str, ...] = get_args(Category)
 
 
 class Filing(BaseModel):
