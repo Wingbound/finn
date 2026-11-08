@@ -126,3 +126,35 @@ class Alert(BaseModel):
     message: str
     story_id: str | None = None
     seq_id: str | None = None  # filing alerts: the headline filing, a stable link target
+
+
+class MetricRow(BaseModel):
+    key: str
+    label: str
+    value: float | None  # INR crore, 2 dp
+    qoq_pct: float | None = None
+    yoy_pct: float | None = None
+    computed: bool = False  # derived by FINN, not a reported line
+
+
+class MarginRow(BaseModel):
+    key: str
+    label: str
+    value_pct: float | None
+    qoq_bps: int | None = None
+    yoy_bps: int | None = None
+
+
+class ResultsCard(BaseModel):
+    symbol: str
+    period_end: date
+    period_label: str
+    basis: Literal["consolidated", "standalone"]
+    format: Literal["indas", "nbfc", "bank"]
+    audited: bool | None
+    compared_qoq: date | None
+    compared_yoy: date | None
+    metrics: list[MetricRow]
+    margins: list[MarginRow]
+    notes: list[str]
+    sources: list[str]
