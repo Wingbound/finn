@@ -231,7 +231,8 @@ _KEYWORD_RULES: tuple[tuple[re.Pattern[str], Category, str | None], ...] = tuple
 )
 
 
-def _management_subtype(text: str) -> str:
+def management_subtype(text: str) -> str:
+    """Scoring subtype of a management change, from its desc/subject/summary text."""
     if _ROLE_CXO.search(text):
         return "cxo"
     if _ROLE_INDEP.search(text):
@@ -241,7 +242,8 @@ def _management_subtype(text: str) -> str:
     return "director"
 
 
-def _credit_subtype(text: str) -> str | None:
+def credit_subtype(text: str) -> str | None:
+    """Scoring subtype of a credit-rating action, from its desc/subject/summary text."""
     for pattern, subtype in _RATING_SUBTYPES:
         if pattern.search(text):
             return subtype
@@ -262,16 +264,16 @@ def classify_rules(f: Filing) -> Classification | None:
         if desc == _norm("Allotment of Securities") and _ESOP.search(text):
             category, subtype = "unclassified", "esop"
         elif category == "management_change":
-            subtype = _management_subtype(f"{f.nse_desc} {text}")
+            subtype = management_subtype(f"{f.nse_desc} {text}")
         elif category == "credit_rating":
-            subtype = _credit_subtype(f"{f.nse_desc} {text}")
+            subtype = credit_subtype(f"{f.nse_desc} {text}")
         return Classification(category=category, subtype=subtype, by="rules", confidence=0.95)
 
     if desc in _AMBIGUOUS_KEYS:
         for pattern, category, subtype in _KEYWORD_RULES:
             if pattern.search(text):
                 if category == "management_change":
-                    subtype = _management_subtype(text)
+                    subtype = management_subtype(text)
                 return Classification(
                     category=category, subtype=subtype, by="rules", confidence=0.8
                 )

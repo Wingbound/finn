@@ -1,6 +1,8 @@
 from finn import db
-from finn.classify.llm import classify_batch_llm
+from finn.classify.llm import LLM_SUBTYPES, SYSTEM_PROMPT, classify_batch_llm
+from finn.classify.materiality import MODIFIERS, score_filing
 from finn.classify.pipeline import classify_pending
+from finn.classify.rules import classify_rules
 from finn.llm import LLMError
 from finn.models import Filing
 
@@ -41,7 +43,8 @@ def test_batches_of_20():
     assert len(r.calls) == 3
     assert len(out) == 45
     c = out["0"]
-    assert (c.category, c.subtype, c.by, c.confidence, c.noise) == ("capex", "new_plant", "llm", 0.7, False)
+    # capex has no scoring subtypes, so the free-form "new_plant" is dropped
+    assert (c.category, c.subtype, c.by, c.confidence, c.noise) == ("capex", None, "llm", 0.7, False)
     assert r.calls[0][0] == "classify"
 
 
@@ -112,7 +115,7 @@ def test_one_bad_item_defaults_only_itself():
     }
     out = classify_batch_llm(FakeRouter(reply), [_f(1), _f(2), _f(3), _f(4)])
     assert (out["1"].category, out["1"].by) == ("dividend", "llm")
-    assert (out["2"].category, out["2"].subtype, out["2"].by) == ("mna", "stake_sale", "llm")
+    assert (out["2"].category, out["2"].by) == ("mna", "llm")  # int id accepted
     # bad subtype is coerced to None; the valid category is kept
     assert (out["3"].category, out["3"].subtype, out["3"].by) == ("capex", None, "llm")
     assert (out["4"].category, out["4"].by) == ("unclassified", "default")
@@ -164,3 +167,49 @@ def test_pending_without_router_leaves_default_rows_alone(conn):
     db.upsert_filings(conn, [_f(3)])
     assert classify_pending(conn, None) == {"rules": 0, "llm": 0, "default": 1}  # only the new one
     assert [f.seq_id for f in db.default_classified_filings(conn)] == ["2", "3"]
+
+
+def _reply(category, subtype, item_id="1"):
+    return {"items": [{"id": item_id, "category": category, "subtype": subtype}]}
+
+
+def test_llm_credit_rating_subtype_comes_from_the_rules():
+    subject = "CRISIL Ratings has reaffirmed the long-term credit rating of the Company at AAA"
+    f = _f(1, desc="General Updates", subject=subject)
+    c = classify_batch_llm(FakeRouter(_reply("credit_rating", "rating_reaffirmation")), [f])["1"]
+    assert (c.category, c.subtype, c.by) == ("credit_rating", "reaffirm", "llm")
+    rule_path = classify_rules(_f(2, desc="Credit Rating- Others", subject=subject))
+    assert rule_path.subtype == "reaffirm"
+    assert score_filing(f, c, set()).score == score_filing(f, rule_path, set()).score == 24
+
+
+def test_llm_management_change_subtype_comes_from_the_rules():
+    subject = "Appointment of Ms. Asha Rao as an Independent Director of the Company"
+    f = _f(1, desc="General Updates", subject=subject)
+    c = classify_batch_llm(FakeRouter(_reply("management_change", "director_appointment")), [f])
+    assert (c["1"].category, c["1"].subtype) == ("management_change", "independent")
+
+
+def test_llm_subtype_kept_only_when_scoring_knows_it():
+    cases = [
+        (("earnings_call", "transcript"), "transcript"),
+        (("earnings_call", " Transcript "), "transcript"),
+        (("results", "presentation"), "presentation"),
+        (("results", "transcript"), None),  # a real subtype, but of another category
+        (("capex", "new_plant"), None),
+        (("press_release", None), None),
+    ]
+    for (category, subtype), expected in cases:
+        c = classify_batch_llm(FakeRouter(_reply(category, subtype)), [_f(1)])["1"]
+        assert (c.category, c.subtype) == (category, expected), (category, subtype)
+
+
+def test_llm_subtype_allowlist_is_the_modifier_table_and_is_in_the_prompt():
+    expected: dict[str, set[str]] = {}
+    for category, subtype in MODIFIERS:
+        if category not in {"management_change", "credit_rating"}:  # derived by the rules
+            expected.setdefault(category, set()).add(subtype)
+    assert {k: set(v) for k, v in LLM_SUBTYPES.items()} == expected
+    for category, subtypes in LLM_SUBTYPES.items():
+        line = next(ln for ln in SYSTEM_PROMPT.splitlines() if ln.startswith(f"{category}: "))
+        assert all(sub in line for sub in subtypes)

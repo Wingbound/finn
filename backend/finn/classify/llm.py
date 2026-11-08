@@ -3,12 +3,38 @@
 from __future__ import annotations
 
 import json
+from collections.abc import Callable
 
-from finn.classify.rules import SUMMARY_CHARS
+from finn.classify.materiality import MODIFIERS
+from finn.classify.rules import SUMMARY_CHARS, credit_subtype, management_subtype
 from finn.llm import LLMError, LLMRouter
 from finn.models import CATEGORIES, Classification, Filing
 
 LLM_CONFIDENCE = 0.7
+
+# Scoring looks subtypes up in MODIFIERS, so a free-form LLM subtype would silently score as
+# "no modifier". For these categories the subtype comes from the rules' text helpers instead.
+RULE_DERIVED_SUBTYPES: dict[str, Callable[[str], str | None]] = {
+    "management_change": management_subtype,
+    "credit_rating": credit_subtype,
+}
+
+
+def _llm_subtypes() -> dict[str, dict[str, str]]:
+    """Allowlist for every other category: its MODIFIERS subtypes (subtype -> label)."""
+    out: dict[str, dict[str, str]] = {}
+    for (category, subtype), (_mult, label) in MODIFIERS.items():
+        if category not in RULE_DERIVED_SUBTYPES:
+            out.setdefault(category, {})[subtype] = label
+    return out
+
+
+LLM_SUBTYPES = _llm_subtypes()
+
+_SUBTYPE_LINES = "\n".join(
+    f"{category}: " + ", ".join(f"{sub} ({label})" for sub, label in subs.items())
+    for category, subs in LLM_SUBTYPES.items()
+)
 
 SYSTEM_PROMPT = """\
 You classify Indian stock-exchange (NSE) corporate filings into exactly one category.
@@ -32,8 +58,10 @@ Categories:
 - unclassified: Routine, low-relevance paperwork - ESOP allotments, compliance certificates, ESG reports, auditor appointments - that doesn't materially move the stock.
 If a filing is routine paperwork, routine = unclassified.
 The user message is a JSON list of {id, desc, subject, summary}.
-Reply with JSON only: {"items":[{"id":"<id>","category":"<category>","subtype":"<short snake_case or null>"}]}
-Include every id exactly once. subtype is optional."""
+Reply with JSON only: {"items":[{"id":"<id>","category":"<category>","subtype":"<subtype or null>"}]}
+Include every id exactly once. subtype must be one of the values listed for the chosen
+category below, or null when none fits or the category is not listed:
+""" + _SUBTYPE_LINES
 
 
 def _default() -> Classification:
@@ -56,20 +84,30 @@ def _payload(batch: list[Filing]) -> str:
     )
 
 
-def _parse_item(raw: object) -> tuple[str, Classification] | None:
+def _subtype(category: str, llm_subtype: object, f: Filing) -> str | None:
+    """A subtype scoring understands: rule-derived, or the LLM's if allowlisted, else None."""
+    derive = RULE_DERIVED_SUBTYPES.get(category)
+    if derive is not None:
+        return derive(f"{f.nse_desc} {f.subject} {(f.nse_summary or '')[:SUMMARY_CHARS]}")
+    if not isinstance(llm_subtype, str):
+        return None
+    llm_subtype = llm_subtype.strip().lower()
+    return llm_subtype if llm_subtype in LLM_SUBTYPES.get(category, {}) else None
+
+
+def _parse_item(raw: object, batch: dict[str, Filing]) -> tuple[str, Classification] | None:
     """Validate one reply item; None if unusable (that filing then keeps its default)."""
     if not isinstance(raw, dict):
         return None
-    item_id, category, subtype = raw.get("id"), raw.get("category"), raw.get("subtype")
+    item_id, category = raw.get("id"), raw.get("category")
     if isinstance(item_id, bool) or not isinstance(item_id, (str, int)):
         return None
-    if not isinstance(category, str) or category not in CATEGORIES:
+    f = batch.get(str(item_id))
+    if f is None or not isinstance(category, str) or category not in CATEGORIES:
         return None
-    if not isinstance(subtype, str) or not subtype.strip():
-        subtype = None
-    return str(item_id), Classification(
+    return f.seq_id, Classification(
         category=category,  # type: ignore[arg-type]
-        subtype=subtype,
+        subtype=_subtype(category, raw.get("subtype"), f),
         by="llm",
         confidence=LLM_CONFIDENCE,
     )
@@ -84,9 +122,10 @@ def _classify_one_batch(router: LLMRouter, batch: list[Filing]) -> dict[str, Cla
     items = reply.get("items") if isinstance(reply, dict) else None
     if not isinstance(items, list):
         return out
+    by_id = {f.seq_id: f for f in batch}
     for raw in items:
-        parsed = _parse_item(raw)
-        if parsed and parsed[0] in out:
+        parsed = _parse_item(raw, by_id)
+        if parsed:
             out[parsed[0]] = parsed[1]
     return out
 
