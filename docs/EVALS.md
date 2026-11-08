@@ -122,6 +122,7 @@ not material.
 
 The 30-day seed `backend/seed/finn.sqlite` was built on 2026-11-08 with
 `scripts/refresh.py --days 30 --no-llm`. Rules classified 253 of its 317 filings (79.8%). The
-other 64 took the `unclassified` default. The next `scripts/refresh.py` run with an API key
-sends those rows to the LLM, because `classify_pending` retries every `by=default` row
-whenever an LLM is available. The seed does not need rebuilding.
+other 64 took the `unclassified` default. Every `scripts/refresh.py` run, with or without an
+API key, re-runs the rules on `by=default` rows, so rule improvements reach them. A run with
+an API key also sends the rows the rules still miss to the LLM. The seed does not need
+rebuilding.

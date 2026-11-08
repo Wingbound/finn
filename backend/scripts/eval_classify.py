@@ -13,6 +13,7 @@ import json
 from pathlib import Path
 
 from finn import db
+from finn.classify import default_classification
 from finn.classify.llm import classify_batch_llm
 from finn.classify.materiality import BASE_SCORES
 from finn.classify.rules import classify_rules
@@ -56,7 +57,7 @@ def predict(
         preds.update(classify_batch_llm(router, misses))
     else:
         for f in misses:
-            preds[f.seq_id] = Classification(category="unclassified", by="default", confidence=0.0)
+            preds[f.seq_id] = default_classification()
     return preds, rule_hits
 
 

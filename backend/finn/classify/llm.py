@@ -5,6 +5,7 @@ from __future__ import annotations
 import json
 from collections.abc import Callable
 
+from finn.classify import default_classification
 from finn.classify.materiality import MODIFIERS
 from finn.classify.rules import SUMMARY_CHARS, credit_subtype, management_subtype
 from finn.llm import LLMError, LLMRouter
@@ -64,10 +65,6 @@ category below, or null when none fits or the category is not listed:
 """ + _SUBTYPE_LINES
 
 
-def _default() -> Classification:
-    return Classification(category="unclassified", by="default", confidence=0.0)
-
-
 def _payload(batch: list[Filing]) -> str:
     return json.dumps(
         [
@@ -114,7 +111,7 @@ def _parse_item(raw: object, batch: dict[str, Filing]) -> tuple[str, Classificat
 
 
 def _classify_one_batch(router: LLMRouter, batch: list[Filing]) -> dict[str, Classification]:
-    out = {f.seq_id: _default() for f in batch}
+    out = {f.seq_id: default_classification() for f in batch}
     try:
         reply = router.complete_json("classify", SYSTEM_PROMPT, _payload(batch))
     except (LLMError, ValueError):  # ValueError: e.g. corrupt cache row (JSONDecodeError)

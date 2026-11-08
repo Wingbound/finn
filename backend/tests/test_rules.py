@@ -187,3 +187,24 @@ def test_partnership_does_not_overmatch():
     assert classify_rules(settle) is None
     bare = _filing("General Updates", "Our partner hospitals reported higher occupancy")
     assert classify_rules(bare) is None
+
+
+SAST = "Disclosure under SEBI Takeover Regulations"
+
+
+@pytest.mark.parametrize(
+    "subject",
+    [
+        "Disclosure under Regulation 31(1) and 31(2) of SAST Regulations for creation of pledge",
+        "Intimation of release of encumbrance on shares held by the promoter group",
+        "Promoter has pledged 2.1% of the equity shares of the Company",
+    ],
+)
+def test_sast_pledge_disclosure_is_pledging(subject):
+    c = classify_rules(_filing(SAST, subject))
+    assert (c.category, c.subtype, c.by) == ("pledging", None, "rules")
+
+
+def test_sast_without_pledge_stays_insider_trading():
+    c = classify_rules(_filing(SAST, "Disclosure under Regulation 29(2) for acquisition of shares"))
+    assert (c.category, c.subtype) == ("insider_trading", "sast")

@@ -171,6 +171,8 @@ _AMBIGUOUS_KEYS = {_norm(d) for d in AMBIGUOUS_DESCS}
 _INVESTOR_MEET_DESC = _norm("Analysts/Institutional Investor Meet/Con. Call Updates")
 
 _ESOP = re.compile(r"ESOP|ESOS|ESPS|employee stock", re.IGNORECASE)
+_SAST_DESC = _norm("Disclosure under SEBI Takeover Regulations")
+_PLEDGE = re.compile(r"pledg|encumb", re.IGNORECASE)
 
 _ROLE_CXO = re.compile(
     r"chief executive|\bceo\b|chief financial|\bcfo\b|managing director|\bmd\b"
@@ -263,6 +265,8 @@ def classify_rules(f: Filing) -> Classification | None:
         category, subtype = _MAP_KEYS[desc]
         if desc == _norm("Allotment of Securities") and _ESOP.search(text):
             category, subtype = "unclassified", "esop"
+        elif desc == _SAST_DESC and _PLEDGE.search(text):
+            category, subtype = "pledging", None  # promoter pledges are filed as SAST
         elif category == "management_change":
             subtype = management_subtype(f"{f.nse_desc} {text}")
         elif category == "credit_rating":

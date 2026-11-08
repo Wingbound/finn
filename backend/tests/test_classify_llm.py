@@ -1,4 +1,5 @@
 from finn import db
+from finn.classify import default_classification
 from finn.classify.llm import LLM_SUBTYPES, SYSTEM_PROMPT, classify_batch_llm
 from finn.classify.materiality import MODIFIERS, score_filing
 from finn.classify.pipeline import classify_pending
@@ -213,3 +214,31 @@ def test_llm_subtype_allowlist_is_the_modifier_table_and_is_in_the_prompt():
     for category, subtypes in LLM_SUBTYPES.items():
         line = next(ln for ln in SYSTEM_PROMPT.splitlines() if ln.startswith(f"{category}: "))
         assert all(sub in line for sub in subtypes)
+
+
+def test_default_classification_helper():
+    c = default_classification()
+    assert (c.category, c.subtype, c.noise, c.by, c.confidence) == (
+        "unclassified", None, False, "default", 0.0
+    )
+
+
+def _defaulted(conn, f: Filing) -> None:
+    """Store f as an earlier run left it: rules missed (e.g. before a rule existed)."""
+    db.upsert_filings(conn, [f])
+    db.save_classifications(conn, {f.seq_id: default_classification()})
+
+
+def test_pending_reruns_rules_on_default_rows_without_router(conn):
+    _defaulted(conn, _f(5, desc="Dividend", subject="Record date for the interim dividend"))
+    assert classify_pending(conn, None) == {"rules": 1, "llm": 0, "default": 0}
+    cls = db.get_filing(conn, "5")[1]
+    assert (cls.category, cls.by) == ("dividend", "rules")
+    assert db.default_classified_filings(conn) == []
+
+
+def test_pending_default_row_the_rules_now_catch_skips_the_llm(conn):
+    _defaulted(conn, _f(5, desc="Dividend", subject="Record date for the interim dividend"))
+    r = FakeRouter()
+    assert classify_pending(conn, r) == {"rules": 1, "llm": 0, "default": 0}
+    assert r.calls == []

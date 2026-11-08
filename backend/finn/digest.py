@@ -7,6 +7,7 @@ from datetime import datetime
 from typing import Literal
 
 from finn import db
+from finn.classify import default_classification
 from finn.classify.cluster import cluster
 from finn.classify.materiality import score_filing
 from finn.classify.rules import classify_rules
@@ -23,11 +24,7 @@ _FLOOR_TIERS: dict[str, set[str]] = {
 
 def classification_or_default(f: Filing, cls: Classification | None) -> Classification:
     """Stored classification, else rules on the fly, else unclassified. Never persists."""
-    return (
-        cls
-        or classify_rules(f)
-        or Classification(category="unclassified", by="default", confidence=0.0)
-    )
+    return cls or classify_rules(f) or default_classification()
 
 
 def score_window(
