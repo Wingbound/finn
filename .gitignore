@@ -1,0 +1,32 @@
+# secrets
+.env
+.env.*
+!.env.example
+
+# python
+__pycache__/
+*.pyc
+.venv/
+.pytest_cache/
+.ruff_cache/
+
+# data caches (seed snapshot is committed explicitly under backend/seed/)
+backend/data/
+*.sqlite
+*.sqlite-wal
+*.sqlite-shm
+!backend/seed/*.sqlite
+
+# raw downloads
+*.pdf
+!backend/tests/fixtures/**/*.pdf
+
+# node
+node_modules/
+.next/
+out/
+.vercel/
+
+# misc
+.DS_Store
+*.log
