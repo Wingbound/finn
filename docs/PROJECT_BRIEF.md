@@ -186,7 +186,7 @@ Noise floor: **Critical ≥ 75 · Important ≥ 45 · Everything**.
   - Every claim is cited, and claims that can't be verified against the source text are dropped.
 - **Model routing:**
   - Rules first (free).
-  - Groq small Llama, batched, for ambiguous classification and one-liners.
+  - Groq `openai/gpt-oss-120b`, batched 20 per call, for ambiguous classification and one-liners.
   - Gemini Flash for PDF extraction (results, transcripts).
   - A stronger Gemini model only for ledger judgment and synthesis.
 - **Efficiency:** content-hash caching of every document and LLM call; every call logged in a per-call cost ledger shown in the UI.

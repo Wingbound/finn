@@ -75,12 +75,12 @@ lower. An out-of-sample check needs a gold set drawn from a later month.
   without any classifier having recognised them.
 - **Misses:** each miss is listed as seq_id · gold → predicted · subject[:80].
 
-### Results (run 2026-11-08)
+### Results
 
 | mode | overall accuracy | material-category accuracy | rules coverage | rules precision |
 |---|---|---|---|---|
-| Rules only (`--no-llm`) | 85.6% (89/104) | 84.8% (39/46) | 80.8% (84/104) | 92.9% (78/84) |
-| Rules + LLM | **pending API keys.** Run `uv run python scripts/eval_classify.py` | target ≥ 90% | 80.8% (same rules) | 92.9% (same rules) |
+| Rules only (`--no-llm`), 2026-11-08 | 85.6% (89/104) | 84.8% (39/46) | 80.8% (84/104) | 92.9% (78/84) |
+| Rules + LLM (`groq/openai/gpt-oss-120b`, reasoning effort medium), 2026-11-09 | **91.3% (95/104)** | 87.0% (40/46), below the 90% target | 80.8% (same rules) | 92.9% (same rules) |
 
 Two caveats on the rules-only row, both printed by the script:
 
@@ -118,11 +118,64 @@ puts it at 89.1%, below the target. Two smaller points: the LLM prompt cannot re
 `noise`, so 106819825 stays a miss in either mode; and the four untitled press releases are
 not material.
 
+**What it did fix (2026-11-09).** The LLM got the CG Power High Court stay (106852258) right
+and missed the other two: the contentless "Outcome of Board Meeting" (106832075 →
+unclassified) and UltraTech's same-day results press release (106821846 → press_release). So
+material accuracy is 40/46 = 87.0%, short of the 90% target. The cheapest way to the target
+is not a bigger model. It is fixing the four confident rule hits, since the LLM never sees
+them. That work belongs with an out-of-sample gold month, so the rules aren't tuned to this
+one again.
+
+### Choosing the Groq model (2026-11-09)
+
+Groq has retired its Llama models; its list-models endpoint now offers `openai/gpt-oss-20b`,
+`openai/gpt-oss-120b` and `qwen/qwen3.8-27b`. Both gpt-oss models are reasoning models, so
+the reasoning effort changes both accuracy and token use. Every run below sends the same 20
+rule misses to the LLM in one batch, with a fresh response cache.
+
+| Groq model, reasoning effort | overall | material | output tokens per batch | list price per batch |
+|---|---|---|---|---|
+| gpt-oss-20b, Groq's default | 85.6% (89/104) | 87.0% | 2,048 | $0.00074 |
+| gpt-oss-120b, Groq's default | 91.3% (95/104) | 87.0% | 1,174 | $0.00095 |
+| gpt-oss-120b, low | 89.4% (93/104) | 87.0% | 678 | $0.00065 |
+| **gpt-oss-120b, medium (chosen)** | **91.3% (95/104)** | 87.0% | 1,304 | $0.00103 |
+
+- Prices are Groq's list prices; FINN runs on the free plan, so nothing is paid.
+- Output tokens include reasoning tokens. A direct probe on the same batch found no
+  truncation at any setting (`finish_reason=stop`, 20 of 20 items returned).
+- The two rows that low effort lost are routine ESG and "General Updates" notices labelled
+  press_release. They score below the Important floor either way, but at about $0.0004 more
+  per batch, accuracy decides.
+- The chosen setting scored 95/104 in all three runs: Groq's default effort, explicit
+  medium, and medium after the prompt fix below. Single runs of the other settings may
+  vary by a row or two.
+
+**Prompt fix found by the live refresh.** The first LLM-classified snapshot labelled Bajaj
+Finance's half-yearly report (PAT +28%) and Voltas's results press release as
+`results/intimation`. That subtype scores ×0.3, so both dropped from 90 to 27 and fell into
+the routine drawer. Every NSE filing says the company "has informed (intimated) the
+Exchange", so the bare label misled the model. The prompt now defines the subtype as a
+board-meeting date with no figures (`SUBTYPE_HINTS` in `finn/classify/llm.py`). Both filings
+now score 90, and the eval is unchanged at 95/104.
+
 ### Live snapshot
 
 The 30-day seed `backend/seed/finn.sqlite` was built on 2026-11-08 with
-`scripts/refresh.py --days 30 --no-llm`. Rules classified 253 of its 317 filings (79.8%). The
-other 64 took the `unclassified` default. Every `scripts/refresh.py` run, with or without an
-API key, re-runs the rules on `by=default` rows, so rule improvements reach them. A run with
-an API key also sends the rows the rules still miss to the LLM. The seed does not need
-rebuilding.
+`scripts/refresh.py --days 30 --no-llm`. Rules classified 253 of its 317 filings (79.8%), and
+the other 64 took the `unclassified` default.
+
+On 2026-11-09, `scripts/refresh.py --days 30` with API keys sent those 64 to the LLM:
+
+- **Calls:** 4 batches; 5,875 input and 4,023 output tokens.
+- **Cost:** $0.0033 at list price, $0 actually paid on the free plan.
+- **Result:** 0 rows left on the default.
+- **Labels:** unclassified 44, press_release 16, results 3, litigation 1.
+- **What surfaced:** over the same windows (clock pinned to 2026-11-09 09:00 IST), the
+  digest shows 9 → 11 stories at 72 hours and 23 → 25 at 7 days. The two new stories had
+  been sitting in the routine drawer. One is CG Power's High Court stay of a plant-closure
+  order (litigation, Critical). The other is Bajaj Finance's half-yearly results.
+- The 24-hour window is empty on a Monday morning, because the last filing was Saturday
+  16:58. The frontend's empty state uses `latest_filing_at` for this.
+
+Every refresh re-runs the rules on `by=default` rows, so rule improvements reach them. A run
+with an API key also sends the rows the rules still miss to the LLM.
