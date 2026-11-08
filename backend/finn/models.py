@@ -67,3 +67,27 @@ class PriceBar(BaseModel):
     low: float
     close: float
     volume: int
+
+
+Tier = Literal["critical", "important", "routine", "noise"]
+
+
+class ScoredFiling(BaseModel):
+    filing: Filing
+    cls: Classification
+    score: int
+    tier: Tier
+    reasons: list[str]
+
+
+class Story(BaseModel):
+    id: str
+    symbol: str
+    company: str
+    category: Category
+    subtype: str | None = None
+    score: int
+    tier: Tier
+    headline: ScoredFiling
+    members: list[ScoredFiling]
+    latest_at: datetime
