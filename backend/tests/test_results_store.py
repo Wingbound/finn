@@ -84,27 +84,55 @@ def test_card_for_unknown_symbol_is_none(conn):
     assert results.card_for(conn, "NOPE") is None
 
 
-def test_ingest_falls_back_to_standalone(conn):
+def _as_standalone(xml: bytes) -> bytes:
+    old = b">Consolidated</in-capmkt:NatureOfReportStandaloneConsolidated>"
+    assert old in xml
+    return xml.replace(old, old.replace(b"Consolidated", b"Standalone", 1))
+
+
+def _standalone_fake(rows_only_standalone=True):
     fake = tatasteel_fake()
-    rows = [dict(r) for r in fake.rows["TATASTEEL"] if r["consolidated"] == "Standalone"]
-    fake2 = FakeNSE({"TATASTEEL": rows}, {r["xbrl"]: b"<x/>" for r in rows})
-    # standalone files are not available as fixtures; expect per-target failures
-    res = results.ingest_financials(conn, fake2, ["TATASTEEL"])
-    assert fake2.byte_calls  # attempted standalone only
-    assert all(r["consolidated"] == "Standalone" for r in rows if r["xbrl"] in fake2.byte_calls)
-    assert "TATASTEEL" in res.failed
+    rows, files = [], {}
+    for r in fake.rows["TATASTEEL"]:
+        if r["xbrl"] in fake.files:
+            r = dict(r, consolidated="Standalone")
+            rows.append(r)
+            files[r["xbrl"]] = _as_standalone(fake.files[r["xbrl"]])
+    return FakeNSE({"TATASTEEL": rows}, files)
+
+
+def test_ingest_falls_back_to_standalone(conn):
+    res = results.ingest_financials(conn, _standalone_fake(), ["TATASTEEL"])
+    assert res.failed == {} and res.fetched == 3
+    for pe in (date(2026, 9, 30), date(2026, 6, 30), date(2025, 9, 30)):
+        got = db.get_financials(conn, "TATASTEEL", pe, "standalone")
+        assert got is not None and got[0].basis == "standalone"
+    card, _ = results.card_for(conn, "TATASTEEL")
+    assert card.basis == "standalone"
 
 
 def test_standalone_basis_stored(conn):
-    fake = tatasteel_fake()
-    cons = {r["xbrl"]: r for r in fake.rows["TATASTEEL"] if r["consolidated"] == "Consolidated"}
-    rows = []
-    for r in cons.values():
-        r = dict(r)
-        r["consolidated"] = "Standalone"
-        rows.append(r)
-    fake2 = FakeNSE({"TATASTEEL": rows}, fake.files)
-    res = results.ingest_financials(conn, fake2, ["TATASTEEL"])
-    assert res.failed == {} and res.fetched == 3
+    results.ingest_financials(conn, _standalone_fake(), ["TATASTEEL"])
     assert {b for _, b in _periods(conn)} == {"standalone"}
     assert db.latest_financials(conn, "TATASTEEL")[1] == "standalone"
+
+
+def test_basis_mismatch_target_is_skipped_and_recorded(conn):
+    fake = _standalone_fake()
+    cons = tatasteel_fake()
+    url = next(iter(fake.files))
+    fake.files[url] = cons.files[url]  # consolidated doc behind a Standalone row
+    res = results.ingest_financials(conn, fake, ["TATASTEEL"])
+    assert "basis mismatch" in res.failed["TATASTEEL"]
+    assert res.fetched == 2 and len(_periods(conn)) == 2
+
+
+def test_rows_stored_under_requested_symbol(conn):
+    fake = tatasteel_fake()
+    for url, xml in fake.files.items():
+        fake.files[url] = xml.replace(
+            b'contextRef="OneD">TATASTEEL<', b'contextRef="OneD">tatasteel<'
+        )
+    results.ingest_financials(conn, fake, ["TATASTEEL"])
+    assert results.card_for(conn, "TATASTEEL") is not None
+    assert len(_periods(conn)) == 3

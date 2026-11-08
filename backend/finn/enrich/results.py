@@ -323,8 +323,10 @@ def _ingest_symbol(
         except XbrlError as e:
             errors.append(f"{target}: {type(e).__name__}: {e}")
             continue
-        # NSE's listing is authoritative for the basis of the filing.
-        q = q.model_copy(update={"basis": filing.basis})
+        if q.basis != filing.basis:
+            errors.append(f"{target} basis mismatch: list {filing.basis}, document {q.basis}")
+            continue
+        q = q.model_copy(update={"symbol": symbol})
         db.upsert_financials(conn, q, filing.filed_at, filing.xbrl_url)
         res.fetched += 1
     if errors:
