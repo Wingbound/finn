@@ -1,4 +1,5 @@
 import json
+import logging
 
 import httpx
 import pytest
@@ -74,6 +75,38 @@ def test_429_then_ok(conn, settings, no_sleep):
 
 
 @respx.mock
+@pytest.mark.parametrize(
+    ("retry_after", "slept"),
+    [
+        ("120", 60.0),  # capped
+        ("-5", 0.0),  # floored
+        ("inf", 1),  # non-finite -> backoff
+        ("nan", 1),
+        ("Wed, 21 Oct 2026 07:28:00 GMT", 1),  # HTTP-date form -> backoff
+    ],
+)
+def test_retry_after_is_clamped_and_sanitised(conn, settings, no_sleep, retry_after, slept):
+    respx.post(GROQ).mock(
+        side_effect=[httpx.Response(429, headers={"retry-after": retry_after}), groq_ok()]
+    )
+    assert LLMRouter(conn, settings).complete_json("classify", "s", "u") == {"a": 1}
+    assert no_sleep == [slept]
+
+
+@respx.mock
+def test_corrupt_cache_row_is_a_miss(conn, settings):
+    route = respx.post(GROQ).mock(return_value=groq_ok())
+    r = LLMRouter(conn, settings)
+    r.complete_json("classify", "s", "u")
+    conn.execute("UPDATE llm_cache SET response = '{not json'")
+    assert r.complete_json("classify", "s", "u") == {"a": 1}
+    assert route.call_count == 2
+    (fixed,) = conn.execute("SELECT response FROM llm_cache").fetchone()
+    assert json.loads(fixed) == {"a": 1}
+    assert r.stats()["cached"] == 0
+
+
+@respx.mock
 def test_persistent_5xx_raises_after_backoff(conn, settings, no_sleep):
     respx.post(GROQ).mock(return_value=httpx.Response(503))
     with pytest.raises(LLMError):
@@ -124,10 +157,20 @@ def test_missing_key_raises_before_http(conn, tmp_path):
         LLMRouter(conn, s).complete_json("classify", "s", "u")
 
 
-def test_unknown_model_costs_zero():
+def test_unknown_model_costs_zero_and_warns(caplog):
     from finn.llm.costs import list_price_usd
 
-    assert list_price_usd("nope", 100, 100) == 0.0
+    with caplog.at_level(logging.WARNING, logger="finn.llm.costs"):
+        assert list_price_usd("unpriced-model-x", 100, 100) == 0.0
+    assert "unpriced-model-x" in caplog.text
+
+
+def test_known_model_does_not_warn(caplog):
+    from finn.llm.costs import list_price_usd
+
+    with caplog.at_level(logging.WARNING, logger="finn.llm.costs"):
+        assert list_price_usd("llama-3.1-8b-instant", 1_000_000, 0) == 0.05
+    assert caplog.text == ""
 
 
 def gemini_resp(body):

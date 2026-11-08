@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+import math
 import re
 import sqlite3
 import time
@@ -18,11 +19,25 @@ from finn.models import IST
 
 MAX_RETRIES = 3
 BACKOFF_S = (1, 2, 4)
+MAX_RETRY_AFTER_S = 60.0
 _FENCE = re.compile(r"^\s*```(?:json)?\s*(.*?)\s*```\s*$", re.DOTALL)
 
 
 def _sleep(seconds: float) -> None:  # patched in tests
     time.sleep(seconds)
+
+
+def _retry_delay(retry_after: str | None, attempt: int) -> float:
+    """The server's retry-after clamped to [0, 60] s; backoff if absent or not a finite number."""
+    if retry_after is None:
+        return BACKOFF_S[attempt]
+    try:
+        delay = float(retry_after)
+    except ValueError:  # e.g. the HTTP-date form
+        return BACKOFF_S[attempt]
+    if not math.isfinite(delay):
+        return BACKOFF_S[attempt]
+    return min(max(delay, 0.0), MAX_RETRY_AFTER_S)
 
 
 def _parse_json(text: str) -> dict:
@@ -56,10 +71,10 @@ class LLMRouter:
     def complete_json(self, task: str, system: str, user: str, *, doc_hash: str = "") -> dict:
         provider, model = route_for(task, self.settings)
         key = hashlib.sha256(f"{provider}|{model}|{system}|{user}|{doc_hash}".encode()).hexdigest()
-        row = self.conn.execute("SELECT response FROM llm_cache WHERE key=?", (key,)).fetchone()
-        if row:
+        cached = self._cached(key)
+        if cached is not None:
             self._log(task, provider, model, True, 0, 0, 0)
-            return json.loads(row[0])
+            return cached
 
         call, parse, key_attr, key_name = PROVIDERS[provider]
         api_key = getattr(self.settings, key_attr)
@@ -80,6 +95,18 @@ class LLMRouter:
         self.conn.commit()
         return result
 
+    def _cached(self, key: str) -> dict | None:
+        """The cached reply, or None on a miss. A corrupt row counts as a miss and is
+        overwritten by the fresh reply."""
+        row = self.conn.execute("SELECT response FROM llm_cache WHERE key=?", (key,)).fetchone()
+        if row is None:
+            return None
+        try:
+            out = json.loads(row[0])
+        except json.JSONDecodeError:
+            return None
+        return out if isinstance(out, dict) else None
+
     def _request(self, call, parse, api_key, model, system, user) -> tuple[str, int, int]:
         last = "no attempt"
         for attempt in range(MAX_RETRIES + 1):
@@ -99,11 +126,7 @@ class LLMRouter:
                         raise LLMError(f"unexpected response shape: {e!r}") from e
             if attempt == MAX_RETRIES:
                 break
-            try:
-                delay = float(wait) if wait is not None else BACKOFF_S[attempt]
-            except ValueError:
-                delay = BACKOFF_S[attempt]
-            _sleep(delay)
+            _sleep(_retry_delay(wait, attempt))
         raise LLMError(f"gave up after {MAX_RETRIES} retries: {last}")
 
     def _log(self, task, provider, model, cached, tin, tout, latency) -> None:

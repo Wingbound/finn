@@ -114,7 +114,7 @@ def _classify_one_batch(router: LLMRouter, batch: list[Filing]) -> dict[str, Cla
     out = {f.seq_id: default_classification() for f in batch}
     try:
         reply = router.complete_json("classify", SYSTEM_PROMPT, _payload(batch))
-    except (LLMError, ValueError):  # ValueError: e.g. corrupt cache row (JSONDecodeError)
+    except (LLMError, ValueError):  # ValueError: belt and braces; the pipeline never raises
         return out
     items = reply.get("items") if isinstance(reply, dict) else None
     if not isinstance(items, list):
