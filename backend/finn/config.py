@@ -1,3 +1,4 @@
+from datetime import date
 from functools import lru_cache
 from pathlib import Path
 from typing import Literal
@@ -30,6 +31,11 @@ class Settings(BaseSettings):
             self.db_path = self.data_dir / "finn.sqlite"
         return self
 
+
+# Weekend dates on which NSE ran a full trading session, e.g. a Saturday Union Budget day.
+# Every other weekend-dated bar is a token special session (Diwali Muhurat) and is dropped
+# from price history; add a date here only after NSE announces a full session for it.
+FULL_SPECIAL_SESSIONS: frozenset[date] = frozenset()
 
 ROUTES: dict[str, Literal["groq", "gemini"]] = {
     "classify": "groq",

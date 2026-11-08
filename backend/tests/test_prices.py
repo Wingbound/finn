@@ -2,21 +2,22 @@ from datetime import date, datetime
 
 import pandas as pd
 
+from finn.config import FULL_SPECIAL_SESSIONS
 from finn.ingest import prices
 from finn.ingest.prices import completed_sessions, fetch_eod
 from finn.models import IST, PriceBar
 from finn.portfolio import Holding
 
 
-def _bar(d: date, vol: int = 5_000_000, close: float = 100.0) -> PriceBar:
-    return PriceBar(symbol="TCS", date=d, open=close, high=close, low=close, close=close, volume=vol)
+def _bar(d: date, vol: int = 5_000_000, close: float = 100.0, symbol: str = "TCS") -> PriceBar:
+    return PriceBar(symbol=symbol, date=d, open=close, high=close, low=close, close=close, volume=vol)
 
 
-def _weekday_bars(n: int, end: date) -> list[PriceBar]:
+def _weekday_bars(n: int, end: date, vol: int = 5_000_000, symbol: str = "TCS") -> list[PriceBar]:
     out, d = [], end
     while len(out) < n:
         if d.weekday() < 5:
-            out.append(_bar(d))
+            out.append(_bar(d, vol=vol, symbol=symbol))
         d = date.fromordinal(d.toordinal() - 1)
     return sorted(out, key=lambda b: b.date)
 
@@ -29,11 +30,28 @@ def test_muhurat_bar_excluded():
     assert len(out) == 25
 
 
-def test_normal_weekend_volume_kept():
-    bars = _weekday_bars(25, date(2026, 11, 6))
-    bars.append(_bar(date(2026, 11, 8), vol=4_000_000))
+def test_muhurat_bar_with_normal_volume_excluded():
+    # VOLTAS, Diwali Muhurat 2026-11-08 (Sunday): 648,834 shares against a ~620,300 median,
+    # so no volume ratio can tell it apart from a full session.
+    bars = _weekday_bars(25, date(2026, 11, 6), vol=620_300, symbol="VOLTAS")
+    bars.append(_bar(date(2026, 11, 8), vol=648_834, symbol="VOLTAS"))
     out = completed_sessions(bars, datetime(2026, 11, 9, 18, 0, tzinfo=IST))
-    assert date(2026, 11, 8) in {b.date for b in out}
+    assert date(2026, 11, 8) not in {b.date for b in out}
+    assert len(out) == 25
+
+
+def test_allowlisted_weekend_full_session_kept():
+    budget_saturday = date(2026, 11, 7)
+    bars = _weekday_bars(25, date(2026, 11, 6)) + [_bar(budget_saturday), _bar(date(2026, 11, 8))]
+    out = completed_sessions(
+        bars, datetime(2026, 11, 9, 18, 0, tzinfo=IST), full_special_sessions={budget_saturday}
+    )
+    kept = {b.date for b in out}
+    assert budget_saturday in kept and date(2026, 11, 8) not in kept
+
+
+def test_full_special_sessions_empty_by_default():
+    assert FULL_SPECIAL_SESSIONS == frozenset()
 
 
 def test_inprogress_bar_dropped():

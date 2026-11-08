@@ -126,7 +126,10 @@ def test_portfolio_has_18_rows_with_spark(client):
     assert h["close"] == 110.0
     assert h["change_pct"] == 10.0
     assert h["vol_ratio"] == 5.0
-    assert set(h) == {"symbol", "name", "sector", "size", "close", "change_pct", "vol_ratio", "spark"}
+    assert h["date"] == "2026-11-06"
+    assert set(h) == {
+        "symbol", "name", "sector", "size", "date", "close", "change_pct", "vol_ratio", "spark"
+    }
 
 
 def test_portfolio_holding_without_bars_has_nulls(client, tmp_path):
@@ -145,6 +148,7 @@ def test_portfolio_holding_without_bars_has_nulls(client, tmp_path):
     app.dependency_overrides[get_conn] = _conn
     h = client.get("/portfolio").json()["holdings"][0]
     assert h["close"] is None and h["vol_ratio"] is None and h["spark"] == []
+    assert h["date"] is None
 
 
 def test_filing_detail_and_unknown_404(client):

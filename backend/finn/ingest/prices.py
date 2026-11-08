@@ -3,20 +3,19 @@
 from __future__ import annotations
 
 import logging
-import statistics
-from datetime import datetime, time
+from collections.abc import Collection
+from datetime import date, datetime, time
 
 import pandas as pd
 import yfinance as yf
 
+from finn.config import FULL_SPECIAL_SESSIONS
 from finn.models import IST, PriceBar
 from finn.portfolio import Holding
 
 log = logging.getLogger(__name__)
 
 SESSION_CLOSE = time(15, 45)  # NSE closes 15:30; allow 15 min for data to settle
-SPECIAL_SESSION_VOLUME_RATIO = 0.25
-SPECIAL_SESSION_LOOKBACK = 20
 
 
 def fetch_eod(holdings: list[Holding], period: str = "3mo") -> list[PriceBar]:
@@ -56,24 +55,22 @@ def fetch_eod(holdings: list[Holding], period: str = "3mo") -> list[PriceBar]:
     return bars
 
 
-def completed_sessions(bars: list[PriceBar], now: datetime) -> list[PriceBar]:
-    """Drop an in-progress bar for today and weekend special (Muhurat) sessions."""
+def completed_sessions(
+    bars: list[PriceBar],
+    now: datetime,
+    full_special_sessions: Collection[date] = FULL_SPECIAL_SESSIONS,
+) -> list[PriceBar]:
+    """Drop an in-progress bar for today and weekend special (Muhurat) sessions.
+
+    A weekend bar is kept only when its date is in `full_special_sessions`. Volume can't
+    separate the two: the 2026 Muhurat hour traded near-normal volume in several names.
+    """
     now_ist = now.astimezone(IST)
     today = now_ist.date()
     in_progress = now_ist.time() < SESSION_CLOSE
-
-    kept: list[PriceBar] = []
-    by_symbol: dict[str, list[PriceBar]] = {}
-    for b in bars:
-        by_symbol.setdefault(b.symbol, []).append(b)
-    for series in by_symbol.values():
-        series.sort(key=lambda b: b.date)
-        for i, b in enumerate(series):
-            if in_progress and b.date == today:
-                continue
-            if b.date.weekday() >= 5:
-                prior = [p.volume for p in series[:i]][-SPECIAL_SESSION_LOOKBACK:]
-                if prior and b.volume < SPECIAL_SESSION_VOLUME_RATIO * statistics.median(prior):
-                    continue
-            kept.append(b)
-    return kept
+    return [
+        b
+        for b in bars
+        if not (in_progress and b.date == today)
+        and (b.date.weekday() < 5 or b.date in full_special_sessions)
+    ]

@@ -93,10 +93,11 @@ def health(conn: Conn) -> dict:
 def _holding_row(h, bars) -> dict:
     row = {
         "symbol": h.symbol, "name": h.name, "sector": h.sector, "size": h.size,
-        "close": None, "change_pct": None, "vol_ratio": None, "spark": [],
+        "date": None, "close": None, "change_pct": None, "vol_ratio": None, "spark": [],
     }
     if not bars:
         return row
+    row["date"] = bars[-1].date.isoformat()  # last completed session; symbols can lag
     row["close"] = bars[-1].close
     row["spark"] = [b.close for b in bars[-SPARK_POINTS:]]
     if len(bars) >= 2 and bars[-2].close > 0:
