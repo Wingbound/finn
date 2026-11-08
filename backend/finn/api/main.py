@@ -2,9 +2,12 @@
 
 from __future__ import annotations
 
+import shutil
 import sqlite3
 import statistics
+from contextlib import asynccontextmanager
 from datetime import datetime, timedelta
+from pathlib import Path
 from typing import Annotated
 
 from fastapi import Depends, FastAPI, HTTPException
@@ -21,7 +24,25 @@ from finn.ingest.prices import completed_sessions
 from finn.models import IST, Alert, Category, Rules, ScoredFiling
 from finn.portfolio import load_portfolio
 
-app = FastAPI(title="FINN")
+SEED_PATH = Path(__file__).resolve().parents[2] / "seed" / "finn.sqlite"
+
+
+def copy_seed_if_missing(db_path: Path, seed_path: Path) -> bool:
+    """First boot: start from the committed snapshot instead of an empty store."""
+    if db_path.exists() or not seed_path.exists():
+        return False
+    db_path.parent.mkdir(parents=True, exist_ok=True)
+    shutil.copyfile(seed_path, db_path)
+    return True
+
+
+@asynccontextmanager
+async def lifespan(_app: FastAPI):
+    copy_seed_if_missing(get_settings().db_path, SEED_PATH)
+    yield
+
+
+app = FastAPI(title="FINN", lifespan=lifespan)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=get_settings().allowed_origins,

@@ -7,9 +7,11 @@ import pytest
 from fastapi.testclient import TestClient
 
 from finn import db
+from finn.api import main as api_main
 from finn.api.deps import get_conn, get_now
-from finn.api.main import app
+from finn.api.main import SEED_PATH, app, copy_seed_if_missing
 from finn.classify.rules import classify_rules
+from finn.config import Settings
 from finn.ingest.nse import parse_announcement
 from finn.models import IST, PriceBar
 from finn.portfolio import load_portfolio
@@ -174,3 +176,43 @@ def test_alerts_reject_out_of_range_rules(client):
     assert client.post("/alerts", json={"price_move_pct": -1}).status_code == 422
     bad = {"overrides": {"TRENT": {"volume_multiple": 0}}}
     assert client.post("/alerts", json=bad).status_code == 422
+
+
+def test_seed_copied_when_db_missing(tmp_path):
+    seed = tmp_path / "seed.sqlite"
+    seed.write_bytes(b"seed-bytes")
+    target = tmp_path / "data" / "nested" / "finn.sqlite"
+    assert copy_seed_if_missing(target, seed) is True
+    assert target.read_bytes() == b"seed-bytes"
+
+
+def test_seed_never_overwrites_existing_db(tmp_path):
+    seed = tmp_path / "seed.sqlite"
+    seed.write_bytes(b"seed-bytes")
+    target = tmp_path / "finn.sqlite"
+    target.write_bytes(b"live-data")
+    assert copy_seed_if_missing(target, seed) is False
+    assert target.read_bytes() == b"live-data"
+
+
+def test_no_seed_no_copy(tmp_path):
+    target = tmp_path / "finn.sqlite"
+    assert copy_seed_if_missing(target, tmp_path / "absent.sqlite") is False
+    assert not target.exists()
+
+
+def test_startup_copies_seed_to_settings_db_path(tmp_path, monkeypatch):
+    seed = tmp_path / "seed.sqlite"
+    seed.write_bytes(b"seed-bytes")
+    target = tmp_path / "data" / "finn.sqlite"
+    monkeypatch.setattr(api_main, "SEED_PATH", seed)
+    monkeypatch.setattr(
+        api_main, "get_settings", lambda: Settings(_env_file=None, db_path=target)
+    )
+    with TestClient(app):
+        pass
+    assert target.read_bytes() == b"seed-bytes"
+
+
+def test_committed_seed_path_points_at_backend_seed():
+    assert SEED_PATH == Path(__file__).resolve().parent.parent / "seed" / "finn.sqlite"
