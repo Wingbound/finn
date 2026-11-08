@@ -104,4 +104,6 @@ not material.
 
 The 30-day seed `backend/seed/finn.sqlite` was built on 2026-11-08 with
 `scripts/refresh.py --days 30 --no-llm`. Rules classified 253 of its 317 filings (79.8%). The
-other 64 took the `unclassified` default, pending the LLM re-run.
+other 64 took the `unclassified` default. The next `scripts/refresh.py` run with an API key
+sends those rows to the LLM, because `classify_pending` retries every `by=default` row
+whenever an LLM is available. The seed does not need rebuilding.

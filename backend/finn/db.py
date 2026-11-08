@@ -139,6 +139,14 @@ def unclassified_filings(conn: sqlite3.Connection) -> list[Filing]:
     return [_filing(r) for r in rows]
 
 
+def default_classified_filings(conn: sqlite3.Connection) -> list[Filing]:
+    """Filings that got the fallback default (rules missed, no usable LLM answer)."""
+    rows = conn.execute(
+        "SELECT * FROM filings WHERE classified_by = 'default' ORDER BY filed_at, seq_id"
+    ).fetchall()
+    return [_filing(r) for r in rows]
+
+
 def filings_in_window(
     conn: sqlite3.Connection, symbols: list[str], start: datetime, end: datetime
 ) -> list[tuple[Filing, Classification | None]]:

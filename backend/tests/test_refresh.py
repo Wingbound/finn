@@ -127,23 +127,44 @@ def test_use_llm_without_keys_degrades_to_rules(conn, keyless, month_by_symbol, 
     assert "GROQ_API_KEY" in capsys.readouterr().out
 
 
-@respx.mock
-def test_use_llm_with_key_sends_rule_misses_to_llm(conn, month_by_symbol, monkeypatch):
+def _groq(req):
+    ids = [item["id"] for item in json.loads(json.loads(req.content)["messages"][1]["content"])]
+    items = [{"id": i, "category": "press_release", "subtype": None} for i in ids]
+    content = json.dumps({"items": items})
+    return httpx.Response(200, json={"choices": [{"message": {"content": content}}]})
+
+
+def _keyed(monkeypatch):
     settings = Settings(_env_file=None, gemini_api_key="", groq_api_key="test-key")
     monkeypatch.setattr(refresh_mod, "get_settings", lambda: settings)
+
+
+@respx.mock
+def test_use_llm_with_key_sends_rule_misses_to_llm(conn, month_by_symbol, monkeypatch):
+    _keyed(monkeypatch)
     _nse_ok(month_by_symbol)
     monkeypatch.setattr(refresh_mod, "fetch_eod", _bars)
-
-    def groq(req):
-        ids = [item["id"] for item in json.loads(json.loads(req.content)["messages"][1]["content"])]
-        items = [{"id": i, "category": "press_release", "subtype": None} for i in ids]
-        content = json.dumps({"items": items})
-        return httpx.Response(200, json={"choices": [{"message": {"content": content}}]})
-
-    respx.post(GROQ_URL).mock(side_effect=groq)
+    respx.post(GROQ_URL).mock(side_effect=_groq)
     summary = refresh(conn, use_llm=True)
     assert summary["classify"]["llm"] > 0 and summary["classify"]["default"] == 0
     assert summary["llm"]["calls"] > 0
+
+
+@respx.mock
+def test_keyed_refresh_upgrades_rows_defaulted_by_a_keyless_run(
+    conn, keyless, month_by_symbol, monkeypatch
+):
+    _nse_ok(month_by_symbol)
+    monkeypatch.setattr(refresh_mod, "fetch_eod", _bars)
+    first = refresh(conn, use_llm=False)  # e.g. the seed, built before keys existed
+    assert first["classify"]["default"] > 0
+
+    _keyed(monkeypatch)
+    respx.post(GROQ_URL).mock(side_effect=_groq)
+    second = refresh(conn, use_llm=True)
+    assert second["filings_new"] == 0
+    assert second["classify"] == {"rules": 0, "llm": first["classify"]["default"], "default": 0}
+    assert db.default_classified_filings(conn) == []
 
 
 @respx.mock

@@ -129,3 +129,38 @@ def test_valueerror_defaults_batch():
             raise ValueError("corrupt cache")
 
     assert classify_batch_llm(Boom(), [_f(1)])["1"].by == "default"
+
+
+def _sent_ids(router: FakeRouter) -> list[str]:
+    import json
+
+    return [it["id"] for c in router.calls for it in json.loads(c[2])]
+
+
+def test_pending_retries_default_rows_when_router_available(conn):
+    db.upsert_filings(conn, [_f(2)])
+    classify_pending(conn, None)  # keyless run: rule miss -> default
+    assert db.get_filing(conn, "2")[1].by == "default"
+
+    db.upsert_filings(conn, [_f(3)])  # a new rule miss arrives too
+    r = FakeRouter()
+    assert classify_pending(conn, r) == {"rules": 0, "llm": 2, "default": 0}
+    assert sorted(_sent_ids(r)) == ["2", "3"]
+    cls = db.get_filing(conn, "2")[1]
+    assert (cls.category, cls.by) == ("capex", "llm")
+    assert db.default_classified_filings(conn) == []
+
+
+def test_pending_retry_that_fails_stays_default(conn):
+    db.upsert_filings(conn, [_f(2)])
+    classify_pending(conn, None)
+    assert classify_pending(conn, FakeRouter(error=True)) == {"rules": 0, "llm": 0, "default": 1}
+    assert [f.seq_id for f in db.default_classified_filings(conn)] == ["2"]
+
+
+def test_pending_without_router_leaves_default_rows_alone(conn):
+    db.upsert_filings(conn, [_f(2)])
+    classify_pending(conn, None)
+    db.upsert_filings(conn, [_f(3)])
+    assert classify_pending(conn, None) == {"rules": 0, "llm": 0, "default": 1}  # only the new one
+    assert [f.seq_id for f in db.default_classified_filings(conn)] == ["2", "3"]
