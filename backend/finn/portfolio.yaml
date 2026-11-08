@@ -1,0 +1,19 @@
+holdings:
+  - {symbol: RELIANCE, name: Reliance Industries Ltd, sector: Oil & Gas / Conglomerate, size: mega}
+  - {symbol: PERSISTENT, name: Persistent Systems Ltd, sector: IT Services, size: mid}
+  - {symbol: TECHM, name: Tech Mahindra Ltd, sector: IT Services, size: large}
+  - {symbol: ZYDUSLIFE, name: Zydus Lifesciences Ltd, sector: Pharma, size: mid}
+  - {symbol: SUNPHARMA, name: Sun Pharmaceutical Industries Ltd, sector: Pharma, size: mega}
+  - {symbol: VOLTAS, name: Voltas Ltd, sector: Consumer Durables, size: mid}
+  - {symbol: M&M, name: Mahindra & Mahindra Ltd, sector: Automobiles, size: mega}
+  - {symbol: TVSMOTOR, name: TVS Motor Company Ltd, sector: Automobiles, size: large}
+  - {symbol: ULTRACEMCO, name: UltraTech Cement Ltd, sector: Cement, size: mega}
+  - {symbol: TRENT, name: Trent Ltd, sector: Retail, size: large}
+  - {symbol: TATASTEEL, name: Tata Steel Ltd, sector: Metals, size: large}
+  - {symbol: MAXHEALTH, name: Max Healthcare Institute Ltd, sector: Healthcare, size: large}
+  - {symbol: IDFCFIRSTB, name: IDFC First Bank Ltd, sector: Banking, size: mid}
+  - {symbol: BAJFINANCE, name: Bajaj Finance Ltd, sector: NBFC, size: mega}
+  - {symbol: CGPOWER, name: CG Power and Industrial Solutions Ltd, sector: Capital Goods, size: large}
+  - {symbol: AMBER, name: Amber Enterprises India Ltd, sector: Electronics Manufacturing, size: small}
+  - {symbol: LODHA, name: Macrotech Developers Ltd, sector: Real Estate, size: mid}
+  - {symbol: PREMIERENE, name: Premier Energies Ltd, sector: Renewable Energy, size: mid}
