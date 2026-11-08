@@ -4,8 +4,6 @@ from __future__ import annotations
 
 import json
 
-from pydantic import BaseModel, ValidationError
-
 from finn.classify.rules import SUMMARY_CHARS
 from finn.llm import LLMError, LLMRouter
 from finn.models import CATEGORIES, Classification, Filing
@@ -38,16 +36,6 @@ Reply with JSON only: {"items":[{"id":"<id>","category":"<category>","subtype":"
 Include every id exactly once. subtype is optional."""
 
 
-class _Item(BaseModel):
-    id: str
-    category: str
-    subtype: str | None = None
-
-
-class _Reply(BaseModel):
-    items: list[_Item]
-
-
 def _default() -> Classification:
     return Classification(category="unclassified", by="default", confidence=0.0)
 
@@ -68,20 +56,38 @@ def _payload(batch: list[Filing]) -> str:
     )
 
 
+def _parse_item(raw: object) -> tuple[str, Classification] | None:
+    """Validate one reply item; None if unusable (that filing then keeps its default)."""
+    if not isinstance(raw, dict):
+        return None
+    item_id, category, subtype = raw.get("id"), raw.get("category"), raw.get("subtype")
+    if isinstance(item_id, bool) or not isinstance(item_id, (str, int)):
+        return None
+    if not isinstance(category, str) or category not in CATEGORIES:
+        return None
+    if not isinstance(subtype, str) or not subtype.strip():
+        subtype = None
+    return str(item_id), Classification(
+        category=category,  # type: ignore[arg-type]
+        subtype=subtype,
+        by="llm",
+        confidence=LLM_CONFIDENCE,
+    )
+
+
 def _classify_one_batch(router: LLMRouter, batch: list[Filing]) -> dict[str, Classification]:
     out = {f.seq_id: _default() for f in batch}
     try:
-        reply = _Reply.model_validate(router.complete_json("classify", SYSTEM_PROMPT, _payload(batch)))
-    except (LLMError, ValidationError):
+        reply = router.complete_json("classify", SYSTEM_PROMPT, _payload(batch))
+    except (LLMError, ValueError):  # ValueError: e.g. corrupt cache row (JSONDecodeError)
         return out
-    for item in reply.items:
-        if item.id in out and item.category in CATEGORIES:
-            out[item.id] = Classification(
-                category=item.category,  # type: ignore[arg-type]
-                subtype=item.subtype or None,
-                by="llm",
-                confidence=LLM_CONFIDENCE,
-            )
+    items = reply.get("items") if isinstance(reply, dict) else None
+    if not isinstance(items, list):
+        return out
+    for raw in items:
+        parsed = _parse_item(raw)
+        if parsed and parsed[0] in out:
+            out[parsed[0]] = parsed[1]
     return out
 
 

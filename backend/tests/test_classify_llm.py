@@ -98,3 +98,34 @@ def test_pending_without_router_defaults(conn):
     db.upsert_filings(conn, [_f(2)])
     assert classify_pending(conn, None) == {"rules": 0, "llm": 0, "default": 1}
     assert db.unclassified_filings(conn) == []
+
+
+def test_one_bad_item_defaults_only_itself():
+    reply = {
+        "items": [
+            {"id": "1", "category": "dividend", "subtype": None},
+            {"id": 2, "category": "mna", "subtype": "stake_sale"},
+            {"id": "3", "category": "capex", "subtype": 5},
+            {"id": "4", "category": None},
+            "garbage",
+        ]
+    }
+    out = classify_batch_llm(FakeRouter(reply), [_f(1), _f(2), _f(3), _f(4)])
+    assert (out["1"].category, out["1"].by) == ("dividend", "llm")
+    assert (out["2"].category, out["2"].subtype, out["2"].by) == ("mna", "stake_sale", "llm")
+    # bad subtype is coerced to None; the valid category is kept
+    assert (out["3"].category, out["3"].subtype, out["3"].by) == ("capex", None, "llm")
+    assert (out["4"].category, out["4"].by) == ("unclassified", "default")
+
+
+def test_items_not_a_list_defaults_batch():
+    out = classify_batch_llm(FakeRouter({"items": "x"}), [_f(1)])
+    assert out["1"].by == "default"
+
+
+def test_valueerror_defaults_batch():
+    class Boom(FakeRouter):
+        def complete_json(self, *a, **k):
+            raise ValueError("corrupt cache")
+
+    assert classify_batch_llm(Boom(), [_f(1)])["1"].by == "default"
