@@ -14,7 +14,7 @@ from finn.api.main import app, copy_seed_if_empty
 from finn.classify.rules import classify_rules
 from finn.config import Settings
 from finn.ingest.nse import parse_announcement
-from finn.models import IST, Filing, PriceBar
+from finn.models import IST, Classification, Filing, PriceBar
 from finn.portfolio import load_portfolio
 
 FIX = Path(__file__).parent / "fixtures" / "nse"
@@ -426,3 +426,46 @@ def test_long_lookback_loads_enough_history(client, tmp_path):
     alerts = client.post("/alerts", json={"lookback": 120}).json()["alerts"]
     assert [(a["kind"], a["date"]) for a in alerts] == [("volume", "2026-11-06")]
     assert alerts[0]["message"] == "TRENT traded 2.8× its 120-day average volume"
+
+
+@pytest.fixture
+def results_client(client, tmp_path, monkeypatch):
+    from finn.enrich import results
+    from tests.fakes import tatasteel_fake
+
+    monkeypatch.setattr(results, "_sleep", lambda s: None)
+    conn = db.connect(tmp_path / "api.sqlite")
+    results.ingest_financials(conn, tatasteel_fake(), ["TATASTEEL"])
+    f = Filing(
+        seq_id="TS-RES",
+        symbol="TATASTEEL",
+        company="Tata Steel Limited",
+        nse_desc="Outcome of Board Meeting",
+        subject="Tata Steel Limited has submitted to the Exchange, the financial results for "
+        "the quarter and half year ended September 30, 2026.",
+        filed_at=datetime(2026, 11, 7, 13, 6, 33, tzinfo=IST),
+    )
+    db.upsert_filings(conn, [f])
+    db.save_classifications(
+        conn, {"TS-RES": Classification(category="results", by="rules", confidence=1.0)}
+    )
+    conn.close()
+    return client
+
+
+def test_results_endpoint(results_client):
+    r = results_client.get("/results/tatasteel")
+    assert r.status_code == 200
+    assert r.json()["period_label"] == "Q2 FY27"
+
+
+def test_results_endpoint_404(client):
+    r = client.get("/results/NOSUCH")
+    assert r.status_code == 404
+    assert r.json() == {"detail": "no results on file"}
+
+
+def test_digest_story_serialises_results(results_client):
+    body = results_client.post("/digest", json={"hours": 48, "floor": "everything"}).json()
+    stories = [s for s in body["stories"] if s["symbol"] == "TATASTEEL"]
+    assert stories[0]["results"]["metrics"][0]["key"] == "revenue"

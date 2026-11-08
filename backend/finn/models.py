@@ -91,6 +91,7 @@ class Story(BaseModel):
     headline: ScoredFiling
     members: list[ScoredFiling]
     latest_at: datetime
+    results: ResultsCard | None = None
 
 
 class SymbolOverride(BaseModel):

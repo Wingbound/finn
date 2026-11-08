@@ -21,8 +21,9 @@ from finn.api.deps import get_conn, get_now
 from finn.classify.materiality import score_filing
 from finn.config import get_settings
 from finn.digest import Floor, build_digest, classification_or_default, stories_in_window
+from finn.enrich.results import card_for
 from finn.ingest.prices import completed_sessions
-from finn.models import IST, Alert, Category, PriceBar, Rules, ScoredFiling
+from finn.models import IST, Alert, Category, PriceBar, ResultsCard, Rules, ScoredFiling
 from finn.portfolio import load_portfolio
 
 log = logging.getLogger(__name__)
@@ -207,6 +208,14 @@ def alerts(rules: Rules, conn: Conn, now: Now) -> dict:
         "window": {"start": start.isoformat(), "end": end.isoformat()},
         "alerts": merged,
     }
+
+
+@app.get("/results/{symbol}")
+def results_card(symbol: str, conn: Conn) -> ResultsCard:
+    found = card_for(conn, symbol.upper())
+    if found is None:
+        raise HTTPException(status_code=404, detail="no results on file")
+    return found[0]
 
 
 @app.get("/filings/{seq_id}")
