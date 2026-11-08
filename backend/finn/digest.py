@@ -65,7 +65,11 @@ def build_digest(
     stories = cluster(scored)
 
     hidden = [
-        {"symbol": s.filing.symbol, "subject": s.filing.subject, "filed_at": s.filing.filed_at.isoformat()}
+        {
+            "symbol": s.filing.symbol,
+            "subject": s.filing.subject,
+            "filed_at": s.filing.filed_at.isoformat(),
+        }
         for s in scored
         if s.tier == "noise"
     ]

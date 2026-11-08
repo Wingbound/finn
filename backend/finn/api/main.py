@@ -39,7 +39,7 @@ ALERT_FILING_DAYS = 7
 
 
 class DigestRequest(BaseModel):
-    hours: int = Field(24, gt=0)
+    hours: int = Field(24, gt=0, le=24 * 366)
     start: datetime | None = None
     end: datetime | None = None
     floor: Floor = "important"
@@ -51,6 +51,8 @@ class DigestRequest(BaseModel):
             v = getattr(self, name)
             if v is not None and v.tzinfo is None:
                 setattr(self, name, v.replace(tzinfo=IST))
+        if self.start and self.end and self.end < self.start:
+            raise ValueError("end must not be before start")
         return self
 
 
@@ -100,6 +102,8 @@ def portfolio(conn: Conn, now: Now) -> dict:
 def digest(req: DigestRequest, conn: Conn, now: Now) -> dict:
     end = req.end or now
     start = req.start or end - timedelta(hours=req.hours)
+    if end < start:  # only reachable when start is given without end and lies after now
+        raise HTTPException(status_code=422, detail="start must not be after the end of the window")
     symbols = [h.symbol for h in load_portfolio()]
     return build_digest(conn, symbols, start, end, req.floor, req.subscribed)
 

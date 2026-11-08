@@ -158,3 +158,19 @@ def test_filing_detail_and_unknown_404(client):
 
 def test_unknown_filing_404(client):
     assert client.get("/filings/nope").status_code == 404
+
+
+def test_digest_rejects_bad_windows(client):
+    assert client.post("/digest", json={"hours": 1_000_000_000}).status_code == 422
+    assert client.post("/digest", json={"hours": 0}).status_code == 422
+    inverted = {"start": "2026-11-08T00:00:00+05:30", "end": "2026-11-01T00:00:00+05:30"}
+    assert client.post("/digest", json=inverted).status_code == 422
+    # start-only after "now" (2026-11-08 20:00 IST) is also rejected
+    assert client.post("/digest", json={"start": "2026-11-09T00:00:00+05:30"}).status_code == 422
+
+
+def test_alerts_reject_out_of_range_rules(client):
+    assert client.post("/alerts", json={"lookback": 0}).status_code == 422
+    assert client.post("/alerts", json={"price_move_pct": -1}).status_code == 422
+    bad = {"overrides": {"TRENT": {"volume_multiple": 0}}}
+    assert client.post("/alerts", json=bad).status_code == 422

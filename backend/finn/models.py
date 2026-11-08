@@ -94,15 +94,15 @@ class Story(BaseModel):
 
 
 class SymbolOverride(BaseModel):
-    volume_multiple: float | None = None
-    price_move_pct: float | None = None
+    volume_multiple: float | None = Field(None, gt=0, le=100)
+    price_move_pct: float | None = Field(None, gt=0, le=100)
     muted: bool = False
 
 
 class Rules(BaseModel):
-    volume_multiple: float = 2.0
-    price_move_pct: float = 5.0
-    lookback: int = 20
+    volume_multiple: float = Field(2.0, gt=0, le=100)
+    price_move_pct: float = Field(5.0, gt=0, le=100)
+    lookback: int = Field(20, ge=5, le=250)
     categories: set[Category] = Field(
         default_factory=lambda: {
             "results",
