@@ -87,3 +87,12 @@ def test_meta_roundtrip(conn):
 def test_llm_tables_exist(conn):
     names = {r[0] for r in conn.execute("SELECT name FROM sqlite_master WHERE type='table'")}
     assert {"filings", "prices", "meta", "llm_cache", "llm_calls"} <= names
+
+
+def test_get_filing(conn):
+    f = Filing(seq_id="g1", symbol="TCS", company="TCS", nse_desc="d", subject="s",
+               filed_at=datetime(2026, 11, 1, 10, 0, tzinfo=IST))
+    db.upsert_filings(conn, [f])
+    got, cls = db.get_filing(conn, "g1")
+    assert got == f and cls is None
+    assert db.get_filing(conn, "missing") is None

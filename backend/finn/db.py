@@ -193,3 +193,8 @@ def set_meta(conn: sqlite3.Connection, key: str, value: str) -> None:
 def get_meta(conn: sqlite3.Connection, key: str) -> str | None:
     row = conn.execute("SELECT value FROM meta WHERE key=?", (key,)).fetchone()
     return row["value"] if row else None
+
+
+def get_filing(conn: sqlite3.Connection, seq_id: str) -> tuple[Filing, Classification | None] | None:
+    row = conn.execute("SELECT * FROM filings WHERE seq_id=?", (seq_id,)).fetchone()
+    return (_filing(row), _classification(row)) if row else None

@@ -22,6 +22,8 @@ module-root = ""
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
+# starlette TestClient nags about httpx (httpx2 is not installable here); narrow filter.
+filterwarnings = ["ignore:Using `httpx` with `starlette.testclient`"]
 
 [tool.ruff]
 line-length = 100
