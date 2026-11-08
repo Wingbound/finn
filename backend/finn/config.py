@@ -12,10 +12,11 @@ class Settings(BaseSettings):
 
     gemini_api_key: str = ""
     groq_api_key: str = ""
-    # Model IDs, each overridable via env (FINN_MODEL_<TASK>). UNVERIFIED (from public docs,
-    # 2026-11-08) — verify via list-models when keys arrive
-    finn_model_classify: str = "llama-3.1-8b-instant"
-    finn_model_oneliner: str = "llama-3.1-8b-instant"
+    # Model IDs, each overridable via env (FINN_MODEL_<TASK>). Verified against each
+    # provider's list-models endpoint on 2026-11-09 (Groq has retired its Llama models).
+    # gpt-oss-120b over -20b: 91.3% vs 85.6% on the classification eval (docs/EVALS.md).
+    finn_model_classify: str = "openai/gpt-oss-120b"
+    finn_model_oneliner: str = "openai/gpt-oss-120b"
     finn_model_extract_pdf: str = "gemini-3.8-flash"
     finn_model_extract_transcript: str = "gemini-3.5-flash-lite"
     # Pro (gemini-3.1-pro-preview) has no free tier, so reason uses Flash.

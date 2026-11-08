@@ -12,24 +12,27 @@ class LLMError(Exception):
 GROQ_URL = "https://api.groq.com/openai/v1/chat/completions"
 GEMINI_URL = "https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent"
 TIMEOUT = 30.0
+# gpt-oss reasons before answering; set explicitly rather than inherit Groq's default.
+# Classify eval, 120b: "medium" 91.3% at ~1.2k output tokens/batch, "low" 89.4% at ~0.7k.
+# Both fit the free plan with room to spare, so accuracy decides. Only gpt-oss takes this.
+GPT_OSS_REASONING_EFFORT = "medium"
 
 
 def call_groq(
     client: httpx.Client, api_key: str, model: str, system: str, user: str
 ) -> httpx.Response:
-    return client.post(
-        GROQ_URL,
-        headers={"Authorization": f"Bearer {api_key}"},
-        json={
-            "model": model,
-            "messages": [
-                {"role": "system", "content": system},
-                {"role": "user", "content": user},
-            ],
-            "response_format": {"type": "json_object"},
-            "temperature": 0,
-        },
-    )
+    body: dict = {
+        "model": model,
+        "messages": [
+            {"role": "system", "content": system},
+            {"role": "user", "content": user},
+        ],
+        "response_format": {"type": "json_object"},
+        "temperature": 0,
+    }
+    if model.startswith("openai/gpt-oss"):
+        body["reasoning_effort"] = GPT_OSS_REASONING_EFFORT
+    return client.post(GROQ_URL, headers={"Authorization": f"Bearer {api_key}"}, json=body)
 
 
 def parse_groq(data: dict) -> tuple[str, int, int]:

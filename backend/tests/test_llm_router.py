@@ -169,8 +169,35 @@ def test_known_model_does_not_warn(caplog):
     from finn.llm.costs import list_price_usd
 
     with caplog.at_level(logging.WARNING, logger="finn.llm.costs"):
-        assert list_price_usd("llama-3.1-8b-instant", 1_000_000, 0) == 0.05
+        assert list_price_usd("openai/gpt-oss-120b", 1_000_000, 1_000_000) == 0.75
     assert caplog.text == ""
+
+
+def test_every_default_model_has_a_list_price():
+    from finn.config import ROUTES, route_for
+    from finn.llm.costs import LIST_PRICES_PER_MTOK
+
+    s = Settings(_env_file=None)
+    assert {route_for(t, s)[1] for t in ROUTES} <= set(LIST_PRICES_PER_MTOK)
+
+
+@respx.mock
+def test_groq_gpt_oss_sends_explicit_reasoning_effort(conn, settings):
+    route = respx.post(GROQ).mock(return_value=groq_ok())
+    LLMRouter(conn, settings).complete_json("classify", "sys", "usr")
+    body = json.loads(route.calls[0].request.content)
+    assert body["model"] == "openai/gpt-oss-120b"
+    assert body["reasoning_effort"] == "medium"
+
+
+@respx.mock
+def test_groq_non_reasoning_model_omits_reasoning_effort(conn, tmp_path):
+    s = Settings(
+        groq_api_key="g", data_dir=tmp_path, finn_model_classify="allam-2-7b", _env_file=None
+    )
+    route = respx.post(GROQ).mock(return_value=groq_ok())
+    LLMRouter(conn, s).complete_json("classify", "sys", "usr")
+    assert "reasoning_effort" not in json.loads(route.calls[0].request.content)
 
 
 def gemini_resp(body):
