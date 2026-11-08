@@ -5,7 +5,7 @@ import httpx
 import pytest
 import respx
 
-from finn.config import Settings
+from finn.config import Settings, chain_for
 from finn.llm import LLMError, LLMRouter
 from finn.llm import router as router_mod
 
@@ -107,18 +107,20 @@ def test_corrupt_cache_row_is_a_miss(conn, settings):
 
 
 @respx.mock
-def test_persistent_5xx_raises_after_backoff(conn, settings, no_sleep):
+def test_persistent_5xx_raises_after_backoff(conn, tmp_path, no_sleep):
+    s = Settings(groq_api_key="g", gemini_api_key="", data_dir=tmp_path, _env_file=None)
     respx.post(GROQ).mock(return_value=httpx.Response(503))
     with pytest.raises(LLMError):
-        LLMRouter(conn, settings).complete_json("classify", "s", "u")
+        LLMRouter(conn, s).complete_json("classify", "s", "u")
     assert no_sleep == [1, 2, 4]
 
 
 @respx.mock
-def test_invalid_json_raises_llmerror(conn, settings):
+def test_invalid_json_raises_llmerror(conn, tmp_path):
+    s = Settings(groq_api_key="g", gemini_api_key="", data_dir=tmp_path, _env_file=None)
     respx.post(GROQ).mock(return_value=groq_ok("not json"))
     with pytest.raises(LLMError):
-        LLMRouter(conn, settings).complete_json("classify", "s", "u")
+        LLMRouter(conn, s).complete_json("classify", "s", "u")
 
 
 @respx.mock
@@ -212,17 +214,19 @@ def gemini_resp(body):
         ({"candidates": [{"finishReason": "SAFETY"}]}, "SAFETY"),
     ],
 )
-def test_gemini_safety_block_raises_clear_error(conn, settings, no_sleep, body, needle):
+def test_gemini_safety_block_raises_clear_error(conn, tmp_path, no_sleep, body, needle):
+    s = Settings(groq_api_key="", gemini_api_key="m", data_dir=tmp_path, _env_file=None)
     route = respx.post(GEMINI).mock(return_value=gemini_resp(body))
     with pytest.raises(LLMError, match=needle):
-        LLMRouter(conn, settings).complete_json("extract_transcript", "s", "u")
+        LLMRouter(conn, s).complete_json("extract_transcript", "s", "u")
     assert route.call_count == 1 and no_sleep == []
 
 
 @respx.mock
-def test_invalid_json_still_logs_usage(conn, settings):
+def test_invalid_json_still_logs_usage(conn, tmp_path):
+    s = Settings(groq_api_key="g", gemini_api_key="", data_dir=tmp_path, _env_file=None)
     respx.post(GROQ).mock(return_value=groq_ok("not json"))
-    r = LLMRouter(conn, settings)
+    r = LLMRouter(conn, s)
     with pytest.raises(LLMError):
         r.complete_json("classify", "s", "u")
     row = conn.execute("SELECT cached, input_tokens, output_tokens FROM llm_calls").fetchone()
@@ -247,3 +251,85 @@ def test_gemini_thinking_tokens_count_as_output(conn, settings):
     r = LLMRouter(conn, settings)
     r.complete_json("extract_transcript", "s", "u")
     assert r.stats()["output_tokens"] == 25
+
+
+def gemini_ok(content='{"a": 1}'):
+    return httpx.Response(
+        200,
+        json={
+            "candidates": [{"content": {"parts": [{"text": content}]}}],
+            "usageMetadata": {"promptTokenCount": 3, "candidatesTokenCount": 2},
+        },
+    )
+
+
+def test_chain_for_appends_fallbacks(settings):
+    assert chain_for("classify", settings) == [
+        ("groq", "openai/gpt-oss-120b"),
+        ("gemini", "gemini-3.5-flash-lite"),
+    ]
+
+
+def test_chain_for_dedupes_primary_and_fallback(tmp_path):
+    s = Settings(finn_model_extract_transcript="gemini-3.5-flash-lite", _env_file=None)
+    assert chain_for("extract_transcript", s) == [
+        ("gemini", "gemini-3.5-flash-lite"),
+        ("groq", "openai/gpt-oss-120b"),
+    ]
+
+
+@respx.mock
+def test_falls_back_to_gemini_on_groq_5xx(conn, settings, no_sleep):
+    groq = respx.post(GROQ).mock(return_value=httpx.Response(503))
+    respx.post(GEMINI).mock(return_value=gemini_ok())
+    r = LLMRouter(conn, settings)
+    assert r.complete_json("classify", "s", "u") == {"a": 1}
+    assert groq.call_count == 2
+    assert r.last_model == "gemini/gemini-3.5-flash-lite"
+
+
+@respx.mock
+def test_falls_back_on_invalid_json(conn, settings):
+    respx.post(GROQ).mock(return_value=groq_ok("not json"))
+    respx.post(GEMINI).mock(return_value=gemini_ok('{"b": 2}'))
+    assert LLMRouter(conn, settings).complete_json("classify", "s", "u") == {"b": 2}
+
+
+@respx.mock
+def test_missing_primary_key_goes_straight_to_fallback(conn, tmp_path):
+    s = Settings(groq_api_key="", gemini_api_key="m", data_dir=tmp_path, _env_file=None)
+    groq = respx.post(GROQ).mock(return_value=groq_ok())
+    gem = respx.post(GEMINI).mock(return_value=gemini_ok())
+    assert LLMRouter(conn, s).complete_json("classify", "s", "u") == {"a": 1}
+    assert groq.call_count == 0 and gem.call_count == 1
+
+
+@respx.mock
+def test_last_usable_model_gets_full_retries(conn, tmp_path, no_sleep):
+    s = Settings(groq_api_key="", gemini_api_key="m", data_dir=tmp_path, _env_file=None)
+    gem = respx.post(GEMINI).mock(return_value=httpx.Response(503))
+    with pytest.raises(LLMError):
+        LLMRouter(conn, s).complete_json("classify", "s", "u")
+    assert gem.call_count == 4 and no_sleep == [1, 2, 4]
+
+
+@respx.mock
+def test_cached_fallback_answer_skips_http(conn, settings):
+    groq = respx.post(GROQ).mock(return_value=httpx.Response(503))
+    gem = respx.post(GEMINI).mock(return_value=gemini_ok())
+    r = LLMRouter(conn, settings)
+    r.complete_json("classify", "s", "u")
+    r.last_model = None
+    assert r.complete_json("classify", "s", "u") == {"a": 1}
+    assert groq.call_count == 2 and gem.call_count == 1
+    assert r.last_model == "gemini/gemini-3.5-flash-lite"
+
+
+@respx.mock
+def test_all_models_fail_names_each(conn, settings):
+    respx.post(GROQ).mock(return_value=httpx.Response(503))
+    respx.post(GEMINI).mock(return_value=httpx.Response(503))
+    with pytest.raises(LLMError) as ei:
+        LLMRouter(conn, settings).complete_json("classify", "s", "u")
+    assert "groq/openai/gpt-oss-120b" in str(ei.value)
+    assert "gemini/gemini-3.5-flash-lite" in str(ei.value)

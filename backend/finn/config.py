@@ -21,7 +21,7 @@ class Settings(BaseSettings):
     finn_model_extract_transcript: str = "gemini-3.5-flash-lite"
     # Pro (gemini-3.1-pro-preview) has no free tier, so reason uses Flash.
     finn_model_reason: str = "gemini-3.8-flash"
-    finn_model_bio: str = "gemini-3.8-flash"
+    finn_model_bio: str = "openai/gpt-oss-120b"
     data_dir: Path = Path("data")
     db_path: Path | None = None
     # Committed snapshot the API copies into an empty store on startup (env SEED_PATH).
@@ -51,7 +51,7 @@ ROUTES: dict[str, Literal["groq", "gemini"]] = {
     "extract_pdf": "gemini",
     "extract_transcript": "gemini",
     "reason": "gemini",
-    "bio": "gemini",
+    "bio": "groq",
 }
 
 
@@ -64,6 +64,27 @@ def route_for(task: str, settings: Settings) -> tuple[str, str]:
     if task not in ROUTES:
         raise KeyError(f"unknown LLM task: {task}")
     return ROUTES[task], getattr(settings, f"finn_model_{task}")
+
+
+_FLASH_LITE = ("gemini", "gemini-3.5-flash-lite")
+# Tried in order after the primary route, so one provider's outage doesn't stop a task.
+FALLBACKS: dict[str, list[tuple[str, str]]] = {
+    "classify": [_FLASH_LITE],
+    "oneliner": [_FLASH_LITE],
+    "bio": [_FLASH_LITE],
+    "extract_pdf": [_FLASH_LITE],
+    "reason": [_FLASH_LITE],
+    "extract_transcript": [("groq", "openai/gpt-oss-120b")],
+}
+
+
+def chain_for(task: str, settings: Settings) -> list[tuple[str, str]]:
+    """The primary (provider, model) then the task's fallbacks, de-duplicated in order."""
+    chain: list[tuple[str, str]] = []
+    for pm in [route_for(task, settings), *FALLBACKS.get(task, [])]:
+        if pm not in chain:
+            chain.append(pm)
+    return chain
 
 
 @lru_cache

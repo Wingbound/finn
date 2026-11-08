@@ -12,7 +12,7 @@ from datetime import datetime
 
 import httpx
 
-from finn.config import Settings, route_for
+from finn.config import Settings, chain_for
 from finn.llm.costs import list_price_usd
 from finn.llm.providers import PROVIDERS, TIMEOUT, LLMError
 from finn.models import IST
@@ -61,6 +61,7 @@ class LLMRouter:
         transport: httpx.BaseTransport | None = None,
     ):
         self.conn = conn
+        self.last_model: str | None = None
         self.settings = settings
         self.client = httpx.Client(
             transport=transport,
@@ -69,31 +70,49 @@ class LLMRouter:
         )
 
     def complete_json(self, task: str, system: str, user: str, *, doc_hash: str = "") -> dict:
-        provider, model = route_for(task, self.settings)
-        key = hashlib.sha256(f"{provider}|{model}|{system}|{user}|{doc_hash}".encode()).hexdigest()
-        cached = self._cached(key)
-        if cached is not None:
-            self._log(task, provider, model, True, 0, 0, 0)
-            return cached
+        chain = chain_for(task, self.settings)
+        keys = [self._key(p, m, system, user, doc_hash) for p, m in chain]
+        for (provider, model), key in zip(chain, keys, strict=True):
+            cached = self._cached(key)
+            if cached is not None:
+                self._log(task, provider, model, True, 0, 0, 0)
+                self.last_model = f"{provider}/{model}"
+                return cached
 
-        call, parse, key_attr, key_name = PROVIDERS[provider]
-        api_key = getattr(self.settings, key_attr)
-        if not api_key:
-            raise LLMError(f"missing {key_name}")
+        usable = [i for i, (p, _) in enumerate(chain) if getattr(self.settings, PROVIDERS[p][2])]
+        failures: list[str] = []
+        for i, (provider, model) in enumerate(chain):
+            call, parse, key_attr, key_name = PROVIDERS[provider]
+            api_key = getattr(self.settings, key_attr)
+            if not api_key:
+                failures.append(f"{provider}/{model}: missing {key_name}")
+                continue
+            retries = MAX_RETRIES if i == usable[-1] else 1
+            try:
+                start = time.monotonic()
+                text, tin, tout = self._request(call, parse, api_key, model, system, user, retries)
+                latency = int((time.monotonic() - start) * 1000)
+                # Log before parsing: a 200 response spent quota even if the JSON is unusable.
+                self._log(task, provider, model, False, tin, tout, latency)
+                result = _parse_json(text)
+            except LLMError as e:
+                failures.append(f"{provider}/{model}: {e}")
+                continue
+            self.conn.execute(
+                "INSERT OR REPLACE INTO llm_cache(key, response, created_at) VALUES (?,?,?)",
+                (keys[i], json.dumps(result), datetime.now(IST).isoformat()),
+            )
+            self.conn.commit()
+            self.last_model = f"{provider}/{model}"
+            return result
 
-        start = time.monotonic()
-        text, tin, tout = self._request(call, parse, api_key, model, system, user)
-        latency = int((time.monotonic() - start) * 1000)
-        # Log before parsing: a 200 response spent quota even if the JSON is unusable.
-        # (Calls that never got a 200 after retries are not logged.)
-        self._log(task, provider, model, False, tin, tout, latency)
-        result = _parse_json(text)
-        self.conn.execute(
-            "INSERT OR REPLACE INTO llm_cache(key, response, created_at) VALUES (?,?,?)",
-            (key, json.dumps(result), datetime.now(IST).isoformat()),
-        )
-        self.conn.commit()
-        return result
+        if not usable:
+            raise LLMError(f"missing {PROVIDERS[chain[0][0]][3]}")
+        raise LLMError("all models failed: " + "; ".join(failures))
+
+    @staticmethod
+    def _key(provider, model, system, user, doc_hash) -> str:
+        return hashlib.sha256(f"{provider}|{model}|{system}|{user}|{doc_hash}".encode()).hexdigest()
 
     def _cached(self, key: str) -> dict | None:
         """The cached reply, or None on a miss. A corrupt row counts as a miss and is
@@ -107,9 +126,11 @@ class LLMRouter:
             return None
         return out if isinstance(out, dict) else None
 
-    def _request(self, call, parse, api_key, model, system, user) -> tuple[str, int, int]:
+    def _request(
+        self, call, parse, api_key, model, system, user, retries: int = MAX_RETRIES
+    ) -> tuple[str, int, int]:
         last = "no attempt"
-        for attempt in range(MAX_RETRIES + 1):
+        for attempt in range(retries + 1):
             try:
                 resp = call(self.client, api_key, model, system, user)
             except httpx.TransportError as e:
@@ -124,10 +145,10 @@ class LLMRouter:
                         return parse(resp.json())
                     except (ValueError, KeyError, IndexError, TypeError) as e:
                         raise LLMError(f"unexpected response shape: {e!r}") from e
-            if attempt == MAX_RETRIES:
+            if attempt == retries:
                 break
             _sleep(_retry_delay(wait, attempt))
-        raise LLMError(f"gave up after {MAX_RETRIES} retries: {last}")
+        raise LLMError(f"gave up after {retries} retries: {last}")
 
     def _log(self, task, provider, model, cached, tin, tout, latency) -> None:
         self.conn.execute(
