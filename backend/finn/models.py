@@ -125,3 +125,4 @@ class Alert(BaseModel):
     threshold: float
     message: str
     story_id: str | None = None
+    seq_id: str | None = None  # filing alerts: the headline filing, a stable link target

@@ -49,7 +49,10 @@ def evaluate_prices(
                                 date=bar.date,
                                 value=ratio,
                                 threshold=vol_mult,
-                                message=f"{symbol} traded {ratio:.1f}× its 20-day average volume",
+                                message=(
+                                    f"{symbol} traded {ratio:.1f}× its {rules.lookback}-day"
+                                    " average volume"
+                                ),
                             )
                         )
             if prior and prior[-1].close > 0:
@@ -88,6 +91,7 @@ def evaluate_filings(stories: list[Story], rules: Rules) -> list[Alert]:
                 threshold=IMPORTANT_FLOOR,
                 message=s.headline.filing.subject[:MAX_MESSAGE],
                 story_id=s.id,
+                seq_id=s.headline.filing.seq_id,
             )
         )
     alerts.sort(key=lambda a: a.symbol)

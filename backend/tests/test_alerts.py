@@ -45,6 +45,11 @@ def test_volume_2_1x_triggers_at_2_not_2_5():
     assert miss == []
 
 
+def test_volume_message_names_the_lookback():
+    hit = evaluate_prices({"TCS": _series(last_vol=10_500_000)}, Rules(lookback=10))
+    assert hit[0].message == "TCS traded 2.1× its 10-day average volume"
+
+
 def test_price_minus_5_2_triggers():
     out = evaluate_prices({"TCS": _series(last_close=94.8)}, Rules())
     assert [a.kind for a in out] == ["price"]
@@ -134,6 +139,7 @@ def test_filing_alerts_respect_categories():
     out = evaluate_filings(stories, rules)
     assert [a.story_id for a in out] == ["a"]
     a = out[0]
+    assert a.seq_id == "a"  # the headline filing; story ids are not stable across windows
     assert isinstance(a, Alert) and a.kind == "filing"
     assert a.date == date(2026, 11, 6) and a.value == 80 and a.threshold == 45
     assert a.message == "S" * 140

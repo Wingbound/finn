@@ -69,7 +69,7 @@ def test_health(client):
     assert r == {"ok": True, "filings_as_of": "2026-11-08T19:00:00+05:30", "prices_as_of": None}
 
 
-def test_digest_default_24h_window_shape(client):
+def test_digest_168h_window_shape(client):
     r = client.post("/digest", json={"hours": 168})
     assert r.status_code == 200
     body = r.json()
@@ -86,8 +86,14 @@ def test_digest_default_24h_window_shape(client):
     assert c["routine"] == sum(len(v) for v in body["routine"].values())
     assert c["filings"] > 0 and c["shown"] > 0
     assert body["stories"][0]["latest_at"].endswith("+05:30")
-    # default 24h call also works
-    assert client.post("/digest", json={}).status_code == 200
+
+
+def test_digest_defaults_to_24h(client):
+    r = client.post("/digest", json={})
+    assert r.status_code == 200
+    assert r.json()["window"] == {
+        "start": (NOW - timedelta(hours=24)).isoformat(), "end": NOW.isoformat()
+    }
 
 
 def test_digest_floor_moves_items_between_shown_and_routine(client):
@@ -212,6 +218,38 @@ def test_filing_detail_and_unknown_404(client):
     assert client.get("/filings/does-not-exist").status_code == 404
 
 
+WIN = {"start": "2026-10-08T00:00:00+05:30", "end": "2026-11-08T23:59:59+05:30"}
+
+
+def test_filing_detail_score_matches_the_digest_card(client):
+    for subscribed in (["results"], ["mna", "litigation"], None):
+        body = {**WIN, **({"subscribed": subscribed} if subscribed is not None else {})}
+        cards = client.post("/digest", json=body).json()["stories"]
+        params = {"subscribed": subscribed} if subscribed is not None else {}
+        for card in cards[:10]:
+            head = card["headline"]
+            detail = client.get(f"/filings/{head['filing']['seq_id']}", params=params).json()
+            assert (detail["score"], detail["reasons"]) == (head["score"], head["reasons"])
+
+
+def test_filing_detail_rejects_unknown_category(client):
+    digest = client.post("/digest", json=WIN).json()
+    seq = digest["stories"][0]["headline"]["filing"]["seq_id"]
+    assert client.get(f"/filings/{seq}", params={"subscribed": "gossip"}).status_code == 422
+
+
+def test_filing_alerts_link_to_their_headline_filing(client):
+    rules = {"categories": ["results", "mna", "management_change"]}
+    alerts = client.post("/alerts", json=rules).json()["alerts"]
+    filing_alerts = [a for a in alerts if a["kind"] == "filing"]
+    assert filing_alerts
+    for a in filing_alerts:
+        detail = client.get(f"/filings/{a['seq_id']}", params={"subscribed": rules["categories"]})
+        assert detail.status_code == 200
+        assert detail.json()["score"] == a["value"]
+    assert all(a["seq_id"] is None for a in alerts if a["kind"] != "filing")
+
+
 def test_unknown_filing_404(client):
     assert client.get("/filings/nope").status_code == 404
 
@@ -315,3 +353,36 @@ def test_seed_path_defaults_to_committed_seed_and_reads_env(monkeypatch):
     assert Settings(_env_file=None).seed_path == committed
     monkeypatch.setenv("SEED_PATH", "/srv/finn/seed.sqlite")
     assert Settings(_env_file=None).seed_path == Path("/srv/finn/seed.sqlite")
+
+
+def test_long_lookback_loads_enough_history(client, tmp_path):
+    # TRENT: 70 quiet sessions (100 shares), 59 busier ones (1,000), then 1,500 on 6 Nov.
+    # Against 120 sessions that is ~2.8x the average; against the last 20 only 1.5x.
+    path = tmp_path / "long.sqlite"
+    _store(path)
+    days, d = [], date(2026, 11, 6)
+    while len(days) < 130:
+        if d.weekday() < 5:
+            days.append(d)
+        d -= timedelta(days=1)
+    days.reverse()
+    vols = [100] * 70 + [1_000] * 59 + [1_500]
+    c = db.connect(path)
+    db.upsert_prices(c, [
+        PriceBar(symbol="TRENT", date=day, open=100, high=100, low=100, close=100, volume=v)
+        for day, v in zip(days, vols, strict=True)
+    ])
+    c.close()
+
+    def _conn():
+        c = db.connect(path)
+        try:
+            yield c
+        finally:
+            c.close()
+
+    app.dependency_overrides[get_conn] = _conn
+    assert client.post("/alerts", json={}).json()["alerts"] == []
+    alerts = client.post("/alerts", json={"lookback": 120}).json()["alerts"]
+    assert [(a["kind"], a["date"]) for a in alerts] == [("volume", "2026-11-06")]
+    assert alerts[0]["message"] == "TRENT traded 2.8× its 120-day average volume"

@@ -11,7 +11,7 @@ from datetime import datetime, time, timedelta
 from pathlib import Path
 from typing import Annotated
 
-from fastapi import Depends, FastAPI, HTTPException
+from fastapi import Depends, FastAPI, HTTPException, Query
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field, model_validator
 
@@ -107,8 +107,13 @@ class DigestRequest(BaseModel):
         return self
 
 
-def _completed_history(conn: sqlite3.Connection, symbol: str, now: datetime):
-    return completed_sessions(db.price_history(conn, symbol, 60), now)
+HISTORY_BARS = 60
+
+
+def _completed_history(
+    conn: sqlite3.Connection, symbol: str, now: datetime, bars: int = HISTORY_BARS
+) -> list[PriceBar]:
+    return completed_sessions(db.price_history(conn, symbol, bars), now)
 
 
 @app.get("/health")
@@ -178,7 +183,9 @@ def _alert_anchor(
 @app.post("/alerts")
 def alerts(rules: Rules, conn: Conn, now: Now) -> dict:
     symbols = [h.symbol for h in load_portfolio()]
-    history = {s: _completed_history(conn, s, now) for s in symbols}
+    # each evaluated session needs `lookback` prior bars; +1 for a possible in-progress bar
+    bars = max(HISTORY_BARS, rules.lookback + ALERT_SESSIONS + 1)
+    history = {s: _completed_history(conn, s, now, bars) for s in symbols}
     end = _alert_anchor(now, db.latest_filed_at(conn, symbols), history)
     start = end - timedelta(days=ALERT_WINDOW_DAYS)
     # Both kinds share the window: filing stories in [start, end], sessions dated within it.
@@ -196,9 +203,16 @@ def alerts(rules: Rules, conn: Conn, now: Now) -> dict:
 
 
 @app.get("/filings/{seq_id}")
-def filing(seq_id: str, conn: Conn) -> ScoredFiling:
+def filing(
+    seq_id: str,
+    conn: Conn,
+    subscribed: Annotated[list[Category] | None, Query()] = None,
+) -> ScoredFiling:
+    """One filing, scored like its digest card: pass the digest's `subscribed` (repeatable);
+    omitted, it defaults to the digest's default."""
     found = db.get_filing(conn, seq_id)
     if found is None:
         raise HTTPException(status_code=404, detail="filing not found")
     f, cls = found
-    return score_filing(f, classification_or_default(f, cls), set())
+    subs = set(subscribed) if subscribed is not None else set(Rules().categories)
+    return score_filing(f, classification_or_default(f, cls), subs)
