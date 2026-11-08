@@ -32,12 +32,26 @@ def _llm_subtypes() -> dict[str, dict[str, str]]:
 
 LLM_SUBTYPES = _llm_subtypes()
 
+# Prompt wording where the scoring label alone misleads the model. Every NSE filing says the
+# company "has informed (intimated) the Exchange", so the bare label pulled real results
+# (a half-yearly report, PAT +28%) into a subtype that scores x0.3.
+SUBTYPE_HINTS: dict[tuple[str, str], str] = {
+    ("results", "intimation"): (
+        "only the date of an upcoming board meeting on results, no figures yet;"
+        " a filing that reports the figures gets null"
+    ),
+}
+
 _SUBTYPE_LINES = "\n".join(
-    f"{category}: " + ", ".join(f"{sub} ({label})" for sub, label in subs.items())
+    f"{category}: "
+    + ", ".join(
+        f"{sub} ({SUBTYPE_HINTS.get((category, sub), label)})" for sub, label in subs.items()
+    )
     for category, subs in LLM_SUBTYPES.items()
 )
 
-SYSTEM_PROMPT = """\
+SYSTEM_PROMPT = (
+    """\
 You classify Indian stock-exchange (NSE) corporate filings into exactly one category.
 Categories:
 - results: Quarterly/annual results, the board meeting approving them, results decks and shareholder letters, and ads confirming results were published.
@@ -62,7 +76,9 @@ The user message is a JSON list of {id, desc, subject, summary}.
 Reply with JSON only: {"items":[{"id":"<id>","category":"<category>","subtype":"<subtype or null>"}]}
 Include every id exactly once. subtype must be one of the values listed for the chosen
 category below, or null when none fits or the category is not listed:
-""" + _SUBTYPE_LINES
+"""
+    + _SUBTYPE_LINES
+)
 
 
 def _payload(batch: list[Filing]) -> str:

@@ -216,6 +216,14 @@ def test_llm_subtype_allowlist_is_the_modifier_table_and_is_in_the_prompt():
         assert all(sub in line for sub in subtypes)
 
 
+def test_prompt_says_results_with_figures_is_not_an_intimation():
+    # Seed refresh 2026-11-09: a half-yearly report (PAT +28%) came back results/intimation
+    # and scored 27 instead of 90, because every NSE filing "has informed the Exchange".
+    line = next(ln for ln in SYSTEM_PROMPT.splitlines() if ln.startswith("results: "))
+    assert "upcoming board meeting" in line
+    assert "figures" in line
+
+
 def test_default_classification_helper():
     c = default_classification()
     assert (c.category, c.subtype, c.noise, c.by, c.confidence) == (
