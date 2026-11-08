@@ -136,3 +136,41 @@ def test_ingest_counts_new_only(conn, reliance):
     assert first.added == len({r["seq_id"] for r in reliance})
     assert ingest_filings(conn, NSEClient(), ["RELIANCE"], START, END).added == 0
     assert db.get_meta(conn, "filings_as_of") is not None
+
+
+@respx.mock
+def test_fetch_integrated_financials_returns_data_list():
+    route = respx.get(nse.INTEGRATED_URL).mock(
+        return_value=json_response({"data": [{"symbol": "TATASTEEL"}], "totalCount": 1})
+    )
+    respx.get("https://www.nseindia.com/").respond(200)
+    out = NSEClient().fetch_integrated_financials("TATASTEEL")
+    assert out == [{"symbol": "TATASTEEL"}]
+    params = route.calls[0].request.url.params
+    assert params["symbol"] == "TATASTEEL"
+    assert params["type"] == "Integrated Filing- Financials"
+
+
+@respx.mock
+def test_fetch_integrated_financials_rejects_non_object():
+    respx.get("https://www.nseindia.com/").respond(200)
+    respx.get(nse.INTEGRATED_URL).mock(return_value=json_response([{"a": 1}]))
+    with pytest.raises(NSEUnavailable):
+        NSEClient().fetch_integrated_financials("TATASTEEL")
+
+
+@respx.mock
+def test_fetch_bytes_rejects_oversize():
+    respx.get("https://www.nseindia.com/").respond(200)
+    respx.get("https://nsearchives.nseindia.com/x.xml").respond(
+        200, content=b"abc", headers={"content-length": "30000000"}
+    )
+    with pytest.raises(NSEUnavailable, match="exceeds"):
+        NSEClient().fetch_bytes("https://nsearchives.nseindia.com/x.xml", max_bytes=25_000_000)
+
+
+@respx.mock
+def test_fetch_bytes_ok():
+    respx.get("https://www.nseindia.com/").respond(200)
+    respx.get("https://nsearchives.nseindia.com/x.xml").respond(200, content=b"<a/>")
+    assert NSEClient().fetch_bytes("https://nsearchives.nseindia.com/x.xml") == b"<a/>"
