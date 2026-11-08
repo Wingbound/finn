@@ -169,3 +169,21 @@ def test_order_win_requires_win_context():
 def test_auditor_appointment_is_not_management_change():
     f = _filing("General Updates", "Appointment of Statutory Auditors Pursuant to Mandatory Auditor Rotation")
     assert classify_rules(f) is None
+
+
+def test_partnership_positive_from_fixtures():
+    f = _filing(
+        "Press Release",
+        'press release titled "Zylidac Bio and Prolific Machines Partner to Scale '
+        'Next-Generation Biologics Manufacturing Platform to GMP Production"',
+    )
+    assert classify_rules(f).subtype == "partnership"
+    f = _filing("Press Release", 'titled "Zydus Sunshine signs agreement with Board of Investment"')
+    assert classify_rules(f).subtype == "partnership"
+
+
+def test_partnership_does_not_overmatch():
+    settle = _filing("General Updates", "Company entered into a settlement agreement with the lender")
+    assert classify_rules(settle) is None
+    bare = _filing("General Updates", "Our partner hospitals reported higher occupancy")
+    assert classify_rules(bare) is None

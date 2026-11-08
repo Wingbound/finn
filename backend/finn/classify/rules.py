@@ -219,7 +219,11 @@ _KEYWORD_RULES: tuple[tuple[re.Pattern[str], Category, str | None], ...] = tuple
          r"|\b(orders?|contracts?)\b.{0,25}\b(worth|valued|aggregating)\b"),
          "press_release", "order_win"),
         (r"\blaunch(es|ed)?\b", "press_release", "product"),
-        (r"\bagreements?\b|\bpartner(s|ship)?\b|\bmou\b", "press_release", "partnership"),
+        ((r"\bmou\b|memorandum of understanding|strategic partner|\bpartnership\b"
+         r"|\bpartners? (to|with)\b"
+         r"|\b(signs?|signed|enters?|entered into|executes?|executed)\b"
+         r"(?!.{0,30}\b(settlement|lease|loan|credit|share swap)\b).{0,30}\bagreements?\b"),
+         "press_release", "partnership"),
         ((r"\bcapacity (addition|expansion)|\bcapex\b|\bcapital expenditure|\bnew (plant|facility)"
          r"|\bexpansion\b"), "capex", None),
         (r"\bmonthly\b|\bbusiness updates?\b|\bsales\b", "press_release", "business_update"),
