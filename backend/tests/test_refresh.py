@@ -1,6 +1,6 @@
 import json
 from collections import defaultdict
-from datetime import date
+from datetime import date, datetime
 from pathlib import Path
 
 import httpx
@@ -10,7 +10,7 @@ import respx
 from finn import db
 from finn.config import Settings
 from finn.ingest import nse
-from finn.models import PriceBar
+from finn.models import IST, PriceBar
 from finn.portfolio import load_portfolio
 from scripts import refresh as refresh_mod
 from scripts.refresh import refresh
@@ -66,6 +66,7 @@ def test_refresh_ingests_prices_and_classifies(conn, keyless, month_by_symbol, m
     assert summary["classify"]["llm"] == 0
     assert summary["unclassified_left"] == 0
     assert summary["errors"] == []
+    assert summary["filings_skipped"] == 0 and summary["prices_missing"] == []
     assert db.get_meta(conn, "filings_as_of") and db.get_meta(conn, "prices_as_of")
     assert {h.symbol for h in load_portfolio()} == {
         r["symbol"] for r in conn.execute("SELECT DISTINCT symbol FROM prices")
@@ -85,10 +86,60 @@ def test_nse_unavailable_keeps_filings_and_still_fetches_prices(
     summary = refresh(conn, use_llm=False)
     assert summary["filings_new"] == 0
     assert summary["filings_total"] == 323
-    assert len(summary["errors"]) == 1 and "NSE" in summary["errors"][0]
+    assert len(summary["errors"]) == 18
+    assert all(e.startswith("filings: NSE") for e in summary["errors"])
     assert db.get_meta(conn, "filings_as_of") == as_of  # not advanced
     assert summary["price_bars"] == 18
     assert "NSE" in capsys.readouterr().out
+
+
+@respx.mock
+def test_one_symbol_failing_keeps_the_rest_and_holds_filings_as_of(
+    conn, keyless, month_by_symbol, monkeypatch
+):
+    respx.get("https://www.nseindia.com/").respond(200)
+    respx.get(NSE_API).mock(
+        side_effect=lambda req: httpx.Response(403)
+        if req.url.params["symbol"] == "TRENT"
+        else httpx.Response(200, json=month_by_symbol.get(req.url.params["symbol"], []))
+    )
+    monkeypatch.setattr(refresh_mod, "fetch_eod", _bars)
+    summary = refresh(conn, use_llm=False)
+    assert summary["filings_new"] == 323 - len(month_by_symbol["TRENT"]) > 0
+    assert len(summary["errors"]) == 1 and "TRENT" in summary["errors"][0]
+    assert db.get_meta(conn, "filings_as_of") is None
+    assert summary["price_bars"] == 18
+
+
+@respx.mock
+def test_prices_still_run_when_the_filings_stage_crashes(conn, keyless, monkeypatch):
+    def crash(*a, **k):
+        raise RuntimeError("parser exploded")
+
+    monkeypatch.setattr(refresh_mod, "ingest_filings", crash)
+    monkeypatch.setattr(refresh_mod, "fetch_eod", _bars)
+    summary = refresh(conn, use_llm=False)
+    assert summary["errors"] == ["filings: RuntimeError: parser exploded"]
+    assert summary["price_bars"] == 18 and db.get_meta(conn, "prices_as_of")
+
+
+@respx.mock
+def test_prices_as_of_is_fetch_time_and_missing_symbols_listed(
+    conn, keyless, month_by_symbol, monkeypatch
+):
+    _nse_ok(month_by_symbol)
+    fetched = []
+
+    def partial(holdings, **_):
+        fetched.append(datetime.now(IST))
+        return _bars([h for h in holdings if h.symbol not in {"AMBER", "LODHA"}])
+
+    monkeypatch.setattr(refresh_mod, "fetch_eod", partial)
+    summary = refresh(conn, use_llm=False)
+    assert summary["prices_missing"] == ["AMBER", "LODHA"]
+    assert summary["errors"] == ["prices: no bars for AMBER, LODHA"]
+    as_of = datetime.fromisoformat(db.get_meta(conn, "prices_as_of"))
+    assert fetched[0] <= as_of <= datetime.now(IST)  # a fetch timestamp, not a bar date
 
 
 @respx.mock

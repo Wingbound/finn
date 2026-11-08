@@ -2,8 +2,10 @@
 
 from __future__ import annotations
 
+import logging
 import sqlite3
 import time
+from dataclasses import dataclass, field
 from datetime import date, datetime
 
 import httpx
@@ -23,7 +25,10 @@ HEADERS = {
     "Referer": f"{BASE_URL}/",
 }
 _BACKOFF_SECONDS = (0.5, 1.0, 2.0)
+SYMBOL_PAUSE_S = 0.5  # polite gap between per-symbol requests
 _sleep = time.sleep  # patched in tests
+
+log = logging.getLogger(__name__)
 
 
 class NSEUnavailable(Exception):
@@ -101,17 +106,43 @@ def parse_announcement(raw: dict) -> Filing:
     )
 
 
+@dataclass
+class IngestResult:
+    added: int = 0  # new rows stored
+    skipped: int = 0  # malformed rows dropped
+    failed: dict[str, str] = field(default_factory=dict)  # symbol -> why NSE gave up
+
+
 def ingest_filings(
     conn: sqlite3.Connection,
     client: NSEClient,
     symbols: list[str],
     start: date,
     end: date,
-) -> int:
-    """Fetch every symbol first; write nothing unless all succeed. Returns new rows."""
-    filings: list[Filing] = []
-    for symbol in symbols:
-        filings.extend(parse_announcement(r) for r in client.fetch_announcements(symbol, start, end))
-    added = upsert_filings(conn, filings)
-    set_meta(conn, "filings_as_of", datetime.now(IST).isoformat())
-    return added
+) -> IngestResult:
+    """Fetch and store filings symbol by symbol; never raises for NSE or row problems.
+
+    Stored rows are never touched (INSERT OR IGNORE), so a failed symbol just keeps what it
+    had. `filings_as_of` advances only when every symbol was fetched.
+    """
+    result = IngestResult()
+    for i, symbol in enumerate(symbols):
+        if i:
+            _sleep(SYMBOL_PAUSE_S)
+        try:
+            rows = client.fetch_announcements(symbol, start, end)
+        except NSEUnavailable as e:
+            result.failed[symbol] = str(e)
+            continue
+        filings: list[Filing] = []
+        for raw in rows:
+            try:
+                filings.append(parse_announcement(raw))
+            except (KeyError, TypeError, ValueError) as e:  # ValidationError is a ValueError
+                result.skipped += 1
+                log.warning("skipping malformed NSE row for %s: %s: %s", symbol,
+                            type(e).__name__, e)
+        result.added += upsert_filings(conn, filings)
+    if not result.failed:
+        set_meta(conn, "filings_as_of", datetime.now(IST).isoformat())
+    return result

@@ -2,8 +2,8 @@
 
 Run: uv run python scripts/refresh.py --days 30 [--no-llm] [--out seed/finn.sqlite]
 
-An unreachable NSE or Yahoo is reported in the summary's `errors` and the run carries on
-with what it has (exit code 1); it never raises for those.
+An unreachable NSE or Yahoo, a symbol either one fails on, or a crash in one stage is
+reported in the summary's `errors` and the run carries on with what it has (exit code 1).
 """
 
 from __future__ import annotations
@@ -17,7 +17,7 @@ from pathlib import Path
 from finn import db
 from finn.classify.pipeline import classify_pending
 from finn.config import get_settings, route_for
-from finn.ingest.nse import NSEClient, NSEUnavailable, ingest_filings
+from finn.ingest.nse import NSEClient, ingest_filings
 from finn.ingest.prices import fetch_eod
 from finn.llm import LLMRouter
 from finn.llm.providers import PROVIDERS
@@ -48,23 +48,30 @@ def refresh(conn: sqlite3.Connection, days: int = 30, use_llm: bool = True) -> d
     now = datetime.now(IST)
     errors: list[str] = []
 
-    filings_new = 0
-    client = NSEClient()
+    filings_new = filings_skipped = 0
     try:
-        filings_new = ingest_filings(
-            conn, client, [h.symbol for h in holdings], (now - timedelta(days=days)).date(),
-            now.date(),
-        )
-    except NSEUnavailable as e:
-        errors.append(f"filings: {e}")
-        print(f"NSE unavailable, keeping existing filings: {e}")
-    finally:
-        client.close()
+        client = NSEClient()
+        try:
+            ingest = ingest_filings(
+                conn, client, [h.symbol for h in holdings], (now - timedelta(days=days)).date(),
+                now.date(),
+            )
+        finally:
+            client.close()
+    except Exception as e:  # noqa: BLE001 - a filings crash must not block the price stage
+        errors.append(f"filings: {type(e).__name__}: {e}")
+        print(f"filing ingest failed, keeping existing filings: {type(e).__name__}: {e}")
+    else:
+        filings_new, filings_skipped = ingest.added, ingest.skipped
+        errors += [f"filings: {why}" for why in ingest.failed.values()]
+        if ingest.failed:
+            print(f"NSE unavailable for {', '.join(ingest.failed)}; keeping their stored filings")
 
     # Prices always span ~3 months: the alert engine needs a 20-session volume baseline.
     bars = []
     try:
         bars = fetch_eod(holdings)
+        fetched_at = datetime.now(IST)
     except Exception as e:  # noqa: BLE001 - yfinance raises assorted network/parse types
         errors.append(f"prices: {type(e).__name__}: {e}")
         print(f"price fetch failed, keeping existing prices: {type(e).__name__}: {e}")
@@ -72,15 +79,21 @@ def refresh(conn: sqlite3.Connection, days: int = 30, use_llm: bool = True) -> d
         if not bars:
             errors.append("prices: no bars returned")
             print("price fetch returned no bars, keeping existing prices")
+    priced = {b.symbol for b in bars}
+    prices_missing = [h.symbol for h in holdings if h.symbol not in priced]
     if bars:
         db.upsert_prices(conn, bars)
-        db.set_meta(conn, "prices_as_of", datetime.now(IST).isoformat())
+        db.set_meta(conn, "prices_as_of", fetched_at.isoformat())
+        if prices_missing:
+            errors.append(f"prices: no bars for {', '.join(prices_missing)}")
 
     router = _router(conn, use_llm)
     summary = {
         "filings_new": filings_new,
+        "filings_skipped": filings_skipped,
         "price_bars": len(bars),
-        "price_symbols": len({b.symbol for b in bars}),
+        "price_symbols": len(priced),
+        "prices_missing": prices_missing,
         "classify": classify_pending(conn, router),
         "filings_total": _count(conn),
         "unclassified_left": _count(conn, "category IS NULL"),
