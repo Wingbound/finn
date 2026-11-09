@@ -285,7 +285,59 @@ def test_falls_back_to_gemini_on_groq_5xx(conn, settings, no_sleep):
     r = LLMRouter(conn, settings)
     assert r.complete_json("classify", "s", "u") == {"a": 1}
     assert groq.call_count == 2
+    assert no_sleep == [1]
     assert r.last_model == "gemini/gemini-3.5-flash-lite"
+
+
+@respx.mock
+def test_rate_limit_waits_on_primary_instead_of_failing_over(conn, settings, no_sleep):
+    limited = httpx.Response(429, headers={"retry-after": "7"})
+    groq = respx.post(GROQ).mock(side_effect=[limited, limited, groq_ok()])
+    gem = respx.post(GEMINI).mock(return_value=gemini_ok())
+    r = LLMRouter(conn, settings)
+    assert r.complete_json("classify", "s", "u") == {"a": 1}
+    assert groq.call_count == 3 and gem.call_count == 0
+    assert no_sleep == [7, 7]
+    assert r.last_model == "groq/openai/gpt-oss-120b"
+
+
+@respx.mock
+def test_rate_limit_budget_is_separate_from_outage_budget(conn, settings, no_sleep):
+    limited = httpx.Response(429, headers={"retry-after": "7"})
+    groq = respx.post(GROQ).mock(side_effect=[limited, httpx.Response(503), limited, groq_ok()])
+    gem = respx.post(GEMINI).mock(return_value=gemini_ok())
+    assert LLMRouter(conn, settings).complete_json("classify", "s", "u") == {"a": 1}
+    assert groq.call_count == 4 and gem.call_count == 0
+    assert no_sleep == [7, 1, 7]
+
+
+@respx.mock
+def test_persistent_rate_limit_fails_over_after_its_budget(conn, settings, no_sleep):
+    groq = respx.post(GROQ).mock(return_value=httpx.Response(429, headers={"retry-after": "7"}))
+    gem = respx.post(GEMINI).mock(return_value=gemini_ok())
+    assert LLMRouter(conn, settings).complete_json("classify", "s", "u") == {"a": 1}
+    assert groq.call_count == 4 and gem.call_count == 1
+    assert no_sleep == [7, 7, 7]
+
+
+@respx.mock
+def test_invalid_escape_is_repaired_once(conn, tmp_path):
+    s = Settings(groq_api_key="g", gemini_api_key="", data_dir=tmp_path, _env_file=None)
+    # \' is not a JSON escape (a gpt-oss slip); the valid \\ beside it must survive
+    respx.post(GROQ).mock(return_value=groq_ok(r'{"a": "x\'y", "b": "c:\\d"}'))
+    out = LLMRouter(conn, s).complete_json("classify", "s", "u")
+    assert out == {"a": "x\\'y", "b": "c:\\d"}
+
+
+def test_parse_json_repairs_invalid_escape():
+    assert router_mod._parse_json(r'{"a": "x\'y"}') == {"a": "x\\'y"}
+    assert router_mod._parse_json(r'{"a": "\\\q"}') == {"a": "\\\\q"}
+
+
+@pytest.mark.parametrize("text", [r'{"a": "x\'y"', "not json", r'{"a": "\q", }'])
+def test_parse_json_still_rejects_truly_invalid_json(text):
+    with pytest.raises(LLMError, match="invalid JSON"):
+        router_mod._parse_json(text)
 
 
 @respx.mock

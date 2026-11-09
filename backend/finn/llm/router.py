@@ -40,6 +40,20 @@ def _retry_delay(retry_after: str | None, attempt: int) -> float:
     return min(max(delay, 0.0), MAX_RETRY_AFTER_S)
 
 
+_ESCAPE = re.compile(r"\\(.)", re.DOTALL)
+_JSON_ESCAPES = frozenset('\\/"bfnrtu')
+
+
+def _repair_escapes(text: str) -> str:
+    r"""Double each backslash that does not start a JSON escape (e.g. a model's \').
+
+    Pairs are consumed left to right, so a valid \\ is never split.
+    """
+    return _ESCAPE.sub(
+        lambda m: m.group(0) if m.group(1) in _JSON_ESCAPES else "\\\\" + m.group(1), text
+    )
+
+
 def _parse_json(text: str) -> dict:
     m = _FENCE.match(text)
     if m:
@@ -47,7 +61,12 @@ def _parse_json(text: str) -> dict:
     try:
         out = json.loads(text)
     except json.JSONDecodeError as e:
-        raise LLMError(f"invalid JSON from model: {e}") from e
+        if "Invalid \\escape" not in e.msg:
+            raise LLMError(f"invalid JSON from model: {e}") from e
+        try:  # one-shot repair of the one slip models make often
+            out = json.loads(_repair_escapes(text))
+        except json.JSONDecodeError as e2:
+            raise LLMError(f"invalid JSON from model: {e2}") from e2
     if not isinstance(out, dict):
         raise LLMError("model returned JSON that is not an object")
     return out
@@ -129,15 +148,26 @@ class LLMRouter:
     def _request(
         self, call, parse, api_key, model, system, user, retries: int = MAX_RETRIES
     ) -> tuple[str, int, int]:
+        """One model's reply text and token counts.
+
+        A 429 is a rate limit, not an outage: every model waits out Retry-After for up
+        to MAX_RETRIES of them. `retries` budgets only 5xx and transport errors, and is
+        small for a model with a fallback behind it, so an outage fails over fast.
+        """
         last = "no attempt"
-        for attempt in range(retries + 1):
+        used = {"rate": 0, "outage": 0}
+        budget = {"rate": MAX_RETRIES, "outage": retries}
+        while True:
             try:
                 resp = call(self.client, api_key, model, system, user)
             except httpx.TransportError as e:
-                last, wait = f"transport error: {e}", None
+                last, wait, kind = f"transport error: {e}", None, "outage"
             else:
-                if resp.status_code == 429 or resp.status_code >= 500:
+                if resp.status_code == 429:
+                    last, wait, kind = "HTTP 429", resp.headers.get("retry-after"), "rate"
+                elif resp.status_code >= 500:
                     last, wait = f"HTTP {resp.status_code}", resp.headers.get("retry-after")
+                    kind = "outage"
                 elif resp.status_code >= 400:
                     raise LLMError(f"HTTP {resp.status_code}: {resp.text[:200]}")
                 else:
@@ -145,10 +175,11 @@ class LLMRouter:
                         return parse(resp.json())
                     except (ValueError, KeyError, IndexError, TypeError) as e:
                         raise LLMError(f"unexpected response shape: {e!r}") from e
-            if attempt == retries:
+            if used[kind] == budget[kind]:
                 break
-            _sleep(_retry_delay(wait, attempt))
-        raise LLMError(f"gave up after {retries} retries: {last}")
+            _sleep(_retry_delay(wait, used[kind]))
+            used[kind] += 1
+        raise LLMError(f"gave up after {sum(used.values())} retries: {last}")
 
     def _log(self, task, provider, model, cached, tin, tout, latency) -> None:
         self.conn.execute(
