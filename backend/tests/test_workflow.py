@@ -59,7 +59,9 @@ def test_compact_seed_drops_document_caches_and_checks_size(tmp_path):
     shutil.copyfile(BACKEND / "seed" / "finn.sqlite", path)
     conn = db.connect(path)
     db.init_db(conn)
-    conn.execute("INSERT INTO doc_text (url, fetched_at, chars, text) VALUES ('u', 'now', 3, 'abc')")
+    conn.execute(
+        "INSERT INTO doc_text (url, fetched_at, chars, text) VALUES ('u', 'now', 3, 'abc')"
+    )
     conn.execute("INSERT INTO doc_pages (url, page, text) VALUES ('u', 1, 'p')")
     conn.commit()
     conn.close()
