@@ -13,6 +13,10 @@ REAL_T1_B = (
     "In terms of financing, we intend replacing the Euro 1.4 billion 18-month bridge loan "
     "with longer tenure, capital and favorable terms."
 )
+REAL_T1_C = (
+    "We have received the shareholder approval for the above funding mix at the "
+    "Extraordinary General Meeting held on October 5th."
+)
 
 
 def sources() -> list[Source]:
@@ -199,8 +203,8 @@ def test_judged_kept_with_page_corrected():
         judge(
             {
                 p.id: {
-                    "status": "missed",
-                    "evidence_quote": REAL_T1_B,
+                    "status": "kept",
+                    "evidence_quote": REAL_T1_C,
                     "evidence_source": "PERSISTENT-T1",
                     "evidence_page": 20,
                     "rationale": "Bridge loan refinancing is being replaced as said.",
@@ -209,7 +213,7 @@ def test_judged_kept_with_page_corrected():
         )
     )
     row = build_ledger(r, [p], sources(), {}, {}).rows[0]
-    assert row.status == "missed" and row.method == "judged"
+    assert row.status == "kept" and row.method == "judged"
     assert row.evidence.source_id == "PERSISTENT-T1" and row.evidence.page == 7
     t = r.calls[0][2]
     assert "=== PERSISTENT-T1: Q2 FY27 call ===" in t and "PERSISTENT-T3" not in t
@@ -892,7 +896,7 @@ def test_guard_idea_below_target_is_pending():
         stats=stats,
     )
     assert row.status == "pending" and row.evidence is None
-    assert row.rationale == "The later figure (42) is below the 50–60 target"
+    assert row.rationale == "The later figure (42) is below the target (50–60)"
     assert stats["verdicts_downgraded"]["below_target"] == 1
 
 
@@ -964,3 +968,40 @@ def test_guard_stats_count_each_reason():
     _guarded("We expect the plant to commence by Q2 this fiscal.", horizon="Q2 FY27", stats=stats)
     _guarded("We expect the plant to commence by Q2 this fiscal.", horizon="Q2 FY27", stats=stats)
     assert stats["verdicts_downgraded"] == {"other_period": 0, "restated": 2, "below_target": 0}
+
+
+def test_guard_fused_period_label_is_not_a_number():
+    row = _guarded(
+        "Capex in H1FY26 we spent Rs 42 billion in total.",
+        quote="That range of INR 50 billion to INR 60 billion, which we had indicated",
+        kind="quantitative",
+        target_low=50,
+        target_high=60,
+        unit="usd_bn",
+    )
+    assert row.status == "pending" and "(42)" in row.rationale
+    row = _guarded(
+        "Capex in Q3 FY'26 we spent Rs 42 billion in total.",
+        quote="That range of INR 50 billion to INR 60 billion, which we had indicated",
+        kind="quantitative",
+        target_low=50,
+        target_high=60,
+        unit="usd_bn",
+    )
+    assert row.status == "pending" and "(42)" in row.rationale
+
+
+def test_guard_present_tense_number_is_delivery():
+    ev = "Margin is 21% and we expect 22% next year."
+    assert _guarded(ev, horizon="FY26").status == "kept"
+
+
+def test_guard_dixon_still_downgrades_with_present_tense_rule():
+    ev = "The plant is nearing completion, and we expect the operation to commence by Q2 this fiscal."
+    assert _guarded(ev, horizon="Q2 FY27").status == "pending"
+
+
+def test_guard_weak_delivery_cue_before_intention_is_restated():
+    ev = "We had planned to commission by Q3 and will now do so in Q4."
+    row = _guarded(ev, horizon="Q3 FY26")
+    assert row.status == "pending" and row.rationale == _RESTATED_MSG

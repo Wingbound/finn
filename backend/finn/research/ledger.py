@@ -435,12 +435,19 @@ _DELIVERED = re.compile(
     r"|commenced|started|launched|received|reported|grew|declined|met|was|were|has been"
     r"|have been|had|did)\b"
 )
+_PRESENT_NUMBER = re.compile(r"\b(?:is|are|stands|now)\s+(?:at\s+)?(?:rs\.?\s*|inr\s*|₹\s*)?\d")
+# "had planned", "was expected": a weak delivery word followed by an intention is not delivery.
+_WEAK_INTENT = re.compile(
+    r"\b(?:had|has|have)\s+(?:planned|intended|expected|hoped|aimed|targeted)\b"
+    r"|\b(?:was|were)\s+(?:planned|expected|scheduled|targeted|supposed)\b"
+)
 _LOWER_BETTER = re.compile(
     r"\b(?:below|under|less than|lower than|at most|not exceed|no more than|cap|reduce"
     r"|bring down|within|maximum)\b"
 )
 _PERIOD_LABEL = re.compile(
-    r"\b(?:FY\s*'?\d{2,4}|Q[1-4]|H[12]|9M|[1-4]Q)\b|\b(?:19|20)\d{2}\b", re.IGNORECASE
+    r"\b(?:[hq][1-4]|9m|[1-4]q)\s*(?:fy\s*'?\d{2,4})?\b|\bfy\s*'?\d{2,4}\b|\b(?:19|20)\d{2}\b",
+    re.IGNORECASE,
 )
 _G_NUM = re.compile(r"\d[\d,]*(?:\.\d+)?")
 _G_PCT = re.compile(r"(\d[\d,]*(?:\.\d+)?)\s*(?:%|percent)")
@@ -471,7 +478,9 @@ def _other_period(p: Promise, ev: str) -> bool:
 
 def _restated(ev: str) -> bool:
     text = normalize(ev)
-    return bool(_FUTURE.search(text)) and not _DELIVERED.search(text)
+    if not _FUTURE.search(text) or _PRESENT_NUMBER.search(text):
+        return False
+    return not _DELIVERED.search(_WEAK_INTENT.sub(" ", text))
 
 
 def _below_target(p: Promise, ev: str) -> str | None:
@@ -490,7 +499,7 @@ def _below_target(p: Promise, ev: str) -> str | None:
         return None
     hi = p.target_high
     target = f"{_fmt(lo)}–{_fmt(hi)}" if hi is not None and hi > lo else f"at least {_fmt(lo)}"
-    return f"The later figure ({_fmt(max(nums))}) is below the {target} target"
+    return f"The later figure ({_fmt(max(nums))}) is below the target ({target})"
 
 
 def _guard_verdict(p: Promise, verdict: tuple, stats: dict | None) -> tuple:
