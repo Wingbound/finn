@@ -1,0 +1,26 @@
+{
+ "filing": {
+  "seq_id": "106852542",
+  "symbol": "BAJFINANCE",
+  "company": "Bajaj Finance Limited",
+  "nse_desc": "General Updates",
+  "subject": "Bajaj Finance Limited has informed the Exchange about General Updates",
+  "nse_summary": "Bajaj Finance Limited submitted its Half Yearly Report for FY2026-27 for the period ended 30 September 2026. Consolidated profit after tax increased by 28% to 12,447 crore. Assets under management grew 26% to 584,624 crore. Net total income rose 23% to 31,198 crore. Profit before tax increased 29% to 16,686 crore. Gross NPA stood at 1.06% and Net NPA at 0.42%. On 1 October 2026, the Board approved raising up to 11,700 crore via Qualified Institutions Placement and up to 5,800 crore through preferential issue of warrants. The report is circulated to members and debenture holders electronically and available on the company website.",
+  "pdf_url": "https://nsearchives.nseindia.com/corporate/BAJFINANCE_07112026162848_Half_yearly_communication_Signed.pdf",
+  "filed_at": "2026-11-07T16:41:29+05:30",
+  "has_xbrl": true
+ },
+ "cls": {
+  "category": "results",
+  "subtype": null,
+  "noise": false,
+  "by": "llm",
+  "confidence": 0.7
+ },
+ "score": 100,
+ "tier": "critical",
+ "reasons": [
+  "results filing (90)",
+  "you follow results +10"
+ ]
+}

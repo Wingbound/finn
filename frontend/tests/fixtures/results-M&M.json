@@ -1,0 +1,69 @@
+{
+ "symbol": "M&M",
+ "period_end": "2026-09-30",
+ "period_label": "Q2 FY27",
+ "basis": "consolidated",
+ "format": "indas",
+ "audited": false,
+ "compared_qoq": "2026-06-30",
+ "compared_yoy": "2025-09-30",
+ "metrics": [
+  {
+   "key": "revenue",
+   "label": "Revenue",
+   "value": 57553.13,
+   "qoq_pct": -1.1,
+   "yoy_pct": 24.8,
+   "computed": false
+  },
+  {
+   "key": "ebitda",
+   "label": "EBITDA",
+   "value": 10221.46,
+   "qoq_pct": -3.3,
+   "yoy_pct": 14.5,
+   "computed": true
+  },
+  {
+   "key": "pbt",
+   "label": "PBT",
+   "value": 6894.67,
+   "qoq_pct": -5.0,
+   "yoy_pct": 23.4,
+   "computed": false
+  },
+  {
+   "key": "pat",
+   "label": "PAT",
+   "value": 5166.77,
+   "qoq_pct": -13.9,
+   "yoy_pct": 30.4,
+   "computed": false
+  }
+ ],
+ "margins": [
+  {
+   "key": "ebitda_margin",
+   "label": "EBITDA margin",
+   "value_pct": 17.8,
+   "qoq_bps": -40,
+   "yoy_bps": -161
+  },
+  {
+   "key": "pat_margin",
+   "label": "PAT margin",
+   "value_pct": 9.0,
+   "qoq_bps": -133,
+   "yoy_bps": 38
+  }
+ ],
+ "notes": [
+  "EBITDA is computed: revenue from operations minus operating expenses (excludes other income).",
+  "PAT includes ₹470.03 cr share of profit of associates and joint ventures."
+ ],
+ "sources": [
+  "https://nsearchives.nseindia.com/corporate/xbrl/INTEGRATED_FILING_INDAS_1753734_05112026054042_WEB.xml",
+  "https://nsearchives.nseindia.com/corporate/xbrl/INTEGRATED_FILING_INDAS_1705129_30072026041119_WEB.xml",
+  "https://nsearchives.nseindia.com/corporate/xbrl/INTEGRATED_FILING_INDAS_1565191_04112025075824_WEB.xml"
+ ]
+}

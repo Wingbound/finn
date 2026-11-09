@@ -1,0 +1,439 @@
+{
+ "as_of": "2026-11-09T10:44:11.869620+05:30",
+ "window": {
+  "start": "2026-10-31T18:58:42+05:30",
+  "end": "2026-11-07T18:58:42+05:30"
+ },
+ "alerts": [
+  {
+   "kind": "filing",
+   "symbol": "AMBER",
+   "date": "2026-11-07",
+   "value": 80.0,
+   "threshold": 45.0,
+   "message": "In furtherance to our earlier intimation dated 11th July 2026 and pursuant to Regulation 30 of SEBI LODR Regulations, IL JIN Electronics (In",
+   "story_id": "AMBER:fund_raise:106852048",
+   "seq_id": "106852048"
+  },
+  {
+   "kind": "filing",
+   "symbol": "BAJFINANCE",
+   "date": "2026-11-07",
+   "value": 100.0,
+   "threshold": 45.0,
+   "message": "Bajaj Finance Limited has informed the Exchange about General Updates",
+   "story_id": "BAJFINANCE:results:106852542",
+   "seq_id": "106852542"
+  },
+  {
+   "kind": "filing",
+   "symbol": "CGPOWER",
+   "date": "2026-11-07",
+   "value": 85.0,
+   "threshold": 45.0,
+   "message": "CG Power and Industrial Solutions Limited has informed the Exchange about General Updates",
+   "story_id": "CGPOWER:litigation:106852258",
+   "seq_id": "106852258"
+  },
+  {
+   "kind": "filing",
+   "symbol": "TATASTEEL",
+   "date": "2026-11-07",
+   "value": 100.0,
+   "threshold": 45.0,
+   "message": "Tata Steel Limited has submitted to the Exchange, the financial results for the quarter and half year ended September 30, 2026.",
+   "story_id": "TATASTEEL:results:106852180",
+   "seq_id": "106852180"
+  },
+  {
+   "kind": "filing",
+   "symbol": "TATASTEEL",
+   "date": "2026-11-07",
+   "value": 98.0,
+   "threshold": 45.0,
+   "message": "Tata Steel Limited has informed the Exchange about Retirement of Mr. Noel Naval Tata as the Non-Executive, Non-Independent Director and Vice",
+   "story_id": "TATASTEEL:management_change:106852199",
+   "seq_id": "106852199"
+  },
+  {
+   "kind": "filing",
+   "symbol": "TATASTEEL",
+   "date": "2026-11-07",
+   "value": 95.0,
+   "threshold": 45.0,
+   "message": "Tata Steel Limited has informed the Exchange about acquisition of 38,222 equity shares of face value &#8377;10/- each in Creative Port Devel",
+   "story_id": "TATASTEEL:mna:106852468",
+   "seq_id": "106852468"
+  },
+  {
+   "kind": "volume",
+   "symbol": "CGPOWER",
+   "date": "2026-11-06",
+   "value": 5.11928938926162,
+   "threshold": 2.0,
+   "message": "CGPOWER traded 5.1× its 20-day average volume",
+   "story_id": null,
+   "seq_id": null
+  },
+  {
+   "kind": "volume",
+   "symbol": "M&M",
+   "date": "2026-11-06",
+   "value": 3.259476126958701,
+   "threshold": 2.0,
+   "message": "M&M traded 3.3× its 20-day average volume",
+   "story_id": null,
+   "seq_id": null
+  },
+  {
+   "kind": "price",
+   "symbol": "M&M",
+   "date": "2026-11-06",
+   "value": 5.106313386790573,
+   "threshold": 5.0,
+   "message": "M&M up 5.1% on the day",
+   "story_id": null,
+   "seq_id": null
+  },
+  {
+   "kind": "filing",
+   "symbol": "M&M",
+   "date": "2026-11-06",
+   "value": 95.0,
+   "threshold": 45.0,
+   "message": "Mahindra & Mahindra Limited has informed the Exchange about Acquisition",
+   "story_id": "M&M:mna:106850437",
+   "seq_id": "106850437"
+  },
+  {
+   "kind": "filing",
+   "symbol": "TECHM",
+   "date": "2026-11-06",
+   "value": 95.0,
+   "threshold": 45.0,
+   "message": "Tech Mahindra Limited has informed the Exchange about Acquisition",
+   "story_id": "TECHM:mna:106850042",
+   "seq_id": "106850042"
+  },
+  {
+   "kind": "filing",
+   "symbol": "VOLTAS",
+   "date": "2026-11-06",
+   "value": 100.0,
+   "threshold": 45.0,
+   "message": "Voltas Limited has submitted to the Exchange, the financial results for the period ended September 30, 2026.",
+   "story_id": "VOLTAS:results:106850826",
+   "seq_id": "106850826"
+  },
+  {
+   "kind": "filing",
+   "symbol": "VOLTAS",
+   "date": "2026-11-06",
+   "value": 98.0,
+   "threshold": 45.0,
+   "message": "Voltas Limited has informed the Exchange about Retirement of Mr. Noel N. Tata as Chairman and Director w.e.f 11th November, 2026 and his app",
+   "story_id": "VOLTAS:management_change:106850975",
+   "seq_id": "106850975"
+  },
+  {
+   "kind": "volume",
+   "symbol": "BAJFINANCE",
+   "date": "2026-11-05",
+   "value": 3.450510263844921,
+   "threshold": 2.0,
+   "message": "BAJFINANCE traded 3.5× its 20-day average volume",
+   "story_id": null,
+   "seq_id": null
+  },
+  {
+   "kind": "price",
+   "symbol": "BAJFINANCE",
+   "date": "2026-11-05",
+   "value": 7.64587525150906,
+   "threshold": 5.0,
+   "message": "BAJFINANCE up 7.6% on the day",
+   "story_id": null,
+   "seq_id": null
+  },
+  {
+   "kind": "filing",
+   "symbol": "CGPOWER",
+   "date": "2026-11-05",
+   "value": 85.0,
+   "threshold": 45.0,
+   "message": "CG Power and Industrial Solutions Limited has informed the Exchange about Action(s) taken or orders passed",
+   "story_id": "CGPOWER:litigation:106846618",
+   "seq_id": "106846618"
+  },
+  {
+   "kind": "volume",
+   "symbol": "IDFCFIRSTB",
+   "date": "2026-11-05",
+   "value": 2.0821172980783422,
+   "threshold": 2.0,
+   "message": "IDFCFIRSTB traded 2.1× its 20-day average volume",
+   "story_id": null,
+   "seq_id": null
+  },
+  {
+   "kind": "volume",
+   "symbol": "M&M",
+   "date": "2026-11-05",
+   "value": 3.813751038437254,
+   "threshold": 2.0,
+   "message": "M&M traded 3.8× its 20-day average volume",
+   "story_id": null,
+   "seq_id": null
+  },
+  {
+   "kind": "price",
+   "symbol": "M&M",
+   "date": "2026-11-05",
+   "value": 5.591009254742563,
+   "threshold": 5.0,
+   "message": "M&M up 5.6% on the day",
+   "story_id": null,
+   "seq_id": null
+  },
+  {
+   "kind": "filing",
+   "symbol": "M&M",
+   "date": "2026-11-05",
+   "value": 100.0,
+   "threshold": 45.0,
+   "message": "Mahindra & Mahindra Limited has submitted to the Exchange, the Unaudited Standalone and Consolidated financial results for the Second Quarte",
+   "story_id": "M&M:results:106846728",
+   "seq_id": "106846728"
+  },
+  {
+   "kind": "filing",
+   "symbol": "M&M",
+   "date": "2026-11-05",
+   "value": 90.0,
+   "threshold": 45.0,
+   "message": "Mahindra & Mahindra Limited has informed the Exchange about change in Management",
+   "story_id": "M&M:management_change:106846758",
+   "seq_id": "106846758"
+  },
+  {
+   "kind": "volume",
+   "symbol": "PREMIERENE",
+   "date": "2026-11-05",
+   "value": 2.964359057802039,
+   "threshold": 2.0,
+   "message": "PREMIERENE traded 3.0× its 20-day average volume",
+   "story_id": null,
+   "seq_id": null
+  },
+  {
+   "kind": "filing",
+   "symbol": "PREMIERENE",
+   "date": "2026-11-05",
+   "value": 100.0,
+   "threshold": 45.0,
+   "message": "Premier Energies Limited has submitted to the Exchange, the financial results for the period ended September 30, 2026.",
+   "story_id": "PREMIERENE:results:106845218",
+   "seq_id": "106845218"
+  },
+  {
+   "kind": "volume",
+   "symbol": "SUNPHARMA",
+   "date": "2026-11-05",
+   "value": 2.031681856642264,
+   "threshold": 2.0,
+   "message": "SUNPHARMA traded 2.0× its 20-day average volume",
+   "story_id": null,
+   "seq_id": null
+  },
+  {
+   "kind": "price",
+   "symbol": "LODHA",
+   "date": "2026-11-04",
+   "value": 5.769225900723063,
+   "threshold": 5.0,
+   "message": "LODHA up 5.8% on the day",
+   "story_id": null,
+   "seq_id": null
+  },
+  {
+   "kind": "filing",
+   "symbol": "M&M",
+   "date": "2026-11-04",
+   "value": 80.0,
+   "threshold": 45.0,
+   "message": "Mahindra & Mahindra Limited has informed the Exchange about Credit Rating",
+   "story_id": "M&M:credit_rating:106845615",
+   "seq_id": "106845615"
+  },
+  {
+   "kind": "filing",
+   "symbol": "PERSISTENT",
+   "date": "2026-11-04",
+   "value": 52.0,
+   "threshold": 45.0,
+   "message": "Persistent Systems Limited has informed the Exchange regarding allotment of 700000 securities pursuant to Non Convertible Securities at its ",
+   "story_id": "PERSISTENT:fund_raise:106844222",
+   "seq_id": "106844222"
+  },
+  {
+   "kind": "filing",
+   "symbol": "RELIANCE",
+   "date": "2026-11-04",
+   "value": 80.0,
+   "threshold": 45.0,
+   "message": "Reliance Industries Limited has informed the Exchange about Credit Rating",
+   "story_id": "RELIANCE:credit_rating:106845760",
+   "seq_id": "106845760"
+  },
+  {
+   "kind": "volume",
+   "symbol": "SUNPHARMA",
+   "date": "2026-11-04",
+   "value": 2.8001086770642503,
+   "threshold": 2.0,
+   "message": "SUNPHARMA traded 2.8× its 20-day average volume",
+   "story_id": null,
+   "seq_id": null
+  },
+  {
+   "kind": "volume",
+   "symbol": "ZYDUSLIFE",
+   "date": "2026-11-04",
+   "value": 3.582828997910273,
+   "threshold": 2.0,
+   "message": "ZYDUSLIFE traded 3.6× its 20-day average volume",
+   "story_id": null,
+   "seq_id": null
+  },
+  {
+   "kind": "filing",
+   "symbol": "ZYDUSLIFE",
+   "date": "2026-11-04",
+   "value": 100.0,
+   "threshold": 45.0,
+   "message": "Zydus Lifesciences Limited has submitted to the Exchange, the financial results for the period ended September 30, 2026.",
+   "story_id": "ZYDUSLIFE:results:106843746",
+   "seq_id": "106843746"
+  },
+  {
+   "kind": "filing",
+   "symbol": "AMBER",
+   "date": "2026-11-03",
+   "value": 95.0,
+   "threshold": 45.0,
+   "message": "Pursuant to Regulation 30 of SEBI (LODR) Regulations, 2015, we wish to inform the exchange that IL JIN Electronics (India) Limited, a materi",
+   "story_id": "AMBER:mna:106842609",
+   "seq_id": "106842609"
+  },
+  {
+   "kind": "price",
+   "symbol": "LODHA",
+   "date": "2026-11-03",
+   "value": 5.783811501913427,
+   "threshold": 5.0,
+   "message": "LODHA up 5.8% on the day",
+   "story_id": null,
+   "seq_id": null
+  },
+  {
+   "kind": "filing",
+   "symbol": "MAXHEALTH",
+   "date": "2026-11-03",
+   "value": 85.0,
+   "threshold": 45.0,
+   "message": "Max Healthcare Institute Limited has informed the Exchange about disclosure under regulation 30 of the SEBI (Listing Obligations and Disclos",
+   "story_id": "MAXHEALTH:litigation:106843057",
+   "seq_id": "106843057"
+  },
+  {
+   "kind": "volume",
+   "symbol": "RELIANCE",
+   "date": "2026-11-03",
+   "value": 2.266613038377672,
+   "threshold": 2.0,
+   "message": "RELIANCE traded 2.3× its 20-day average volume",
+   "story_id": null,
+   "seq_id": null
+  },
+  {
+   "kind": "filing",
+   "symbol": "TATASTEEL",
+   "date": "2026-11-03",
+   "value": 95.0,
+   "threshold": 45.0,
+   "message": "Tata Steel Limited has informed the Exchange about  Effective Date  of the Scheme of Amalgamation amongst Tata Steel Limited and Rujuvalika ",
+   "story_id": "TATASTEEL:mna:106841469",
+   "seq_id": "106841469"
+  },
+  {
+   "kind": "price",
+   "symbol": "AMBER",
+   "date": "2026-11-02",
+   "value": 6.1040068201193565,
+   "threshold": 5.0,
+   "message": "AMBER up 6.1% on the day",
+   "story_id": null,
+   "seq_id": null
+  },
+  {
+   "kind": "volume",
+   "symbol": "LODHA",
+   "date": "2026-11-02",
+   "value": 2.1600905843777616,
+   "threshold": 2.0,
+   "message": "LODHA traded 2.2× its 20-day average volume",
+   "story_id": null,
+   "seq_id": null
+  },
+  {
+   "kind": "volume",
+   "symbol": "RELIANCE",
+   "date": "2026-11-02",
+   "value": 5.83448477751834,
+   "threshold": 2.0,
+   "message": "RELIANCE traded 5.8× its 20-day average volume",
+   "story_id": null,
+   "seq_id": null
+  },
+  {
+   "kind": "price",
+   "symbol": "RELIANCE",
+   "date": "2026-11-02",
+   "value": 11.597559683621084,
+   "threshold": 5.0,
+   "message": "RELIANCE up 11.6% on the day",
+   "story_id": null,
+   "seq_id": null
+  },
+  {
+   "kind": "volume",
+   "symbol": "SUNPHARMA",
+   "date": "2026-11-02",
+   "value": 2.116117685653504,
+   "threshold": 2.0,
+   "message": "SUNPHARMA traded 2.1× its 20-day average volume",
+   "story_id": null,
+   "seq_id": null
+  },
+  {
+   "kind": "price",
+   "symbol": "TATASTEEL",
+   "date": "2026-11-02",
+   "value": 5.829348841215198,
+   "threshold": 5.0,
+   "message": "TATASTEEL up 5.8% on the day",
+   "story_id": null,
+   "seq_id": null
+  },
+  {
+   "kind": "filing",
+   "symbol": "ZYDUSLIFE",
+   "date": "2026-10-31",
+   "value": 90.0,
+   "threshold": 45.0,
+   "message": "Zydus Lifesciences Limited has informed the Exchange about change in Management",
+   "story_id": "ZYDUSLIFE:management_change:106838526",
+   "seq_id": "106838526"
+  }
+ ]
+}

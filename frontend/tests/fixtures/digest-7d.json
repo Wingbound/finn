@@ -1,0 +1,5705 @@
+{
+ "window": {
+  "start": "2026-10-31T18:58:42+05:30",
+  "end": "2026-11-07T18:58:42+05:30"
+ },
+ "as_of": "2026-11-09T10:44:11.182744+05:30",
+ "latest_filing_at": "2026-11-07T16:58:42+05:30",
+ "counts": {
+  "shown": 27,
+  "routine": 34,
+  "hidden": 7,
+  "filings": 102
+ },
+ "stories": [
+  {
+   "id": "BAJFINANCE:results:106852542",
+   "symbol": "BAJFINANCE",
+   "company": "Bajaj Finance Limited",
+   "category": "results",
+   "subtype": null,
+   "score": 100,
+   "tier": "critical",
+   "headline": {
+    "filing": {
+     "seq_id": "106852542",
+     "symbol": "BAJFINANCE",
+     "company": "Bajaj Finance Limited",
+     "nse_desc": "General Updates",
+     "subject": "Bajaj Finance Limited has informed the Exchange about General Updates",
+     "nse_summary": "Bajaj Finance Limited submitted its Half Yearly Report for FY2026-27 for the period ended 30 September 2026. Consolidated profit after tax increased by 28% to 12,447 crore. Assets under management grew 26% to 584,624 crore. Net total income rose 23% to 31,198 crore. Profit before tax increased 29% to 16,686 crore. Gross NPA stood at 1.06% and Net NPA at 0.42%. On 1 October 2026, the Board approved raising up to 11,700 crore via Qualified Institutions Placement and up to 5,800 crore through preferential issue of warrants. The report is circulated to members and debenture holders electronically and available on the company website.",
+     "pdf_url": "https://nsearchives.nseindia.com/corporate/BAJFINANCE_07112026162848_Half_yearly_communication_Signed.pdf",
+     "filed_at": "2026-11-07T16:41:29+05:30",
+     "has_xbrl": true
+    },
+    "cls": {
+     "category": "results",
+     "subtype": null,
+     "noise": false,
+     "by": "llm",
+     "confidence": 0.7
+    },
+    "score": 100,
+    "tier": "critical",
+    "reasons": [
+     "results filing (90)",
+     "you follow results +10"
+    ]
+   },
+   "members": [
+    {
+     "filing": {
+      "seq_id": "106852542",
+      "symbol": "BAJFINANCE",
+      "company": "Bajaj Finance Limited",
+      "nse_desc": "General Updates",
+      "subject": "Bajaj Finance Limited has informed the Exchange about General Updates",
+      "nse_summary": "Bajaj Finance Limited submitted its Half Yearly Report for FY2026-27 for the period ended 30 September 2026. Consolidated profit after tax increased by 28% to 12,447 crore. Assets under management grew 26% to 584,624 crore. Net total income rose 23% to 31,198 crore. Profit before tax increased 29% to 16,686 crore. Gross NPA stood at 1.06% and Net NPA at 0.42%. On 1 October 2026, the Board approved raising up to 11,700 crore via Qualified Institutions Placement and up to 5,800 crore through preferential issue of warrants. The report is circulated to members and debenture holders electronically and available on the company website.",
+      "pdf_url": "https://nsearchives.nseindia.com/corporate/BAJFINANCE_07112026162848_Half_yearly_communication_Signed.pdf",
+      "filed_at": "2026-11-07T16:41:29+05:30",
+      "has_xbrl": true
+     },
+     "cls": {
+      "category": "results",
+      "subtype": null,
+      "noise": false,
+      "by": "llm",
+      "confidence": 0.7
+     },
+     "score": 100,
+     "tier": "critical",
+     "reasons": [
+      "results filing (90)",
+      "you follow results +10"
+     ]
+    }
+   ],
+   "latest_at": "2026-11-07T16:41:29+05:30",
+   "results": {
+    "symbol": "BAJFINANCE",
+    "period_end": "2026-09-30",
+    "period_label": "Q2 FY27",
+    "basis": "consolidated",
+    "format": "nbfc",
+    "audited": false,
+    "compared_qoq": "2026-06-30",
+    "compared_yoy": "2025-09-30",
+    "metrics": [
+     {
+      "key": "revenue",
+      "label": "Revenue",
+      "value": 24546.37,
+      "qoq_pct": 6.0,
+      "yoy_pct": 21.6,
+      "computed": false
+     },
+     {
+      "key": "nii",
+      "label": "Net interest income",
+      "value": 13334.66,
+      "qoq_pct": 6.1,
+      "yoy_pct": 23.6,
+      "computed": true
+     },
+     {
+      "key": "impairment",
+      "label": "Credit cost",
+      "value": 2166.09,
+      "qoq_pct": 8.7,
+      "yoy_pct": -4.5,
+      "computed": false
+     },
+     {
+      "key": "pbt",
+      "label": "PBT",
+      "value": 8533.47,
+      "qoq_pct": 4.8,
+      "yoy_pct": 29.2,
+      "computed": false
+     },
+     {
+      "key": "pat",
+      "label": "PAT",
+      "value": 6366.57,
+      "qoq_pct": 4.7,
+      "yoy_pct": 28.7,
+      "computed": false
+     }
+    ],
+    "margins": [
+     {
+      "key": "pat_margin",
+      "label": "PAT margin",
+      "value_pct": 25.9,
+      "qoq_bps": -31,
+      "yoy_bps": 142
+     }
+    ],
+    "notes": [
+     "NBFCs are shown on net interest income and credit cost; EBITDA does not apply.",
+     "PAT includes ₹3.73 cr share of profit of associates and joint ventures."
+    ],
+    "sources": [
+     "https://nsearchives.nseindia.com/corporate/xbrl/INTEGRATED_FILING_NBFC_INDAS_1742040_19102026075918_WEB.xml",
+     "https://nsearchives.nseindia.com/corporate/xbrl/INTEGRATED_FILING_NBFC_INDAS_1705543_30072026070233_WEB.xml",
+     "https://nsearchives.nseindia.com/corporate/xbrl/INTEGRATED_FILING_NBFC_INDAS_1570585_10112025100247_WEB.xml"
+    ]
+   },
+   "people": [],
+   "brief": null
+  },
+  {
+   "id": "TATASTEEL:results:106852180",
+   "symbol": "TATASTEEL",
+   "company": "Tata Steel Limited",
+   "category": "results",
+   "subtype": "results",
+   "score": 100,
+   "tier": "critical",
+   "headline": {
+    "filing": {
+     "seq_id": "106852180",
+     "symbol": "TATASTEEL",
+     "company": "Tata Steel Limited",
+     "nse_desc": "Outcome of Board Meeting",
+     "subject": "Tata Steel Limited has submitted to the Exchange, the financial results for the quarter and half year ended September 30, 2026.",
+     "nse_summary": "Tata Steel Limited approved its audited standalone and unaudited consolidated financial results for the quarter and half year ended September 30, 2026. The statutory auditor issued a qualified opinion due to non-recognition of further fair value reduction for Tata Steel Nederland B.V., which has a carrying value of Rs. 59,078.13 crore. The auditor also highlighted an emphasis of matter regarding the Scheme of Amalgamation with Rujuvalika Investments Limited, approved by the National Company Law Tribunal on October 1, 2026. Mr. Noel Naval Tata, DIN 00024713, will retire as Non-Executive, Non-Independent Director and Vice Chairman effective November 11, 2026. The Board meeting was held on November 7, 2026.",
+     "pdf_url": "https://nsearchives.nseindia.com/corporate/NIDHIFADNAVIS_07112026130531_BOARDOUTCOME-NOV7.pdf",
+     "filed_at": "2026-11-07T13:06:33+05:30",
+     "has_xbrl": true
+    },
+    "cls": {
+     "category": "results",
+     "subtype": "results",
+     "noise": false,
+     "by": "rules",
+     "confidence": 0.8
+    },
+    "score": 100,
+    "tier": "critical",
+    "reasons": [
+     "results filing (90)",
+     "you follow results +10"
+    ]
+   },
+   "members": [
+    {
+     "filing": {
+      "seq_id": "106852180",
+      "symbol": "TATASTEEL",
+      "company": "Tata Steel Limited",
+      "nse_desc": "Outcome of Board Meeting",
+      "subject": "Tata Steel Limited has submitted to the Exchange, the financial results for the quarter and half year ended September 30, 2026.",
+      "nse_summary": "Tata Steel Limited approved its audited standalone and unaudited consolidated financial results for the quarter and half year ended September 30, 2026. The statutory auditor issued a qualified opinion due to non-recognition of further fair value reduction for Tata Steel Nederland B.V., which has a carrying value of Rs. 59,078.13 crore. The auditor also highlighted an emphasis of matter regarding the Scheme of Amalgamation with Rujuvalika Investments Limited, approved by the National Company Law Tribunal on October 1, 2026. Mr. Noel Naval Tata, DIN 00024713, will retire as Non-Executive, Non-Independent Director and Vice Chairman effective November 11, 2026. The Board meeting was held on November 7, 2026.",
+      "pdf_url": "https://nsearchives.nseindia.com/corporate/NIDHIFADNAVIS_07112026130531_BOARDOUTCOME-NOV7.pdf",
+      "filed_at": "2026-11-07T13:06:33+05:30",
+      "has_xbrl": true
+     },
+     "cls": {
+      "category": "results",
+      "subtype": "results",
+      "noise": false,
+      "by": "rules",
+      "confidence": 0.8
+     },
+     "score": 100,
+     "tier": "critical",
+     "reasons": [
+      "results filing (90)",
+      "you follow results +10"
+     ]
+    },
+    {
+     "filing": {
+      "seq_id": "106852205",
+      "symbol": "TATASTEEL",
+      "company": "Tata Steel Limited",
+      "nse_desc": "Press Release",
+      "subject": "Tata Steel Limited has informed the Exchange regarding a press release dated November 07, 2026, titled 'Tata Steel reports Consolidated EBITDA of Rs 10,665 crores for the quarter and Rs 20,035 crores for the half year ended September 30, 2026'.",
+      "nse_summary": "Tata Steel submitted a press release and investor presentation to BSE and NSE on November 7, 2026, regarding financial results for the quarter and half year ended September 30, 2026. Consolidated EBITDA was Rs 10,665 crores for the quarter and Rs 20,035 crores for the half year. Consolidated revenues were Rs 65,436 crores for the quarter and Rs 1,26,231 crores for the half year. India revenues were Rs 42,653 crores for the quarter. Netherlands revenues were €1,395 million. UK revenues were £411 million with an EBITDA loss of £56 million. Capital expenditure was Rs 3,280 crores for the quarter and Rs 6,860 crores for the half year. Net debt stood at Rs 91,423 crores with a net debt to EBITDA ratio of 2.4x. Group liquidity was Rs 40,076 crores.",
+      "pdf_url": "https://nsearchives.nseindia.com/corporate/NIDHIFADNAVIS_07112026132017_BSENSEPRANDIR.pdf",
+      "filed_at": "2026-11-07T13:21:16+05:30",
+      "has_xbrl": true
+     },
+     "cls": {
+      "category": "results",
+      "subtype": "press_release",
+      "noise": false,
+      "by": "rules",
+      "confidence": 0.8
+     },
+     "score": 100,
+     "tier": "critical",
+     "reasons": [
+      "results filing (90)",
+      "you follow results +10"
+     ]
+    },
+    {
+     "filing": {
+      "seq_id": "106852208",
+      "symbol": "TATASTEEL",
+      "company": "Tata Steel Limited",
+      "nse_desc": "Investor Presentation",
+      "subject": "Tata Steel Limited has informed the Exchange about Investor Presentation",
+      "nse_summary": "Tata Steel submitted a press release and investor presentation to BSE and NSE on November 7, 2026, regarding financial results for the quarter and half year ended September 30, 2026. Consolidated EBITDA was Rs 10,665 crores for the quarter and Rs 20,035 crores for the half year. Consolidated revenues were Rs 65,436 crores for the quarter and Rs 1,26,231 crores for the half year. India revenues were Rs 42,653 crores for the quarter. Netherlands revenues were €1,395 million. UK revenues were £411 million with an EBITDA loss of £56 million. Capital expenditure was Rs 3,280 crores for the quarter and Rs 6,860 crores for the half year. Net debt stood at Rs 91,423 crores with a net debt to EBITDA ratio of 2.4x. Group liquidity was Rs 40,076 crores.",
+      "pdf_url": "https://nsearchives.nseindia.com/corporate/NIDHIFADNAVIS_07112026132213_BSENSEPRANDIR.pdf",
+      "filed_at": "2026-11-07T13:23:05+05:30",
+      "has_xbrl": true
+     },
+     "cls": {
+      "category": "results",
+      "subtype": "presentation",
+      "noise": false,
+      "by": "rules",
+      "confidence": 0.95
+     },
+     "score": 91,
+     "tier": "critical",
+     "reasons": [
+      "results filing (90)",
+      "investor presentation ×0.9",
+      "you follow results +10"
+     ]
+    },
+    {
+     "filing": {
+      "seq_id": "106852244",
+      "symbol": "TATASTEEL",
+      "company": "Tata Steel Limited",
+      "nse_desc": "General Updates",
+      "subject": "Tata Steel Limited has informed the Exchange about Outcome of Board meeting of Tata Steel Limited for the quarter and half year ended September 30, 2026",
+      "nse_summary": "Tata Steel Limited approved its audited standalone and unaudited consolidated financial results for the quarter and half year ended September 30, 2026. The statutory auditor issued a qualified opinion due to non-recognition of further fair value reduction for Tata Steel Nederland B.V., which has a carrying value of Rs. 59,078.13 crore. The auditor also highlighted an emphasis of matter regarding the Scheme of Amalgamation with Rujuvalika Investments Limited, approved by the National Company Law Tribunal on October 1, 2026. Mr. Noel Naval Tata, DIN 00024713, will retire as Non-Executive, Non-Independent Director and Vice Chairman effective November 11, 2026. The Board meeting was held on November 7, 2026.",
+      "pdf_url": "https://nsearchives.nseindia.com/corporate/NIDHIFADNAVIS_07112026134209_Outcome_of_BM.pdf",
+      "filed_at": "2026-11-07T13:43:17+05:30",
+      "has_xbrl": true
+     },
+     "cls": {
+      "category": "results",
+      "subtype": "results",
+      "noise": false,
+      "by": "rules",
+      "confidence": 0.8
+     },
+     "score": 100,
+     "tier": "critical",
+     "reasons": [
+      "results filing (90)",
+      "you follow results +10"
+     ]
+    },
+    {
+     "filing": {
+      "seq_id": "106852254",
+      "symbol": "TATASTEEL",
+      "company": "Tata Steel Limited",
+      "nse_desc": "Outcome of Board Meeting",
+      "subject": "Tata Steel Limited has informed the Exchange regarding retirement of Mr. Noel Naval Tata as the Non-Executive, Non-Independent Director and Vice Chairman of the Board",
+      "nse_summary": "Tata Steel Limited approved its audited standalone and unaudited consolidated financial results for the quarter and half year ended September 30, 2026. The statutory auditor issued a qualified opinion due to non-recognition of further fair value reduction for Tata Steel Nederland B.V., which has a carrying value of Rs. 59,078.13 crore. The auditor also highlighted an emphasis of matter regarding the Scheme of Amalgamation with Rujuvalika Investments Limited, approved by the National Company Law Tribunal on October 1, 2026. Mr. Noel Naval Tata, DIN 00024713, will retire as Non-Executive, Non-Independent Director and Vice Chairman effective November 11, 2026. The Board meeting was held on November 7, 2026.",
+      "pdf_url": "https://nsearchives.nseindia.com/corporate/NIDHIFADNAVIS_07112026134722_Outcome_of_BM.pdf",
+      "filed_at": "2026-11-07T13:48:10+05:30",
+      "has_xbrl": true
+     },
+     "cls": {
+      "category": "results",
+      "subtype": "results",
+      "noise": false,
+      "by": "rules",
+      "confidence": 0.8
+     },
+     "score": 100,
+     "tier": "critical",
+     "reasons": [
+      "results filing (90)",
+      "you follow results +10"
+     ]
+    }
+   ],
+   "latest_at": "2026-11-07T13:48:10+05:30",
+   "results": {
+    "symbol": "TATASTEEL",
+    "period_end": "2026-09-30",
+    "period_label": "Q2 FY27",
+    "basis": "consolidated",
+    "format": "indas",
+    "audited": false,
+    "compared_qoq": "2026-06-30",
+    "compared_yoy": "2025-09-30",
+    "metrics": [
+     {
+      "key": "revenue",
+      "label": "Revenue",
+      "value": 65436.24,
+      "qoq_pct": 7.6,
+      "yoy_pct": 11.5,
+      "computed": false
+     },
+     {
+      "key": "ebitda",
+      "label": "EBITDA",
+      "value": 10533.07,
+      "qoq_pct": 13.7,
+      "yoy_pct": 18.4,
+      "computed": true
+     },
+     {
+      "key": "pbt",
+      "label": "PBT",
+      "value": 5342.88,
+      "qoq_pct": 42.8,
+      "yoy_pct": 28.1,
+      "computed": false
+     },
+     {
+      "key": "pat",
+      "label": "PAT",
+      "value": 3699.59,
+      "qoq_pct": 55.1,
+      "yoy_pct": 16.2,
+      "computed": false
+     }
+    ],
+    "margins": [
+     {
+      "key": "ebitda_margin",
+      "label": "EBITDA margin",
+      "value_pct": 16.1,
+      "qoq_bps": 86,
+      "yoy_bps": 94
+     },
+     {
+      "key": "pat_margin",
+      "label": "PAT margin",
+      "value_pct": 5.7,
+      "qoq_bps": 173,
+      "yoy_bps": 23
+     }
+    ],
+    "notes": [
+     "EBITDA is computed: revenue from operations minus operating expenses (excludes other income).",
+     "PBT includes an exceptional gain of ₹348.68 cr.",
+     "PAT includes ₹112.27 cr share of profit of associates and joint ventures."
+    ],
+    "sources": [
+     "https://nsearchives.nseindia.com/corporate/xbrl/INTEGRATED_FILING_INDAS_1755442_07112026053333_WEB.xml",
+     "https://nsearchives.nseindia.com/corporate/xbrl/INTEGRATED_FILING_INDAS_1705622_30072026075610_WEB.xml",
+     "https://nsearchives.nseindia.com/corporate/xbrl/INTEGRATED_FILING_INDAS_1572729_12112025073451_WEB.xml"
+    ]
+   },
+   "people": [],
+   "brief": null
+  },
+  {
+   "id": "VOLTAS:results:106850826",
+   "symbol": "VOLTAS",
+   "company": "Voltas Limited",
+   "category": "results",
+   "subtype": "results",
+   "score": 100,
+   "tier": "critical",
+   "headline": {
+    "filing": {
+     "seq_id": "106850826",
+     "symbol": "VOLTAS",
+     "company": "Voltas Limited",
+     "nse_desc": "Outcome of Board Meeting",
+     "subject": "Voltas Limited has submitted to the Exchange, the financial results for the period ended September 30, 2026.",
+     "nse_summary": null,
+     "pdf_url": "https://nsearchives.nseindia.com/corporate/VOLTAS_RB_06112026165511_01_Financial_Results_signed.pdf",
+     "filed_at": "2026-11-06T16:59:40+05:30",
+     "has_xbrl": true
+    },
+    "cls": {
+     "category": "results",
+     "subtype": "results",
+     "noise": false,
+     "by": "rules",
+     "confidence": 0.8
+    },
+    "score": 100,
+    "tier": "critical",
+    "reasons": [
+     "results filing (90)",
+     "you follow results +10"
+    ]
+   },
+   "members": [
+    {
+     "filing": {
+      "seq_id": "106850826",
+      "symbol": "VOLTAS",
+      "company": "Voltas Limited",
+      "nse_desc": "Outcome of Board Meeting",
+      "subject": "Voltas Limited has submitted to the Exchange, the financial results for the period ended September 30, 2026.",
+      "nse_summary": null,
+      "pdf_url": "https://nsearchives.nseindia.com/corporate/VOLTAS_RB_06112026165511_01_Financial_Results_signed.pdf",
+      "filed_at": "2026-11-06T16:59:40+05:30",
+      "has_xbrl": true
+     },
+     "cls": {
+      "category": "results",
+      "subtype": "results",
+      "noise": false,
+      "by": "rules",
+      "confidence": 0.8
+     },
+     "score": 100,
+     "tier": "critical",
+     "reasons": [
+      "results filing (90)",
+      "you follow results +10"
+     ]
+    },
+    {
+     "filing": {
+      "seq_id": "106851076",
+      "symbol": "VOLTAS",
+      "company": "Voltas Limited",
+      "nse_desc": "Press Release",
+      "subject": "Voltas Limited has informed the Exchange regarding a press release dated November 06, 2026, titled \"Voltas Delivers Steady Q2 FY27 Performance, on the back of market leadership and Execution Excellence\".",
+      "nse_summary": null,
+      "pdf_url": "https://nsearchives.nseindia.com/corporate/VOLTAS_RB_06112026174401_01_Financial_Results_signed.pdf",
+      "filed_at": "2026-11-06T17:47:42+05:30",
+      "has_xbrl": true
+     },
+     "cls": {
+      "category": "results",
+      "subtype": null,
+      "noise": false,
+      "by": "llm",
+      "confidence": 0.7
+     },
+     "score": 100,
+     "tier": "critical",
+     "reasons": [
+      "results filing (90)",
+      "you follow results +10"
+     ]
+    },
+    {
+     "filing": {
+      "seq_id": "106851196",
+      "symbol": "VOLTAS",
+      "company": "Voltas Limited",
+      "nse_desc": "Investor Presentation",
+      "subject": "Voltas Limited has informed the Exchange about Investor Presentation",
+      "nse_summary": null,
+      "pdf_url": "https://nsearchives.nseindia.com/corporate/VOLTAS_RB_06112026180943_SEIntimationsigned.pdf",
+      "filed_at": "2026-11-06T18:09:56+05:30",
+      "has_xbrl": true
+     },
+     "cls": {
+      "category": "results",
+      "subtype": "presentation",
+      "noise": false,
+      "by": "rules",
+      "confidence": 0.95
+     },
+     "score": 91,
+     "tier": "critical",
+     "reasons": [
+      "results filing (90)",
+      "investor presentation ×0.9",
+      "you follow results +10"
+     ]
+    }
+   ],
+   "latest_at": "2026-11-06T18:09:56+05:30",
+   "results": {
+    "symbol": "VOLTAS",
+    "period_end": "2026-09-30",
+    "period_label": "Q2 FY27",
+    "basis": "consolidated",
+    "format": "indas",
+    "audited": false,
+    "compared_qoq": "2026-06-30",
+    "compared_yoy": "2025-09-30",
+    "metrics": [
+     {
+      "key": "revenue",
+      "label": "Revenue",
+      "value": 2706.57,
+      "qoq_pct": -42.1,
+      "yoy_pct": 15.3,
+      "computed": false
+     },
+     {
+      "key": "ebitda",
+      "label": "EBITDA",
+      "value": 127.86,
+      "qoq_pct": -51.8,
+      "yoy_pct": 81.6,
+      "computed": true
+     },
+     {
+      "key": "pbt",
+      "label": "PBT",
+      "value": 124.03,
+      "qoq_pct": -61.6,
+      "yoy_pct": 36.8,
+      "computed": false
+     },
+     {
+      "key": "pat",
+      "label": "PAT",
+      "value": 47.71,
+      "qoq_pct": -77.6,
+      "yoy_pct": 51.5,
+      "computed": false
+     }
+    ],
+    "margins": [
+     {
+      "key": "ebitda_margin",
+      "label": "EBITDA margin",
+      "value_pct": 4.7,
+      "qoq_bps": -96,
+      "yoy_bps": 172
+     },
+     {
+      "key": "pat_margin",
+      "label": "PAT margin",
+      "value_pct": 1.8,
+      "qoq_bps": -279,
+      "yoy_bps": 42
+     }
+    ],
+    "notes": [
+     "EBITDA is computed: revenue from operations minus operating expenses (excludes other income).",
+     "PAT includes a ₹41.10 cr share of loss of associates and joint ventures."
+    ],
+    "sources": [
+     "https://nsearchives.nseindia.com/corporate/xbrl/INTEGRATED_FILING_INDAS_1755186_06112026085901_WEB.xml",
+     "https://nsearchives.nseindia.com/corporate/xbrl/INTEGRATED_FILING_INDAS_1715051_14082026080841_WEB.xml",
+     "https://nsearchives.nseindia.com/corporate/xbrl/INTEGRATED_FILING_INDAS_1574474_13112025095958_WEB.xml"
+    ]
+   },
+   "people": [],
+   "brief": null
+  },
+  {
+   "id": "M&M:results:106846728",
+   "symbol": "M&M",
+   "company": "Mahindra & Mahindra Limited",
+   "category": "results",
+   "subtype": "results",
+   "score": 100,
+   "tier": "critical",
+   "headline": {
+    "filing": {
+     "seq_id": "106846728",
+     "symbol": "M&M",
+     "company": "Mahindra & Mahindra Limited",
+     "nse_desc": "Outcome of Board Meeting",
+     "subject": "Mahindra & Mahindra Limited has submitted to the Exchange, the Unaudited Standalone and Consolidated financial results for the Second Quarter and Half Year ended September 30, 2026.",
+     "nse_summary": null,
+     "pdf_url": "https://nsearchives.nseindia.com/corporate/Pooja_05112026125638_Outcome5Nov.pdf",
+     "filed_at": "2026-11-05T12:57:20+05:30",
+     "has_xbrl": true
+    },
+    "cls": {
+     "category": "results",
+     "subtype": "results",
+     "noise": false,
+     "by": "rules",
+     "confidence": 0.8
+    },
+    "score": 100,
+    "tier": "critical",
+    "reasons": [
+     "results filing (90)",
+     "you follow results +10"
+    ]
+   },
+   "members": [
+    {
+     "filing": {
+      "seq_id": "106846728",
+      "symbol": "M&M",
+      "company": "Mahindra & Mahindra Limited",
+      "nse_desc": "Outcome of Board Meeting",
+      "subject": "Mahindra & Mahindra Limited has submitted to the Exchange, the Unaudited Standalone and Consolidated financial results for the Second Quarter and Half Year ended September 30, 2026.",
+      "nse_summary": null,
+      "pdf_url": "https://nsearchives.nseindia.com/corporate/Pooja_05112026125638_Outcome5Nov.pdf",
+      "filed_at": "2026-11-05T12:57:20+05:30",
+      "has_xbrl": true
+     },
+     "cls": {
+      "category": "results",
+      "subtype": "results",
+      "noise": false,
+      "by": "rules",
+      "confidence": 0.8
+     },
+     "score": 100,
+     "tier": "critical",
+     "reasons": [
+      "results filing (90)",
+      "you follow results +10"
+     ]
+    },
+    {
+     "filing": {
+      "seq_id": "106846747",
+      "symbol": "M&M",
+      "company": "Mahindra & Mahindra Limited",
+      "nse_desc": "Press Release",
+      "subject": "Mahindra & Mahindra Limited has informed the Exchange regarding a press release dated November 05, 2026, titled \"Press Release on Unaudited Standalone and Consolidated Financial Results of the Company for the Second Quarter and Half Year ended 30th September 2026\".",
+      "nse_summary": null,
+      "pdf_url": "https://nsearchives.nseindia.com/corporate/ferozebaria_05112026130049_BoardMeetingPR05112026.pdf",
+      "filed_at": "2026-11-05T13:01:01+05:30",
+      "has_xbrl": true
+     },
+     "cls": {
+      "category": "results",
+      "subtype": "results",
+      "noise": false,
+      "by": "rules",
+      "confidence": 0.8
+     },
+     "score": 100,
+     "tier": "critical",
+     "reasons": [
+      "results filing (90)",
+      "you follow results +10"
+     ]
+    },
+    {
+     "filing": {
+      "seq_id": "106846890",
+      "symbol": "M&M",
+      "company": "Mahindra & Mahindra Limited",
+      "nse_desc": "Investor Presentation",
+      "subject": "Mahindra & Mahindra Limited has informed the Exchange about Investor Presentation",
+      "nse_summary": null,
+      "pdf_url": "https://nsearchives.nseindia.com/corporate/AmitDodani_05112026135323_PresentationtobemadetoPressAnalyst_Reg_30.pdf",
+      "filed_at": "2026-11-05T13:53:35+05:30",
+      "has_xbrl": true
+     },
+     "cls": {
+      "category": "results",
+      "subtype": "presentation",
+      "noise": false,
+      "by": "rules",
+      "confidence": 0.95
+     },
+     "score": 91,
+     "tier": "critical",
+     "reasons": [
+      "results filing (90)",
+      "investor presentation ×0.9",
+      "you follow results +10"
+     ]
+    }
+   ],
+   "latest_at": "2026-11-05T13:53:35+05:30",
+   "results": {
+    "symbol": "M&M",
+    "period_end": "2026-09-30",
+    "period_label": "Q2 FY27",
+    "basis": "consolidated",
+    "format": "indas",
+    "audited": false,
+    "compared_qoq": "2026-06-30",
+    "compared_yoy": "2025-09-30",
+    "metrics": [
+     {
+      "key": "revenue",
+      "label": "Revenue",
+      "value": 57553.13,
+      "qoq_pct": -1.1,
+      "yoy_pct": 24.8,
+      "computed": false
+     },
+     {
+      "key": "ebitda",
+      "label": "EBITDA",
+      "value": 10221.46,
+      "qoq_pct": -3.3,
+      "yoy_pct": 14.5,
+      "computed": true
+     },
+     {
+      "key": "pbt",
+      "label": "PBT",
+      "value": 6894.67,
+      "qoq_pct": -5.0,
+      "yoy_pct": 23.4,
+      "computed": false
+     },
+     {
+      "key": "pat",
+      "label": "PAT",
+      "value": 5166.77,
+      "qoq_pct": -13.9,
+      "yoy_pct": 30.4,
+      "computed": false
+     }
+    ],
+    "margins": [
+     {
+      "key": "ebitda_margin",
+      "label": "EBITDA margin",
+      "value_pct": 17.8,
+      "qoq_bps": -40,
+      "yoy_bps": -161
+     },
+     {
+      "key": "pat_margin",
+      "label": "PAT margin",
+      "value_pct": 9.0,
+      "qoq_bps": -133,
+      "yoy_bps": 38
+     }
+    ],
+    "notes": [
+     "EBITDA is computed: revenue from operations minus operating expenses (excludes other income).",
+     "PAT includes ₹470.03 cr share of profit of associates and joint ventures."
+    ],
+    "sources": [
+     "https://nsearchives.nseindia.com/corporate/xbrl/INTEGRATED_FILING_INDAS_1753734_05112026054042_WEB.xml",
+     "https://nsearchives.nseindia.com/corporate/xbrl/INTEGRATED_FILING_INDAS_1705129_30072026041119_WEB.xml",
+     "https://nsearchives.nseindia.com/corporate/xbrl/INTEGRATED_FILING_INDAS_1565191_04112025075824_WEB.xml"
+    ]
+   },
+   "people": [],
+   "brief": null
+  },
+  {
+   "id": "PREMIERENE:results:106845218",
+   "symbol": "PREMIERENE",
+   "company": "Premier Energies Limited",
+   "category": "results",
+   "subtype": "results",
+   "score": 100,
+   "tier": "critical",
+   "headline": {
+    "filing": {
+     "seq_id": "106845218",
+     "symbol": "PREMIERENE",
+     "company": "Premier Energies Limited",
+     "nse_desc": "Outcome of Board Meeting",
+     "subject": "Premier Energies Limited has submitted to the Exchange, the financial results for the period ended September 30, 2026.",
+     "nse_summary": null,
+     "pdf_url": "https://nsearchives.nseindia.com/corporate/PEL2024_04112026182631_Outcome_Q2_FY_2026-27_Signed.pdf",
+     "filed_at": "2026-11-04T18:28:04+05:30",
+     "has_xbrl": true
+    },
+    "cls": {
+     "category": "results",
+     "subtype": "results",
+     "noise": false,
+     "by": "rules",
+     "confidence": 0.8
+    },
+    "score": 100,
+    "tier": "critical",
+    "reasons": [
+     "results filing (90)",
+     "you follow results +10"
+    ]
+   },
+   "members": [
+    {
+     "filing": {
+      "seq_id": "106845218",
+      "symbol": "PREMIERENE",
+      "company": "Premier Energies Limited",
+      "nse_desc": "Outcome of Board Meeting",
+      "subject": "Premier Energies Limited has submitted to the Exchange, the financial results for the period ended September 30, 2026.",
+      "nse_summary": null,
+      "pdf_url": "https://nsearchives.nseindia.com/corporate/PEL2024_04112026182631_Outcome_Q2_FY_2026-27_Signed.pdf",
+      "filed_at": "2026-11-04T18:28:04+05:30",
+      "has_xbrl": true
+     },
+     "cls": {
+      "category": "results",
+      "subtype": "results",
+      "noise": false,
+      "by": "rules",
+      "confidence": 0.8
+     },
+     "score": 100,
+     "tier": "critical",
+     "reasons": [
+      "results filing (90)",
+      "you follow results +10"
+     ]
+    },
+    {
+     "filing": {
+      "seq_id": "106845671",
+      "symbol": "PREMIERENE",
+      "company": "Premier Energies Limited",
+      "nse_desc": "Investor Presentation",
+      "subject": "Premier Energies Limited has informed the Exchange about Investor Presentation",
+      "nse_summary": null,
+      "pdf_url": "https://nsearchives.nseindia.com/corporate/PEL2024_04112026200307_Investor_Presentation_Signed.pdf",
+      "filed_at": "2026-11-04T20:03:28+05:30",
+      "has_xbrl": true
+     },
+     "cls": {
+      "category": "results",
+      "subtype": "presentation",
+      "noise": false,
+      "by": "rules",
+      "confidence": 0.95
+     },
+     "score": 91,
+     "tier": "critical",
+     "reasons": [
+      "results filing (90)",
+      "investor presentation ×0.9",
+      "you follow results +10"
+     ]
+    },
+    {
+     "filing": {
+      "seq_id": "106846304",
+      "symbol": "PREMIERENE",
+      "company": "Premier Energies Limited",
+      "nse_desc": "Press Release",
+      "subject": "Premier Energies Limited has informed the Exchange regarding a press release dated November 05, 2026, titled \"Premier Energies Reports Strong Q2 FY27 Results\"",
+      "nse_summary": null,
+      "pdf_url": "https://nsearchives.nseindia.com/corporate/PEL2024_05112026101211_Press_Release_Signed.pdf",
+      "filed_at": "2026-11-05T10:12:45+05:30",
+      "has_xbrl": true
+     },
+     "cls": {
+      "category": "results",
+      "subtype": "press_release",
+      "noise": false,
+      "by": "rules",
+      "confidence": 0.8
+     },
+     "score": 100,
+     "tier": "critical",
+     "reasons": [
+      "results filing (90)",
+      "you follow results +10"
+     ]
+    }
+   ],
+   "latest_at": "2026-11-05T10:12:45+05:30",
+   "results": {
+    "symbol": "PREMIERENE",
+    "period_end": "2026-09-30",
+    "period_label": "Q2 FY27",
+    "basis": "consolidated",
+    "format": "indas",
+    "audited": false,
+    "compared_qoq": "2026-06-30",
+    "compared_yoy": "2025-09-30",
+    "metrics": [
+     {
+      "key": "revenue",
+      "label": "Revenue",
+      "value": 2631.85,
+      "qoq_pct": 6.9,
+      "yoy_pct": 43.3,
+      "computed": false
+     },
+     {
+      "key": "ebitda",
+      "label": "EBITDA",
+      "value": 735.76,
+      "qoq_pct": 3.0,
+      "yoy_pct": 31.2,
+      "computed": true
+     },
+     {
+      "key": "pbt",
+      "label": "PBT",
+      "value": 601.12,
+      "qoq_pct": -3.0,
+      "yoy_pct": 28.7,
+      "computed": false
+     },
+     {
+      "key": "pat",
+      "label": "PAT",
+      "value": 462.39,
+      "qoq_pct": -2.0,
+      "yoy_pct": 30.8,
+      "computed": false
+     }
+    ],
+    "margins": [
+     {
+      "key": "ebitda_margin",
+      "label": "EBITDA margin",
+      "value_pct": 28.0,
+      "qoq_bps": -105,
+      "yoy_bps": -258
+     },
+     {
+      "key": "pat_margin",
+      "label": "PAT margin",
+      "value_pct": 17.6,
+      "qoq_bps": -159,
+      "yoy_bps": -167
+     }
+    ],
+    "notes": [
+     "EBITDA is computed: revenue from operations minus operating expenses (excludes other income).",
+     "PAT includes ₹0.15 cr share of profit of associates and joint ventures."
+    ],
+    "sources": [
+     "https://nsearchives.nseindia.com/corporate/xbrl/INTEGRATED_FILING_INDAS_1753167_04112026083633_WEB.xml",
+     "https://nsearchives.nseindia.com/corporate/xbrl/INTEGRATED_FILING_INDAS_1709422_06082026084047_WEB.xml",
+     "https://nsearchives.nseindia.com/corporate/xbrl/INTEGRATED_FILING_INDAS_1559297_28102025100034_WEB.xml"
+    ]
+   },
+   "people": [],
+   "brief": null
+  },
+  {
+   "id": "ZYDUSLIFE:results:106843746",
+   "symbol": "ZYDUSLIFE",
+   "company": "Zydus Lifesciences Limited",
+   "category": "results",
+   "subtype": "results",
+   "score": 100,
+   "tier": "critical",
+   "headline": {
+    "filing": {
+     "seq_id": "106843746",
+     "symbol": "ZYDUSLIFE",
+     "company": "Zydus Lifesciences Limited",
+     "nse_desc": "Outcome of Board Meeting",
+     "subject": "Zydus Lifesciences Limited has submitted to the Exchange, the financial results for the period ended September 30, 2026.",
+     "nse_summary": null,
+     "pdf_url": "https://nsearchives.nseindia.com/corporate/Cadilahc_04112026121711_OutcomeofBM.pdf",
+     "filed_at": "2026-11-04T12:19:04+05:30",
+     "has_xbrl": true
+    },
+    "cls": {
+     "category": "results",
+     "subtype": "results",
+     "noise": false,
+     "by": "rules",
+     "confidence": 0.8
+    },
+    "score": 100,
+    "tier": "critical",
+    "reasons": [
+     "results filing (90)",
+     "you follow results +10"
+    ]
+   },
+   "members": [
+    {
+     "filing": {
+      "seq_id": "106843746",
+      "symbol": "ZYDUSLIFE",
+      "company": "Zydus Lifesciences Limited",
+      "nse_desc": "Outcome of Board Meeting",
+      "subject": "Zydus Lifesciences Limited has submitted to the Exchange, the financial results for the period ended September 30, 2026.",
+      "nse_summary": null,
+      "pdf_url": "https://nsearchives.nseindia.com/corporate/Cadilahc_04112026121711_OutcomeofBM.pdf",
+      "filed_at": "2026-11-04T12:19:04+05:30",
+      "has_xbrl": true
+     },
+     "cls": {
+      "category": "results",
+      "subtype": "results",
+      "noise": false,
+      "by": "rules",
+      "confidence": 0.8
+     },
+     "score": 100,
+     "tier": "critical",
+     "reasons": [
+      "results filing (90)",
+      "you follow results +10"
+     ]
+    },
+    {
+     "filing": {
+      "seq_id": "106843780",
+      "symbol": "ZYDUSLIFE",
+      "company": "Zydus Lifesciences Limited",
+      "nse_desc": "Investor Presentation",
+      "subject": "Zydus Lifesciences Limited has informed the Exchange about Investor Presentation",
+      "nse_summary": null,
+      "pdf_url": "https://nsearchives.nseindia.com/corporate/Cadilahc_04112026123450_Investorpresentation.pdf",
+      "filed_at": "2026-11-04T12:35:20+05:30",
+      "has_xbrl": true
+     },
+     "cls": {
+      "category": "results",
+      "subtype": "presentation",
+      "noise": false,
+      "by": "rules",
+      "confidence": 0.95
+     },
+     "score": 91,
+     "tier": "critical",
+     "reasons": [
+      "results filing (90)",
+      "investor presentation ×0.9",
+      "you follow results +10"
+     ]
+    }
+   ],
+   "latest_at": "2026-11-04T12:35:20+05:30",
+   "results": {
+    "symbol": "ZYDUSLIFE",
+    "period_end": "2026-09-30",
+    "period_label": "Q2 FY27",
+    "basis": "consolidated",
+    "format": "indas",
+    "audited": false,
+    "compared_qoq": "2026-06-30",
+    "compared_yoy": "2025-09-30",
+    "metrics": [
+     {
+      "key": "revenue",
+      "label": "Revenue",
+      "value": 7909.6,
+      "qoq_pct": -1.3,
+      "yoy_pct": 29.2,
+      "computed": false
+     },
+     {
+      "key": "ebitda",
+      "label": "EBITDA",
+      "value": 1894.5,
+      "qoq_pct": -1.8,
+      "yoy_pct": -6.0,
+      "computed": true
+     },
+     {
+      "key": "pbt",
+      "label": "PBT",
+      "value": 1234.2,
+      "qoq_pct": -5.5,
+      "yoy_pct": -26.9,
+      "computed": false
+     },
+     {
+      "key": "pat",
+      "label": "PAT",
+      "value": 927.7,
+      "qoq_pct": -6.3,
+      "yoy_pct": -25.1,
+      "computed": false
+     }
+    ],
+    "margins": [
+     {
+      "key": "ebitda_margin",
+      "label": "EBITDA margin",
+      "value_pct": 24.0,
+      "qoq_bps": -11,
+      "yoy_bps": -897
+     },
+     {
+      "key": "pat_margin",
+      "label": "PAT margin",
+      "value_pct": 11.7,
+      "qoq_bps": -62,
+      "yoy_bps": -850
+     }
+    ],
+    "notes": [
+     "EBITDA is computed: revenue from operations minus operating expenses (excludes other income).",
+     "PBT includes an exceptional gain of ₹1.30 cr.",
+     "PAT includes ₹27.50 cr share of profit of associates and joint ventures."
+    ],
+    "sources": [
+     "https://nsearchives.nseindia.com/corporate/xbrl/INTEGRATED_FILING_INDAS_1753077_04112026073431_WEB.xml",
+     "https://nsearchives.nseindia.com/corporate/xbrl/INTEGRATED_FILING_INDAS_1712104_11082026072500_WEB.xml",
+     "https://nsearchives.nseindia.com/corporate/xbrl/INTEGRATED_FILING_INDAS_1567128_06112025062119_WEB.xml"
+    ]
+   },
+   "people": [],
+   "brief": null
+  },
+  {
+   "id": "TATASTEEL:management_change:106852199",
+   "symbol": "TATASTEEL",
+   "company": "Tata Steel Limited",
+   "category": "management_change",
+   "subtype": "cxo",
+   "score": 98,
+   "tier": "critical",
+   "headline": {
+    "filing": {
+     "seq_id": "106852199",
+     "symbol": "TATASTEEL",
+     "company": "Tata Steel Limited",
+     "nse_desc": "Retirement",
+     "subject": "Tata Steel Limited has informed the Exchange about Retirement of Mr. Noel Naval Tata as the Non-Executive, Non-Independent Director and Vice Chairman of the Board",
+     "nse_summary": "Tata Steel Limited approved its audited standalone and unaudited consolidated financial results for the quarter and half year ended September 30, 2026. The statutory auditor issued a qualified opinion due to non-recognition of further fair value reduction for Tata Steel Nederland B.V., which has a carrying value of Rs. 59,078.13 crore. The auditor also highlighted an emphasis of matter regarding the Scheme of Amalgamation with Rujuvalika Investments Limited, approved by the National Company Law Tribunal on October 1, 2026. Mr. Noel Naval Tata, DIN 00024713, will retire as Non-Executive, Non-Independent Director and Vice Chairman effective November 11, 2026. The Board meeting was held on November 7, 2026.",
+     "pdf_url": "https://nsearchives.nseindia.com/corporate/NIDHIFADNAVIS_07112026131701_BOARDOUTCOME-NOV7.pdf",
+     "filed_at": "2026-11-07T13:17:42+05:30",
+     "has_xbrl": true
+    },
+    "cls": {
+     "category": "management_change",
+     "subtype": "cxo",
+     "noise": false,
+     "by": "rules",
+     "confidence": 0.95
+    },
+    "score": 98,
+    "tier": "critical",
+    "reasons": [
+     "management change filing (80)",
+     "CFO/CEO/MD change ×1.1",
+     "you follow management change +10"
+    ]
+   },
+   "members": [
+    {
+     "filing": {
+      "seq_id": "106852199",
+      "symbol": "TATASTEEL",
+      "company": "Tata Steel Limited",
+      "nse_desc": "Retirement",
+      "subject": "Tata Steel Limited has informed the Exchange about Retirement of Mr. Noel Naval Tata as the Non-Executive, Non-Independent Director and Vice Chairman of the Board",
+      "nse_summary": "Tata Steel Limited approved its audited standalone and unaudited consolidated financial results for the quarter and half year ended September 30, 2026. The statutory auditor issued a qualified opinion due to non-recognition of further fair value reduction for Tata Steel Nederland B.V., which has a carrying value of Rs. 59,078.13 crore. The auditor also highlighted an emphasis of matter regarding the Scheme of Amalgamation with Rujuvalika Investments Limited, approved by the National Company Law Tribunal on October 1, 2026. Mr. Noel Naval Tata, DIN 00024713, will retire as Non-Executive, Non-Independent Director and Vice Chairman effective November 11, 2026. The Board meeting was held on November 7, 2026.",
+      "pdf_url": "https://nsearchives.nseindia.com/corporate/NIDHIFADNAVIS_07112026131701_BOARDOUTCOME-NOV7.pdf",
+      "filed_at": "2026-11-07T13:17:42+05:30",
+      "has_xbrl": true
+     },
+     "cls": {
+      "category": "management_change",
+      "subtype": "cxo",
+      "noise": false,
+      "by": "rules",
+      "confidence": 0.95
+     },
+     "score": 98,
+     "tier": "critical",
+     "reasons": [
+      "management change filing (80)",
+      "CFO/CEO/MD change ×1.1",
+      "you follow management change +10"
+     ]
+    }
+   ],
+   "latest_at": "2026-11-07T13:17:42+05:30",
+   "results": null,
+   "people": [
+    {
+     "name": "Mr. Noel Naval Tata",
+     "role": "Non-Executive, Non-Independent Director and Vice Chairman of the Board",
+     "change": "retired",
+     "effective": "effective close of business hours on November 11, 2026",
+     "profile": "Mr. Tata has been associated with the Company since March 2022 and during his tenure, he has provided valuable guidance and strategic direction to the Company. The Board places on record its deep appreciation for his invaluable contributions to the Company.",
+     "incoming": false,
+     "source_seq_id": "106852199"
+    }
+   ],
+   "brief": null
+  },
+  {
+   "id": "VOLTAS:management_change:106850975",
+   "symbol": "VOLTAS",
+   "company": "Voltas Limited",
+   "category": "management_change",
+   "subtype": "cxo",
+   "score": 98,
+   "tier": "critical",
+   "headline": {
+    "filing": {
+     "seq_id": "106850975",
+     "symbol": "VOLTAS",
+     "company": "Voltas Limited",
+     "nse_desc": "Retirement",
+     "subject": "Voltas Limited has informed the Exchange about Retirement of Mr. Noel N. Tata as Chairman and Director w.e.f 11th November, 2026 and his appointment as Chairman Emeritus w.e.f 12th November, 2026",
+     "nse_summary": null,
+     "pdf_url": "https://nsearchives.nseindia.com/corporate/VOLTAS_RB_06112026171132_02SE_Directorssigned.pdf",
+     "filed_at": "2026-11-06T17:31:30+05:30",
+     "has_xbrl": true
+    },
+    "cls": {
+     "category": "management_change",
+     "subtype": "cxo",
+     "noise": false,
+     "by": "rules",
+     "confidence": 0.95
+    },
+    "score": 98,
+    "tier": "critical",
+    "reasons": [
+     "management change filing (80)",
+     "CFO/CEO/MD change ×1.1",
+     "you follow management change +10"
+    ]
+   },
+   "members": [
+    {
+     "filing": {
+      "seq_id": "106850975",
+      "symbol": "VOLTAS",
+      "company": "Voltas Limited",
+      "nse_desc": "Retirement",
+      "subject": "Voltas Limited has informed the Exchange about Retirement of Mr. Noel N. Tata as Chairman and Director w.e.f 11th November, 2026 and his appointment as Chairman Emeritus w.e.f 12th November, 2026",
+      "nse_summary": null,
+      "pdf_url": "https://nsearchives.nseindia.com/corporate/VOLTAS_RB_06112026171132_02SE_Directorssigned.pdf",
+      "filed_at": "2026-11-06T17:31:30+05:30",
+      "has_xbrl": true
+     },
+     "cls": {
+      "category": "management_change",
+      "subtype": "cxo",
+      "noise": false,
+      "by": "rules",
+      "confidence": 0.95
+     },
+     "score": 98,
+     "tier": "critical",
+     "reasons": [
+      "management change filing (80)",
+      "CFO/CEO/MD change ×1.1",
+      "you follow management change +10"
+     ]
+    },
+    {
+     "filing": {
+      "seq_id": "106850976",
+      "symbol": "VOLTAS",
+      "company": "Voltas Limited",
+      "nse_desc": "Retirement",
+      "subject": "Voltas Limited has informed the Exchange about Retirement of Mr. Mukundan Menon C. P. Managing Director of the Company w.e.f. 24th May, 2027",
+      "nse_summary": null,
+      "pdf_url": "https://nsearchives.nseindia.com/corporate/VOLTAS_RB_06112026171317_02SE_Directorssigned.pdf",
+      "filed_at": "2026-11-06T17:31:30+05:30",
+      "has_xbrl": true
+     },
+     "cls": {
+      "category": "management_change",
+      "subtype": "cxo",
+      "noise": false,
+      "by": "rules",
+      "confidence": 0.95
+     },
+     "score": 98,
+     "tier": "critical",
+     "reasons": [
+      "management change filing (80)",
+      "CFO/CEO/MD change ×1.1",
+      "you follow management change +10"
+     ]
+    },
+    {
+     "filing": {
+      "seq_id": "106850977",
+      "symbol": "VOLTAS",
+      "company": "Voltas Limited",
+      "nse_desc": "Appointment",
+      "subject": "Voltas Limited has informed the Exchange regarding Appointment of Mr Sunil Alaric DSouza as Chairman of the company w.e.f. November 12, 2026.",
+      "nse_summary": null,
+      "pdf_url": "https://nsearchives.nseindia.com/corporate/VOLTAS_RB_06112026171534_02SE_Directorssigned.pdf",
+      "filed_at": "2026-11-06T17:31:30+05:30",
+      "has_xbrl": true
+     },
+     "cls": {
+      "category": "management_change",
+      "subtype": "cxo",
+      "noise": false,
+      "by": "rules",
+      "confidence": 0.95
+     },
+     "score": 98,
+     "tier": "critical",
+     "reasons": [
+      "management change filing (80)",
+      "CFO/CEO/MD change ×1.1",
+      "you follow management change +10"
+     ]
+    },
+    {
+     "filing": {
+      "seq_id": "106850978",
+      "symbol": "VOLTAS",
+      "company": "Voltas Limited",
+      "nse_desc": "Appointment",
+      "subject": "Voltas Limited has informed the Exchange regarding Appointment of Mr Venkatesalu Palaniswamy as Non- Executive Director of the company w.e.f. November 12, 2026.",
+      "nse_summary": null,
+      "pdf_url": "https://nsearchives.nseindia.com/corporate/VOLTAS_RB_06112026171832_02SE_Directorssigned.pdf",
+      "filed_at": "2026-11-06T17:31:30+05:30",
+      "has_xbrl": true
+     },
+     "cls": {
+      "category": "management_change",
+      "subtype": "independent",
+      "noise": false,
+      "by": "rules",
+      "confidence": 0.95
+     },
+     "score": 58,
+     "tier": "important",
+     "reasons": [
+      "management change filing (80)",
+      "independent director change ×0.6",
+      "you follow management change +10"
+     ]
+    },
+    {
+     "filing": {
+      "seq_id": "106850979",
+      "symbol": "VOLTAS",
+      "company": "Voltas Limited",
+      "nse_desc": "Appointment",
+      "subject": "Voltas Limited has informed the Exchange regarding Appointment of Mr Jayant Balan as Managing Director of the company w.e.f. 25th May, 2027.",
+      "nse_summary": null,
+      "pdf_url": "https://nsearchives.nseindia.com/corporate/VOLTAS_RB_06112026172057_02SE_Directorssigned.pdf",
+      "filed_at": "2026-11-06T17:31:30+05:30",
+      "has_xbrl": true
+     },
+     "cls": {
+      "category": "management_change",
+      "subtype": "cxo",
+      "noise": false,
+      "by": "rules",
+      "confidence": 0.95
+     },
+     "score": 98,
+     "tier": "critical",
+     "reasons": [
+      "management change filing (80)",
+      "CFO/CEO/MD change ×1.1",
+      "you follow management change +10"
+     ]
+    }
+   ],
+   "latest_at": "2026-11-06T17:31:30+05:30",
+   "results": null,
+   "people": [
+    {
+     "name": "Mr. Sunil Alaric D’Souza",
+     "role": "Chairman",
+     "change": "appointed",
+     "effective": "12th November, 2026",
+     "profile": null,
+     "incoming": true,
+     "source_seq_id": "106850975"
+    },
+    {
+     "name": "Mr. Jayant Balan",
+     "role": "Head – Room Air Conditioner Business and Managing Director Designate",
+     "change": "redesignated",
+     "effective": "until his appointment as Managing Director takes effect on 25th May, 2027",
+     "profile": "Mr. Jayant Balan is a Mechanical Engineer and PGDM from SP Jain Institute of Management & Research. Mr. Balan joined the Tata Group in 1999 as part of the Tata Administrative Service and moved to Voltas in 2001. Over past two and a half decades, Mr. Balan has held leadership roles across manufacturing, supply chain, strategy, international operations, and consumer durables.",
+     "incoming": true,
+     "source_seq_id": "106850975"
+    },
+    {
+     "name": "Mr. Venkatesalu Palaniswamy",
+     "role": "Additional Director (Non-Independent Non-Executive)",
+     "change": "appointed",
+     "effective": "12th November, 2026",
+     "profile": "Mr. Venkatesalu Palaniswamy is a Commerce Graduate, Alumn i of Harvard Business School (Advanced Management Program – AMP), Master’s in Management from Symbiosis (SIIB) Pune, CFA from the Institute of Chartered Financial Analysts of India (ICFAI). Mr. Venkate salu Palaniswamy is th e Managing Director of Trent Limited. Prior to that, he held the position of Executive Director and Chief Executive Officer of Trent.",
+     "incoming": true,
+     "source_seq_id": "106850975"
+    },
+    {
+     "name": "Mr. Noel N. Tata",
+     "role": "Chairman",
+     "change": "retired",
+     "effective": "close of business hours on 11 th November, 2026",
+     "profile": null,
+     "incoming": false,
+     "source_seq_id": "106850975"
+    },
+    {
+     "name": "Mr. Mukundan Menon C.P.",
+     "role": "Managing Director",
+     "change": "retired",
+     "effective": "24 th May, 2027",
+     "profile": null,
+     "incoming": false,
+     "source_seq_id": "106850975"
+    }
+   ],
+   "brief": null
+  },
+  {
+   "id": "TATASTEEL:mna:106852468",
+   "symbol": "TATASTEEL",
+   "company": "Tata Steel Limited",
+   "category": "mna",
+   "subtype": "acquisition",
+   "score": 95,
+   "tier": "critical",
+   "headline": {
+    "filing": {
+     "seq_id": "106852468",
+     "symbol": "TATASTEEL",
+     "company": "Tata Steel Limited",
+     "nse_desc": "Acquisition",
+     "subject": "Tata Steel Limited has informed the Exchange about acquisition of 38,222 equity shares of face value &#8377;10/- each in Creative Port Development Private Limited ( CPDPL ) due to conversion of 25,10,830 Optionally Convertible Redeemable Preference Shares of CPDPL, as per terms of issue",
+     "nse_summary": "Tata Steel Limited acquired 38,222 equity shares in Creative Port Development Private Limited on November 7, 2026. This acquisition resulted from the conversion of 25,10,830 Optionally Convertible Redeemable Preference Shares. The conversion ratio was one equity share for every 65.69 preference shares. Tata Steel’s equity stake in the subsidiary increased from 51% to 57.5%. The company received a cash payment of ₹6,876.11 for fractional entitlements. Creative Port Development Private Limited remains a subsidiary of Tata Steel. The target entity operates in the transportation and storage sector. No governmental or regulatory approvals were required for this transaction.",
+     "pdf_url": "https://nsearchives.nseindia.com/corporate/NIDHIFADNAVIS_07112026154336_NSEBSE_CPDPL.pdf",
+     "filed_at": "2026-11-07T15:45:33+05:30",
+     "has_xbrl": true
+    },
+    "cls": {
+     "category": "mna",
+     "subtype": "acquisition",
+     "noise": false,
+     "by": "rules",
+     "confidence": 0.95
+    },
+    "score": 95,
+    "tier": "critical",
+    "reasons": [
+     "M&A filing (85)",
+     "you follow M&A +10"
+    ]
+   },
+   "members": [
+    {
+     "filing": {
+      "seq_id": "106852468",
+      "symbol": "TATASTEEL",
+      "company": "Tata Steel Limited",
+      "nse_desc": "Acquisition",
+      "subject": "Tata Steel Limited has informed the Exchange about acquisition of 38,222 equity shares of face value &#8377;10/- each in Creative Port Development Private Limited ( CPDPL ) due to conversion of 25,10,830 Optionally Convertible Redeemable Preference Shares of CPDPL, as per terms of issue",
+      "nse_summary": "Tata Steel Limited acquired 38,222 equity shares in Creative Port Development Private Limited on November 7, 2026. This acquisition resulted from the conversion of 25,10,830 Optionally Convertible Redeemable Preference Shares. The conversion ratio was one equity share for every 65.69 preference shares. Tata Steel’s equity stake in the subsidiary increased from 51% to 57.5%. The company received a cash payment of ₹6,876.11 for fractional entitlements. Creative Port Development Private Limited remains a subsidiary of Tata Steel. The target entity operates in the transportation and storage sector. No governmental or regulatory approvals were required for this transaction.",
+      "pdf_url": "https://nsearchives.nseindia.com/corporate/NIDHIFADNAVIS_07112026154336_NSEBSE_CPDPL.pdf",
+      "filed_at": "2026-11-07T15:45:33+05:30",
+      "has_xbrl": true
+     },
+     "cls": {
+      "category": "mna",
+      "subtype": "acquisition",
+      "noise": false,
+      "by": "rules",
+      "confidence": 0.95
+     },
+     "score": 95,
+     "tier": "critical",
+     "reasons": [
+      "M&A filing (85)",
+      "you follow M&A +10"
+     ]
+    }
+   ],
+   "latest_at": "2026-11-07T15:45:33+05:30",
+   "results": null,
+   "people": [],
+   "brief": {
+    "one_liner": "Tata Steel increased its equity stake in Creative Port Development Private Limited from 51% to 57.5% by converting preference shares.",
+    "facts": [
+     {
+      "label": "Acquisition Date",
+      "value": "November 7, 2026"
+     },
+     {
+      "label": "Equity Shares Acquired",
+      "value": "38,222"
+     },
+     {
+      "label": "New Equity Stake",
+      "value": "57.5%"
+     }
+    ],
+    "quote": "Post this conversion, the Company’s equity stake in CPDPL has increased by 6.5% from 51% to 57.5% and CPDPL continues to remain a subsidiary of the Company.",
+    "by": "llm",
+    "source_seq_id": "106852468"
+   }
+  },
+  {
+   "id": "M&M:mna:106850437",
+   "symbol": "M&M",
+   "company": "Mahindra & Mahindra Limited",
+   "category": "mna",
+   "subtype": "acquisition",
+   "score": 95,
+   "tier": "critical",
+   "headline": {
+    "filing": {
+     "seq_id": "106850437",
+     "symbol": "M&M",
+     "company": "Mahindra & Mahindra Limited",
+     "nse_desc": "Acquisition",
+     "subject": "Mahindra & Mahindra Limited has informed the Exchange about Acquisition",
+     "nse_summary": null,
+     "pdf_url": "https://nsearchives.nseindia.com/corporate/AmitDodani_06112026153559_SEIntimationSMLRightsIssue.pdf",
+     "filed_at": "2026-11-06T15:36:06+05:30",
+     "has_xbrl": true
+    },
+    "cls": {
+     "category": "mna",
+     "subtype": "acquisition",
+     "noise": false,
+     "by": "rules",
+     "confidence": 0.95
+    },
+    "score": 95,
+    "tier": "critical",
+    "reasons": [
+     "M&A filing (85)",
+     "you follow M&A +10"
+    ]
+   },
+   "members": [
+    {
+     "filing": {
+      "seq_id": "106850437",
+      "symbol": "M&M",
+      "company": "Mahindra & Mahindra Limited",
+      "nse_desc": "Acquisition",
+      "subject": "Mahindra & Mahindra Limited has informed the Exchange about Acquisition",
+      "nse_summary": null,
+      "pdf_url": "https://nsearchives.nseindia.com/corporate/AmitDodani_06112026153559_SEIntimationSMLRightsIssue.pdf",
+      "filed_at": "2026-11-06T15:36:06+05:30",
+      "has_xbrl": true
+     },
+     "cls": {
+      "category": "mna",
+      "subtype": "acquisition",
+      "noise": false,
+      "by": "rules",
+      "confidence": 0.95
+     },
+     "score": 95,
+     "tier": "critical",
+     "reasons": [
+      "M&A filing (85)",
+      "you follow M&A +10"
+     ]
+    }
+   ],
+   "latest_at": "2026-11-06T15:36:06+05:30",
+   "results": null,
+   "people": [],
+   "brief": {
+    "one_liner": "Mahindra & Mahindra plans to invest up to Rs. 1,450 crore in the rights issue of its listed subsidiary SML.",
+    "facts": [
+     {
+      "label": "Revenue for FY ended 31st March 2026",
+      "value": "Rs. 2,837.92 crore"
+     },
+     {
+      "label": "Net worth as of 31st March 2026",
+      "value": "Rs. 519.34 crore"
+     },
+     {
+      "label": "Maximum aggregate investment",
+      "value": "Rs. 1,450 crore"
+     }
+    ],
+    "quote": "The aggregate investment by the Company in the rights issue, including any additional subscription, shall not exceed Rs. 1,450 crore.",
+    "by": "llm",
+    "source_seq_id": "106850437"
+   }
+  },
+  {
+   "id": "TECHM:mna:106850042",
+   "symbol": "TECHM",
+   "company": "Tech Mahindra Limited",
+   "category": "mna",
+   "subtype": "acquisition",
+   "score": 95,
+   "tier": "critical",
+   "headline": {
+    "filing": {
+     "seq_id": "106850042",
+     "symbol": "TECHM",
+     "company": "Tech Mahindra Limited",
+     "nse_desc": "Acquisition",
+     "subject": "Tech Mahindra Limited has informed the Exchange about Acquisition",
+     "nse_summary": null,
+     "pdf_url": "https://nsearchives.nseindia.com/corporate/Apekshakhemka_06112026135439_Pininfarina__SE_Intimation_of_commitment_to_Tender_Final_S.pdf",
+     "filed_at": "2026-11-06T13:55:05+05:30",
+     "has_xbrl": true
+    },
+    "cls": {
+     "category": "mna",
+     "subtype": "acquisition",
+     "noise": false,
+     "by": "rules",
+     "confidence": 0.95
+    },
+    "score": 95,
+    "tier": "critical",
+    "reasons": [
+     "M&A filing (85)",
+     "you follow M&A +10"
+    ]
+   },
+   "members": [
+    {
+     "filing": {
+      "seq_id": "106850042",
+      "symbol": "TECHM",
+      "company": "Tech Mahindra Limited",
+      "nse_desc": "Acquisition",
+      "subject": "Tech Mahindra Limited has informed the Exchange about Acquisition",
+      "nse_summary": null,
+      "pdf_url": "https://nsearchives.nseindia.com/corporate/Apekshakhemka_06112026135439_Pininfarina__SE_Intimation_of_commitment_to_Tender_Final_S.pdf",
+      "filed_at": "2026-11-06T13:55:05+05:30",
+      "has_xbrl": true
+     },
+     "cls": {
+      "category": "mna",
+      "subtype": "acquisition",
+      "noise": false,
+      "by": "rules",
+      "confidence": 0.95
+     },
+     "score": 95,
+     "tier": "critical",
+     "reasons": [
+      "M&A filing (85)",
+      "you follow M&A +10"
+     ]
+    }
+   ],
+   "latest_at": "2026-11-06T13:55:05+05:30",
+   "results": null,
+   "people": [],
+   "brief": {
+    "one_liner": "Tech Mahindra's subsidiary PF Holdings B.V. entered into a tender offer to acquire a 10.02% stake in Pininfarina S.p.A. for up to EUR 9.46 million, increasing its shareholding to 92.59%.",
+    "facts": [
+     {
+      "label": "Acquisition Stake",
+      "value": "10.02%"
+     },
+     {
+      "label": "Cost of Acquisition",
+      "value": "Up to EUR 9.46 million"
+     },
+     {
+      "label": "Post-Transaction Shareholding",
+      "value": "92.59%"
+     }
+    ],
+    "quote": "Upon successful completion of the Transaction, PFH’s shareholding in Pininfarina S.p.A will increase from 82.57% to 92.59%.",
+    "by": "llm",
+    "source_seq_id": "106850042"
+   }
+  },
+  {
+   "id": "AMBER:mna:106842609",
+   "symbol": "AMBER",
+   "company": "Amber Enterprises India Limited",
+   "category": "mna",
+   "subtype": "acquisition",
+   "score": 95,
+   "tier": "critical",
+   "headline": {
+    "filing": {
+     "seq_id": "106842609",
+     "symbol": "AMBER",
+     "company": "Amber Enterprises India Limited",
+     "nse_desc": "Acquisition",
+     "subject": "Pursuant to Regulation 30 of SEBI (LODR) Regulations, 2015, we wish to inform the exchange that IL JIN Electronics (India) Limited, a material subsidiary of the Company (\"IL JIN\") has completed acquisition of the balance 1.50% equity stake of Ascent Circuits Private Limited (\"Ascent Circuits\"), from Ms. Manju Thomas, shareholder of Ascent Circuits, pursuant to Share Swap Agreement executed on 18th October 2026, thereby making Ascent Circuits Wholly-Owned Subsidiary of IL JIN and Wholly-Owned step down subsidiary of the Company. Further, 13,120 Compulsorily Convertible Preference Shares A2 have been allotted by IL JIN to Ms. Manju Thomas, as non-cash consideration, for the aforesaid acquisition, in terms of the said Share Swap Agreement.",
+     "nse_summary": null,
+     "pdf_url": "https://nsearchives.nseindia.com/corporate/AMBER_03112026185712_SEIntimationUpdateonAcquisitionAscent.pdf",
+     "filed_at": "2026-11-03T18:57:33+05:30",
+     "has_xbrl": true
+    },
+    "cls": {
+     "category": "mna",
+     "subtype": "acquisition",
+     "noise": false,
+     "by": "rules",
+     "confidence": 0.95
+    },
+    "score": 95,
+    "tier": "critical",
+    "reasons": [
+     "M&A filing (85)",
+     "you follow M&A +10"
+    ]
+   },
+   "members": [
+    {
+     "filing": {
+      "seq_id": "106842609",
+      "symbol": "AMBER",
+      "company": "Amber Enterprises India Limited",
+      "nse_desc": "Acquisition",
+      "subject": "Pursuant to Regulation 30 of SEBI (LODR) Regulations, 2015, we wish to inform the exchange that IL JIN Electronics (India) Limited, a material subsidiary of the Company (\"IL JIN\") has completed acquisition of the balance 1.50% equity stake of Ascent Circuits Private Limited (\"Ascent Circuits\"), from Ms. Manju Thomas, shareholder of Ascent Circuits, pursuant to Share Swap Agreement executed on 18th October 2026, thereby making Ascent Circuits Wholly-Owned Subsidiary of IL JIN and Wholly-Owned step down subsidiary of the Company. Further, 13,120 Compulsorily Convertible Preference Shares A2 have been allotted by IL JIN to Ms. Manju Thomas, as non-cash consideration, for the aforesaid acquisition, in terms of the said Share Swap Agreement.",
+      "nse_summary": null,
+      "pdf_url": "https://nsearchives.nseindia.com/corporate/AMBER_03112026185712_SEIntimationUpdateonAcquisitionAscent.pdf",
+      "filed_at": "2026-11-03T18:57:33+05:30",
+      "has_xbrl": true
+     },
+     "cls": {
+      "category": "mna",
+      "subtype": "acquisition",
+      "noise": false,
+      "by": "rules",
+      "confidence": 0.95
+     },
+     "score": 95,
+     "tier": "critical",
+     "reasons": [
+      "M&A filing (85)",
+      "you follow M&A +10"
+     ]
+    },
+    {
+     "filing": {
+      "seq_id": "106842705",
+      "symbol": "AMBER",
+      "company": "Amber Enterprises India Limited",
+      "nse_desc": "Acquisition",
+      "subject": "Pursuant to Regulation 30 of SEBI (LODR) Regulations, 2015, we wish to inform the exchange that IL JIN Electronics (India) Limited, a material subsidiary of the Company (\"IL JIN\") has completed the acquisition of the balance 40% equity stake of Power-One Micro Systems Private Limited (\"Power-One\") from Mr. Ramanna Rajesh Mayasandra, Mr. Harsha Venkatesh, Dwaith Advisory Private Limited and Mrs. Doddabidere Honappa Venna, shareholders of Power-One, pursuant to Share Swap agreement executed on 18th October 2026, thereby making Power-One a Wholly-Owned Subsidiary of IL JIN and Wholly-Owned step down subsidiary of the Company. Further, 1,76,000 Compulsorily Convertible Preference Shares A3 have been allotted by IL JIN to Mr. Ramanna Rajesh Mayasandra, Mr. Harsha Venkatesh, Dwaith Advisory Private Limited and Mrs. Doddabidere Honappa Veena, as a non -cash consideration, for the aforesaid, in terms of the said Share Swap Agreement.",
+      "nse_summary": null,
+      "pdf_url": "https://nsearchives.nseindia.com/corporate/AMBER_03112026191915_SEIntimationUpdateonAcquisitionPowerOne.pdf",
+      "filed_at": "2026-11-03T19:19:57+05:30",
+      "has_xbrl": true
+     },
+     "cls": {
+      "category": "mna",
+      "subtype": "acquisition",
+      "noise": false,
+      "by": "rules",
+      "confidence": 0.95
+     },
+     "score": 95,
+     "tier": "critical",
+     "reasons": [
+      "M&A filing (85)",
+      "you follow M&A +10"
+     ]
+    }
+   ],
+   "latest_at": "2026-11-03T19:19:57+05:30",
+   "results": null,
+   "people": [],
+   "brief": {
+    "one_liner": "IL JIN Electronics has acquired the remaining 1.50% equity stake in Ascent Circuits, making it a wholly-owned step-down subsidiary.",
+    "facts": [
+     {
+      "label": "Acquired Stake",
+      "value": "1.50%"
+     },
+     {
+      "label": "Shares Acquired",
+      "value": "23,401"
+     },
+     {
+      "label": "Consideration Shares Allotted",
+      "value": "13,120"
+     }
+    ],
+    "quote": "Ascent Circuits becoming a wholly owned subsidiary of IL JIN and the Company",
+    "by": "llm",
+    "source_seq_id": "106842609"
+   }
+  },
+  {
+   "id": "TATASTEEL:mna:106841469",
+   "symbol": "TATASTEEL",
+   "company": "Tata Steel Limited",
+   "category": "mna",
+   "subtype": "scheme",
+   "score": 95,
+   "tier": "critical",
+   "headline": {
+    "filing": {
+     "seq_id": "106841469",
+     "symbol": "TATASTEEL",
+     "company": "Tata Steel Limited",
+     "nse_desc": "Scheme of Arrangement",
+     "subject": "Tata Steel Limited has informed the Exchange about  Effective Date  of the Scheme of Amalgamation amongst Tata Steel Limited and Rujuvalika Investments Limited, wholly owned subsidiary, and their respective shareholders",
+     "nse_summary": null,
+     "pdf_url": "https://nsearchives.nseindia.com/corporate/NIDHIFADNAVIS_03112026124351_BSENSE.pdf",
+     "filed_at": "2026-11-03T12:46:35+05:30",
+     "has_xbrl": true
+    },
+    "cls": {
+     "category": "mna",
+     "subtype": "scheme",
+     "noise": false,
+     "by": "rules",
+     "confidence": 0.95
+    },
+    "score": 95,
+    "tier": "critical",
+    "reasons": [
+     "M&A filing (85)",
+     "you follow M&A +10"
+    ]
+   },
+   "members": [
+    {
+     "filing": {
+      "seq_id": "106841469",
+      "symbol": "TATASTEEL",
+      "company": "Tata Steel Limited",
+      "nse_desc": "Scheme of Arrangement",
+      "subject": "Tata Steel Limited has informed the Exchange about  Effective Date  of the Scheme of Amalgamation amongst Tata Steel Limited and Rujuvalika Investments Limited, wholly owned subsidiary, and their respective shareholders",
+      "nse_summary": null,
+      "pdf_url": "https://nsearchives.nseindia.com/corporate/NIDHIFADNAVIS_03112026124351_BSENSE.pdf",
+      "filed_at": "2026-11-03T12:46:35+05:30",
+      "has_xbrl": true
+     },
+     "cls": {
+      "category": "mna",
+      "subtype": "scheme",
+      "noise": false,
+      "by": "rules",
+      "confidence": 0.95
+     },
+     "score": 95,
+     "tier": "critical",
+     "reasons": [
+      "M&A filing (85)",
+      "you follow M&A +10"
+     ]
+    },
+    {
+     "filing": {
+      "seq_id": "106841480",
+      "symbol": "TATASTEEL",
+      "company": "Tata Steel Limited",
+      "nse_desc": "Amalgamation/Merger",
+      "subject": "Tata Steel Limited has informed the Exchange about  Effective Date  of the Scheme of Amalgamation amongst Tata Steel Limited and Rujuvalika Investments Limited, wholly owned subsidiary, and their respective shareholders",
+      "nse_summary": null,
+      "pdf_url": "https://nsearchives.nseindia.com/corporate/NIDHIFADNAVIS_03112026124745_BSENSE.pdf",
+      "filed_at": "2026-11-03T12:49:40+05:30",
+      "has_xbrl": true
+     },
+     "cls": {
+      "category": "mna",
+      "subtype": "merger",
+      "noise": false,
+      "by": "rules",
+      "confidence": 0.95
+     },
+     "score": 95,
+     "tier": "critical",
+     "reasons": [
+      "M&A filing (85)",
+      "you follow M&A +10"
+     ]
+    }
+   ],
+   "latest_at": "2026-11-03T12:49:40+05:30",
+   "results": null,
+   "people": [],
+   "brief": {
+    "one_liner": "The amalgamation becomes effective on November 3, 2026, expanding Tata Steel’s authorized capital to ₹32,621.05 crore.",
+    "facts": [
+     {
+      "label": "Effective Date",
+      "value": "November 3, 2026"
+     },
+     {
+      "label": "Authorized share capital",
+      "value": "₹32,621.05 crore"
+     },
+     {
+      "label": "RIL authorized equity share capital merged",
+      "value": "₹1.55 crore"
+     }
+    ],
+    "quote": "the Scheme of Amalgamation has become operative on and from today i.e., November 3, 2026 (‘ Effective Date’).",
+    "by": "llm",
+    "source_seq_id": "106841469"
+   }
+  },
+  {
+   "id": "M&M:management_change:106846758",
+   "symbol": "M&M",
+   "company": "Mahindra & Mahindra Limited",
+   "category": "management_change",
+   "subtype": "director",
+   "score": 90,
+   "tier": "critical",
+   "headline": {
+    "filing": {
+     "seq_id": "106846758",
+     "symbol": "M&M",
+     "company": "Mahindra & Mahindra Limited",
+     "nse_desc": "Change in Management",
+     "subject": "Mahindra & Mahindra Limited has informed the Exchange about change in Management",
+     "nse_summary": null,
+     "pdf_url": "https://nsearchives.nseindia.com/corporate/Pooja_05112026130348_Outcome5Nov.pdf",
+     "filed_at": "2026-11-05T13:04:12+05:30",
+     "has_xbrl": true
+    },
+    "cls": {
+     "category": "management_change",
+     "subtype": "director",
+     "noise": false,
+     "by": "rules",
+     "confidence": 0.95
+    },
+    "score": 90,
+    "tier": "critical",
+    "reasons": [
+     "management change filing (80)",
+     "you follow management change +10"
+    ]
+   },
+   "members": [
+    {
+     "filing": {
+      "seq_id": "106846758",
+      "symbol": "M&M",
+      "company": "Mahindra & Mahindra Limited",
+      "nse_desc": "Change in Management",
+      "subject": "Mahindra & Mahindra Limited has informed the Exchange about change in Management",
+      "nse_summary": null,
+      "pdf_url": "https://nsearchives.nseindia.com/corporate/Pooja_05112026130348_Outcome5Nov.pdf",
+      "filed_at": "2026-11-05T13:04:12+05:30",
+      "has_xbrl": true
+     },
+     "cls": {
+      "category": "management_change",
+      "subtype": "director",
+      "noise": false,
+      "by": "rules",
+      "confidence": 0.95
+     },
+     "score": 90,
+     "tier": "critical",
+     "reasons": [
+      "management change filing (80)",
+      "you follow management change +10"
+     ]
+    },
+    {
+     "filing": {
+      "seq_id": "106846774",
+      "symbol": "M&M",
+      "company": "Mahindra & Mahindra Limited",
+      "nse_desc": "Cessation",
+      "subject": "Mahindra & Mahindra Limited has informed the Exchange regarding Cessation of Ms. Shuchi Suri as Senior Management Personnel of the Company",
+      "nse_summary": null,
+      "pdf_url": "https://nsearchives.nseindia.com/corporate/Pooja_05112026130646_Outcome5Nov.pdf",
+      "filed_at": "2026-11-05T13:07:20+05:30",
+      "has_xbrl": true
+     },
+     "cls": {
+      "category": "management_change",
+      "subtype": "director",
+      "noise": false,
+      "by": "rules",
+      "confidence": 0.95
+     },
+     "score": 90,
+     "tier": "critical",
+     "reasons": [
+      "management change filing (80)",
+      "you follow management change +10"
+     ]
+    }
+   ],
+   "latest_at": "2026-11-05T13:07:20+05:30",
+   "results": null,
+   "people": [
+    {
+     "name": "Ms. Shuchi Suri",
+     "role": "Chief Sales & Marketing Officer - Automotive Business",
+     "change": "redesignated",
+     "effective": "1st April 2027",
+     "profile": null,
+     "incoming": true,
+     "source_seq_id": "106846758"
+    }
+   ],
+   "brief": null
+  },
+  {
+   "id": "ZYDUSLIFE:management_change:106838526",
+   "symbol": "ZYDUSLIFE",
+   "company": "Zydus Lifesciences Limited",
+   "category": "management_change",
+   "subtype": "director",
+   "score": 90,
+   "tier": "critical",
+   "headline": {
+    "filing": {
+     "seq_id": "106838526",
+     "symbol": "ZYDUSLIFE",
+     "company": "Zydus Lifesciences Limited",
+     "nse_desc": "Change in Management",
+     "subject": "Zydus Lifesciences Limited has informed the Exchange about change in Management",
+     "nse_summary": null,
+     "pdf_url": "https://nsearchives.nseindia.com/corporate/Cadilahc_31102026192646_SEIntimation_changesinSeniorManagement.pdf",
+     "filed_at": "2026-10-31T19:28:16+05:30",
+     "has_xbrl": true
+    },
+    "cls": {
+     "category": "management_change",
+     "subtype": "director",
+     "noise": false,
+     "by": "rules",
+     "confidence": 0.95
+    },
+    "score": 90,
+    "tier": "critical",
+    "reasons": [
+     "management change filing (80)",
+     "you follow management change +10"
+    ]
+   },
+   "members": [
+    {
+     "filing": {
+      "seq_id": "106838526",
+      "symbol": "ZYDUSLIFE",
+      "company": "Zydus Lifesciences Limited",
+      "nse_desc": "Change in Management",
+      "subject": "Zydus Lifesciences Limited has informed the Exchange about change in Management",
+      "nse_summary": null,
+      "pdf_url": "https://nsearchives.nseindia.com/corporate/Cadilahc_31102026192646_SEIntimation_changesinSeniorManagement.pdf",
+      "filed_at": "2026-10-31T19:28:16+05:30",
+      "has_xbrl": true
+     },
+     "cls": {
+      "category": "management_change",
+      "subtype": "director",
+      "noise": false,
+      "by": "rules",
+      "confidence": 0.95
+     },
+     "score": 90,
+     "tier": "critical",
+     "reasons": [
+      "management change filing (80)",
+      "you follow management change +10"
+     ]
+    }
+   ],
+   "latest_at": "2026-10-31T19:28:16+05:30",
+   "results": null,
+   "people": [
+    {
+     "name": "Mr. Christoph Stoller",
+     "role": "President and Business Unit Head, International Markets Business",
+     "change": "appointed",
+     "effective": "November 2, 2026",
+     "profile": "Mr. Christoph Stoller is a highly accomplished Swiss pharmaceutical industry leader with more than 30 years of global experience in branded pharmaceuticals, specialty medicines, biologics, biosimilars, generics, OTC products, and innovative therapies. He has held CEO, President, Board, and Global Business Leadership roles across Europe, Emerging Markets, LATAM, and APAC. Educational qualification: Degree in Business Administration, Economics, Law, and Social Sciences from the University of St. Gallen, Switzerland, one of Europe's most respected business schools. Earlier Career Leadership roles at Roche Pharma, DSM Nutritional Products, and Swiss Re.",
+     "incoming": true,
+     "source_seq_id": "106838526"
+    },
+    {
+     "name": "Dr. Amrut Naik",
+     "role": "President and Business Unit Head, International Markets Business",
+     "change": "resigned",
+     "effective": "October 31, 2026",
+     "profile": null,
+     "incoming": false,
+     "source_seq_id": "106838526"
+    }
+   ],
+   "brief": null
+  },
+  {
+   "id": "CGPOWER:litigation:106852258",
+   "symbol": "CGPOWER",
+   "company": "CG Power and Industrial Solutions Limited",
+   "category": "litigation",
+   "subtype": null,
+   "score": 85,
+   "tier": "critical",
+   "headline": {
+    "filing": {
+     "seq_id": "106852258",
+     "symbol": "CGPOWER",
+     "company": "CG Power and Industrial Solutions Limited",
+     "nse_desc": "General Updates",
+     "subject": "CG Power and Industrial Solutions Limited has informed the Exchange about General Updates",
+     "nse_summary": "CG Power and Industrial Solutions Limited discloses that the Hon'ble High Court Aurangabad Bench stayed the Maharashtra Pollution Control Board direction dated 3rd November 2026 ordering the closure of its manufacturing unit at Plot no. D-2, D1/2, MIDC, Waluj, Chhatrapati Sambhajinagar. The stay was granted via an order dated 6th November 2026. The notice returnable date is 19th November 2026. The manufacturing unit contributes approximately 2.5% of the company's annual consolidated revenue.",
+     "pdf_url": "https://nsearchives.nseindia.com/corporate/CGPOWER_07112026134853_Disclosure-_High_Court_Stay_order_on_Closure_of_Operations.pdf",
+     "filed_at": "2026-11-07T13:49:21+05:30",
+     "has_xbrl": true
+    },
+    "cls": {
+     "category": "litigation",
+     "subtype": null,
+     "noise": false,
+     "by": "llm",
+     "confidence": 0.7
+    },
+    "score": 85,
+    "tier": "critical",
+    "reasons": [
+     "litigation filing (75)",
+     "you follow litigation +10"
+    ]
+   },
+   "members": [
+    {
+     "filing": {
+      "seq_id": "106852258",
+      "symbol": "CGPOWER",
+      "company": "CG Power and Industrial Solutions Limited",
+      "nse_desc": "General Updates",
+      "subject": "CG Power and Industrial Solutions Limited has informed the Exchange about General Updates",
+      "nse_summary": "CG Power and Industrial Solutions Limited discloses that the Hon'ble High Court Aurangabad Bench stayed the Maharashtra Pollution Control Board direction dated 3rd November 2026 ordering the closure of its manufacturing unit at Plot no. D-2, D1/2, MIDC, Waluj, Chhatrapati Sambhajinagar. The stay was granted via an order dated 6th November 2026. The notice returnable date is 19th November 2026. The manufacturing unit contributes approximately 2.5% of the company's annual consolidated revenue.",
+      "pdf_url": "https://nsearchives.nseindia.com/corporate/CGPOWER_07112026134853_Disclosure-_High_Court_Stay_order_on_Closure_of_Operations.pdf",
+      "filed_at": "2026-11-07T13:49:21+05:30",
+      "has_xbrl": true
+     },
+     "cls": {
+      "category": "litigation",
+      "subtype": null,
+      "noise": false,
+      "by": "llm",
+      "confidence": 0.7
+     },
+     "score": 85,
+     "tier": "critical",
+     "reasons": [
+      "litigation filing (75)",
+      "you follow litigation +10"
+     ]
+    }
+   ],
+   "latest_at": "2026-11-07T13:49:21+05:30",
+   "results": null,
+   "people": [],
+   "brief": {
+    "one_liner": "The Aurangabad Bench of the High Court stayed the pollution board's closure direction for CG Power's manufacturing unit, which contributes about 2.5% of annual consolidated revenue.",
+    "facts": [
+     {
+      "label": "Revenue contribution",
+      "value": "2.5%"
+     },
+     {
+      "label": "Stay order date",
+      "value": "6th November 2026"
+     },
+     {
+      "label": "Notice returnable date",
+      "value": "19th November 2026"
+     }
+    ],
+    "quote": "the Hon'ble High Court (Aurangabad Bench) vide its order dated 6th November 2026 has stayed the Direction dated 3rd November 2026 of Maharashtra Pollution Control Board",
+    "by": "llm",
+    "source_seq_id": "106852258"
+   }
+  },
+  {
+   "id": "CGPOWER:litigation:106846618",
+   "symbol": "CGPOWER",
+   "company": "CG Power and Industrial Solutions Limited",
+   "category": "litigation",
+   "subtype": null,
+   "score": 85,
+   "tier": "critical",
+   "headline": {
+    "filing": {
+     "seq_id": "106846618",
+     "symbol": "CGPOWER",
+     "company": "CG Power and Industrial Solutions Limited",
+     "nse_desc": "Action(s) taken or orders passed",
+     "subject": "CG Power and Industrial Solutions Limited has informed the Exchange about Action(s) taken or orders passed",
+     "nse_summary": null,
+     "pdf_url": "https://nsearchives.nseindia.com/corporate/CGPOWER_05112026123502_Draft_SE_Disclosure-_Closure_of_Operations-051126.pdf",
+     "filed_at": "2026-11-05T12:35:21+05:30",
+     "has_xbrl": true
+    },
+    "cls": {
+     "category": "litigation",
+     "subtype": null,
+     "noise": false,
+     "by": "rules",
+     "confidence": 0.95
+    },
+    "score": 85,
+    "tier": "critical",
+    "reasons": [
+     "litigation filing (75)",
+     "you follow litigation +10"
+    ]
+   },
+   "members": [
+    {
+     "filing": {
+      "seq_id": "106846618",
+      "symbol": "CGPOWER",
+      "company": "CG Power and Industrial Solutions Limited",
+      "nse_desc": "Action(s) taken or orders passed",
+      "subject": "CG Power and Industrial Solutions Limited has informed the Exchange about Action(s) taken or orders passed",
+      "nse_summary": null,
+      "pdf_url": "https://nsearchives.nseindia.com/corporate/CGPOWER_05112026123502_Draft_SE_Disclosure-_Closure_of_Operations-051126.pdf",
+      "filed_at": "2026-11-05T12:35:21+05:30",
+      "has_xbrl": true
+     },
+     "cls": {
+      "category": "litigation",
+      "subtype": null,
+      "noise": false,
+      "by": "rules",
+      "confidence": 0.95
+     },
+     "score": 85,
+     "tier": "critical",
+     "reasons": [
+      "litigation filing (75)",
+      "you follow litigation +10"
+     ]
+    }
+   ],
+   "latest_at": "2026-11-05T12:35:21+05:30",
+   "results": null,
+   "people": [],
+   "brief": {
+    "one_liner": "CG Power and Industrial Solutions Limited received a direction from the Maharashtra Pollution Control Board to close manufacturing operations at its Chhatrapati Sambhajinagar unit.",
+    "facts": [
+     {
+      "label": "Authority",
+      "value": "Maharashtra Pollution Control Board"
+     },
+     {
+      "label": "Date of receipt of direction",
+      "value": "4th November 2026"
+     },
+     {
+      "label": "Location",
+      "value": "Plot no. D-2, D1/2, MIDC, Waluj, Chhatrapati Sambhajinagar"
+     }
+    ],
+    "quote": "Direction vide letter no. MPCB/CD/ 2611030034 dated 3 Nov 2026 to close down all manufacturing activities of the plant situated at Plot no. D-2, D1/2, MIDC, Waluj, Chhatrapati Sambhajinagar",
+    "by": "llm",
+    "source_seq_id": "106846618"
+   }
+  },
+  {
+   "id": "MAXHEALTH:litigation:106843057",
+   "symbol": "MAXHEALTH",
+   "company": "Max Healthcare Institute Limited",
+   "category": "litigation",
+   "subtype": null,
+   "score": 85,
+   "tier": "critical",
+   "headline": {
+    "filing": {
+     "seq_id": "106843057",
+     "symbol": "MAXHEALTH",
+     "company": "Max Healthcare Institute Limited",
+     "nse_desc": "Pendency of Litigation(s)/dispute(s) or the outcome impacting the Company",
+     "subject": "Max Healthcare Institute Limited has informed the Exchange about disclosure under regulation 30 of the SEBI (Listing Obligations and Disclosure Requirements) Regulations, 2015",
+     "nse_summary": null,
+     "pdf_url": "https://nsearchives.nseindia.com/corporate/MAXHEALTH_03112026221201_SE_Disclosure.pdf",
+     "filed_at": "2026-11-03T22:14:12+05:30",
+     "has_xbrl": true
+    },
+    "cls": {
+     "category": "litigation",
+     "subtype": null,
+     "noise": false,
+     "by": "rules",
+     "confidence": 0.95
+    },
+    "score": 85,
+    "tier": "critical",
+    "reasons": [
+     "litigation filing (75)",
+     "you follow litigation +10"
+    ]
+   },
+   "members": [
+    {
+     "filing": {
+      "seq_id": "106843057",
+      "symbol": "MAXHEALTH",
+      "company": "Max Healthcare Institute Limited",
+      "nse_desc": "Pendency of Litigation(s)/dispute(s) or the outcome impacting the Company",
+      "subject": "Max Healthcare Institute Limited has informed the Exchange about disclosure under regulation 30 of the SEBI (Listing Obligations and Disclosure Requirements) Regulations, 2015",
+      "nse_summary": null,
+      "pdf_url": "https://nsearchives.nseindia.com/corporate/MAXHEALTH_03112026221201_SE_Disclosure.pdf",
+      "filed_at": "2026-11-03T22:14:12+05:30",
+      "has_xbrl": true
+     },
+     "cls": {
+      "category": "litigation",
+      "subtype": null,
+      "noise": false,
+      "by": "rules",
+      "confidence": 0.95
+     },
+     "score": 85,
+     "tier": "critical",
+     "reasons": [
+      "litigation filing (75)",
+      "you follow litigation +10"
+     ]
+    }
+   ],
+   "latest_at": "2026-11-03T22:14:12+05:30",
+   "results": null,
+   "people": [],
+   "brief": {
+    "one_liner": "Max Healthcare Institute updated the exchange regarding the NCLT hearing on petitions filed against its subsidiary Kalinga Hospital Ltd.",
+    "facts": [
+     {
+      "label": "Hearing Date",
+      "value": "October 30, 2026"
+     },
+     {
+      "label": "Next Consideration Date",
+      "value": "December 14, 2026"
+     },
+     {
+      "label": "Order Receipt Date",
+      "value": "November 3, 2026"
+     }
+    ],
+    "quote": "the Hon’ble NCLT listed the matter for further consideration on December 14, 2026.",
+    "by": "llm",
+    "source_seq_id": "106843057"
+   }
+  },
+  {
+   "id": "AMBER:fund_raise:106852048",
+   "symbol": "AMBER",
+   "company": "Amber Enterprises India Limited",
+   "category": "fund_raise",
+   "subtype": null,
+   "score": 80,
+   "tier": "critical",
+   "headline": {
+    "filing": {
+     "seq_id": "106852048",
+     "symbol": "AMBER",
+     "company": "Amber Enterprises India Limited",
+     "nse_desc": "Updates",
+     "subject": "In furtherance to our earlier intimation dated 11th July 2026 and pursuant to Regulation 30 of SEBI LODR Regulations, IL JIN Electronics (India) Limited (formerly known as IL JIN Electronics (India) Private Limited), a material subsidiary of the Company, has filed the Draft Red Herring Prospectus dated 6th November 2026, on 7th November 2026 with the SEBI, BSE and NSE in connection with its proposed Initial Public Offer.",
+     "nse_summary": "Amber Enterprises India Limited intimates that its material subsidiary, IL JIN Electronics India Limited, filed the Draft Red Herring Prospectus on 7th November 2026 with the Securities and Exchange Board of India, BSE Limited, and National Stock Exchange of India Limited. This filing relates to the proposed Initial Public Offer of IL JIN Electronics India Limited. The IPO is subject to receipt of required regulatory approvals. The intimation was made pursuant to Regulation 30 read with Schedule III of the SEBI LODR Regulations. The information is available on the company website at www.ambergroupindia.com.",
+     "pdf_url": "https://nsearchives.nseindia.com/corporate/AMBER_07112026112953_StockExchangeIntimations_ILJINDRHPFiling.pdf",
+     "filed_at": "2026-11-07T11:30:38+05:30",
+     "has_xbrl": true
+    },
+    "cls": {
+     "category": "fund_raise",
+     "subtype": null,
+     "noise": false,
+     "by": "rules",
+     "confidence": 0.8
+    },
+    "score": 80,
+    "tier": "critical",
+    "reasons": [
+     "fund raise filing (70)",
+     "you follow fund raise +10"
+    ]
+   },
+   "members": [
+    {
+     "filing": {
+      "seq_id": "106852048",
+      "symbol": "AMBER",
+      "company": "Amber Enterprises India Limited",
+      "nse_desc": "Updates",
+      "subject": "In furtherance to our earlier intimation dated 11th July 2026 and pursuant to Regulation 30 of SEBI LODR Regulations, IL JIN Electronics (India) Limited (formerly known as IL JIN Electronics (India) Private Limited), a material subsidiary of the Company, has filed the Draft Red Herring Prospectus dated 6th November 2026, on 7th November 2026 with the SEBI, BSE and NSE in connection with its proposed Initial Public Offer.",
+      "nse_summary": "Amber Enterprises India Limited intimates that its material subsidiary, IL JIN Electronics India Limited, filed the Draft Red Herring Prospectus on 7th November 2026 with the Securities and Exchange Board of India, BSE Limited, and National Stock Exchange of India Limited. This filing relates to the proposed Initial Public Offer of IL JIN Electronics India Limited. The IPO is subject to receipt of required regulatory approvals. The intimation was made pursuant to Regulation 30 read with Schedule III of the SEBI LODR Regulations. The information is available on the company website at www.ambergroupindia.com.",
+      "pdf_url": "https://nsearchives.nseindia.com/corporate/AMBER_07112026112953_StockExchangeIntimations_ILJINDRHPFiling.pdf",
+      "filed_at": "2026-11-07T11:30:38+05:30",
+      "has_xbrl": true
+     },
+     "cls": {
+      "category": "fund_raise",
+      "subtype": null,
+      "noise": false,
+      "by": "rules",
+      "confidence": 0.8
+     },
+     "score": 80,
+     "tier": "critical",
+     "reasons": [
+      "fund raise filing (70)",
+      "you follow fund raise +10"
+     ]
+    }
+   ],
+   "latest_at": "2026-11-07T11:30:38+05:30",
+   "results": null,
+   "people": [],
+   "brief": {
+    "one_liner": "Amber Enterprises announced that its material subsidiary, IL JIN Electronics (India) Limited, filed a Draft Red Herring Prospectus for a proposed IPO.",
+    "facts": [
+     {
+      "label": "DRHP Filing Date",
+      "value": "7th November 2026"
+     },
+     {
+      "label": "Subsidiary",
+      "value": "IL JIN Electronics (India) Limited"
+     }
+    ],
+    "quote": null,
+    "by": "llm",
+    "source_seq_id": "106852048"
+   }
+  },
+  {
+   "id": "RELIANCE:credit_rating:106845760",
+   "symbol": "RELIANCE",
+   "company": "Reliance Industries Limited",
+   "category": "credit_rating",
+   "subtype": null,
+   "score": 80,
+   "tier": "critical",
+   "headline": {
+    "filing": {
+     "seq_id": "106845760",
+     "symbol": "RELIANCE",
+     "company": "Reliance Industries Limited",
+     "nse_desc": "Credit Rating",
+     "subject": "Reliance Industries Limited has informed the Exchange about Credit Rating",
+     "nse_summary": null,
+     "pdf_url": "https://nsearchives.nseindia.com/corporate/PVIVINMA_04112026204646_SE_RIL_041126.pdf",
+     "filed_at": "2026-11-04T20:47:14+05:30",
+     "has_xbrl": true
+    },
+    "cls": {
+     "category": "credit_rating",
+     "subtype": null,
+     "noise": false,
+     "by": "rules",
+     "confidence": 0.95
+    },
+    "score": 80,
+    "tier": "critical",
+    "reasons": [
+     "credit rating filing (70)",
+     "you follow credit rating +10"
+    ]
+   },
+   "members": [
+    {
+     "filing": {
+      "seq_id": "106845760",
+      "symbol": "RELIANCE",
+      "company": "Reliance Industries Limited",
+      "nse_desc": "Credit Rating",
+      "subject": "Reliance Industries Limited has informed the Exchange about Credit Rating",
+      "nse_summary": null,
+      "pdf_url": "https://nsearchives.nseindia.com/corporate/PVIVINMA_04112026204646_SE_RIL_041126.pdf",
+      "filed_at": "2026-11-04T20:47:14+05:30",
+      "has_xbrl": true
+     },
+     "cls": {
+      "category": "credit_rating",
+      "subtype": null,
+      "noise": false,
+      "by": "rules",
+      "confidence": 0.95
+     },
+     "score": 80,
+     "tier": "critical",
+     "reasons": [
+      "credit rating filing (70)",
+      "you follow credit rating +10"
+     ]
+    }
+   ],
+   "latest_at": "2026-11-04T20:47:14+05:30",
+   "results": null,
+   "people": [],
+   "brief": {
+    "one_liner": "S&P Global Ratings has reaffirmed the credit rating of A- with a Stable outlook for Reliance Industries Limited's Senior Unsecured US$ Denominated Fixed Rate Notes.",
+    "facts": [
+     {
+      "label": "Rating Agency",
+      "value": "S&P Global Ratings"
+     },
+     {
+      "label": "Credit Rating",
+      "value": "A –"
+     },
+     {
+      "label": "Outlook",
+      "value": "Stable"
+     }
+    ],
+    "quote": "S&P Global Ratings, vide its press release dated November 3, 2026, has reaffirmed the credit rating of “A –” with a “Stable” outlook",
+    "by": "llm",
+    "source_seq_id": "106845760"
+   }
+  },
+  {
+   "id": "M&M:credit_rating:106845615",
+   "symbol": "M&M",
+   "company": "Mahindra & Mahindra Limited",
+   "category": "credit_rating",
+   "subtype": null,
+   "score": 80,
+   "tier": "critical",
+   "headline": {
+    "filing": {
+     "seq_id": "106845615",
+     "symbol": "M&M",
+     "company": "Mahindra & Mahindra Limited",
+     "nse_desc": "Credit Rating",
+     "subject": "Mahindra & Mahindra Limited has informed the Exchange about Credit Rating",
+     "nse_summary": null,
+     "pdf_url": "https://nsearchives.nseindia.com/corporate/ferozebaria_04112026194248_CARE04112026.pdf",
+     "filed_at": "2026-11-04T19:43:00+05:30",
+     "has_xbrl": true
+    },
+    "cls": {
+     "category": "credit_rating",
+     "subtype": null,
+     "noise": false,
+     "by": "rules",
+     "confidence": 0.95
+    },
+    "score": 80,
+    "tier": "critical",
+    "reasons": [
+     "credit rating filing (70)",
+     "you follow credit rating +10"
+    ]
+   },
+   "members": [
+    {
+     "filing": {
+      "seq_id": "106845615",
+      "symbol": "M&M",
+      "company": "Mahindra & Mahindra Limited",
+      "nse_desc": "Credit Rating",
+      "subject": "Mahindra & Mahindra Limited has informed the Exchange about Credit Rating",
+      "nse_summary": null,
+      "pdf_url": "https://nsearchives.nseindia.com/corporate/ferozebaria_04112026194248_CARE04112026.pdf",
+      "filed_at": "2026-11-04T19:43:00+05:30",
+      "has_xbrl": true
+     },
+     "cls": {
+      "category": "credit_rating",
+      "subtype": null,
+      "noise": false,
+      "by": "rules",
+      "confidence": 0.95
+     },
+     "score": 80,
+     "tier": "critical",
+     "reasons": [
+      "credit rating filing (70)",
+      "you follow credit rating +10"
+     ]
+    }
+   ],
+   "latest_at": "2026-11-04T19:43:00+05:30",
+   "results": null,
+   "people": [],
+   "brief": {
+    "one_liner": "CARE Ratings reaffirmed M&M's bank facility ratings, underscoring strong credit standing across ₹2,139.06 cr short-term and ₹24.11 cr long-term facilities.",
+    "facts": [
+     {
+      "label": "Intimation date",
+      "value": "4th November 2026"
+     },
+     {
+      "label": "Short-term bank facilities (₹ crore)",
+      "value": "2,139.06"
+     },
+     {
+      "label": "Long-term bank facilities (₹ crore)",
+      "value": "24.11"
+     }
+    ],
+    "quote": "Reaffirmation of ratings to bank facilities of Mahindra & Mahindra Limited (M&M) continues to factor in its strong market position",
+    "by": "llm",
+    "source_seq_id": "106845615"
+   }
+  },
+  {
+   "id": "PERSISTENT:fund_raise:106844222",
+   "symbol": "PERSISTENT",
+   "company": "Persistent Systems Limited",
+   "category": "fund_raise",
+   "subtype": "allotment",
+   "score": 52,
+   "tier": "important",
+   "headline": {
+    "filing": {
+     "seq_id": "106844222",
+     "symbol": "PERSISTENT",
+     "company": "Persistent Systems Limited",
+     "nse_desc": "Allotment of Securities",
+     "subject": "Persistent Systems Limited has informed the Exchange regarding allotment of 700000 securities pursuant to Non Convertible Securities at its meeting held on November 04, 2026",
+     "nse_summary": null,
+     "pdf_url": "https://nsearchives.nseindia.com/corporate/PERSISTENTUSER1_04112026150907_PersistentSEOutcomeAllotmentofNCDsNovember42026Signed.pdf",
+     "filed_at": "2026-11-04T15:09:23+05:30",
+     "has_xbrl": true
+    },
+    "cls": {
+     "category": "fund_raise",
+     "subtype": "allotment",
+     "noise": false,
+     "by": "rules",
+     "confidence": 0.95
+    },
+    "score": 52,
+    "tier": "important",
+    "reasons": [
+     "fund raise filing (70)",
+     "allotment ×0.6",
+     "you follow fund raise +10"
+    ]
+   },
+   "members": [
+    {
+     "filing": {
+      "seq_id": "106844222",
+      "symbol": "PERSISTENT",
+      "company": "Persistent Systems Limited",
+      "nse_desc": "Allotment of Securities",
+      "subject": "Persistent Systems Limited has informed the Exchange regarding allotment of 700000 securities pursuant to Non Convertible Securities at its meeting held on November 04, 2026",
+      "nse_summary": null,
+      "pdf_url": "https://nsearchives.nseindia.com/corporate/PERSISTENTUSER1_04112026150907_PersistentSEOutcomeAllotmentofNCDsNovember42026Signed.pdf",
+      "filed_at": "2026-11-04T15:09:23+05:30",
+      "has_xbrl": true
+     },
+     "cls": {
+      "category": "fund_raise",
+      "subtype": "allotment",
+      "noise": false,
+      "by": "rules",
+      "confidence": 0.95
+     },
+     "score": 52,
+     "tier": "important",
+     "reasons": [
+      "fund raise filing (70)",
+      "allotment ×0.6",
+      "you follow fund raise +10"
+     ]
+    }
+   ],
+   "latest_at": "2026-11-04T15:09:23+05:30",
+   "results": null,
+   "people": [],
+   "brief": {
+    "one_liner": "Persistent Systems has approved the allotment of 700,000 non-convertible debentures aggregating to INR 70 billion on a private placement basis.",
+    "facts": [
+     {
+      "label": "Securities allotted",
+      "value": "700,000"
+     },
+     {
+      "label": "Aggregate amount",
+      "value": "INR 70 billion"
+     },
+     {
+      "label": "Date of allotment",
+      "value": "4 November 2026"
+     }
+    ],
+    "quote": "approved the allotment of 700,000 (Seven Lakh) INR denominated, senior, rated, listed and redeemable non-convertible debentures",
+    "by": "llm",
+    "source_seq_id": "106844222"
+   }
+  },
+  {
+   "id": "ZYDUSLIFE:earnings_call:106852434",
+   "symbol": "ZYDUSLIFE",
+   "company": "Zydus Lifesciences Limited",
+   "category": "earnings_call",
+   "subtype": "transcript",
+   "score": 45,
+   "tier": "important",
+   "headline": {
+    "filing": {
+     "seq_id": "106852434",
+     "symbol": "ZYDUSLIFE",
+     "company": "Zydus Lifesciences Limited",
+     "nse_desc": "Analysts/Institutional Investor Meet/Con. Call Updates",
+     "subject": "Zydus Lifesciences Limited has informed the Exchange about Transcript",
+     "nse_summary": "Zydus Lifesciences Limited filed the transcript of its Q2 FY27 post results earnings call held on November 4, 2026. The company reported consolidated revenues of ₹79.1 billion, up 29% year-on-year. EBITDA stood at ₹18.9 billion with a margin of 24%. Net profit was ₹9.3 billion. The net debt to EBITDA ratio was 0.62 times as on September 30, 2026. India branded formulations grew 19% year-on-year. International markets formulations revenues were ₹10 billion, up 33% year-on-year. US revenues reached ₹33.1 billion, up 21% year-on-year. Consumer wellness revenues were ₹11.2 billion, up 76% year-on-year. Medical devices revenues were ₹2.2 billion. The company received USFDA acceptance for the BLA for a Keytruda biosimilar. Phase IIb trial results for Saroglitazar in MASH were positive. The company is investing in the US launch of Saroglitazar.",
+     "pdf_url": "https://nsearchives.nseindia.com/corporate/Cadilahc_07112026151831_IntimationofPostResultsEarningsCallTranscript04112026.pdf",
+     "filed_at": "2026-11-07T15:19:54+05:30",
+     "has_xbrl": true
+    },
+    "cls": {
+     "category": "earnings_call",
+     "subtype": "transcript",
+     "noise": false,
+     "by": "rules",
+     "confidence": 0.8
+    },
+    "score": 45,
+    "tier": "important",
+    "reasons": [
+     "earnings call filing (30)",
+     "call transcript ×1.5"
+    ]
+   },
+   "members": [
+    {
+     "filing": {
+      "seq_id": "106852434",
+      "symbol": "ZYDUSLIFE",
+      "company": "Zydus Lifesciences Limited",
+      "nse_desc": "Analysts/Institutional Investor Meet/Con. Call Updates",
+      "subject": "Zydus Lifesciences Limited has informed the Exchange about Transcript",
+      "nse_summary": "Zydus Lifesciences Limited filed the transcript of its Q2 FY27 post results earnings call held on November 4, 2026. The company reported consolidated revenues of ₹79.1 billion, up 29% year-on-year. EBITDA stood at ₹18.9 billion with a margin of 24%. Net profit was ₹9.3 billion. The net debt to EBITDA ratio was 0.62 times as on September 30, 2026. India branded formulations grew 19% year-on-year. International markets formulations revenues were ₹10 billion, up 33% year-on-year. US revenues reached ₹33.1 billion, up 21% year-on-year. Consumer wellness revenues were ₹11.2 billion, up 76% year-on-year. Medical devices revenues were ₹2.2 billion. The company received USFDA acceptance for the BLA for a Keytruda biosimilar. Phase IIb trial results for Saroglitazar in MASH were positive. The company is investing in the US launch of Saroglitazar.",
+      "pdf_url": "https://nsearchives.nseindia.com/corporate/Cadilahc_07112026151831_IntimationofPostResultsEarningsCallTranscript04112026.pdf",
+      "filed_at": "2026-11-07T15:19:54+05:30",
+      "has_xbrl": true
+     },
+     "cls": {
+      "category": "earnings_call",
+      "subtype": "transcript",
+      "noise": false,
+      "by": "rules",
+      "confidence": 0.8
+     },
+     "score": 45,
+     "tier": "important",
+     "reasons": [
+      "earnings call filing (30)",
+      "call transcript ×1.5"
+     ]
+    }
+   ],
+   "latest_at": "2026-11-07T15:19:54+05:30",
+   "results": null,
+   "people": [],
+   "brief": null
+  },
+  {
+   "id": "LODHA:earnings_call:106846467",
+   "symbol": "LODHA",
+   "company": "Lodha Developers Limited",
+   "category": "earnings_call",
+   "subtype": "transcript",
+   "score": 45,
+   "tier": "important",
+   "headline": {
+    "filing": {
+     "seq_id": "106846467",
+     "symbol": "LODHA",
+     "company": "Lodha Developers Limited",
+     "nse_desc": "Analysts/Institutional Investor Meet/Con. Call Updates",
+     "subject": "Lodha Developers Limited has informed the Exchange about Transcript of Earning Conference Call held on November 2, 2026",
+     "nse_summary": null,
+     "pdf_url": "https://nsearchives.nseindia.com/corporate/LODHA_05112026115153_LDL_Q2FY27_Earnings_call_Transcript_05112026.pdf",
+     "filed_at": "2026-11-05T11:54:55+05:30",
+     "has_xbrl": true
+    },
+    "cls": {
+     "category": "earnings_call",
+     "subtype": "transcript",
+     "noise": false,
+     "by": "rules",
+     "confidence": 0.8
+    },
+    "score": 45,
+    "tier": "important",
+    "reasons": [
+     "earnings call filing (30)",
+     "call transcript ×1.5"
+    ]
+   },
+   "members": [
+    {
+     "filing": {
+      "seq_id": "106846467",
+      "symbol": "LODHA",
+      "company": "Lodha Developers Limited",
+      "nse_desc": "Analysts/Institutional Investor Meet/Con. Call Updates",
+      "subject": "Lodha Developers Limited has informed the Exchange about Transcript of Earning Conference Call held on November 2, 2026",
+      "nse_summary": null,
+      "pdf_url": "https://nsearchives.nseindia.com/corporate/LODHA_05112026115153_LDL_Q2FY27_Earnings_call_Transcript_05112026.pdf",
+      "filed_at": "2026-11-05T11:54:55+05:30",
+      "has_xbrl": true
+     },
+     "cls": {
+      "category": "earnings_call",
+      "subtype": "transcript",
+      "noise": false,
+      "by": "rules",
+      "confidence": 0.8
+     },
+     "score": 45,
+     "tier": "important",
+     "reasons": [
+      "earnings call filing (30)",
+      "call transcript ×1.5"
+     ]
+    }
+   ],
+   "latest_at": "2026-11-05T11:54:55+05:30",
+   "results": null,
+   "people": [],
+   "brief": null
+  },
+  {
+   "id": "SUNPHARMA:earnings_call:106845480",
+   "symbol": "SUNPHARMA",
+   "company": "Sun Pharmaceutical Industries Limited",
+   "category": "earnings_call",
+   "subtype": "transcript",
+   "score": 45,
+   "tier": "important",
+   "headline": {
+    "filing": {
+     "seq_id": "106845480",
+     "symbol": "SUNPHARMA",
+     "company": "Sun Pharmaceutical Industries Limited",
+     "nse_desc": "Analysts/Institutional Investor Meet/Con. Call Updates",
+     "subject": "Sun Pharmaceutical Industries Limited has informed the Exchange about Transcript",
+     "nse_summary": null,
+     "pdf_url": "https://nsearchives.nseindia.com/corporate/SUNPHARMA456_04112026191520_IntimationSE20261104EarningsCallTranscriptQ2FY27_Signed.pdf",
+     "filed_at": "2026-11-04T19:15:34+05:30",
+     "has_xbrl": true
+    },
+    "cls": {
+     "category": "earnings_call",
+     "subtype": "transcript",
+     "noise": false,
+     "by": "rules",
+     "confidence": 0.8
+    },
+    "score": 45,
+    "tier": "important",
+    "reasons": [
+     "earnings call filing (30)",
+     "call transcript ×1.5"
+    ]
+   },
+   "members": [
+    {
+     "filing": {
+      "seq_id": "106845480",
+      "symbol": "SUNPHARMA",
+      "company": "Sun Pharmaceutical Industries Limited",
+      "nse_desc": "Analysts/Institutional Investor Meet/Con. Call Updates",
+      "subject": "Sun Pharmaceutical Industries Limited has informed the Exchange about Transcript",
+      "nse_summary": null,
+      "pdf_url": "https://nsearchives.nseindia.com/corporate/SUNPHARMA456_04112026191520_IntimationSE20261104EarningsCallTranscriptQ2FY27_Signed.pdf",
+      "filed_at": "2026-11-04T19:15:34+05:30",
+      "has_xbrl": true
+     },
+     "cls": {
+      "category": "earnings_call",
+      "subtype": "transcript",
+      "noise": false,
+      "by": "rules",
+      "confidence": 0.8
+     },
+     "score": 45,
+     "tier": "important",
+     "reasons": [
+      "earnings call filing (30)",
+      "call transcript ×1.5"
+     ]
+    }
+   ],
+   "latest_at": "2026-11-04T19:15:34+05:30",
+   "results": null,
+   "people": [],
+   "brief": null
+  },
+  {
+   "id": "TVSMOTOR:earnings_call:106844913",
+   "symbol": "TVSMOTOR",
+   "company": "TVS Motor Company Limited",
+   "category": "earnings_call",
+   "subtype": "transcript",
+   "score": 45,
+   "tier": "important",
+   "headline": {
+    "filing": {
+     "seq_id": "106844913",
+     "symbol": "TVSMOTOR",
+     "company": "TVS Motor Company Limited",
+     "nse_desc": "Analysts/Institutional Investor Meet/Con. Call Updates",
+     "subject": "TVS Motor Company Limited has informed the Exchange about Transcript",
+     "nse_summary": null,
+     "pdf_url": "https://nsearchives.nseindia.com/corporate/TVSMOTOR_04112026174008_NSEBSEInvestorcalltranscript.pdf",
+     "filed_at": "2026-11-04T17:40:17+05:30",
+     "has_xbrl": true
+    },
+    "cls": {
+     "category": "earnings_call",
+     "subtype": "transcript",
+     "noise": false,
+     "by": "rules",
+     "confidence": 0.8
+    },
+    "score": 45,
+    "tier": "important",
+    "reasons": [
+     "earnings call filing (30)",
+     "call transcript ×1.5"
+    ]
+   },
+   "members": [
+    {
+     "filing": {
+      "seq_id": "106844913",
+      "symbol": "TVSMOTOR",
+      "company": "TVS Motor Company Limited",
+      "nse_desc": "Analysts/Institutional Investor Meet/Con. Call Updates",
+      "subject": "TVS Motor Company Limited has informed the Exchange about Transcript",
+      "nse_summary": null,
+      "pdf_url": "https://nsearchives.nseindia.com/corporate/TVSMOTOR_04112026174008_NSEBSEInvestorcalltranscript.pdf",
+      "filed_at": "2026-11-04T17:40:17+05:30",
+      "has_xbrl": true
+     },
+     "cls": {
+      "category": "earnings_call",
+      "subtype": "transcript",
+      "noise": false,
+      "by": "rules",
+      "confidence": 0.8
+     },
+     "score": 45,
+     "tier": "important",
+     "reasons": [
+      "earnings call filing (30)",
+      "call transcript ×1.5"
+     ]
+    }
+   ],
+   "latest_at": "2026-11-04T17:40:17+05:30",
+   "results": null,
+   "people": [],
+   "brief": null
+  },
+  {
+   "id": "RELIANCE:earnings_call:106838897",
+   "symbol": "RELIANCE",
+   "company": "Reliance Industries Limited",
+   "category": "earnings_call",
+   "subtype": "transcript",
+   "score": 45,
+   "tier": "important",
+   "headline": {
+    "filing": {
+     "seq_id": "106838897",
+     "symbol": "RELIANCE",
+     "company": "Reliance Industries Limited",
+     "nse_desc": "Analysts/Institutional Investor Meet/Con. Call Updates",
+     "subject": "Transcript of the discussion on the Unaudited Financial Results (Consolidated and Standalone) of the Company for the quarter and half year ended September 30, 2026, at the analyst meet held on October 30, 2026, is attached and also available on the website of the Company.",
+     "nse_summary": null,
+     "pdf_url": "https://nsearchives.nseindia.com/corporate/kavinavora_01112026230907_SE_01112026.pdf",
+     "filed_at": "2026-11-01T23:09:22+05:30",
+     "has_xbrl": true
+    },
+    "cls": {
+     "category": "earnings_call",
+     "subtype": "transcript",
+     "noise": false,
+     "by": "rules",
+     "confidence": 0.8
+    },
+    "score": 45,
+    "tier": "important",
+    "reasons": [
+     "earnings call filing (30)",
+     "call transcript ×1.5"
+    ]
+   },
+   "members": [
+    {
+     "filing": {
+      "seq_id": "106838897",
+      "symbol": "RELIANCE",
+      "company": "Reliance Industries Limited",
+      "nse_desc": "Analysts/Institutional Investor Meet/Con. Call Updates",
+      "subject": "Transcript of the discussion on the Unaudited Financial Results (Consolidated and Standalone) of the Company for the quarter and half year ended September 30, 2026, at the analyst meet held on October 30, 2026, is attached and also available on the website of the Company.",
+      "nse_summary": null,
+      "pdf_url": "https://nsearchives.nseindia.com/corporate/kavinavora_01112026230907_SE_01112026.pdf",
+      "filed_at": "2026-11-01T23:09:22+05:30",
+      "has_xbrl": true
+     },
+     "cls": {
+      "category": "earnings_call",
+      "subtype": "transcript",
+      "noise": false,
+      "by": "rules",
+      "confidence": 0.8
+     },
+     "score": 45,
+     "tier": "important",
+     "reasons": [
+      "earnings call filing (30)",
+      "call transcript ×1.5"
+     ]
+    }
+   ],
+   "latest_at": "2026-11-01T23:09:22+05:30",
+   "results": null,
+   "people": [],
+   "brief": null
+  }
+ ],
+ "routine": {
+  "press_release": [
+   {
+    "id": "ZYDUSLIFE:press_release:106851457",
+    "symbol": "ZYDUSLIFE",
+    "company": "Zydus Lifesciences Limited",
+    "category": "press_release",
+    "subtype": null,
+    "score": 35,
+    "tier": "routine",
+    "headline": {
+     "filing": {
+      "seq_id": "106851457",
+      "symbol": "ZYDUSLIFE",
+      "company": "Zydus Lifesciences Limited",
+      "nse_desc": "Press Release",
+      "subject": "Zydus Lifesciences Limited has informed the Exchange regarding a press release dated November 06, 2026, titled \"Press Release\".",
+      "nse_summary": null,
+      "pdf_url": "https://nsearchives.nseindia.com/corporate/Cadilahc_06112026190130_PressRelease06112026.pdf",
+      "filed_at": "2026-11-06T19:01:47+05:30",
+      "has_xbrl": true
+     },
+     "cls": {
+      "category": "press_release",
+      "subtype": null,
+      "noise": false,
+      "by": "llm",
+      "confidence": 0.7
+     },
+     "score": 35,
+     "tier": "routine",
+     "reasons": [
+      "press release filing (35)"
+     ]
+    },
+    "members": [
+     {
+      "filing": {
+       "seq_id": "106851457",
+       "symbol": "ZYDUSLIFE",
+       "company": "Zydus Lifesciences Limited",
+       "nse_desc": "Press Release",
+       "subject": "Zydus Lifesciences Limited has informed the Exchange regarding a press release dated November 06, 2026, titled \"Press Release\".",
+       "nse_summary": null,
+       "pdf_url": "https://nsearchives.nseindia.com/corporate/Cadilahc_06112026190130_PressRelease06112026.pdf",
+       "filed_at": "2026-11-06T19:01:47+05:30",
+       "has_xbrl": true
+      },
+      "cls": {
+       "category": "press_release",
+       "subtype": null,
+       "noise": false,
+       "by": "llm",
+       "confidence": 0.7
+      },
+      "score": 35,
+      "tier": "routine",
+      "reasons": [
+       "press release filing (35)"
+      ]
+     }
+    ],
+    "latest_at": "2026-11-06T19:01:47+05:30",
+    "results": null,
+    "people": [],
+    "brief": null
+   },
+   {
+    "id": "ZYDUSLIFE:press_release:106843792",
+    "symbol": "ZYDUSLIFE",
+    "company": "Zydus Lifesciences Limited",
+    "category": "press_release",
+    "subtype": null,
+    "score": 35,
+    "tier": "routine",
+    "headline": {
+     "filing": {
+      "seq_id": "106843792",
+      "symbol": "ZYDUSLIFE",
+      "company": "Zydus Lifesciences Limited",
+      "nse_desc": "Press Release",
+      "subject": "Zydus Lifesciences Limited has informed the Exchange regarding a press release dated November 04, 2026, titled \"Press release\".",
+      "nse_summary": null,
+      "pdf_url": "https://nsearchives.nseindia.com/corporate/Cadilahc_04112026123914_PressRelease.pdf",
+      "filed_at": "2026-11-04T12:39:35+05:30",
+      "has_xbrl": true
+     },
+     "cls": {
+      "category": "press_release",
+      "subtype": null,
+      "noise": false,
+      "by": "llm",
+      "confidence": 0.7
+     },
+     "score": 35,
+     "tier": "routine",
+     "reasons": [
+      "press release filing (35)"
+     ]
+    },
+    "members": [
+     {
+      "filing": {
+       "seq_id": "106843792",
+       "symbol": "ZYDUSLIFE",
+       "company": "Zydus Lifesciences Limited",
+       "nse_desc": "Press Release",
+       "subject": "Zydus Lifesciences Limited has informed the Exchange regarding a press release dated November 04, 2026, titled \"Press release\".",
+       "nse_summary": null,
+       "pdf_url": "https://nsearchives.nseindia.com/corporate/Cadilahc_04112026123914_PressRelease.pdf",
+       "filed_at": "2026-11-04T12:39:35+05:30",
+       "has_xbrl": true
+      },
+      "cls": {
+       "category": "press_release",
+       "subtype": null,
+       "noise": false,
+       "by": "llm",
+       "confidence": 0.7
+      },
+      "score": 35,
+      "tier": "routine",
+      "reasons": [
+       "press release filing (35)"
+      ]
+     }
+    ],
+    "latest_at": "2026-11-04T12:39:35+05:30",
+    "results": null,
+    "people": [],
+    "brief": null
+   },
+   {
+    "id": "SUNPHARMA:press_release:106839459",
+    "symbol": "SUNPHARMA",
+    "company": "Sun Pharmaceutical Industries Limited",
+    "category": "press_release",
+    "subtype": "clarification",
+    "score": 35,
+    "tier": "routine",
+    "headline": {
+     "filing": {
+      "seq_id": "106839459",
+      "symbol": "SUNPHARMA",
+      "company": "Sun Pharmaceutical Industries Limited",
+      "nse_desc": "News Verification",
+      "subject": "The Exchange has sought clarification from Sun Pharmaceutical Industries Limited with respect to recent news item captioned India orders Sun Pharma to halt eye-care drug production at plant after quality lapses.  The response from the Company is awaited.",
+      "nse_summary": null,
+      "pdf_url": "-",
+      "filed_at": "2026-11-02T14:18:39+05:30",
+      "has_xbrl": true
+     },
+     "cls": {
+      "category": "press_release",
+      "subtype": "clarification",
+      "noise": false,
+      "by": "rules",
+      "confidence": 0.95
+     },
+     "score": 35,
+     "tier": "routine",
+     "reasons": [
+      "press release filing (35)"
+     ]
+    },
+    "members": [
+     {
+      "filing": {
+       "seq_id": "106839459",
+       "symbol": "SUNPHARMA",
+       "company": "Sun Pharmaceutical Industries Limited",
+       "nse_desc": "News Verification",
+       "subject": "The Exchange has sought clarification from Sun Pharmaceutical Industries Limited with respect to recent news item captioned India orders Sun Pharma to halt eye-care drug production at plant after quality lapses.  The response from the Company is awaited.",
+       "nse_summary": null,
+       "pdf_url": "-",
+       "filed_at": "2026-11-02T14:18:39+05:30",
+       "has_xbrl": true
+      },
+      "cls": {
+       "category": "press_release",
+       "subtype": "clarification",
+       "noise": false,
+       "by": "rules",
+       "confidence": 0.95
+      },
+      "score": 35,
+      "tier": "routine",
+      "reasons": [
+       "press release filing (35)"
+      ]
+     },
+     {
+      "filing": {
+       "seq_id": "106840669",
+       "symbol": "SUNPHARMA",
+       "company": "Sun Pharmaceutical Industries Limited",
+       "nse_desc": "Rumour Verification - Regulation 30(11)",
+       "subject": "Clarification regarding news report relating to the Company s Assam facility",
+       "nse_summary": null,
+       "pdf_url": "https://nsearchives.nseindia.com/corporate/SUNSEC_02112026205719_Reply_to_SEs_-_Rumour_Verification02112026.pdf",
+       "filed_at": "2026-11-02T20:58:22+05:30",
+       "has_xbrl": true
+      },
+      "cls": {
+       "category": "press_release",
+       "subtype": "clarification",
+       "noise": false,
+       "by": "rules",
+       "confidence": 0.95
+      },
+      "score": 35,
+      "tier": "routine",
+      "reasons": [
+       "press release filing (35)"
+      ]
+     },
+     {
+      "filing": {
+       "seq_id": "106843482",
+       "symbol": "SUNPHARMA",
+       "company": "Sun Pharmaceutical Industries Limited",
+       "nse_desc": "News Verification",
+       "subject": "The Exchange has sought clarification from Sun Pharmaceutical Industries Limited with respect to recent news item captioned India orders Sun Pharma to halt eye-care drug production at plant after quality lapses.  The response from the Company is attached.",
+       "nse_summary": null,
+       "pdf_url": "https://nsearchives.nseindia.com/corporate/SUNSEC_04112026100317_Reply_to_SEs_-_Rumour_Verification02112026.pdf",
+       "filed_at": "2026-11-04T10:04:11+05:30",
+       "has_xbrl": true
+      },
+      "cls": {
+       "category": "press_release",
+       "subtype": "clarification",
+       "noise": false,
+       "by": "rules",
+       "confidence": 0.95
+      },
+      "score": 35,
+      "tier": "routine",
+      "reasons": [
+       "press release filing (35)"
+      ]
+     }
+    ],
+    "latest_at": "2026-11-04T10:04:11+05:30",
+    "results": null,
+    "people": [],
+    "brief": null
+   },
+   {
+    "id": "TVSMOTOR:press_release:106838791",
+    "symbol": "TVSMOTOR",
+    "company": "TVS Motor Company Limited",
+    "category": "press_release",
+    "subtype": "business_update",
+    "score": 35,
+    "tier": "routine",
+    "headline": {
+     "filing": {
+      "seq_id": "106838791",
+      "symbol": "TVSMOTOR",
+      "company": "TVS Motor Company Limited",
+      "nse_desc": "Monthly Business Updates",
+      "subject": "TVS Motor Company Limited has informed the Exchange regarding Monthly Business Updates for the month of October 2026",
+      "nse_summary": null,
+      "pdf_url": "https://nsearchives.nseindia.com/corporate/TVSMOTOR_01112026144636_TVSM_SalesupdateSD.pdf",
+      "filed_at": "2026-11-01T14:46:50+05:30",
+      "has_xbrl": true
+     },
+     "cls": {
+      "category": "press_release",
+      "subtype": "business_update",
+      "noise": false,
+      "by": "rules",
+      "confidence": 0.8
+     },
+     "score": 35,
+     "tier": "routine",
+     "reasons": [
+      "press release filing (35)"
+     ]
+    },
+    "members": [
+     {
+      "filing": {
+       "seq_id": "106838791",
+       "symbol": "TVSMOTOR",
+       "company": "TVS Motor Company Limited",
+       "nse_desc": "Monthly Business Updates",
+       "subject": "TVS Motor Company Limited has informed the Exchange regarding Monthly Business Updates for the month of October 2026",
+       "nse_summary": null,
+       "pdf_url": "https://nsearchives.nseindia.com/corporate/TVSMOTOR_01112026144636_TVSM_SalesupdateSD.pdf",
+       "filed_at": "2026-11-01T14:46:50+05:30",
+       "has_xbrl": true
+      },
+      "cls": {
+       "category": "press_release",
+       "subtype": "business_update",
+       "noise": false,
+       "by": "rules",
+       "confidence": 0.8
+      },
+      "score": 35,
+      "tier": "routine",
+      "reasons": [
+       "press release filing (35)"
+      ]
+     },
+     {
+      "filing": {
+       "seq_id": "106841670",
+       "symbol": "TVSMOTOR",
+       "company": "TVS Motor Company Limited",
+       "nse_desc": "Press Release",
+       "subject": "TVS Motor Company Limited has informed the Exchange regarding a press release dated November 03, 2026, titled \"TVS MOTOR COMPANY STRENGTHENS ITS EUROPEAN PRESENCE WITH FOUR PRODUCTION-READY MODELS AT EICMA 2026\".",
+       "nse_summary": null,
+       "pdf_url": "https://nsearchives.nseindia.com/corporate/TVSMOTOR_03112026143108_NSEBSEEICMA_sd.pdf",
+       "filed_at": "2026-11-03T14:33:44+05:30",
+       "has_xbrl": true
+      },
+      "cls": {
+       "category": "press_release",
+       "subtype": null,
+       "noise": false,
+       "by": "llm",
+       "confidence": 0.7
+      },
+      "score": 35,
+      "tier": "routine",
+      "reasons": [
+       "press release filing (35)"
+      ]
+     }
+    ],
+    "latest_at": "2026-11-03T14:33:44+05:30",
+    "results": null,
+    "people": [],
+    "brief": null
+   },
+   {
+    "id": "M&M:press_release:106838749",
+    "symbol": "M&M",
+    "company": "Mahindra & Mahindra Limited",
+    "category": "press_release",
+    "subtype": "business_update",
+    "score": 35,
+    "tier": "routine",
+    "headline": {
+     "filing": {
+      "seq_id": "106838749",
+      "symbol": "M&M",
+      "company": "Mahindra & Mahindra Limited",
+      "nse_desc": "Monthly Business Updates",
+      "subject": "Mahindra & Mahindra Limited has informed the Exchange regarding Monthly Business Updates for the month of October 2026",
+      "nse_summary": null,
+      "pdf_url": "https://nsearchives.nseindia.com/corporate/ferozebaria_01112026101454_SEIntimationNovember2026PR.pdf",
+      "filed_at": "2026-11-01T10:15:10+05:30",
+      "has_xbrl": true
+     },
+     "cls": {
+      "category": "press_release",
+      "subtype": "business_update",
+      "noise": false,
+      "by": "rules",
+      "confidence": 0.8
+     },
+     "score": 35,
+     "tier": "routine",
+     "reasons": [
+      "press release filing (35)"
+     ]
+    },
+    "members": [
+     {
+      "filing": {
+       "seq_id": "106838749",
+       "symbol": "M&M",
+       "company": "Mahindra & Mahindra Limited",
+       "nse_desc": "Monthly Business Updates",
+       "subject": "Mahindra & Mahindra Limited has informed the Exchange regarding Monthly Business Updates for the month of October 2026",
+       "nse_summary": null,
+       "pdf_url": "https://nsearchives.nseindia.com/corporate/ferozebaria_01112026101454_SEIntimationNovember2026PR.pdf",
+       "filed_at": "2026-11-01T10:15:10+05:30",
+       "has_xbrl": true
+      },
+      "cls": {
+       "category": "press_release",
+       "subtype": "business_update",
+       "noise": false,
+       "by": "rules",
+       "confidence": 0.8
+      },
+      "score": 35,
+      "tier": "routine",
+      "reasons": [
+       "press release filing (35)"
+      ]
+     }
+    ],
+    "latest_at": "2026-11-01T10:15:10+05:30",
+    "results": null,
+    "people": [],
+    "brief": null
+   }
+  ],
+  "dividend": [
+   {
+    "id": "PREMIERENE:dividend:106845262",
+    "symbol": "PREMIERENE",
+    "company": "Premier Energies Limited",
+    "category": "dividend",
+    "subtype": null,
+    "score": 30,
+    "tier": "routine",
+    "headline": {
+     "filing": {
+      "seq_id": "106845262",
+      "symbol": "PREMIERENE",
+      "company": "Premier Energies Limited",
+      "nse_desc": "Dividend",
+      "subject": "Premier Energies Limited has informed the Exchange that Board of Directors at its meeting held on November 04, 2026, declared Interim Dividend of Rs. 0.50 per equity share.",
+      "nse_summary": null,
+      "pdf_url": "https://nsearchives.nseindia.com/corporate/PEL2024_04112026183655_BM_Outcome_Q2_FY27_Financial_Results.pdf",
+      "filed_at": "2026-11-04T18:37:42+05:30",
+      "has_xbrl": true
+     },
+     "cls": {
+      "category": "dividend",
+      "subtype": null,
+      "noise": false,
+      "by": "rules",
+      "confidence": 0.95
+     },
+     "score": 30,
+     "tier": "routine",
+     "reasons": [
+      "dividend filing (30)"
+     ]
+    },
+    "members": [
+     {
+      "filing": {
+       "seq_id": "106845262",
+       "symbol": "PREMIERENE",
+       "company": "Premier Energies Limited",
+       "nse_desc": "Dividend",
+       "subject": "Premier Energies Limited has informed the Exchange that Board of Directors at its meeting held on November 04, 2026, declared Interim Dividend of Rs. 0.50 per equity share.",
+       "nse_summary": null,
+       "pdf_url": "https://nsearchives.nseindia.com/corporate/PEL2024_04112026183655_BM_Outcome_Q2_FY27_Financial_Results.pdf",
+       "filed_at": "2026-11-04T18:37:42+05:30",
+       "has_xbrl": true
+      },
+      "cls": {
+       "category": "dividend",
+       "subtype": null,
+       "noise": false,
+       "by": "rules",
+       "confidence": 0.95
+      },
+      "score": 30,
+      "tier": "routine",
+      "reasons": [
+       "dividend filing (30)"
+      ]
+     },
+     {
+      "filing": {
+       "seq_id": "106845305",
+       "symbol": "PREMIERENE",
+       "company": "Premier Energies Limited",
+       "nse_desc": "Record Date",
+       "subject": "Premier Energies Limited has informed the Exchange that Record date for the purpose of Dividend  is 11-Nov-2026.",
+       "nse_summary": null,
+       "pdf_url": "https://nsearchives.nseindia.com/corporate/PEL2024_04112026184116_BM_Outcome_Q2_FY27_Financial_Results.pdf",
+       "filed_at": "2026-11-04T18:45:03+05:30",
+       "has_xbrl": true
+      },
+      "cls": {
+       "category": "dividend",
+       "subtype": null,
+       "noise": false,
+       "by": "rules",
+       "confidence": 0.95
+      },
+      "score": 30,
+      "tier": "routine",
+      "reasons": [
+       "dividend filing (30)"
+      ]
+     }
+    ],
+    "latest_at": "2026-11-04T18:45:03+05:30",
+    "results": null,
+    "people": [],
+    "brief": null
+   }
+  ],
+  "earnings_call": [
+   {
+    "id": "TATASTEEL:earnings_call:106852572",
+    "symbol": "TATASTEEL",
+    "company": "Tata Steel Limited",
+    "category": "earnings_call",
+    "subtype": "audio",
+    "score": 15,
+    "tier": "routine",
+    "headline": {
+     "filing": {
+      "seq_id": "106852572",
+      "symbol": "TATASTEEL",
+      "company": "Tata Steel Limited",
+      "nse_desc": "Analysts/Institutional Investor Meet/Con. Call Updates",
+      "subject": "Tata Steel Limited has informed the Exchange about Link of Recording",
+      "nse_summary": "Tata Steel Limited has made available the audio-video recording of its 2QFY27 Earnings Discussion. The Board of Directors approved the audited Standalone and unaudited Consolidated Financial Results for the quarter and half year ended September 30, 2026, during a meeting held on November 7, 2026. The Earnings Discussion was hosted on the same date at 2:00 p.m. IST. The recording is accessible on the Company's website at https://www.tatasteel.com/investors/financial-performance/analyst-call-recording/. This filing is submitted pursuant to Regulation 30 read with Para A of Part A of Schedule III of the SEBI Listing Regulations, 2015.",
+      "pdf_url": "https://nsearchives.nseindia.com/corporate/SAKSHIKAPUR_07112026165801_BSENSE_Signed.pdf",
+      "filed_at": "2026-11-07T16:58:42+05:30",
+      "has_xbrl": true
+     },
+     "cls": {
+      "category": "earnings_call",
+      "subtype": "audio",
+      "noise": false,
+      "by": "rules",
+      "confidence": 0.8
+     },
+     "score": 15,
+     "tier": "routine",
+     "reasons": [
+      "earnings call filing (30)",
+      "call audio ×0.5"
+     ]
+    },
+    "members": [
+     {
+      "filing": {
+       "seq_id": "106852572",
+       "symbol": "TATASTEEL",
+       "company": "Tata Steel Limited",
+       "nse_desc": "Analysts/Institutional Investor Meet/Con. Call Updates",
+       "subject": "Tata Steel Limited has informed the Exchange about Link of Recording",
+       "nse_summary": "Tata Steel Limited has made available the audio-video recording of its 2QFY27 Earnings Discussion. The Board of Directors approved the audited Standalone and unaudited Consolidated Financial Results for the quarter and half year ended September 30, 2026, during a meeting held on November 7, 2026. The Earnings Discussion was hosted on the same date at 2:00 p.m. IST. The recording is accessible on the Company's website at https://www.tatasteel.com/investors/financial-performance/analyst-call-recording/. This filing is submitted pursuant to Regulation 30 read with Para A of Part A of Schedule III of the SEBI Listing Regulations, 2015.",
+       "pdf_url": "https://nsearchives.nseindia.com/corporate/SAKSHIKAPUR_07112026165801_BSENSE_Signed.pdf",
+       "filed_at": "2026-11-07T16:58:42+05:30",
+       "has_xbrl": true
+      },
+      "cls": {
+       "category": "earnings_call",
+       "subtype": "audio",
+       "noise": false,
+       "by": "rules",
+       "confidence": 0.8
+      },
+      "score": 15,
+      "tier": "routine",
+      "reasons": [
+       "earnings call filing (30)",
+       "call audio ×0.5"
+      ]
+     }
+    ],
+    "latest_at": "2026-11-07T16:58:42+05:30",
+    "results": null,
+    "people": [],
+    "brief": null
+   },
+   {
+    "id": "VOLTAS:earnings_call:106851729",
+    "symbol": "VOLTAS",
+    "company": "Voltas Limited",
+    "category": "earnings_call",
+    "subtype": "audio",
+    "score": 15,
+    "tier": "routine",
+    "headline": {
+     "filing": {
+      "seq_id": "106851729",
+      "symbol": "VOLTAS",
+      "company": "Voltas Limited",
+      "nse_desc": "Analysts/Institutional Investor Meet/Con. Call Updates",
+      "subject": "Voltas Limited has informed the Exchange about Link of Recording",
+      "nse_summary": null,
+      "pdf_url": "https://nsearchives.nseindia.com/corporate/VOLTAS_RB_06112026211403_SEIntimationAudioRecording.pdf",
+      "filed_at": "2026-11-06T21:14:59+05:30",
+      "has_xbrl": true
+     },
+     "cls": {
+      "category": "earnings_call",
+      "subtype": "audio",
+      "noise": false,
+      "by": "rules",
+      "confidence": 0.8
+     },
+     "score": 15,
+     "tier": "routine",
+     "reasons": [
+      "earnings call filing (30)",
+      "call audio ×0.5"
+     ]
+    },
+    "members": [
+     {
+      "filing": {
+       "seq_id": "106851729",
+       "symbol": "VOLTAS",
+       "company": "Voltas Limited",
+       "nse_desc": "Analysts/Institutional Investor Meet/Con. Call Updates",
+       "subject": "Voltas Limited has informed the Exchange about Link of Recording",
+       "nse_summary": null,
+       "pdf_url": "https://nsearchives.nseindia.com/corporate/VOLTAS_RB_06112026211403_SEIntimationAudioRecording.pdf",
+       "filed_at": "2026-11-06T21:14:59+05:30",
+       "has_xbrl": true
+      },
+      "cls": {
+       "category": "earnings_call",
+       "subtype": "audio",
+       "noise": false,
+       "by": "rules",
+       "confidence": 0.8
+      },
+      "score": 15,
+      "tier": "routine",
+      "reasons": [
+       "earnings call filing (30)",
+       "call audio ×0.5"
+      ]
+     }
+    ],
+    "latest_at": "2026-11-06T21:14:59+05:30",
+    "results": null,
+    "people": [],
+    "brief": null
+   },
+   {
+    "id": "M&M:earnings_call:106848808",
+    "symbol": "M&M",
+    "company": "Mahindra & Mahindra Limited",
+    "category": "earnings_call",
+    "subtype": "audio",
+    "score": 15,
+    "tier": "routine",
+    "headline": {
+     "filing": {
+      "seq_id": "106848808",
+      "symbol": "M&M",
+      "company": "Mahindra & Mahindra Limited",
+      "nse_desc": "Analysts/Institutional Investor Meet/Con. Call Updates",
+      "subject": "Mahindra & Mahindra Limited has informed the Exchange about Link of Audio-Video recording of M&M Analyst Meet Q2FY27 Earnings Conference Call",
+      "nse_summary": null,
+      "pdf_url": "https://nsearchives.nseindia.com/corporate/AmitDodani_05112026203607_IntimationofAudiorecordingofanalystmeet_Q2F27_05112026.pdf",
+      "filed_at": "2026-11-05T20:37:24+05:30",
+      "has_xbrl": true
+     },
+     "cls": {
+      "category": "earnings_call",
+      "subtype": "audio",
+      "noise": false,
+      "by": "rules",
+      "confidence": 0.8
+     },
+     "score": 15,
+     "tier": "routine",
+     "reasons": [
+      "earnings call filing (30)",
+      "call audio ×0.5"
+     ]
+    },
+    "members": [
+     {
+      "filing": {
+       "seq_id": "106848808",
+       "symbol": "M&M",
+       "company": "Mahindra & Mahindra Limited",
+       "nse_desc": "Analysts/Institutional Investor Meet/Con. Call Updates",
+       "subject": "Mahindra & Mahindra Limited has informed the Exchange about Link of Audio-Video recording of M&M Analyst Meet Q2FY27 Earnings Conference Call",
+       "nse_summary": null,
+       "pdf_url": "https://nsearchives.nseindia.com/corporate/AmitDodani_05112026203607_IntimationofAudiorecordingofanalystmeet_Q2F27_05112026.pdf",
+       "filed_at": "2026-11-05T20:37:24+05:30",
+       "has_xbrl": true
+      },
+      "cls": {
+       "category": "earnings_call",
+       "subtype": "audio",
+       "noise": false,
+       "by": "rules",
+       "confidence": 0.8
+      },
+      "score": 15,
+      "tier": "routine",
+      "reasons": [
+       "earnings call filing (30)",
+       "call audio ×0.5"
+      ]
+     }
+    ],
+    "latest_at": "2026-11-05T20:37:24+05:30",
+    "results": null,
+    "people": [],
+    "brief": null
+   },
+   {
+    "id": "PREMIERENE:earnings_call:106847506",
+    "symbol": "PREMIERENE",
+    "company": "Premier Energies Limited",
+    "category": "earnings_call",
+    "subtype": "audio",
+    "score": 15,
+    "tier": "routine",
+    "headline": {
+     "filing": {
+      "seq_id": "106847506",
+      "symbol": "PREMIERENE",
+      "company": "Premier Energies Limited",
+      "nse_desc": "Analysts/Institutional Investor Meet/Con. Call Updates",
+      "subject": "Premier Energies Limited has informed the Exchange about Link of Recording",
+      "nse_summary": null,
+      "pdf_url": "https://nsearchives.nseindia.com/corporate/PEL2024_05112026162924_SE_Intimation_-_Audio_Recording.pdf",
+      "filed_at": "2026-11-05T16:44:08+05:30",
+      "has_xbrl": true
+     },
+     "cls": {
+      "category": "earnings_call",
+      "subtype": "audio",
+      "noise": false,
+      "by": "rules",
+      "confidence": 0.8
+     },
+     "score": 15,
+     "tier": "routine",
+     "reasons": [
+      "earnings call filing (30)",
+      "call audio ×0.5"
+     ]
+    },
+    "members": [
+     {
+      "filing": {
+       "seq_id": "106847506",
+       "symbol": "PREMIERENE",
+       "company": "Premier Energies Limited",
+       "nse_desc": "Analysts/Institutional Investor Meet/Con. Call Updates",
+       "subject": "Premier Energies Limited has informed the Exchange about Link of Recording",
+       "nse_summary": null,
+       "pdf_url": "https://nsearchives.nseindia.com/corporate/PEL2024_05112026162924_SE_Intimation_-_Audio_Recording.pdf",
+       "filed_at": "2026-11-05T16:44:08+05:30",
+       "has_xbrl": true
+      },
+      "cls": {
+       "category": "earnings_call",
+       "subtype": "audio",
+       "noise": false,
+       "by": "rules",
+       "confidence": 0.8
+      },
+      "score": 15,
+      "tier": "routine",
+      "reasons": [
+       "earnings call filing (30)",
+       "call audio ×0.5"
+      ]
+     }
+    ],
+    "latest_at": "2026-11-05T16:44:08+05:30",
+    "results": null,
+    "people": [],
+    "brief": null
+   },
+   {
+    "id": "ZYDUSLIFE:earnings_call:106845477",
+    "symbol": "ZYDUSLIFE",
+    "company": "Zydus Lifesciences Limited",
+    "category": "earnings_call",
+    "subtype": "audio",
+    "score": 15,
+    "tier": "routine",
+    "headline": {
+     "filing": {
+      "seq_id": "106845477",
+      "symbol": "ZYDUSLIFE",
+      "company": "Zydus Lifesciences Limited",
+      "nse_desc": "Analysts/Institutional Investor Meet/Con. Call Updates",
+      "subject": "Zydus Lifesciences Limited has informed the Exchange about Link of Recording",
+      "nse_summary": null,
+      "pdf_url": "https://nsearchives.nseindia.com/corporate/Cadilahc_04112026191430_AudioLink.pdf",
+      "filed_at": "2026-11-04T19:15:19+05:30",
+      "has_xbrl": true
+     },
+     "cls": {
+      "category": "earnings_call",
+      "subtype": "audio",
+      "noise": false,
+      "by": "rules",
+      "confidence": 0.8
+     },
+     "score": 15,
+     "tier": "routine",
+     "reasons": [
+      "earnings call filing (30)",
+      "call audio ×0.5"
+     ]
+    },
+    "members": [
+     {
+      "filing": {
+       "seq_id": "106845477",
+       "symbol": "ZYDUSLIFE",
+       "company": "Zydus Lifesciences Limited",
+       "nse_desc": "Analysts/Institutional Investor Meet/Con. Call Updates",
+       "subject": "Zydus Lifesciences Limited has informed the Exchange about Link of Recording",
+       "nse_summary": null,
+       "pdf_url": "https://nsearchives.nseindia.com/corporate/Cadilahc_04112026191430_AudioLink.pdf",
+       "filed_at": "2026-11-04T19:15:19+05:30",
+       "has_xbrl": true
+      },
+      "cls": {
+       "category": "earnings_call",
+       "subtype": "audio",
+       "noise": false,
+       "by": "rules",
+       "confidence": 0.8
+      },
+      "score": 15,
+      "tier": "routine",
+      "reasons": [
+       "earnings call filing (30)",
+       "call audio ×0.5"
+      ]
+     }
+    ],
+    "latest_at": "2026-11-04T19:15:19+05:30",
+    "results": null,
+    "people": [],
+    "brief": null
+   },
+   {
+    "id": "MAXHEALTH:earnings_call:106843071",
+    "symbol": "MAXHEALTH",
+    "company": "Max Healthcare Institute Limited",
+    "category": "earnings_call",
+    "subtype": "audio",
+    "score": 15,
+    "tier": "routine",
+    "headline": {
+     "filing": {
+      "seq_id": "106843071",
+      "symbol": "MAXHEALTH",
+      "company": "Max Healthcare Institute Limited",
+      "nse_desc": "Analysts/Institutional Investor Meet/Con. Call Updates",
+      "subject": "Max Healthcare Institute Limited has informed the Exchange about Link of Recording",
+      "nse_summary": null,
+      "pdf_url": "https://nsearchives.nseindia.com/corporate/MAXHEALTH_03112026222129_SE_Intimation_-_Audio_Recording_of_Earnings_Call.pdf",
+      "filed_at": "2026-11-03T22:22:43+05:30",
+      "has_xbrl": true
+     },
+     "cls": {
+      "category": "earnings_call",
+      "subtype": "audio",
+      "noise": false,
+      "by": "rules",
+      "confidence": 0.8
+     },
+     "score": 15,
+     "tier": "routine",
+     "reasons": [
+      "earnings call filing (30)",
+      "call audio ×0.5"
+     ]
+    },
+    "members": [
+     {
+      "filing": {
+       "seq_id": "106843071",
+       "symbol": "MAXHEALTH",
+       "company": "Max Healthcare Institute Limited",
+       "nse_desc": "Analysts/Institutional Investor Meet/Con. Call Updates",
+       "subject": "Max Healthcare Institute Limited has informed the Exchange about Link of Recording",
+       "nse_summary": null,
+       "pdf_url": "https://nsearchives.nseindia.com/corporate/MAXHEALTH_03112026222129_SE_Intimation_-_Audio_Recording_of_Earnings_Call.pdf",
+       "filed_at": "2026-11-03T22:22:43+05:30",
+       "has_xbrl": true
+      },
+      "cls": {
+       "category": "earnings_call",
+       "subtype": "audio",
+       "noise": false,
+       "by": "rules",
+       "confidence": 0.8
+      },
+      "score": 15,
+      "tier": "routine",
+      "reasons": [
+       "earnings call filing (30)",
+       "call audio ×0.5"
+      ]
+     }
+    ],
+    "latest_at": "2026-11-03T22:22:43+05:30",
+    "results": null,
+    "people": [],
+    "brief": null
+   },
+   {
+    "id": "LODHA:earnings_call:106840336",
+    "symbol": "LODHA",
+    "company": "Lodha Developers Limited",
+    "category": "earnings_call",
+    "subtype": "audio",
+    "score": 15,
+    "tier": "routine",
+    "headline": {
+     "filing": {
+      "seq_id": "106840336",
+      "symbol": "LODHA",
+      "company": "Lodha Developers Limited",
+      "nse_desc": "Analysts/Institutional Investor Meet/Con. Call Updates",
+      "subject": "Lodha Developers Limited has informed the Exchange about Link of Recording",
+      "nse_summary": null,
+      "pdf_url": "https://nsearchives.nseindia.com/corporate/LODHA_02112026183127_LDL_Q2FY27_Earnings_call_audio_recording_02112026.pdf",
+      "filed_at": "2026-11-02T18:32:20+05:30",
+      "has_xbrl": true
+     },
+     "cls": {
+      "category": "earnings_call",
+      "subtype": "audio",
+      "noise": false,
+      "by": "rules",
+      "confidence": 0.8
+     },
+     "score": 15,
+     "tier": "routine",
+     "reasons": [
+      "earnings call filing (30)",
+      "call audio ×0.5"
+     ]
+    },
+    "members": [
+     {
+      "filing": {
+       "seq_id": "106840336",
+       "symbol": "LODHA",
+       "company": "Lodha Developers Limited",
+       "nse_desc": "Analysts/Institutional Investor Meet/Con. Call Updates",
+       "subject": "Lodha Developers Limited has informed the Exchange about Link of Recording",
+       "nse_summary": null,
+       "pdf_url": "https://nsearchives.nseindia.com/corporate/LODHA_02112026183127_LDL_Q2FY27_Earnings_call_audio_recording_02112026.pdf",
+       "filed_at": "2026-11-02T18:32:20+05:30",
+       "has_xbrl": true
+      },
+      "cls": {
+       "category": "earnings_call",
+       "subtype": "audio",
+       "noise": false,
+       "by": "rules",
+       "confidence": 0.8
+      },
+      "score": 15,
+      "tier": "routine",
+      "reasons": [
+       "earnings call filing (30)",
+       "call audio ×0.5"
+      ]
+     }
+    ],
+    "latest_at": "2026-11-02T18:32:20+05:30",
+    "results": null,
+    "people": [],
+    "brief": null
+   }
+  ],
+  "agm_egm": [
+   {
+    "id": "BAJFINANCE:agm_egm:106840525",
+    "symbol": "BAJFINANCE",
+    "company": "Bajaj Finance Limited",
+    "category": "agm_egm",
+    "subtype": null,
+    "score": 15,
+    "tier": "routine",
+    "headline": {
+     "filing": {
+      "seq_id": "106840525",
+      "symbol": "BAJFINANCE",
+      "company": "Bajaj Finance Limited",
+      "nse_desc": "Shareholders meeting",
+      "subject": "Bajaj Finance Limited has informed the Exchange regarding Proceedings of Extraordinary General Meeting held on November 02, 2026",
+      "nse_summary": null,
+      "pdf_url": "https://nsearchives.nseindia.com/corporate/BAJFINANCE_02112026193032_BFLEGMProceedings.pdf",
+      "filed_at": "2026-11-02T19:31:06+05:30",
+      "has_xbrl": true
+     },
+     "cls": {
+      "category": "agm_egm",
+      "subtype": null,
+      "noise": false,
+      "by": "rules",
+      "confidence": 0.8
+     },
+     "score": 15,
+     "tier": "routine",
+     "reasons": [
+      "agm egm filing (15)"
+     ]
+    },
+    "members": [
+     {
+      "filing": {
+       "seq_id": "106840525",
+       "symbol": "BAJFINANCE",
+       "company": "Bajaj Finance Limited",
+       "nse_desc": "Shareholders meeting",
+       "subject": "Bajaj Finance Limited has informed the Exchange regarding Proceedings of Extraordinary General Meeting held on November 02, 2026",
+       "nse_summary": null,
+       "pdf_url": "https://nsearchives.nseindia.com/corporate/BAJFINANCE_02112026193032_BFLEGMProceedings.pdf",
+       "filed_at": "2026-11-02T19:31:06+05:30",
+       "has_xbrl": true
+      },
+      "cls": {
+       "category": "agm_egm",
+       "subtype": null,
+       "noise": false,
+       "by": "rules",
+       "confidence": 0.8
+      },
+      "score": 15,
+      "tier": "routine",
+      "reasons": [
+       "agm egm filing (15)"
+      ]
+     },
+     {
+      "filing": {
+       "seq_id": "106844300",
+       "symbol": "BAJFINANCE",
+       "company": "Bajaj Finance Limited",
+       "nse_desc": "Shareholders meeting",
+       "subject": "Bajaj Finance Limited has submitted the Exchange a copy Srutinizers report of  Extraordinary General Meeting held on November 02, 2026. Further, the company has informed the Exchange regarding voting results.",
+       "nse_summary": null,
+       "pdf_url": "https://nsearchives.nseindia.com/corporate/BAJFINANCE_04112026152849_SEintimationsScrutinizersReportSignedForUpload.pdf",
+       "filed_at": "2026-11-04T15:29:09+05:30",
+       "has_xbrl": true
+      },
+      "cls": {
+       "category": "agm_egm",
+       "subtype": null,
+       "noise": false,
+       "by": "rules",
+       "confidence": 0.8
+      },
+      "score": 15,
+      "tier": "routine",
+      "reasons": [
+       "agm egm filing (15)"
+      ]
+     }
+    ],
+    "latest_at": "2026-11-04T15:29:09+05:30",
+    "results": null,
+    "people": [],
+    "brief": null
+   }
+  ],
+  "postal_ballot": [
+   {
+    "id": "SUNPHARMA:postal_ballot:106838574",
+    "symbol": "SUNPHARMA",
+    "company": "Sun Pharmaceutical Industries Limited",
+    "category": "postal_ballot",
+    "subtype": null,
+    "score": 15,
+    "tier": "routine",
+    "headline": {
+     "filing": {
+      "seq_id": "106838574",
+      "symbol": "SUNPHARMA",
+      "company": "Sun Pharmaceutical Industries Limited",
+      "nse_desc": "General Updates",
+      "subject": "Completion and Results of Postal Ballot dated 01 October 2026",
+      "nse_summary": null,
+      "pdf_url": "https://nsearchives.nseindia.com/corporate/SUNSEC_31102026201341_SEIntimationforVR_-_31_October_2026.pdf",
+      "filed_at": "2026-10-31T20:14:24+05:30",
+      "has_xbrl": true
+     },
+     "cls": {
+      "category": "postal_ballot",
+      "subtype": null,
+      "noise": false,
+      "by": "rules",
+      "confidence": 0.8
+     },
+     "score": 15,
+     "tier": "routine",
+     "reasons": [
+      "postal ballot filing (15)"
+     ]
+    },
+    "members": [
+     {
+      "filing": {
+       "seq_id": "106838574",
+       "symbol": "SUNPHARMA",
+       "company": "Sun Pharmaceutical Industries Limited",
+       "nse_desc": "General Updates",
+       "subject": "Completion and Results of Postal Ballot dated 01 October 2026",
+       "nse_summary": null,
+       "pdf_url": "https://nsearchives.nseindia.com/corporate/SUNSEC_31102026201341_SEIntimationforVR_-_31_October_2026.pdf",
+       "filed_at": "2026-10-31T20:14:24+05:30",
+       "has_xbrl": true
+      },
+      "cls": {
+       "category": "postal_ballot",
+       "subtype": null,
+       "noise": false,
+       "by": "rules",
+       "confidence": 0.8
+      },
+      "score": 15,
+      "tier": "routine",
+      "reasons": [
+       "postal ballot filing (15)"
+      ]
+     }
+    ],
+    "latest_at": "2026-10-31T20:14:24+05:30",
+    "results": null,
+    "people": [],
+    "brief": null
+   }
+  ],
+  "investor_meetings": [
+   {
+    "id": "RELIANCE:investor_meetings:106851483",
+    "symbol": "RELIANCE",
+    "company": "Reliance Industries Limited",
+    "category": "investor_meetings",
+    "subtype": null,
+    "score": 10,
+    "tier": "routine",
+    "headline": {
+     "filing": {
+      "seq_id": "106851483",
+      "symbol": "RELIANCE",
+      "company": "Reliance Industries Limited",
+      "nse_desc": "Analysts/Institutional Investor Meet/Con. Call Updates",
+      "subject": "Please note that the Company executives will be participating in the Institutional Investors' Meeting - CLSA India Forum, scheduled to be held on November 16, 2026 at Mumbai. It is expected that the meeting with the investors will be on one-on-one basis.",
+      "nse_summary": null,
+      "pdf_url": "https://nsearchives.nseindia.com/corporate/kavinavora_06112026191022_Pre_CLSA_SE_06112026.pdf",
+      "filed_at": "2026-11-06T19:10:58+05:30",
+      "has_xbrl": true
+     },
+     "cls": {
+      "category": "investor_meetings",
+      "subtype": null,
+      "noise": false,
+      "by": "rules",
+      "confidence": 0.8
+     },
+     "score": 10,
+     "tier": "routine",
+     "reasons": [
+      "investor meetings filing (10)"
+     ]
+    },
+    "members": [
+     {
+      "filing": {
+       "seq_id": "106851483",
+       "symbol": "RELIANCE",
+       "company": "Reliance Industries Limited",
+       "nse_desc": "Analysts/Institutional Investor Meet/Con. Call Updates",
+       "subject": "Please note that the Company executives will be participating in the Institutional Investors' Meeting - CLSA India Forum, scheduled to be held on November 16, 2026 at Mumbai. It is expected that the meeting with the investors will be on one-on-one basis.",
+       "nse_summary": null,
+       "pdf_url": "https://nsearchives.nseindia.com/corporate/kavinavora_06112026191022_Pre_CLSA_SE_06112026.pdf",
+       "filed_at": "2026-11-06T19:10:58+05:30",
+       "has_xbrl": true
+      },
+      "cls": {
+       "category": "investor_meetings",
+       "subtype": null,
+       "noise": false,
+       "by": "rules",
+       "confidence": 0.8
+      },
+      "score": 10,
+      "tier": "routine",
+      "reasons": [
+       "investor meetings filing (10)"
+      ]
+     }
+    ],
+    "latest_at": "2026-11-06T19:10:58+05:30",
+    "results": null,
+    "people": [],
+    "brief": null
+   },
+   {
+    "id": "TRENT:investor_meetings:106849393",
+    "symbol": "TRENT",
+    "company": "Trent Limited",
+    "category": "investor_meetings",
+    "subtype": null,
+    "score": 10,
+    "tier": "routine",
+    "headline": {
+     "filing": {
+      "seq_id": "106849393",
+      "symbol": "TRENT",
+      "company": "Trent Limited",
+      "nse_desc": "Analysts/Institutional Investor Meet/Con. Call Updates",
+      "subject": "Trent Limited has informed the Exchange about Intimation of schedule of Analyst / Institutional Investors Meeting",
+      "nse_summary": null,
+      "pdf_url": "https://nsearchives.nseindia.com/corporate/TRENT_06112026103411_Investor_Analyst_Meeting_06112026.pdf",
+      "filed_at": "2026-11-06T10:35:35+05:30",
+      "has_xbrl": true
+     },
+     "cls": {
+      "category": "investor_meetings",
+      "subtype": null,
+      "noise": false,
+      "by": "rules",
+      "confidence": 0.8
+     },
+     "score": 10,
+     "tier": "routine",
+     "reasons": [
+      "investor meetings filing (10)"
+     ]
+    },
+    "members": [
+     {
+      "filing": {
+       "seq_id": "106849393",
+       "symbol": "TRENT",
+       "company": "Trent Limited",
+       "nse_desc": "Analysts/Institutional Investor Meet/Con. Call Updates",
+       "subject": "Trent Limited has informed the Exchange about Intimation of schedule of Analyst / Institutional Investors Meeting",
+       "nse_summary": null,
+       "pdf_url": "https://nsearchives.nseindia.com/corporate/TRENT_06112026103411_Investor_Analyst_Meeting_06112026.pdf",
+       "filed_at": "2026-11-06T10:35:35+05:30",
+       "has_xbrl": true
+      },
+      "cls": {
+       "category": "investor_meetings",
+       "subtype": null,
+       "noise": false,
+       "by": "rules",
+       "confidence": 0.8
+      },
+      "score": 10,
+      "tier": "routine",
+      "reasons": [
+       "investor meetings filing (10)"
+      ]
+     }
+    ],
+    "latest_at": "2026-11-06T10:35:35+05:30",
+    "results": null,
+    "people": [],
+    "brief": null
+   },
+   {
+    "id": "TECHM:investor_meetings:106848831",
+    "symbol": "TECHM",
+    "company": "Tech Mahindra Limited",
+    "category": "investor_meetings",
+    "subtype": null,
+    "score": 10,
+    "tier": "routine",
+    "headline": {
+     "filing": {
+      "seq_id": "106848831",
+      "symbol": "TECHM",
+      "company": "Tech Mahindra Limited",
+      "nse_desc": "Analysts/Institutional Investor Meet/Con. Call Updates",
+      "subject": "Tech Mahindra Limited has informed the Exchange about Schedule of meet",
+      "nse_summary": null,
+      "pdf_url": "https://nsearchives.nseindia.com/corporate/Apekshakhemka_05112026204841_Signed_InvestorconferenceF.pdf",
+      "filed_at": "2026-11-05T20:48:58+05:30",
+      "has_xbrl": true
+     },
+     "cls": {
+      "category": "investor_meetings",
+      "subtype": null,
+      "noise": false,
+      "by": "rules",
+      "confidence": 0.8
+     },
+     "score": 10,
+     "tier": "routine",
+     "reasons": [
+      "investor meetings filing (10)"
+     ]
+    },
+    "members": [
+     {
+      "filing": {
+       "seq_id": "106848831",
+       "symbol": "TECHM",
+       "company": "Tech Mahindra Limited",
+       "nse_desc": "Analysts/Institutional Investor Meet/Con. Call Updates",
+       "subject": "Tech Mahindra Limited has informed the Exchange about Schedule of meet",
+       "nse_summary": null,
+       "pdf_url": "https://nsearchives.nseindia.com/corporate/Apekshakhemka_05112026204841_Signed_InvestorconferenceF.pdf",
+       "filed_at": "2026-11-05T20:48:58+05:30",
+       "has_xbrl": true
+      },
+      "cls": {
+       "category": "investor_meetings",
+       "subtype": null,
+       "noise": false,
+       "by": "rules",
+       "confidence": 0.8
+      },
+      "score": 10,
+      "tier": "routine",
+      "reasons": [
+       "investor meetings filing (10)"
+      ]
+     },
+     {
+      "filing": {
+       "seq_id": "106848842",
+       "symbol": "TECHM",
+       "company": "Tech Mahindra Limited",
+       "nse_desc": "Analysts/Institutional Investor Meet/Con. Call Updates",
+       "subject": "Tech Mahindra Limited has informed the Exchange about Schedule of meet",
+       "nse_summary": null,
+       "pdf_url": "https://nsearchives.nseindia.com/corporate/Apekshakhemka_05112026205131_Signed_InvestorconferenceF.pdf",
+       "filed_at": "2026-11-05T20:54:28+05:30",
+       "has_xbrl": true
+      },
+      "cls": {
+       "category": "investor_meetings",
+       "subtype": null,
+       "noise": false,
+       "by": "rules",
+       "confidence": 0.8
+      },
+      "score": 10,
+      "tier": "routine",
+      "reasons": [
+       "investor meetings filing (10)"
+      ]
+     },
+     {
+      "filing": {
+       "seq_id": "106848853",
+       "symbol": "TECHM",
+       "company": "Tech Mahindra Limited",
+       "nse_desc": "Analysts/Institutional Investor Meet/Con. Call Updates",
+       "subject": "Tech Mahindra Limited has informed the Exchange about Schedule of meet",
+       "nse_summary": null,
+       "pdf_url": "https://nsearchives.nseindia.com/corporate/Apekshakhemka_05112026205845_Signed_InvestorconferenceF.pdf",
+       "filed_at": "2026-11-05T21:03:06+05:30",
+       "has_xbrl": true
+      },
+      "cls": {
+       "category": "investor_meetings",
+       "subtype": null,
+       "noise": false,
+       "by": "rules",
+       "confidence": 0.8
+      },
+      "score": 10,
+      "tier": "routine",
+      "reasons": [
+       "investor meetings filing (10)"
+      ]
+     }
+    ],
+    "latest_at": "2026-11-05T21:03:06+05:30",
+    "results": null,
+    "people": [],
+    "brief": null
+   },
+   {
+    "id": "ZYDUSLIFE:investor_meetings:106848518",
+    "symbol": "ZYDUSLIFE",
+    "company": "Zydus Lifesciences Limited",
+    "category": "investor_meetings",
+    "subtype": null,
+    "score": 10,
+    "tier": "routine",
+    "headline": {
+     "filing": {
+      "seq_id": "106848518",
+      "symbol": "ZYDUSLIFE",
+      "company": "Zydus Lifesciences Limited",
+      "nse_desc": "Analysts/Institutional Investor Meet/Con. Call Updates",
+      "subject": "Zydus Lifesciences Limited has informed the Exchange about Schedule of meet",
+      "nse_summary": null,
+      "pdf_url": "https://nsearchives.nseindia.com/corporate/Cadilahc_05112026191417_Investorconference05112026.pdf",
+      "filed_at": "2026-11-05T19:15:31+05:30",
+      "has_xbrl": true
+     },
+     "cls": {
+      "category": "investor_meetings",
+      "subtype": null,
+      "noise": false,
+      "by": "rules",
+      "confidence": 0.8
+     },
+     "score": 10,
+     "tier": "routine",
+     "reasons": [
+      "investor meetings filing (10)"
+     ]
+    },
+    "members": [
+     {
+      "filing": {
+       "seq_id": "106848518",
+       "symbol": "ZYDUSLIFE",
+       "company": "Zydus Lifesciences Limited",
+       "nse_desc": "Analysts/Institutional Investor Meet/Con. Call Updates",
+       "subject": "Zydus Lifesciences Limited has informed the Exchange about Schedule of meet",
+       "nse_summary": null,
+       "pdf_url": "https://nsearchives.nseindia.com/corporate/Cadilahc_05112026191417_Investorconference05112026.pdf",
+       "filed_at": "2026-11-05T19:15:31+05:30",
+       "has_xbrl": true
+      },
+      "cls": {
+       "category": "investor_meetings",
+       "subtype": null,
+       "noise": false,
+       "by": "rules",
+       "confidence": 0.8
+      },
+      "score": 10,
+      "tier": "routine",
+      "reasons": [
+       "investor meetings filing (10)"
+      ]
+     },
+     {
+      "filing": {
+       "seq_id": "106848564",
+       "symbol": "ZYDUSLIFE",
+       "company": "Zydus Lifesciences Limited",
+       "nse_desc": "Analysts/Institutional Investor Meet/Con. Call Updates",
+       "subject": "Zydus Lifesciences Limited has informed the Exchange about Schedule of meet",
+       "nse_summary": null,
+       "pdf_url": "https://nsearchives.nseindia.com/corporate/Cadilahc_05112026192606_Investorconference05112026_1.pdf",
+       "filed_at": "2026-11-05T19:27:24+05:30",
+       "has_xbrl": true
+      },
+      "cls": {
+       "category": "investor_meetings",
+       "subtype": null,
+       "noise": false,
+       "by": "rules",
+       "confidence": 0.8
+      },
+      "score": 10,
+      "tier": "routine",
+      "reasons": [
+       "investor meetings filing (10)"
+      ]
+     }
+    ],
+    "latest_at": "2026-11-05T19:27:24+05:30",
+    "results": null,
+    "people": [],
+    "brief": null
+   },
+   {
+    "id": "M&M:investor_meetings:106848498",
+    "symbol": "M&M",
+    "company": "Mahindra & Mahindra Limited",
+    "category": "investor_meetings",
+    "subtype": null,
+    "score": 10,
+    "tier": "routine",
+    "headline": {
+     "filing": {
+      "seq_id": "106848498",
+      "symbol": "M&M",
+      "company": "Mahindra & Mahindra Limited",
+      "nse_desc": "Analysts/Institutional Investor Meet/Con. Call Updates",
+      "subject": "Mahindra & Mahindra Limited has informed the Exchange about Investor meet",
+      "nse_summary": null,
+      "pdf_url": "https://nsearchives.nseindia.com/corporate/AmitDodani_05112026191034_UpcomingAnalystMeet12112026.pdf",
+      "filed_at": "2026-11-05T19:10:51+05:30",
+      "has_xbrl": true
+     },
+     "cls": {
+      "category": "investor_meetings",
+      "subtype": null,
+      "noise": false,
+      "by": "rules",
+      "confidence": 0.8
+     },
+     "score": 10,
+     "tier": "routine",
+     "reasons": [
+      "investor meetings filing (10)"
+     ]
+    },
+    "members": [
+     {
+      "filing": {
+       "seq_id": "106848498",
+       "symbol": "M&M",
+       "company": "Mahindra & Mahindra Limited",
+       "nse_desc": "Analysts/Institutional Investor Meet/Con. Call Updates",
+       "subject": "Mahindra & Mahindra Limited has informed the Exchange about Investor meet",
+       "nse_summary": null,
+       "pdf_url": "https://nsearchives.nseindia.com/corporate/AmitDodani_05112026191034_UpcomingAnalystMeet12112026.pdf",
+       "filed_at": "2026-11-05T19:10:51+05:30",
+       "has_xbrl": true
+      },
+      "cls": {
+       "category": "investor_meetings",
+       "subtype": null,
+       "noise": false,
+       "by": "rules",
+       "confidence": 0.8
+      },
+      "score": 10,
+      "tier": "routine",
+      "reasons": [
+       "investor meetings filing (10)"
+      ]
+     }
+    ],
+    "latest_at": "2026-11-05T19:10:51+05:30",
+    "results": null,
+    "people": [],
+    "brief": null
+   },
+   {
+    "id": "SUNPHARMA:investor_meetings:106847279",
+    "symbol": "SUNPHARMA",
+    "company": "Sun Pharmaceutical Industries Limited",
+    "category": "investor_meetings",
+    "subtype": null,
+    "score": 10,
+    "tier": "routine",
+    "headline": {
+     "filing": {
+      "seq_id": "106847279",
+      "symbol": "SUNPHARMA",
+      "company": "Sun Pharmaceutical Industries Limited",
+      "nse_desc": "Analysts/Institutional Investor Meet/Con. Call Updates",
+      "subject": "Sun Pharmaceutical Industries Limited has informed the Exchange about Schedule of meet",
+      "nse_summary": null,
+      "pdf_url": "https://nsearchives.nseindia.com/corporate/SUNPHARMA456_05112026155401_IntimationSE20261105_for_Analyst_and_Investor_meeting_Signed.pdf",
+      "filed_at": "2026-11-05T15:54:14+05:30",
+      "has_xbrl": true
+     },
+     "cls": {
+      "category": "investor_meetings",
+      "subtype": null,
+      "noise": false,
+      "by": "rules",
+      "confidence": 0.8
+     },
+     "score": 10,
+     "tier": "routine",
+     "reasons": [
+      "investor meetings filing (10)"
+     ]
+    },
+    "members": [
+     {
+      "filing": {
+       "seq_id": "106847279",
+       "symbol": "SUNPHARMA",
+       "company": "Sun Pharmaceutical Industries Limited",
+       "nse_desc": "Analysts/Institutional Investor Meet/Con. Call Updates",
+       "subject": "Sun Pharmaceutical Industries Limited has informed the Exchange about Schedule of meet",
+       "nse_summary": null,
+       "pdf_url": "https://nsearchives.nseindia.com/corporate/SUNPHARMA456_05112026155401_IntimationSE20261105_for_Analyst_and_Investor_meeting_Signed.pdf",
+       "filed_at": "2026-11-05T15:54:14+05:30",
+       "has_xbrl": true
+      },
+      "cls": {
+       "category": "investor_meetings",
+       "subtype": null,
+       "noise": false,
+       "by": "rules",
+       "confidence": 0.8
+      },
+      "score": 10,
+      "tier": "routine",
+      "reasons": [
+       "investor meetings filing (10)"
+      ]
+     }
+    ],
+    "latest_at": "2026-11-05T15:54:14+05:30",
+    "results": null,
+    "people": [],
+    "brief": null
+   },
+   {
+    "id": "MAXHEALTH:investor_meetings:106845312",
+    "symbol": "MAXHEALTH",
+    "company": "Max Healthcare Institute Limited",
+    "category": "investor_meetings",
+    "subtype": null,
+    "score": 10,
+    "tier": "routine",
+    "headline": {
+     "filing": {
+      "seq_id": "106845312",
+      "symbol": "MAXHEALTH",
+      "company": "Max Healthcare Institute Limited",
+      "nse_desc": "Analysts/Institutional Investor Meet/Con. Call Updates",
+      "subject": "Max Healthcare Institute Limited has informed the Exchange about Schedule of meet",
+      "nse_summary": null,
+      "pdf_url": "https://nsearchives.nseindia.com/corporate/MAXHEALTH_04112026184234_SE_Intimation_Schedule.pdf",
+      "filed_at": "2026-11-04T18:45:48+05:30",
+      "has_xbrl": true
+     },
+     "cls": {
+      "category": "investor_meetings",
+      "subtype": null,
+      "noise": false,
+      "by": "rules",
+      "confidence": 0.8
+     },
+     "score": 10,
+     "tier": "routine",
+     "reasons": [
+      "investor meetings filing (10)"
+     ]
+    },
+    "members": [
+     {
+      "filing": {
+       "seq_id": "106845312",
+       "symbol": "MAXHEALTH",
+       "company": "Max Healthcare Institute Limited",
+       "nse_desc": "Analysts/Institutional Investor Meet/Con. Call Updates",
+       "subject": "Max Healthcare Institute Limited has informed the Exchange about Schedule of meet",
+       "nse_summary": null,
+       "pdf_url": "https://nsearchives.nseindia.com/corporate/MAXHEALTH_04112026184234_SE_Intimation_Schedule.pdf",
+       "filed_at": "2026-11-04T18:45:48+05:30",
+       "has_xbrl": true
+      },
+      "cls": {
+       "category": "investor_meetings",
+       "subtype": null,
+       "noise": false,
+       "by": "rules",
+       "confidence": 0.8
+      },
+      "score": 10,
+      "tier": "routine",
+      "reasons": [
+       "investor meetings filing (10)"
+      ]
+     }
+    ],
+    "latest_at": "2026-11-04T18:45:48+05:30",
+    "results": null,
+    "people": [],
+    "brief": null
+   },
+   {
+    "id": "LODHA:investor_meetings:106845280",
+    "symbol": "LODHA",
+    "company": "Lodha Developers Limited",
+    "category": "investor_meetings",
+    "subtype": null,
+    "score": 10,
+    "tier": "routine",
+    "headline": {
+     "filing": {
+      "seq_id": "106845280",
+      "symbol": "LODHA",
+      "company": "Lodha Developers Limited",
+      "nse_desc": "Analysts/Institutional Investor Meet/Con. Call Updates",
+      "subject": "Lodha Developers Limited has informed the Exchange about Schedule of meet",
+      "nse_summary": null,
+      "pdf_url": "https://nsearchives.nseindia.com/corporate/LODHA_04112026183836_LDL_Investor_Call_Intimation.pdf",
+      "filed_at": "2026-11-04T18:41:03+05:30",
+      "has_xbrl": true
+     },
+     "cls": {
+      "category": "investor_meetings",
+      "subtype": null,
+      "noise": false,
+      "by": "rules",
+      "confidence": 0.8
+     },
+     "score": 10,
+     "tier": "routine",
+     "reasons": [
+      "investor meetings filing (10)"
+     ]
+    },
+    "members": [
+     {
+      "filing": {
+       "seq_id": "106845280",
+       "symbol": "LODHA",
+       "company": "Lodha Developers Limited",
+       "nse_desc": "Analysts/Institutional Investor Meet/Con. Call Updates",
+       "subject": "Lodha Developers Limited has informed the Exchange about Schedule of meet",
+       "nse_summary": null,
+       "pdf_url": "https://nsearchives.nseindia.com/corporate/LODHA_04112026183836_LDL_Investor_Call_Intimation.pdf",
+       "filed_at": "2026-11-04T18:41:03+05:30",
+       "has_xbrl": true
+      },
+      "cls": {
+       "category": "investor_meetings",
+       "subtype": null,
+       "noise": false,
+       "by": "rules",
+       "confidence": 0.8
+      },
+      "score": 10,
+      "tier": "routine",
+      "reasons": [
+       "investor meetings filing (10)"
+      ]
+     }
+    ],
+    "latest_at": "2026-11-04T18:41:03+05:30",
+    "results": null,
+    "people": [],
+    "brief": null
+   },
+   {
+    "id": "VOLTAS:investor_meetings:106842239",
+    "symbol": "VOLTAS",
+    "company": "Voltas Limited",
+    "category": "investor_meetings",
+    "subtype": null,
+    "score": 10,
+    "tier": "routine",
+    "headline": {
+     "filing": {
+      "seq_id": "106842239",
+      "symbol": "VOLTAS",
+      "company": "Voltas Limited",
+      "nse_desc": "Analysts/Institutional Investor Meet/Con. Call Updates",
+      "subject": "Voltas Limited has informed the Exchange about Schedule of meet",
+      "nse_summary": null,
+      "pdf_url": "https://nsearchives.nseindia.com/corporate/VOLTAS_RB_03112026173122_SE_Intimation.pdf",
+      "filed_at": "2026-11-03T17:31:59+05:30",
+      "has_xbrl": true
+     },
+     "cls": {
+      "category": "investor_meetings",
+      "subtype": null,
+      "noise": false,
+      "by": "rules",
+      "confidence": 0.8
+     },
+     "score": 10,
+     "tier": "routine",
+     "reasons": [
+      "investor meetings filing (10)"
+     ]
+    },
+    "members": [
+     {
+      "filing": {
+       "seq_id": "106842239",
+       "symbol": "VOLTAS",
+       "company": "Voltas Limited",
+       "nse_desc": "Analysts/Institutional Investor Meet/Con. Call Updates",
+       "subject": "Voltas Limited has informed the Exchange about Schedule of meet",
+       "nse_summary": null,
+       "pdf_url": "https://nsearchives.nseindia.com/corporate/VOLTAS_RB_03112026173122_SE_Intimation.pdf",
+       "filed_at": "2026-11-03T17:31:59+05:30",
+       "has_xbrl": true
+      },
+      "cls": {
+       "category": "investor_meetings",
+       "subtype": null,
+       "noise": false,
+       "by": "rules",
+       "confidence": 0.8
+      },
+      "score": 10,
+      "tier": "routine",
+      "reasons": [
+       "investor meetings filing (10)"
+      ]
+     }
+    ],
+    "latest_at": "2026-11-03T17:31:59+05:30",
+    "results": null,
+    "people": [],
+    "brief": null
+   }
+  ],
+  "unclassified": [
+   {
+    "id": "VOLTAS:unclassified:106850827",
+    "symbol": "VOLTAS",
+    "company": "Voltas Limited",
+    "category": "unclassified",
+    "subtype": null,
+    "score": 5,
+    "tier": "routine",
+    "headline": {
+     "filing": {
+      "seq_id": "106850827",
+      "symbol": "VOLTAS",
+      "company": "Voltas Limited",
+      "nse_desc": "Outcome of Board Meeting",
+      "subject": "Voltas Limited has informed the Exchange regarding Outcome of Board Meeting held on November 06, 2026.",
+      "nse_summary": null,
+      "pdf_url": "https://nsearchives.nseindia.com/corporate/VOLTAS_RB_06112026165554_02SE_Directorssigned.pdf",
+      "filed_at": "2026-11-06T16:59:40+05:30",
+      "has_xbrl": true
+     },
+     "cls": {
+      "category": "unclassified",
+      "subtype": null,
+      "noise": false,
+      "by": "llm",
+      "confidence": 0.7
+     },
+     "score": 5,
+     "tier": "routine",
+     "reasons": [
+      "unclassified filing (5)"
+     ]
+    },
+    "members": [
+     {
+      "filing": {
+       "seq_id": "106850827",
+       "symbol": "VOLTAS",
+       "company": "Voltas Limited",
+       "nse_desc": "Outcome of Board Meeting",
+       "subject": "Voltas Limited has informed the Exchange regarding Outcome of Board Meeting held on November 06, 2026.",
+       "nse_summary": null,
+       "pdf_url": "https://nsearchives.nseindia.com/corporate/VOLTAS_RB_06112026165554_02SE_Directorssigned.pdf",
+       "filed_at": "2026-11-06T16:59:40+05:30",
+       "has_xbrl": true
+      },
+      "cls": {
+       "category": "unclassified",
+       "subtype": null,
+       "noise": false,
+       "by": "llm",
+       "confidence": 0.7
+      },
+      "score": 5,
+      "tier": "routine",
+      "reasons": [
+       "unclassified filing (5)"
+      ]
+     },
+     {
+      "filing": {
+       "seq_id": "106850828",
+       "symbol": "VOLTAS",
+       "company": "Voltas Limited",
+       "nse_desc": "Outcome of Board Meeting",
+       "subject": "Voltas Limited has informed the Exchange regarding Outcome of Board Meeting held on November 06, 2026.",
+       "nse_summary": null,
+       "pdf_url": "https://nsearchives.nseindia.com/corporate/VOLTAS_RB_06112026165629_03_Auditor_appointment_signed.pdf",
+       "filed_at": "2026-11-06T16:59:40+05:30",
+       "has_xbrl": true
+      },
+      "cls": {
+       "category": "unclassified",
+       "subtype": null,
+       "noise": false,
+       "by": "llm",
+       "confidence": 0.7
+      },
+      "score": 5,
+      "tier": "routine",
+      "reasons": [
+       "unclassified filing (5)"
+      ]
+     },
+     {
+      "filing": {
+       "seq_id": "106850876",
+       "symbol": "VOLTAS",
+       "company": "Voltas Limited",
+       "nse_desc": "Change in Auditors",
+       "subject": "Voltas Limited has informed the Exchange regarding Change in Auditors of the company.",
+       "nse_summary": null,
+       "pdf_url": "https://nsearchives.nseindia.com/corporate/VOLTAS_RB_06112026170542_03_Auditor_appointment_signed.pdf",
+       "filed_at": "2026-11-06T17:08:25+05:30",
+       "has_xbrl": true
+      },
+      "cls": {
+       "category": "unclassified",
+       "subtype": "auditor",
+       "noise": false,
+       "by": "rules",
+       "confidence": 0.95
+      },
+      "score": 5,
+      "tier": "routine",
+      "reasons": [
+       "unclassified filing (5)"
+      ]
+     }
+    ],
+    "latest_at": "2026-11-06T17:08:25+05:30",
+    "results": null,
+    "people": [],
+    "brief": null
+   },
+   {
+    "id": "IDFCFIRSTB:unclassified:106850849",
+    "symbol": "IDFCFIRSTB",
+    "company": "IDFC First Bank Limited",
+    "category": "unclassified",
+    "subtype": "esop",
+    "score": 5,
+    "tier": "routine",
+    "headline": {
+     "filing": {
+      "seq_id": "106850849",
+      "symbol": "IDFCFIRSTB",
+      "company": "IDFC First Bank Limited",
+      "nse_desc": "ESOP/ESOS/ESPS",
+      "subject": "IDFC First Bank Limited has informed the Exchange regarding Allotment of 3545636  Shares.",
+      "nse_summary": null,
+      "pdf_url": "https://nsearchives.nseindia.com/corporate/IDFCFIRSTB_06112026170311_ESOP_Allotment_November_06_2026.pdf",
+      "filed_at": "2026-11-06T17:03:55+05:30",
+      "has_xbrl": true
+     },
+     "cls": {
+      "category": "unclassified",
+      "subtype": "esop",
+      "noise": false,
+      "by": "rules",
+      "confidence": 0.95
+     },
+     "score": 5,
+     "tier": "routine",
+     "reasons": [
+      "unclassified filing (5)"
+     ]
+    },
+    "members": [
+     {
+      "filing": {
+       "seq_id": "106850849",
+       "symbol": "IDFCFIRSTB",
+       "company": "IDFC First Bank Limited",
+       "nse_desc": "ESOP/ESOS/ESPS",
+       "subject": "IDFC First Bank Limited has informed the Exchange regarding Allotment of 3545636  Shares.",
+       "nse_summary": null,
+       "pdf_url": "https://nsearchives.nseindia.com/corporate/IDFCFIRSTB_06112026170311_ESOP_Allotment_November_06_2026.pdf",
+       "filed_at": "2026-11-06T17:03:55+05:30",
+       "has_xbrl": true
+      },
+      "cls": {
+       "category": "unclassified",
+       "subtype": "esop",
+       "noise": false,
+       "by": "rules",
+       "confidence": 0.95
+      },
+      "score": 5,
+      "tier": "routine",
+      "reasons": [
+       "unclassified filing (5)"
+      ]
+     }
+    ],
+    "latest_at": "2026-11-06T17:03:55+05:30",
+    "results": null,
+    "people": [],
+    "brief": null
+   },
+   {
+    "id": "PERSISTENT:unclassified:106844210",
+    "symbol": "PERSISTENT",
+    "company": "Persistent Systems Limited",
+    "category": "unclassified",
+    "subtype": null,
+    "score": 5,
+    "tier": "routine",
+    "headline": {
+     "filing": {
+      "seq_id": "106844210",
+      "symbol": "PERSISTENT",
+      "company": "Persistent Systems Limited",
+      "nse_desc": "Committee Meeting Updates",
+      "subject": "Persistent Systems Limited has informed the Exchange regarding Outcome of Committee Meeting held on November 04, 2026.",
+      "nse_summary": null,
+      "pdf_url": "https://nsearchives.nseindia.com/corporate/PERSISTENTUSER1_04112026150426_PersistentSEOutcomeAllotmentofNCDsNovember42026Signed.pdf",
+      "filed_at": "2026-11-04T15:04:42+05:30",
+      "has_xbrl": true
+     },
+     "cls": {
+      "category": "unclassified",
+      "subtype": null,
+      "noise": false,
+      "by": "llm",
+      "confidence": 0.7
+     },
+     "score": 5,
+     "tier": "routine",
+     "reasons": [
+      "unclassified filing (5)"
+     ]
+    },
+    "members": [
+     {
+      "filing": {
+       "seq_id": "106844210",
+       "symbol": "PERSISTENT",
+       "company": "Persistent Systems Limited",
+       "nse_desc": "Committee Meeting Updates",
+       "subject": "Persistent Systems Limited has informed the Exchange regarding Outcome of Committee Meeting held on November 04, 2026.",
+       "nse_summary": null,
+       "pdf_url": "https://nsearchives.nseindia.com/corporate/PERSISTENTUSER1_04112026150426_PersistentSEOutcomeAllotmentofNCDsNovember42026Signed.pdf",
+       "filed_at": "2026-11-04T15:04:42+05:30",
+       "has_xbrl": true
+      },
+      "cls": {
+       "category": "unclassified",
+       "subtype": null,
+       "noise": false,
+       "by": "llm",
+       "confidence": 0.7
+      },
+      "score": 5,
+      "tier": "routine",
+      "reasons": [
+       "unclassified filing (5)"
+      ]
+     },
+     {
+      "filing": {
+       "seq_id": "106849153",
+       "symbol": "PERSISTENT",
+       "company": "Persistent Systems Limited",
+       "nse_desc": "General Updates",
+       "subject": "Persistent Systems Limited has informed the Exchange about General Updates",
+       "nse_summary": null,
+       "pdf_url": "https://nsearchives.nseindia.com/corporate/PERSISTENTUSER1_05112026233015_PersistentSEOutcomeAllotmentofCPsNovember52026signed.pdf",
+       "filed_at": "2026-11-05T23:30:49+05:30",
+       "has_xbrl": true
+      },
+      "cls": {
+       "category": "unclassified",
+       "subtype": null,
+       "noise": false,
+       "by": "llm",
+       "confidence": 0.7
+      },
+      "score": 5,
+      "tier": "routine",
+      "reasons": [
+       "unclassified filing (5)"
+      ]
+     }
+    ],
+    "latest_at": "2026-11-05T23:30:49+05:30",
+    "results": null,
+    "people": [],
+    "brief": null
+   },
+   {
+    "id": "M&M:unclassified:106848295",
+    "symbol": "M&M",
+    "company": "Mahindra & Mahindra Limited",
+    "category": "unclassified",
+    "subtype": null,
+    "score": 5,
+    "tier": "routine",
+    "headline": {
+     "filing": {
+      "seq_id": "106848295",
+      "symbol": "M&M",
+      "company": "Mahindra & Mahindra Limited",
+      "nse_desc": "Related Party Transactions",
+      "subject": "Mahindra & Mahindra Limited has informed the Exchange about Disclosure of Related Party Transactions for H1F27 under Regulation 23(9) of SEBI (LODR) Regulations, 2015",
+      "nse_summary": null,
+      "pdf_url": "https://nsearchives.nseindia.com/corporate/AmitDodani_05112026183350_SEIntimationRPT_H1F27_05112026.pdf",
+      "filed_at": "2026-11-05T18:37:08+05:30",
+      "has_xbrl": true
+     },
+     "cls": {
+      "category": "unclassified",
+      "subtype": null,
+      "noise": false,
+      "by": "llm",
+      "confidence": 0.7
+     },
+     "score": 5,
+     "tier": "routine",
+     "reasons": [
+      "unclassified filing (5)"
+     ]
+    },
+    "members": [
+     {
+      "filing": {
+       "seq_id": "106848295",
+       "symbol": "M&M",
+       "company": "Mahindra & Mahindra Limited",
+       "nse_desc": "Related Party Transactions",
+       "subject": "Mahindra & Mahindra Limited has informed the Exchange about Disclosure of Related Party Transactions for H1F27 under Regulation 23(9) of SEBI (LODR) Regulations, 2015",
+       "nse_summary": null,
+       "pdf_url": "https://nsearchives.nseindia.com/corporate/AmitDodani_05112026183350_SEIntimationRPT_H1F27_05112026.pdf",
+       "filed_at": "2026-11-05T18:37:08+05:30",
+       "has_xbrl": true
+      },
+      "cls": {
+       "category": "unclassified",
+       "subtype": null,
+       "noise": false,
+       "by": "llm",
+       "confidence": 0.7
+      },
+      "score": 5,
+      "tier": "routine",
+      "reasons": [
+       "unclassified filing (5)"
+      ]
+     }
+    ],
+    "latest_at": "2026-11-05T18:37:08+05:30",
+    "results": null,
+    "people": [],
+    "brief": null
+   },
+   {
+    "id": "M&M:unclassified:106841911",
+    "symbol": "M&M",
+    "company": "Mahindra & Mahindra Limited",
+    "category": "unclassified",
+    "subtype": null,
+    "score": 5,
+    "tier": "routine",
+    "headline": {
+     "filing": {
+      "seq_id": "106841911",
+      "symbol": "M&M",
+      "company": "Mahindra & Mahindra Limited",
+      "nse_desc": "Updates",
+      "subject": "Mahindra & Mahindra Limited has informed the Exchange regarding the change in the address of the Corporate Office of the Registrar to an Issue and Share Transfer Agent'.",
+      "nse_summary": null,
+      "pdf_url": "https://nsearchives.nseindia.com/corporate/Deepak_03112026160659_SE_Intimation_Change_of_Kfintech_Corporate_Office.pdf",
+      "filed_at": "2026-11-03T16:07:13+05:30",
+      "has_xbrl": true
+     },
+     "cls": {
+      "category": "unclassified",
+      "subtype": null,
+      "noise": false,
+      "by": "llm",
+      "confidence": 0.7
+     },
+     "score": 5,
+     "tier": "routine",
+     "reasons": [
+      "unclassified filing (5)"
+     ]
+    },
+    "members": [
+     {
+      "filing": {
+       "seq_id": "106841911",
+       "symbol": "M&M",
+       "company": "Mahindra & Mahindra Limited",
+       "nse_desc": "Updates",
+       "subject": "Mahindra & Mahindra Limited has informed the Exchange regarding the change in the address of the Corporate Office of the Registrar to an Issue and Share Transfer Agent'.",
+       "nse_summary": null,
+       "pdf_url": "https://nsearchives.nseindia.com/corporate/Deepak_03112026160659_SE_Intimation_Change_of_Kfintech_Corporate_Office.pdf",
+       "filed_at": "2026-11-03T16:07:13+05:30",
+       "has_xbrl": true
+      },
+      "cls": {
+       "category": "unclassified",
+       "subtype": null,
+       "noise": false,
+       "by": "llm",
+       "confidence": 0.7
+      },
+      "score": 5,
+      "tier": "routine",
+      "reasons": [
+       "unclassified filing (5)"
+      ]
+     },
+     {
+      "filing": {
+       "seq_id": "106846738",
+       "symbol": "M&M",
+       "company": "Mahindra & Mahindra Limited",
+       "nse_desc": "Outcome of Board Meeting",
+       "subject": "Mahindra & Mahindra Limited has informed the Exchange regarding Outcome of Board Meeting held on November 05, 2026.",
+       "nse_summary": null,
+       "pdf_url": "https://nsearchives.nseindia.com/corporate/Pooja_05112026125925_Outcome5Nov.pdf",
+       "filed_at": "2026-11-05T13:00:09+05:30",
+       "has_xbrl": true
+      },
+      "cls": {
+       "category": "unclassified",
+       "subtype": null,
+       "noise": false,
+       "by": "llm",
+       "confidence": 0.7
+      },
+      "score": 5,
+      "tier": "routine",
+      "reasons": [
+       "unclassified filing (5)"
+      ]
+     },
+     {
+      "filing": {
+       "seq_id": "106846751",
+       "symbol": "M&M",
+       "company": "Mahindra & Mahindra Limited",
+       "nse_desc": "Outcome of Board Meeting",
+       "subject": "Mahindra & Mahindra Limited has informed the Exchange regarding Outcome of Board Meeting held on November 05, 2026.",
+       "nse_summary": null,
+       "pdf_url": "https://nsearchives.nseindia.com/corporate/Pooja_05112026130154_Outcome5Nov.pdf",
+       "filed_at": "2026-11-05T13:02:18+05:30",
+       "has_xbrl": true
+      },
+      "cls": {
+       "category": "unclassified",
+       "subtype": null,
+       "noise": false,
+       "by": "llm",
+       "confidence": 0.7
+      },
+      "score": 5,
+      "tier": "routine",
+      "reasons": [
+       "unclassified filing (5)"
+      ]
+     },
+     {
+      "filing": {
+       "seq_id": "106846850",
+       "symbol": "M&M",
+       "company": "Mahindra & Mahindra Limited",
+       "nse_desc": "General Updates",
+       "subject": "Mahindra & Mahindra Limited has informed the Exchange about Press/Analyst Presentation being made today",
+       "nse_summary": null,
+       "pdf_url": "https://nsearchives.nseindia.com/corporate/AmitDodani_05112026133302_PresentationtobemadetoPressAnalyst.pdf",
+       "filed_at": "2026-11-05T13:33:17+05:30",
+       "has_xbrl": true
+      },
+      "cls": {
+       "category": "unclassified",
+       "subtype": null,
+       "noise": false,
+       "by": "llm",
+       "confidence": 0.7
+      },
+      "score": 5,
+      "tier": "routine",
+      "reasons": [
+       "unclassified filing (5)"
+      ]
+     }
+    ],
+    "latest_at": "2026-11-05T13:33:17+05:30",
+    "results": null,
+    "people": [],
+    "brief": null
+   },
+   {
+    "id": "PREMIERENE:unclassified:106845350",
+    "symbol": "PREMIERENE",
+    "company": "Premier Energies Limited",
+    "category": "unclassified",
+    "subtype": null,
+    "score": 5,
+    "tier": "routine",
+    "headline": {
+     "filing": {
+      "seq_id": "106845350",
+      "symbol": "PREMIERENE",
+      "company": "Premier Energies Limited",
+      "nse_desc": "Outcome of Board Meeting",
+      "subject": "Premier Energies Limited has informed the Exchange regarding Outcome of Board Meeting held on November 04, 2026.",
+      "nse_summary": null,
+      "pdf_url": "https://nsearchives.nseindia.com/corporate/PEL2024_04112026184950_BM_Outcome_Q2_FY27_Financial_Results.pdf",
+      "filed_at": "2026-11-04T18:52:19+05:30",
+      "has_xbrl": true
+     },
+     "cls": {
+      "category": "unclassified",
+      "subtype": null,
+      "noise": false,
+      "by": "llm",
+      "confidence": 0.7
+     },
+     "score": 5,
+     "tier": "routine",
+     "reasons": [
+      "unclassified filing (5)"
+     ]
+    },
+    "members": [
+     {
+      "filing": {
+       "seq_id": "106845350",
+       "symbol": "PREMIERENE",
+       "company": "Premier Energies Limited",
+       "nse_desc": "Outcome of Board Meeting",
+       "subject": "Premier Energies Limited has informed the Exchange regarding Outcome of Board Meeting held on November 04, 2026.",
+       "nse_summary": null,
+       "pdf_url": "https://nsearchives.nseindia.com/corporate/PEL2024_04112026184950_BM_Outcome_Q2_FY27_Financial_Results.pdf",
+       "filed_at": "2026-11-04T18:52:19+05:30",
+       "has_xbrl": true
+      },
+      "cls": {
+       "category": "unclassified",
+       "subtype": null,
+       "noise": false,
+       "by": "llm",
+       "confidence": 0.7
+      },
+      "score": 5,
+      "tier": "routine",
+      "reasons": [
+       "unclassified filing (5)"
+      ]
+     }
+    ],
+    "latest_at": "2026-11-04T18:52:19+05:30",
+    "results": null,
+    "people": [],
+    "brief": null
+   },
+   {
+    "id": "LODHA:unclassified:106844865",
+    "symbol": "LODHA",
+    "company": "Lodha Developers Limited",
+    "category": "unclassified",
+    "subtype": "esop",
+    "score": 5,
+    "tier": "routine",
+    "headline": {
+     "filing": {
+      "seq_id": "106844865",
+      "symbol": "LODHA",
+      "company": "Lodha Developers Limited",
+      "nse_desc": "Allotment of Securities",
+      "subject": "Lodha Developers Limited has informed the Exchange regarding allotment of 56654 securities pursuant to ESOP/ESPS at its meeting held on November 04, 2026",
+      "nse_summary": null,
+      "pdf_url": "https://nsearchives.nseindia.com/corporate/LODHA_04112026173241_Allotment_under_ESOP_04112026_sd.pdf",
+      "filed_at": "2026-11-04T17:33:07+05:30",
+      "has_xbrl": true
+     },
+     "cls": {
+      "category": "unclassified",
+      "subtype": "esop",
+      "noise": false,
+      "by": "rules",
+      "confidence": 0.95
+     },
+     "score": 5,
+     "tier": "routine",
+     "reasons": [
+      "unclassified filing (5)"
+     ]
+    },
+    "members": [
+     {
+      "filing": {
+       "seq_id": "106844865",
+       "symbol": "LODHA",
+       "company": "Lodha Developers Limited",
+       "nse_desc": "Allotment of Securities",
+       "subject": "Lodha Developers Limited has informed the Exchange regarding allotment of 56654 securities pursuant to ESOP/ESPS at its meeting held on November 04, 2026",
+       "nse_summary": null,
+       "pdf_url": "https://nsearchives.nseindia.com/corporate/LODHA_04112026173241_Allotment_under_ESOP_04112026_sd.pdf",
+       "filed_at": "2026-11-04T17:33:07+05:30",
+       "has_xbrl": true
+      },
+      "cls": {
+       "category": "unclassified",
+       "subtype": "esop",
+       "noise": false,
+       "by": "rules",
+       "confidence": 0.95
+      },
+      "score": 5,
+      "tier": "routine",
+      "reasons": [
+       "unclassified filing (5)"
+      ]
+     }
+    ],
+    "latest_at": "2026-11-04T17:33:07+05:30",
+    "results": null,
+    "people": [],
+    "brief": null
+   },
+   {
+    "id": "ULTRACEMCO:unclassified:106843790",
+    "symbol": "ULTRACEMCO",
+    "company": "UltraTech Cement Limited",
+    "category": "unclassified",
+    "subtype": null,
+    "score": 5,
+    "tier": "routine",
+    "headline": {
+     "filing": {
+      "seq_id": "106843790",
+      "symbol": "ULTRACEMCO",
+      "company": "UltraTech Cement Limited",
+      "nse_desc": "Updates",
+      "subject": "UltraTech Cement Limited has informed the Exchange regarding 'Change in Corporate Office address of Registrar and Share Transfer Agent ( RTA ) for correspondence'.",
+      "nse_summary": null,
+      "pdf_url": "https://nsearchives.nseindia.com/corporate/ULTRACEMCO_04112026123807_SEintimation04112026.pdf",
+      "filed_at": "2026-11-04T12:38:18+05:30",
+      "has_xbrl": true
+     },
+     "cls": {
+      "category": "unclassified",
+      "subtype": null,
+      "noise": false,
+      "by": "llm",
+      "confidence": 0.7
+     },
+     "score": 5,
+     "tier": "routine",
+     "reasons": [
+      "unclassified filing (5)"
+     ]
+    },
+    "members": [
+     {
+      "filing": {
+       "seq_id": "106843790",
+       "symbol": "ULTRACEMCO",
+       "company": "UltraTech Cement Limited",
+       "nse_desc": "Updates",
+       "subject": "UltraTech Cement Limited has informed the Exchange regarding 'Change in Corporate Office address of Registrar and Share Transfer Agent ( RTA ) for correspondence'.",
+       "nse_summary": null,
+       "pdf_url": "https://nsearchives.nseindia.com/corporate/ULTRACEMCO_04112026123807_SEintimation04112026.pdf",
+       "filed_at": "2026-11-04T12:38:18+05:30",
+       "has_xbrl": true
+      },
+      "cls": {
+       "category": "unclassified",
+       "subtype": null,
+       "noise": false,
+       "by": "llm",
+       "confidence": 0.7
+      },
+      "score": 5,
+      "tier": "routine",
+      "reasons": [
+       "unclassified filing (5)"
+      ]
+     }
+    ],
+    "latest_at": "2026-11-04T12:38:18+05:30",
+    "results": null,
+    "people": [],
+    "brief": null
+   },
+   {
+    "id": "ZYDUSLIFE:unclassified:106839319",
+    "symbol": "ZYDUSLIFE",
+    "company": "Zydus Lifesciences Limited",
+    "category": "unclassified",
+    "subtype": null,
+    "score": 5,
+    "tier": "routine",
+    "headline": {
+     "filing": {
+      "seq_id": "106839319",
+      "symbol": "ZYDUSLIFE",
+      "company": "Zydus Lifesciences Limited",
+      "nse_desc": "General Updates",
+      "subject": "Zydus Lifesciences Limited has informed the Exchange about General Updates",
+      "nse_summary": null,
+      "pdf_url": "https://nsearchives.nseindia.com/corporate/Cadilahc_02112026124012_Zydus_SBL_API_BTA_closing.pdf",
+      "filed_at": "2026-11-02T12:43:02+05:30",
+      "has_xbrl": true
+     },
+     "cls": {
+      "category": "unclassified",
+      "subtype": null,
+      "noise": false,
+      "by": "llm",
+      "confidence": 0.7
+     },
+     "score": 5,
+     "tier": "routine",
+     "reasons": [
+      "unclassified filing (5)"
+     ]
+    },
+    "members": [
+     {
+      "filing": {
+       "seq_id": "106839319",
+       "symbol": "ZYDUSLIFE",
+       "company": "Zydus Lifesciences Limited",
+       "nse_desc": "General Updates",
+       "subject": "Zydus Lifesciences Limited has informed the Exchange about General Updates",
+       "nse_summary": null,
+       "pdf_url": "https://nsearchives.nseindia.com/corporate/Cadilahc_02112026124012_Zydus_SBL_API_BTA_closing.pdf",
+       "filed_at": "2026-11-02T12:43:02+05:30",
+       "has_xbrl": true
+      },
+      "cls": {
+       "category": "unclassified",
+       "subtype": null,
+       "noise": false,
+       "by": "llm",
+       "confidence": 0.7
+      },
+      "score": 5,
+      "tier": "routine",
+      "reasons": [
+       "unclassified filing (5)"
+      ]
+     },
+     {
+      "filing": {
+       "seq_id": "106843762",
+       "symbol": "ZYDUSLIFE",
+       "company": "Zydus Lifesciences Limited",
+       "nse_desc": "Outcome of Board Meeting",
+       "subject": "Zydus Lifesciences Limited has informed the Exchange regarding Outcome of Board Meeting held on November 04, 2026.",
+       "nse_summary": null,
+       "pdf_url": "https://nsearchives.nseindia.com/corporate/Cadilahc_04112026122736_SEIntimationStatutoryAuditors.pdf",
+       "filed_at": "2026-11-04T12:29:30+05:30",
+       "has_xbrl": true
+      },
+      "cls": {
+       "category": "unclassified",
+       "subtype": null,
+       "noise": false,
+       "by": "llm",
+       "confidence": 0.7
+      },
+      "score": 5,
+      "tier": "routine",
+      "reasons": [
+       "unclassified filing (5)"
+      ]
+     },
+     {
+      "filing": {
+       "seq_id": "106843774",
+       "symbol": "ZYDUSLIFE",
+       "company": "Zydus Lifesciences Limited",
+       "nse_desc": "Change in Auditors",
+       "subject": "Zydus Lifesciences Limited has informed the Exchange regarding Change in Auditors of the company.",
+       "nse_summary": null,
+       "pdf_url": "https://nsearchives.nseindia.com/corporate/Cadilahc_04112026123245_SEIntimationStatutoryAuditors.pdf",
+       "filed_at": "2026-11-04T12:33:11+05:30",
+       "has_xbrl": true
+      },
+      "cls": {
+       "category": "unclassified",
+       "subtype": "auditor",
+       "noise": false,
+       "by": "rules",
+       "confidence": 0.95
+      },
+      "score": 5,
+      "tier": "routine",
+      "reasons": [
+       "unclassified filing (5)"
+      ]
+     }
+    ],
+    "latest_at": "2026-11-04T12:33:11+05:30",
+    "results": null,
+    "people": [],
+    "brief": null
+   },
+   {
+    "id": "CGPOWER:unclassified:106842224",
+    "symbol": "CGPOWER",
+    "company": "CG Power and Industrial Solutions Limited",
+    "category": "unclassified",
+    "subtype": "esop",
+    "score": 5,
+    "tier": "routine",
+    "headline": {
+     "filing": {
+      "seq_id": "106842224",
+      "symbol": "CGPOWER",
+      "company": "CG Power and Industrial Solutions Limited",
+      "nse_desc": "ESOP/ESOS/ESPS",
+      "subject": "CG Power and Industrial Solutions Limited has informed the Exchange regarding Allotment of 17000  Shares.",
+      "nse_summary": null,
+      "pdf_url": "https://nsearchives.nseindia.com/corporate/CGPOWER_03112026172203_Disclosure_-_ESOP_Allotment-031126.pdf",
+      "filed_at": "2026-11-03T17:28:01+05:30",
+      "has_xbrl": true
+     },
+     "cls": {
+      "category": "unclassified",
+      "subtype": "esop",
+      "noise": false,
+      "by": "rules",
+      "confidence": 0.95
+     },
+     "score": 5,
+     "tier": "routine",
+     "reasons": [
+      "unclassified filing (5)"
+     ]
+    },
+    "members": [
+     {
+      "filing": {
+       "seq_id": "106842224",
+       "symbol": "CGPOWER",
+       "company": "CG Power and Industrial Solutions Limited",
+       "nse_desc": "ESOP/ESOS/ESPS",
+       "subject": "CG Power and Industrial Solutions Limited has informed the Exchange regarding Allotment of 17000  Shares.",
+       "nse_summary": null,
+       "pdf_url": "https://nsearchives.nseindia.com/corporate/CGPOWER_03112026172203_Disclosure_-_ESOP_Allotment-031126.pdf",
+       "filed_at": "2026-11-03T17:28:01+05:30",
+       "has_xbrl": true
+      },
+      "cls": {
+       "category": "unclassified",
+       "subtype": "esop",
+       "noise": false,
+       "by": "rules",
+       "confidence": 0.95
+      },
+      "score": 5,
+      "tier": "routine",
+      "reasons": [
+       "unclassified filing (5)"
+      ]
+     }
+    ],
+    "latest_at": "2026-11-03T17:28:01+05:30",
+    "results": null,
+    "people": [],
+    "brief": null
+   }
+  ]
+ },
+ "hidden": [
+  {
+   "symbol": "M&M",
+   "subject": "Mahindra & Mahindra Limited has informed the Exchange about Copy of Newspaper Publication",
+   "filed_at": "2026-11-06T10:54:47+05:30"
+  },
+  {
+   "symbol": "M&M",
+   "subject": "Mahindra & Mahindra Limited has informed the Exchange about Copy of Newspaper Publication pertaining to Special Window for Re-Lodgement of Transfer Request of Physical Shares and actions required by Shareholders holding Shares in Physical Form",
+   "filed_at": "2026-11-05T15:47:06+05:30"
+  },
+  {
+   "symbol": "ZYDUSLIFE",
+   "subject": "Zydus Lifesciences Limited has informed the Exchange about Copy of Newspaper Publication",
+   "filed_at": "2026-11-05T12:09:24+05:30"
+  },
+  {
+   "symbol": "PREMIERENE",
+   "subject": "Premier Energies Limited has informed the Exchange about Copy of Newspaper Publication",
+   "filed_at": "2026-11-05T10:39:22+05:30"
+  },
+  {
+   "symbol": "ZYDUSLIFE",
+   "subject": "Zydus Lifesciences Limited has informed the Exchange about Copy of Newspaper Publication",
+   "filed_at": "2026-11-04T15:03:19+05:30"
+  },
+  {
+   "symbol": "TRENT",
+   "subject": "Trent Limited has informed the Exchange about Newspaper Publication on Unaudited Financial Results (Standalone and Consolidated) for the second quarter and half-year ended 30th September 2026",
+   "filed_at": "2026-11-02T13:26:56+05:30"
+  },
+  {
+   "symbol": "MAXHEALTH",
+   "subject": "Max Healthcare Institute Limited has informed the Exchange about Newspaper Publication pertaining to Financial Results for the quarter and half year ended September 30, 2026",
+   "filed_at": "2026-10-31T20:52:14+05:30"
+  }
+ ]
+}

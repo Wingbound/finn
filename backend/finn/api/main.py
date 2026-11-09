@@ -270,6 +270,7 @@ def _counts(d: Dossier) -> dict:
         "bull": len(d.bull),
         "bear": len(d.bear),
         "notes": len(d.notes),
+        "ledger": dict(d.ledger.counts) if d.ledger else {},
     }
 
 

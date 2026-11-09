@@ -1,0 +1,565 @@
+{
+ "symbol": "DIXON",
+ "name": "Dixon Technologies (India) Ltd",
+ "basis": "consolidated",
+ "built_at": "2026-11-09T21:16:59.423144+05:30",
+ "sources": [
+  {
+   "id": "T1",
+   "kind": "transcript",
+   "title": "Q2 FY27 earnings call (Nov 2026)",
+   "quarter": "Q2 FY27",
+   "url": "https://www.bseindia.com/stockinfo/AnnPdfOpen.aspx?Pname=995a3a71-4a1e-4c1f-a29a-6c6747e4ca10.pdf"
+  },
+  {
+   "id": "T2",
+   "kind": "transcript",
+   "title": "Q1 FY27 earnings call (Aug 2026)",
+   "quarter": "Q1 FY27",
+   "url": "https://www.bseindia.com/stockinfo/AnnPdfOpen.aspx?Pname=7ce2ca16-3043-48f4-97f9-a62a6a086c2f.pdf"
+  },
+  {
+   "id": "T3",
+   "kind": "transcript",
+   "title": "Q4 FY26 earnings call (May 2026)",
+   "quarter": "Q4 FY26",
+   "url": "https://www.bseindia.com/stockinfo/AnnPdfOpen.aspx?Pname=38b72f07-55a6-4503-91fd-ed3b2c209e96.pdf"
+  },
+  {
+   "id": "T4",
+   "kind": "transcript",
+   "title": "Q3 FY26 earnings call (Feb 2026)",
+   "quarter": "Q3 FY26",
+   "url": "https://www.bseindia.com/stockinfo/AnnPdfOpen.aspx?Pname=ad6e72f1-b5f8-4a75-8e45-f2e88c7525e0.pdf"
+  },
+  {
+   "id": "AR",
+   "kind": "annual_report",
+   "title": "Annual Report 2026",
+   "quarter": null,
+   "url": "https://www.bseindia.com/xml-data/corpfiling/AttachHis/5ef88e3c-352d-4223-a8ec-bdd7d3aa31c1.pdf"
+  }
+ ],
+ "ledger": {
+  "rows": [
+   {
+    "promise": {
+     "id": "T4-1",
+     "citation": {
+      "source_id": "T4",
+      "page": 4,
+      "quote": "Construction of a 1 million square feet facility in Noida with higher capacities for our anchor customers is expected to be completed by Q1 of financial year '26-'27 and mass production to start by Q2 of '26-'27."
+     },
+     "topic": "capacity expansion",
+     "kind": "qualitative",
+     "metric": null,
+     "target_low": null,
+     "target_high": null,
+     "unit": null,
+     "horizon": "Q2 FY27",
+     "made_in": "Q3 FY26"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "The later call restated the target; delivery is not shown yet"
+   },
+   {
+    "promise": {
+     "id": "T4-2",
+     "citation": {
+      "source_id": "T4",
+      "page": 17,
+      "quote": "We feel that for next year, the numbers are going to be somewhere around INR3,500 crores to INR4,000 crores."
+     },
+     "topic": "IT hardware revenue",
+     "kind": "quantitative",
+     "metric": "revenue_growth",
+     "target_low": 3500.0,
+     "target_high": 4000.0,
+     "unit": "cr",
+     "horizon": "next year",
+     "made_in": "Q3 FY26"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "Target not yet due — tracking is not delivery"
+   },
+   {
+    "promise": {
+     "id": "T4-3",
+     "citation": {
+      "source_id": "T4",
+      "page": 17,
+      "quote": "So first 9 months, the capex outgo is INR720 crores. And we feel that in the overall fiscal, it should be somewhere between INR1,100 crores, INR1,200 crores."
+     },
+     "topic": "capex",
+     "kind": "quantitative",
+     "metric": "capex",
+     "target_low": 1100.0,
+     "target_high": 1200.0,
+     "unit": "cr",
+     "horizon": "FY26",
+     "made_in": "Q3 FY26"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "No verifiable later evidence"
+   },
+   {
+    "promise": {
+     "id": "T4-4",
+     "citation": {
+      "source_id": "T4",
+      "page": 19,
+      "quote": "We feel that in '27 -- '26-'27, it will be around 8 million to 10 million units."
+     },
+     "topic": "Longcheer JV volume",
+     "kind": "quantitative",
+     "metric": "volume_growth",
+     "target_low": 8.0,
+     "target_high": 10.0,
+     "unit": "x",
+     "horizon": "FY27",
+     "made_in": "Q3 FY26"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "No later evidence of the outcome yet"
+   },
+   {
+    "promise": {
+     "id": "T3-1",
+     "citation": {
+      "source_id": "T3",
+      "page": 4,
+      "quote": "The trials will start from beginning of Q3 and mass production will commence from end of Q3, beginning of Q4 this fiscal."
+     },
+     "topic": "display facility production",
+     "kind": "qualitative",
+     "metric": null,
+     "target_low": null,
+     "target_high": null,
+     "unit": null,
+     "horizon": "this fiscal",
+     "made_in": "Q4 FY26"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "The later call restated the target; delivery is not shown yet"
+   },
+   {
+    "promise": {
+     "id": "T3-2",
+     "citation": {
+      "source_id": "T3",
+      "page": 5,
+      "quote": "The segment delivered a healthy performance for the quarter under review, and we expect 3x growth in the revenues in the current fiscal against last year with a huge uptake in order books from all customers."
+     },
+     "topic": "IT hardware revenue growth",
+     "kind": "quantitative",
+     "metric": "revenue_growth",
+     "target_low": 3.0,
+     "target_high": 3.0,
+     "unit": "x",
+     "horizon": "current fiscal",
+     "made_in": "Q4 FY26"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "No later evidence of the outcome yet"
+   },
+   {
+    "promise": {
+     "id": "T3-3",
+     "citation": {
+      "source_id": "T3",
+      "page": 6,
+      "quote": "We expect the revenues to grow almost to 2x in the current fiscal."
+     },
+     "topic": "lighting revenue growth",
+     "kind": "quantitative",
+     "metric": "revenue_growth",
+     "target_low": 2.0,
+     "target_high": 2.0,
+     "unit": "x",
+     "horizon": "current fiscal",
+     "made_in": "Q4 FY26"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "No later evidence of the outcome yet"
+   },
+   {
+    "promise": {
+     "id": "T3-4",
+     "citation": {
+      "source_id": "T3",
+      "page": 9,
+      "quote": "We are targeting a revenue of almost INR2,500 crores in that business."
+     },
+     "topic": "camera module revenue",
+     "kind": "quantitative",
+     "metric": "revenue_growth",
+     "target_low": 2500.0,
+     "target_high": 2500.0,
+     "unit": "cr",
+     "horizon": null,
+     "made_in": "Q4 FY26"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "No later evidence of the outcome yet"
+   },
+   {
+    "promise": {
+     "id": "T3-5",
+     "citation": {
+      "source_id": "T3",
+      "page": 15,
+      "quote": "Next year, we are targeting almost INR56,000 crores without the Vivo numbers, and mobile volume being flat."
+     },
+     "topic": "revenue target",
+     "kind": "quantitative",
+     "metric": "revenue_growth",
+     "target_low": 56000.0,
+     "target_high": 56000.0,
+     "unit": "cr",
+     "horizon": "next year",
+     "made_in": "Q4 FY26"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "No verifiable later evidence"
+   },
+   {
+    "promise": {
+     "id": "T2-1",
+     "citation": {
+      "source_id": "T2",
+      "page": 4,
+      "quote": "We expect the JV to commence operations and start reflecting in our revenues from Q3 of the current fiscal."
+     },
+     "topic": "joint venture operations",
+     "kind": "qualitative",
+     "metric": null,
+     "target_low": null,
+     "target_high": null,
+     "unit": null,
+     "horizon": "Q3 of current fiscal",
+     "made_in": "Q1 FY27"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "The later call restated the target; delivery is not shown yet"
+   },
+   {
+    "promise": {
+     "id": "T2-2",
+     "citation": {
+      "source_id": "T2",
+      "page": 5,
+      "quote": "We expect the operations to commence from Q3 of this fiscal."
+     },
+     "topic": "facility operations",
+     "kind": "qualitative",
+     "metric": null,
+     "target_low": null,
+     "target_high": null,
+     "unit": null,
+     "horizon": "Q3 of this fiscal",
+     "made_in": "Q1 FY27"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "Target not yet due — tracking is not delivery"
+   },
+   {
+    "promise": {
+     "id": "T2-3",
+     "citation": {
+      "source_id": "T2",
+      "page": 6,
+      "quote": "We expect to start export deliveries to the largest retail chain in U.S. and Germany in Q2 and Q3 of this fiscal."
+     },
+     "topic": "export deliveries",
+     "kind": "qualitative",
+     "metric": null,
+     "target_low": null,
+     "target_high": null,
+     "unit": null,
+     "horizon": "Q2 and Q3 of this fiscal",
+     "made_in": "Q1 FY27"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "Target not yet due — tracking is not delivery"
+   },
+   {
+    "promise": {
+     "id": "T2-4",
+     "citation": {
+      "source_id": "T2",
+      "page": 20,
+      "quote": "And there's going to be a decent growth next year."
+     },
+     "topic": "revenue growth",
+     "kind": "qualitative",
+     "metric": null,
+     "target_low": null,
+     "target_high": null,
+     "unit": null,
+     "horizon": "next year",
+     "made_in": "Q1 FY27"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "No verifiable later evidence"
+   },
+   {
+    "promise": {
+     "id": "T1-1",
+     "citation": {
+      "source_id": "T1",
+      "page": 9,
+      "quote": "And with the outlook for H2, we feel we should be somewhere around 33 -34 million."
+     },
+     "topic": "mobile volume",
+     "kind": "quantitative",
+     "metric": "volume_growth",
+     "target_low": 33.0,
+     "target_high": 34.0,
+     "unit": "x",
+     "horizon": "H2",
+     "made_in": "Q2 FY27"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "Too recent to judge"
+   },
+   {
+    "promise": {
+     "id": "T1-2",
+     "citation": {
+      "source_id": "T1",
+      "page": 11,
+      "quote": "We feel that in next couple of years , this is going to be almost INR 15,000 crore to INR 20,000 crore business for us."
+     },
+     "topic": "IT hardware revenue",
+     "kind": "quantitative",
+     "metric": "revenue_growth",
+     "target_low": 15000.0,
+     "target_high": 20000.0,
+     "unit": "cr",
+     "horizon": "next couple of years",
+     "made_in": "Q2 FY27"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "Too recent to judge"
+   },
+   {
+    "promise": {
+     "id": "T1-3",
+     "citation": {
+      "source_id": "T1",
+      "page": 10,
+      "quote": "We feel that for that customer, next year, we should be doing almost 8 to 10 million."
+     },
+     "topic": "customer volume",
+     "kind": "quantitative",
+     "metric": "volume_growth",
+     "target_low": 8.0,
+     "target_high": 10.0,
+     "unit": "x",
+     "horizon": "next year",
+     "made_in": "Q2 FY27"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "Too recent to judge"
+   }
+  ],
+  "counts": {
+   "kept": 0,
+   "partly": 0,
+   "missed": 0,
+   "pending": 16,
+   "dropped": 0
+  },
+  "credibility_pct": null,
+  "note": null
+ },
+ "snapshot": {
+  "summary": [
+   {
+    "text": "The company is making a strategic foray into display modules, camera modules, mechanicals, and other critical components.",
+    "citation": {
+     "source_id": "T1",
+     "page": 4,
+     "quote": "Our strategic foray into display modules, camera modules, mechanicals, and other critical components represent a significant step in Dixon's evolution from a scaled electronics manufacturing services player to more deeply integrated electronics manufacturing ecosystem."
+    }
+   }
+  ]
+ },
+ "trajectory": {
+  "years": [
+   "Mar 2022",
+   "Mar 2023",
+   "Mar 2024",
+   "Mar 2025",
+   "Mar 2026"
+  ],
+  "revenue": [
+   10697.0,
+   12192.0,
+   17691.0,
+   38860.0,
+   48873.0
+  ],
+  "operating_profit": [
+   384.0,
+   519.0,
+   705.0,
+   1515.0,
+   1873.0
+  ],
+  "margin_pct": [
+   3.589791530335608,
+   4.256889763779528,
+   3.9850771578768867,
+   3.89861039629439,
+   3.8323818877498828
+  ],
+  "pat": [
+   190.0,
+   255.0,
+   375.0,
+   1233.0,
+   1644.0
+  ],
+  "revenue_cagr_pct": 46.20147381738424,
+  "pat_cagr_pct": 71.50905462370855,
+  "margin_change_bps": 24,
+  "read": "growing",
+  "lender": false
+ },
+ "health": {
+  "as_of": "Mar 2026",
+  "debt_to_equity": 0.21252939918751337,
+  "cfo_to_pat_3y": 1.081180811808118,
+  "fcf_3y_cr": 994.0,
+  "working_capital_days": -3.0,
+  "wc_days_change_3y": -1.0,
+  "roce_pct": 29.0,
+  "flags": [
+   {
+    "level": "good",
+    "text": "Profits are backed by cash (CFO/PAT 1.08)"
+   }
+  ]
+ },
+ "bull": [
+  {
+   "text": "The company has achieved a strong net profit compound annual growth rate of 71.5 percent.",
+   "citation": {
+    "source_id": "FACTS",
+    "page": 0,
+    "quote": "Net profit CAGR: 71.5%"
+   }
+  },
+  {
+   "text": "Return on capital employed stands at a healthy level of 29.0 percent.",
+   "citation": {
+    "source_id": "FACTS",
+    "page": 0,
+    "quote": "ROCE: 29.0%"
+   }
+  },
+  {
+   "text": "Profits are backed by strong cash flow with a cash flow from operations to profit after tax ratio of 1.08.",
+   "citation": {
+    "source_id": "FACTS",
+    "page": 0,
+    "quote": "Profits are backed by cash (CFO/PAT 1.08)"
+   }
+  }
+ ],
+ "bear": [
+  {
+   "text": "There are sixteen pending promises in the promise ledger that remain unresolved.",
+   "citation": {
+    "source_id": "FACTS",
+    "page": 0,
+    "quote": "Promise ledger: 0 kept, 0 partly, 0 missed, 16 pending, 0 dropped (0 of 16 promises resolved)"
+   }
+  },
+  {
+   "text": "Margins during the quarter were impacted by the expiration of the mobile PLI 1 scheme and elevated global memory prices.",
+   "citation": {
+    "source_id": "T1",
+    "page": 3,
+    "quote": "Margins during the quarter were impacted on expiration of mobile PLI 1 scheme along with elevated global memory prices due to rapid expansion of AI infrastructure."
+   }
+  },
+  {
+   "text": "Profitability in the washing machine and refrigerator segments was temporarily affected by polymer prices, rising freight costs, and adverse foreign exchange movements.",
+   "citation": {
+    "source_id": "T1",
+    "page": 4,
+    "quote": "Profitability in washing machine and r efrigerator was temporarily affected by fluctuations in polymer prices, rising freight costs and transit time, unfavorable foreign exchange movement, and higher cost of other key inputs."
+   }
+  }
+ ],
+ "notes": [],
+ "cost": {
+  "calls": 9,
+  "cached": 8,
+  "input_tokens": 16436,
+  "output_tokens": 497,
+  "usd_list_price": 0.006173
+ },
+ "build_seconds": 14.0,
+ "guard": {
+  "promises_proposed": 32,
+  "promises_kept": 16,
+  "points_proposed": 9,
+  "points_kept": 7,
+  "verdicts_downgraded": {
+   "other_period": 0,
+   "restated": 3,
+   "below_target": 0
+  }
+ }
+}
