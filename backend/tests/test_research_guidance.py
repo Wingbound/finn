@@ -239,3 +239,30 @@ def test_system_prompt_excludes_conditionals():
         "Exclude conditional or hypothetical statements (if, unless, assuming, provided, subject to)."
         in SYSTEM
     )
+
+
+@pytest.mark.parametrize(
+    "quote",
+    [
+        "Capacity is expected to come on stream by end of this calendar year.",
+        "The plant is planned to be commissioned in Q3.",
+        "The new facility is scheduled to start by March 2027.",
+        "Revenue is projected to grow 15% in FY27.",
+        "The order book remains poised to grow.",
+    ],
+)
+def test_passive_future_forms_are_cues(quote):
+    assert _forward_looking(quote)
+
+
+@pytest.mark.parametrize(
+    "quote",
+    [
+        "As expected, revenue grew 12%.",
+        "Demand was expected to recover but did not.",
+        "Our plant utilization was 80%.",
+        "Segment profitability stood at ₹ 272 million, translating to a margin of 6.7%.",
+    ],
+)
+def test_passive_past_forms_are_not_cues(quote):
+    assert not _forward_looking(quote)
