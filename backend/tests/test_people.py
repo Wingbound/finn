@@ -144,6 +144,16 @@ def test_role_and_effective_must_be_in_filing(voltas):
     assert out[1].role == "Managing Director"
 
 
+def test_role_and_effective_match_whole_words_only():
+    text = "Mr. Jayant Balan joins from Amdocs as head of delivery on 1st June."
+    row = {"name": "Jayant Balan", "role": "MD", "change": "appointed", "effective": "1st Jun"}
+    (p,) = extract_people(FakeRouter(_reply(row)), _filing(), text)
+    assert p.role is None and p.effective is None
+    row = {**row, "role": "head of delivery", "effective": "1st June"}
+    (p,) = extract_people(FakeRouter(_reply(row)), _filing(), text)
+    assert (p.role, p.effective) == ("head of delivery", "1st June")
+
+
 def test_malformed_field_types_do_not_crash(voltas):
     rows = [
         {**TATA_ROW, "change": ["appointed"]},

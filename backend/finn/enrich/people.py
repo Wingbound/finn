@@ -14,6 +14,7 @@ from finn.enrich.grounding import (
     grounded_sentences,
     name_in_text,
     normalize,
+    phrase_in_text,
     strip_honorifics,
 )
 from finn.enrich.pdftext import get_doc_text, relevant_window
@@ -106,10 +107,10 @@ def extract_people(router, f: Filing, text: str) -> list[PersonChange]:
 
 
 def _grounded_or_none(v: object, text: str) -> str | None:
-    """A string field kept only if the filing text contains it."""
+    """A string field kept only if the filing text contains it on word boundaries."""
     if not isinstance(v, str) or not v.strip():
         return None
-    return v.strip() if normalize(v) in normalize(text) else None
+    return v.strip() if phrase_in_text(v, text) else None
 
 
 def enrich_people(conn: sqlite3.Connection, client, router, since: datetime) -> EnrichResult:

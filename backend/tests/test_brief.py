@@ -83,6 +83,34 @@ def test_fact_without_digit_must_be_in_source():
     assert b.facts == []
 
 
+def test_numeric_fact_words_must_be_in_source():
+    facts = [
+        {"label": "Buyer", "value": "Zeta Corp, 100%"},  # 100 is in the source, Zeta is not
+        {"label": "Consideration", "value": "₹1,250 crore"},
+        {"label": "Stake", "value": "100% of Alpha Ltd"},
+    ]
+    b = make_brief(FakeRouter(_reply(facts=facts)), _filing(), TEXT)
+    assert [f.label for f in b.facts] == ["Consideration", "Stake"]
+
+
+def test_numeric_fact_unit_words_need_not_be_in_source():
+    facts = [
+        {"label": "a", "value": "Rs 1,250 crores"},
+        {"label": "b", "value": "100 percent equity"},
+        {"label": "c", "value": "1,250 million shares, face value each"},
+    ]
+    b = make_brief(FakeRouter(_reply(facts=facts)), _filing(), TEXT)
+    assert [f.label for f in b.facts] == ["a", "b", "c"]
+
+
+def test_numeric_fact_word_matched_on_word_boundaries():
+    facts = [{"label": "Time", "value": "6 mon"}, {"label": "Code", "value": "INE123A01016"}]
+    text = TEXT + " ISIN INE123A01016."
+    b = make_brief(FakeRouter(_reply(facts=facts)), _filing(), text)
+    # "mon" is only a fragment of "months"; the ISIN token is not an alphabetic word
+    assert [f.label for f in b.facts] == ["Code"]
+
+
 def test_facts_capped_at_three():
     facts = [{"label": f"L{i}", "value": "100%"} for i in range(5)]
     assert len(make_brief(FakeRouter(_reply(facts=facts)), _filing(), TEXT).facts) == 3

@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import logging
+import re
 import sqlite3
 from datetime import datetime
 
@@ -94,6 +95,20 @@ def _fallback(f: Filing) -> Brief | None:
     return Brief(one_liner=line, by="nse_summary", source_seq_id=f.seq_id)
 
 
+# Unit words a numeric fact may carry even when the source spells the unit differently.
+UNIT_WORDS = frozenset({
+    "crore", "crores", "cr", "lakh", "lakhs", "rs", "inr", "mn", "million", "bn", "billion",
+    "per", "cent", "percent", "shares", "equity", "each", "face", "value",
+})  # fmt: skip
+_WORD = re.compile(r"\w+")
+
+
+def _fact_words_grounded(value: str, source: str) -> bool:
+    """Every alphabetic word of 3+ letters in value, bar unit words, is a word in source."""
+    words = [w for w in _WORD.findall(normalize(value)) if w.isalpha() and len(w) >= 3]
+    return all(phrase_in_text(w, source) for w in words if w not in UNIT_WORDS)
+
+
 def _clean_facts(raw: object, source: str) -> list[Fact]:
     if not isinstance(raw, list):
         return []
@@ -107,7 +122,7 @@ def _clean_facts(raw: object, source: str) -> list[Fact]:
         if not label.strip() or not value.strip():
             continue
         if any(ch.isdigit() for ch in value):
-            if not numbers_grounded(value, source):
+            if not numbers_grounded(value, source) or not _fact_words_grounded(value, source):
                 continue
         elif len(normalize(value)) < 3 or not phrase_in_text(value, source):
             continue
