@@ -77,7 +77,13 @@ def client(tmp_path):
 
 def test_health(client):
     r = client.get("/health").json()
-    assert r == {"ok": True, "filings_as_of": "2026-11-08T19:00:00+05:30", "prices_as_of": None}
+    assert r == {
+        "ok": True,
+        "seeded": True,
+        "cors": ["*"],
+        "filings_as_of": "2026-11-08T19:00:00+05:30",
+        "prices_as_of": None,
+    }
 
 
 def test_digest_168h_window_shape(client):

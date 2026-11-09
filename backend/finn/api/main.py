@@ -5,13 +5,11 @@ from __future__ import annotations
 import json
 import logging
 import queue
-import shutil
 import sqlite3
 import statistics
 import threading
 from contextlib import asynccontextmanager
 from datetime import datetime, time, timedelta
-from pathlib import Path
 from time import monotonic
 from typing import Annotated
 
@@ -22,7 +20,8 @@ from pydantic import BaseModel, Field, model_validator
 
 from finn import db
 from finn.alerts import evaluate_filings, evaluate_prices
-from finn.api.deps import get_conn, get_now
+from finn.api.deps import ensure_seeded, get_conn, get_now
+from finn.api.seed import copy_seed_if_empty  # noqa: F401  (re-exported for scripts and tests)
 from finn.classify.materiality import score_filing
 from finn.config import get_settings
 from finn.digest import (
@@ -53,46 +52,9 @@ from finn.research.pipeline import build_dossier, is_degraded
 log = logging.getLogger(__name__)
 
 
-def _has_filings(db_path: Path) -> bool:
-    """Whether an existing SQLite file holds any filings (raises sqlite3.DatabaseError)."""
-    conn = sqlite3.connect(db_path)
-    try:
-        table = conn.execute(
-            "SELECT 1 FROM sqlite_master WHERE type='table' AND name='filings'"
-        ).fetchone()
-        return bool(table) and conn.execute("SELECT 1 FROM filings LIMIT 1").fetchone() is not None
-    finally:
-        conn.close()
-
-
-def copy_seed_if_empty(db_path: Path, seed_path: Path) -> bool:
-    """Start from the committed snapshot when the store is missing or has no filings.
-
-    Scripts that open the serving DB create an empty one as a side effect, so "file exists"
-    is not enough. A store with filings, or a file that isn't a readable database, is never
-    overwritten.
-    """
-    if db_path.exists():
-        try:
-            if _has_filings(db_path):
-                return False
-        except sqlite3.DatabaseError as e:
-            log.warning("not seeding %s: it is not a readable SQLite database (%s)", db_path, e)
-            return False
-    if not seed_path.exists():
-        log.warning("seed snapshot %s not found; %s starts empty", seed_path, db_path)
-        return False
-    db_path.parent.mkdir(parents=True, exist_ok=True)
-    for sidecar in ("-wal", "-shm"):  # an old WAL would be replayed onto the copied seed
-        Path(f"{db_path}{sidecar}").unlink(missing_ok=True)
-    shutil.copyfile(seed_path, db_path)
-    return True
-
-
 @asynccontextmanager
 async def lifespan(_app: FastAPI):
-    settings = get_settings()
-    copy_seed_if_empty(settings.db_path, settings.seed_path)
+    ensure_seeded(get_settings())  # also done lazily per request: serverless may skip lifespan
     yield
 
 
@@ -145,6 +107,8 @@ def _completed_history(
 def health(conn: Conn) -> dict:
     return {
         "ok": True,
+        "seeded": conn.execute("SELECT 1 FROM filings LIMIT 1").fetchone() is not None,
+        "cors": get_settings().allowed_origins,
         "filings_as_of": db.get_meta(conn, "filings_as_of"),
         "prices_as_of": db.get_meta(conn, "prices_as_of"),
     }

@@ -6,9 +6,6 @@ import logging
 from collections.abc import Collection
 from datetime import date, datetime, time
 
-import pandas as pd
-import yfinance as yf
-
 from finn.config import FULL_SPECIAL_SESSIONS
 from finn.models import IST, PriceBar
 from finn.portfolio import Holding
@@ -19,6 +16,11 @@ SESSION_CLOSE = time(15, 45)  # NSE closes 15:30; allow 15 min for data to settl
 
 
 def fetch_eod(holdings: list[Holding], period: str = "3mo") -> list[PriceBar]:
+    # Imported here: only the refresh job fetches prices, and pandas + yfinance add ~2 s to
+    # every serverless cold start of the API.
+    import pandas as pd
+    import yfinance as yf
+
     tickers = [h.yahoo for h in holdings]
     frame = yf.download(
         tickers,

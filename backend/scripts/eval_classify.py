@@ -152,7 +152,7 @@ def main(argv: list[str] | None = None) -> int:
     settings = get_settings()
     provider, model = route_for("classify", settings)
     _call, _parse, key_attr, key_name = PROVIDERS[provider]
-    if not getattr(settings, key_attr):
+    if not settings.api_key(key_attr):
         print(f"{key_name} is empty; set it or run with --no-llm")
         return 2
     conn = db.connect(settings.llm_cache_path)  # LLM cache reused across runs; not serving DB

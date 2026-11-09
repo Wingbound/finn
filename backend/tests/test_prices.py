@@ -3,7 +3,6 @@ from datetime import date, datetime
 import pandas as pd
 
 from finn.config import FULL_SPECIAL_SESSIONS
-from finn.ingest import prices
 from finn.ingest.prices import completed_sessions, fetch_eod
 from finn.models import IST, PriceBar
 from finn.portfolio import Holding
@@ -76,7 +75,9 @@ def test_fetch_eod_maps_frame_to_bars(monkeypatch):
         [1, 2, 0.5, 1.7, 300, 10, 12, 9, 13, nan],
     ]
     frame = pd.DataFrame(rows, index=idx, columns=cols)
-    monkeypatch.setattr(prices.yf, "download", lambda *a, **k: frame)
+    import yfinance
+
+    monkeypatch.setattr(yfinance, "download", lambda *a, **k: frame)
     holdings = [
         Holding(symbol="TCS", name="TCS", sector="IT", size="mega"),
         Holding(symbol="M&M", name="M&M", sector="Auto", size="large", yahoo="M&M.NS"),

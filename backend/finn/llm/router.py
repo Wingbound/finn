@@ -129,7 +129,7 @@ class LLMRouter:
         failures: list[str] = []
         for i, (provider, model) in enumerate(chain):
             call, parse, key_attr, key_name = PROVIDERS[provider]
-            api_key = getattr(self.settings, key_attr)
+            api_key = self.settings.api_key(key_attr)
             if not api_key:
                 failures.append(f"{provider}/{model}: missing {key_name}")
                 continue

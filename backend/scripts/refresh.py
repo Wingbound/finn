@@ -4,6 +4,7 @@ Run: uv run python scripts/refresh.py --days 30 [--no-llm] [--out seed/finn.sqli
 
 An unreachable NSE or Yahoo, a symbol either one fails on, or a crash in one stage is
 reported in the summary's `errors` and the run carries on with what it has (exit code 1).
+A run that ingests no filings and no prices exits 2 and leaves the store untouched.
 """
 
 from __future__ import annotations
@@ -36,7 +37,7 @@ def _router(conn: sqlite3.Connection, use_llm: bool) -> LLMRouter | None:
         return None
     settings = get_settings()
     providers = {p for task in _LLM_TASKS for p, _model in chain_for(task, settings)}
-    if not any(getattr(settings, PROVIDERS[p][2]) for p in providers):
+    if not any(settings.api_key(PROVIDERS[p][2]) for p in providers):
         keys = ", ".join(sorted(PROVIDERS[p][3] for p in providers))
         print(f"note: no LLM key set ({keys}); rules only, no enrichment (as with --no-llm)")
         return None
@@ -160,14 +161,48 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--out", type=Path, help="SQLite file to write (default: DB_PATH)")
     args = parser.parse_args(argv)
 
-    conn = db.connect(args.out or get_settings().db_path)
+    target = Path(args.out or get_settings().db_path)
+    # Work on a copy: a run that ingests nothing (exit 2) must leave the snapshot as it was,
+    # so a scheduled job never commits a store gutted by an outage.
+    work = target.with_name(f"{target.name}.refresh-tmp")
+    _discard(work)
+    target.parent.mkdir(parents=True, exist_ok=True)
+    if target.exists():
+        src = sqlite3.connect(target)
+        dst = sqlite3.connect(work)
+        src.backup(dst)
+        src.close()
+        dst.close()
+    conn = db.connect(work)
     try:
         summary = refresh(conn, days=args.days, use_llm=not args.no_llm)
         conn.execute("PRAGMA wal_checkpoint(TRUNCATE)")  # fold the WAL in; file stands alone
+        conn.execute("PRAGMA journal_mode=DELETE")
     finally:
         conn.close()
     print(json.dumps(summary, indent=2))
-    return 1 if summary["errors"] else 0
+    code = exit_code(summary)
+    if code == 2:
+        _discard(work)
+        return 2
+    for sidecar in ("-wal", "-shm"):
+        Path(f"{target}{sidecar}").unlink(missing_ok=True)
+    work.replace(target)
+    _discard(work)
+    return code
+
+
+def exit_code(summary: dict) -> int:
+    """0 clean; 1 partial (something failed, the store was still updated); 2 nothing ingested."""
+    if not summary["errors"]:
+        return 0
+    nothing = summary.get("filings_new", 0) == 0 and summary.get("price_bars", 0) == 0
+    return 2 if nothing else 1
+
+
+def _discard(path: Path) -> None:
+    for p in (path, Path(f"{path}-wal"), Path(f"{path}-shm"), Path(f"{path}-journal")):
+        p.unlink(missing_ok=True)
 
 
 if __name__ == "__main__":
