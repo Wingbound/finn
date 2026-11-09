@@ -27,6 +27,29 @@ def _sleep(seconds: float) -> None:  # patched in tests
     time.sleep(seconds)
 
 
+def _now() -> float:  # patched in tests
+    return time.monotonic()
+
+
+class _QuotaExhausted(LLMError):
+    """A 429 whose Retry-After exceeds MAX_RETRY_AFTER_S: a quota cap, not pacing."""
+
+    def __init__(self, retry_after: float):
+        super().__init__(f"quota exhausted (retry in {retry_after:.0f}s)")
+        self.retry_after = retry_after
+
+
+def _quota_wait(retry_after: str | None) -> float | None:
+    """Seconds until reset if Retry-After is a finite number above the pacing cap, else None."""
+    if retry_after is None:
+        return None
+    try:
+        wait = float(retry_after)
+    except ValueError:
+        return None
+    return wait if math.isfinite(wait) and wait > MAX_RETRY_AFTER_S else None
+
+
 def _retry_delay(retry_after: str | None, attempt: int) -> float:
     """The server's retry-after clamped to [0, 60] s; backoff if absent or not a finite number."""
     if retry_after is None:
@@ -81,6 +104,7 @@ class LLMRouter:
     ):
         self.conn = conn
         self.last_model: str | None = None
+        self._exhausted_until: dict[str, float] = {}  # provider -> monotonic reset time
         self.settings = settings
         self.client = httpx.Client(
             transport=transport,
@@ -98,13 +122,20 @@ class LLMRouter:
                 self.last_model = f"{provider}/{model}"
                 return cached
 
-        usable = [i for i, (p, _) in enumerate(chain) if getattr(self.settings, PROVIDERS[p][2])]
+        keyed = [i for i, (p, _) in enumerate(chain) if getattr(self.settings, PROVIDERS[p][2])]
+        now = _now()
+        self._exhausted_until = {p: t for p, t in self._exhausted_until.items() if t > now}
+        usable = [i for i in keyed if chain[i][0] not in self._exhausted_until]
         failures: list[str] = []
         for i, (provider, model) in enumerate(chain):
             call, parse, key_attr, key_name = PROVIDERS[provider]
             api_key = getattr(self.settings, key_attr)
             if not api_key:
                 failures.append(f"{provider}/{model}: missing {key_name}")
+                continue
+            if provider in self._exhausted_until:
+                left = self._exhausted_until[provider] - now
+                failures.append(f"{provider}/{model}: quota exhausted (retry in {left:.0f}s)")
                 continue
             retries = MAX_RETRIES if i == usable[-1] else 1
             try:
@@ -114,6 +145,10 @@ class LLMRouter:
                 # Log before parsing: a 200 response spent quota even if the JSON is unusable.
                 self._log(task, provider, model, False, tin, tout, latency)
                 result = _parse_json(text)
+            except _QuotaExhausted as e:
+                self._exhausted_until[provider] = _now() + e.retry_after
+                failures.append(f"{provider}/{model}: {e}")
+                continue
             except LLMError as e:
                 failures.append(f"{provider}/{model}: {e}")
                 continue
@@ -125,7 +160,7 @@ class LLMRouter:
             self.last_model = f"{provider}/{model}"
             return result
 
-        if not usable:
+        if not keyed:
             raise LLMError(f"missing {PROVIDERS[chain[0][0]][3]}")
         raise LLMError("all models failed: " + "; ".join(failures))
 
@@ -150,7 +185,9 @@ class LLMRouter:
     ) -> tuple[str, int, int]:
         """One model's reply text and token counts.
 
-        A 429 is a rate limit, not an outage: every model waits out Retry-After for up
+        A 429 with Retry-After > MAX_RETRY_AFTER_S is quota exhaustion: raise
+        _QuotaExhausted at once, without sleeping. Any other 429 is pacing, not an
+        outage: every model waits out Retry-After for up
         to MAX_RETRIES of them. `retries` budgets only 5xx and transport errors, and is
         small for a model with a fallback behind it, so an outage fails over fast.
         """
@@ -164,6 +201,9 @@ class LLMRouter:
                 last, wait, kind = f"transport error: {e}", None, "outage"
             else:
                 if resp.status_code == 429:
+                    quota = _quota_wait(resp.headers.get("retry-after"))
+                    if quota is not None:
+                        raise _QuotaExhausted(quota)
                     last, wait, kind = "HTTP 429", resp.headers.get("retry-after"), "rate"
                 elif resp.status_code >= 500:
                     last, wait = f"HTTP {resp.status_code}", resp.headers.get("retry-after")

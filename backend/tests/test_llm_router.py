@@ -78,7 +78,7 @@ def test_429_then_ok(conn, settings, no_sleep):
 @pytest.mark.parametrize(
     ("retry_after", "slept"),
     [
-        ("120", 60.0),  # capped
+        ("60", 60.0),  # at the cap is still pacing (above it is quota)
         ("-5", 0.0),  # floored
         ("inf", 1),  # non-finite -> backoff
         ("nan", 1),
@@ -385,3 +385,64 @@ def test_all_models_fail_names_each(conn, settings):
         LLMRouter(conn, settings).complete_json("classify", "s", "u")
     assert "groq/openai/gpt-oss-120b" in str(ei.value)
     assert "gemini/gemini-3.5-flash-lite" in str(ei.value)
+
+
+def quota_429():
+    return httpx.Response(429, headers={"retry-after": "781"})
+
+
+@respx.mock
+def test_quota_429_fails_over_without_sleeping(conn, settings, no_sleep):
+    groq = respx.post(GROQ).mock(return_value=quota_429())
+    respx.post(GEMINI).mock(return_value=gemini_ok())
+    assert LLMRouter(conn, settings).complete_json("classify", "s", "u") == {"a": 1}
+    assert no_sleep == []
+    assert groq.call_count == 1
+
+
+@respx.mock
+def test_exhausted_provider_is_skipped_on_later_calls(conn, settings, no_sleep):
+    groq = respx.post(GROQ).mock(return_value=quota_429())
+    gem = respx.post(GEMINI).mock(return_value=gemini_ok())
+    r = LLMRouter(conn, settings)
+    r.complete_json("classify", "s", "u")
+    assert r.complete_json("classify", "s", "other") == {"a": 1}
+    assert groq.call_count == 1 and gem.call_count == 2
+    assert no_sleep == []
+
+
+@respx.mock
+def test_exhausted_provider_returns_after_reset(conn, settings, monkeypatch):
+    now = [1000.0]
+    monkeypatch.setattr(router_mod, "_now", lambda: now[0])
+    groq = respx.post(GROQ).mock(side_effect=[quota_429(), groq_ok()])
+    respx.post(GEMINI).mock(return_value=gemini_ok('{"b": 2}'))
+    r = LLMRouter(conn, settings)
+    assert r.complete_json("classify", "s", "u") == {"b": 2}
+    now[0] += 780
+    assert r.complete_json("classify", "s", "v") == {"b": 2}
+    assert groq.call_count == 1
+    now[0] += 2
+    assert r.complete_json("classify", "s", "w") == {"a": 1}
+    assert groq.call_count == 2
+
+
+@respx.mock
+def test_quota_on_last_model_raises_fast(conn, tmp_path, no_sleep):
+    s = Settings(groq_api_key="g", gemini_api_key="", data_dir=tmp_path, _env_file=None)
+    groq = respx.post(GROQ).mock(return_value=quota_429())
+    with pytest.raises(LLMError, match="quota exhausted"):
+        LLMRouter(conn, s).complete_json("classify", "s", "u")
+    assert no_sleep == [] and groq.call_count == 1
+
+
+@respx.mock
+def test_non_numeric_retry_after_is_pacing(conn, settings, no_sleep):
+    date = "Wed, 21 Oct 2026 07:28:00 GMT"
+    groq = respx.post(GROQ).mock(
+        side_effect=[httpx.Response(429, headers={"retry-after": date}), groq_ok()]
+    )
+    gem = respx.post(GEMINI).mock(return_value=gemini_ok())
+    assert LLMRouter(conn, settings).complete_json("classify", "s", "u") == {"a": 1}
+    assert groq.call_count == 2 and gem.call_count == 0
+    assert no_sleep == [1]
