@@ -306,6 +306,7 @@ class Dossier(BaseModel):
     notes: list[str]  # every skipped/failed section with its reason
     cost: dict  # router.stats() delta
     build_seconds: float
+    guard: dict = {}  # promises/points proposed vs kept by the citation guard
 
 
 def public(dossier: Dossier) -> dict:

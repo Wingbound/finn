@@ -38,6 +38,7 @@ def build_dossier(
     t0 = now()
     before = router.stats() if hasattr(router, "stats") else {}
     notes: list[str] = []
+    guard = {"promises_proposed": 0, "promises_kept": 0, "points_proposed": 0, "points_kept": 0}
 
     progress(f"Resolving {symbol} on screener")
     html, basis = screener.fetch_company(symbol, screener_client)
@@ -96,7 +97,7 @@ def build_dossier(
             continue
         progress(f"Extracting guidance from {src.title}")
         try:
-            promises.extend(extract_promises(router, src))
+            promises.extend(extract_promises(router, src, guard))
         except Exception as e:  # noqa: BLE001
             failed(f"guidance ({src.id})", e)
 
@@ -115,14 +116,14 @@ def build_dossier(
         progress("Writing snapshot and bull/bear")
         if not late("snapshot"):
             try:
-                snap = snapshot(router, sources)
+                snap = snapshot(router, sources, guard)
             except Exception as e:  # noqa: BLE001
                 failed("snapshot", e)
         if ledger is None or traj is None or health is None:
             notes.append("bull/bear skipped: ledger or financials unavailable")
         elif not late("bull/bear"):
             try:
-                bull, bear = bull_bear(router, sources, ledger, traj, health)
+                bull, bear = bull_bear(router, sources, ledger, traj, health, guard)
             except Exception as e:  # noqa: BLE001
                 failed("bull/bear", e)
     else:
@@ -148,4 +149,5 @@ def build_dossier(
         notes=notes,
         cost=cost,
         build_seconds=round(secs, 1),
+        guard=guard,
     )

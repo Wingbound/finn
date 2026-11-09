@@ -56,7 +56,7 @@ def _opt_str(v: object) -> str | None:
     return v.strip() or None if isinstance(v, str) else None
 
 
-def extract_promises(router, source: Source) -> list[Promise]:
+def extract_promises(router, source: Source, guard: dict | None = None) -> list[Promise]:
     user = f"Transcript: {source.title} ({source.quarter or 'quarter unknown'})\n\n" + tagged_text(
         source
     )
@@ -68,6 +68,8 @@ def extract_promises(router, source: Source) -> list[Promise]:
     if not isinstance(reply, dict) or not isinstance(reply.get("promises"), list):
         return []
 
+    if guard is not None:
+        guard["promises_proposed"] = guard.get("promises_proposed", 0) + len(reply["promises"])
     out: list[Promise] = []
     seen: set[str] = set()
     for item in reply["promises"]:
@@ -113,4 +115,6 @@ def extract_promises(router, source: Source) -> list[Promise]:
         )
         if len(out) >= MAX_PROMISES:
             break
+    if guard is not None:
+        guard["promises_kept"] = guard.get("promises_kept", 0) + len(out)
     return out

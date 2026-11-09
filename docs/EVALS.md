@@ -297,3 +297,21 @@ exist in the filing. It does not prove:
 - the units next to a number ("₹1,250 crore" passes wherever "1,250" appears);
 - that a fact's label is right for its value;
 - the one-liner's claims that carry no number.
+
+## 4. Research dossiers
+
+`scripts/eval_research.py [--db PATH]` reads every stored dossier (default `DB_PATH`) and prints one Markdown row per dossier plus a totals row. Offline; no LLM calls.
+
+Method:
+
+- **Citation re-verification.** Every citation (ledger promise and evidence, snapshot, bull, bear) is re-located with `cite.locate` in the stored source pages. It must be verbatim, 6+ words, negation-guarded, and land on the stored page. A `FACTS` citation must equal a line of `facts_block` recomputed from the stored dossier. Expected 100%; each failure is listed as `symbol | field | source_id p{page} | quote[:80]`.
+- **Guard drop rate.** `build_dossier` records `guard` (promises and points proposed vs kept). Drop rate = 1 − kept/proposed, shown for promises and for points.
+- **Ledger distribution.** Counts per status, and computed vs judged rows.
+- **Cost and latency.** LLM calls, `usd_list_price` and `build_seconds` from the dossier.
+- **Live-build budget.** 4 transcripts, 40 AR pages, at most 12 LLM calls, 240 s soft deadline; the cost and seconds columns show whether builds stay inside it.
+
+Live results: pending (controller)
+
+### Limits
+
+The judge's status is an LLM judgement gated by verbatim evidence: the quote is checked, the verdict is not. Computed grades cover only revenue growth, margin and PAT growth with explicit periods. Reaffirmations are treated as pending, not as delivery. Citation verification proves a quote exists on its page, not that the claim built on it is right.
