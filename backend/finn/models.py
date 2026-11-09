@@ -278,3 +278,12 @@ class Ledger(BaseModel):
     counts: dict[str, int]  # per status
     credibility_pct: float | None  # (kept + 0.5*partly) / (kept + partly + missed) * 100
     note: str | None = None
+
+
+class Point(BaseModel):
+    text: str  # at most 30 words
+    citation: Citation
+
+
+class Snapshot(BaseModel):
+    summary: list[Point]  # 2-4 cited sentences on what the company does
