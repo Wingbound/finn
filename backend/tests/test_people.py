@@ -127,9 +127,51 @@ def test_enrich_saves_and_skips_next_time(conn, voltas):
 def test_enrich_ignores_other_categories_and_old_filings(conn, voltas):
     _seed(conn, _filing("V1"), category="results")
     _seed(conn, _filing("V2", at=datetime(2026, 10, 1, tzinfo=IST)))
-    router = FakeRouter(_reply())
-    enrich_people(conn, FakeNSE({}, {}), router, SINCE)
+    db.save_doc_text(conn, URL, voltas)
+    client = FakeNSE({}, {})
+    router = FakeRouter(_reply(TATA_ROW))
+    res = enrich_people(conn, client, router, SINCE)
     assert router.calls == []
+    assert res.done == res.empty == 0 and res.failed == {}
+    assert client.byte_calls == []
+
+
+def test_role_and_effective_must_be_in_filing(voltas):
+    row = {**TATA_ROW, "role": "Chief Financial Officer", "effective": "1 Jan 1999"}
+    ok = {**BALAN_ROW, "role": "Managing Director"}
+    out = extract_people(FakeRouter(_reply(row, ok)), _filing(), voltas)
+    assert out[0].role is None and out[0].effective is None
+    assert out[1].role == "Managing Director"
+
+
+def test_malformed_field_types_do_not_crash(voltas):
+    rows = [
+        {**TATA_ROW, "change": ["appointed"]},
+        {"name": ["x"], "change": "appointed"},
+        {**BALAN_ROW, "role": 5, "effective": {}, "profile": 7},
+    ]
+    out = extract_people(FakeRouter(_reply(*rows)), _filing(), voltas)
+    assert [p.name for p in out] == ["Noel N. Tata", "Jayant Balan"]
+    assert out[0].change == "other"
+    assert out[1].role is None and out[1].profile is None
+
+
+def test_stage_survives_bad_replies_and_crashes(conn, voltas):
+    for i, seq in enumerate(["V1", "V2", "V3"]):
+        _seed(conn, _filing(seq, at=datetime(2026, 11, 5, 10 + i, 0, tzinfo=IST)))
+    db.save_doc_text(conn, URL, voltas)
+    replies = iter([{"people": "x"}, RuntimeError("boom"), _reply(TATA_ROW)])
+
+    def reply(task, system, user):
+        r = next(replies)
+        if isinstance(r, Exception):
+            raise r
+        return r
+
+    res = enrich_people(conn, FakeNSE({}, {}), FakeRouter(reply), SINCE)
+    assert res.done == 2
+    assert list(res.failed) == ["V2"] and "RuntimeError: boom" in res.failed["V2"]
+    assert set(db.get_enrichments(conn, ["V1", "V2", "V3"], "people")) == {"V1", "V3"}
 
 
 def test_no_text_saved_as_empty(conn):

@@ -82,15 +82,15 @@ def extract_people(router, f: Filing, text: str) -> list[PersonChange]:
             continue
         seen.add(key)
         change = item.get("change")
-        if change not in CHANGES:
+        if not isinstance(change, str) or change not in CHANGES:
             change = "other"
         profile = item.get("profile")
         out.append(
             PersonChange(
                 name=name.strip(),
-                role=_str_or_none(item.get("role")),
+                role=_grounded_or_none(item.get("role"), text),
                 change=change,
-                effective=_str_or_none(item.get("effective")),
+                effective=_grounded_or_none(item.get("effective"), text),
                 profile=(
                     grounded_sentences(profile, text, PROFILE_MAX_WORDS)
                     if isinstance(profile, str)
@@ -103,8 +103,11 @@ def extract_people(router, f: Filing, text: str) -> list[PersonChange]:
     return out
 
 
-def _str_or_none(v: object) -> str | None:
-    return v.strip() or None if isinstance(v, str) else None
+def _grounded_or_none(v: object, text: str) -> str | None:
+    """A string field kept only if the filing text contains it."""
+    if not isinstance(v, str) or not v.strip():
+        return None
+    return v.strip() if normalize(v) in normalize(text) else None
 
 
 def enrich_people(conn: sqlite3.Connection, client, router, since: datetime) -> EnrichResult:
@@ -125,6 +128,10 @@ def enrich_people(conn: sqlite3.Connection, client, router, since: datetime) -> 
         except (LLMError, NSEUnavailable) as e:
             log.warning("people enrichment failed for %s: %s", f.seq_id, e)
             res.failed[f.seq_id] = str(e)
+            continue
+        except Exception as e:
+            log.exception("people enrichment crashed for %s", f.seq_id)
+            res.failed[f.seq_id] = f"{type(e).__name__}: {e}"
             continue
         payload = {"people": [p.model_dump(mode="json") for p in people]}
         db.save_enrichment(conn, f.seq_id, KIND, payload, router.last_model)
