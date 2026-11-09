@@ -9,6 +9,7 @@ import sqlite3
 from pypdf import PdfReader
 
 from finn import db
+from finn.ingest.nse import PayloadTooLarge
 
 log = logging.getLogger(__name__)
 
@@ -31,11 +32,14 @@ def extract_text(pdf: bytes) -> str:
 
 
 def get_doc_text(conn: sqlite3.Connection, client, url: str, max_bytes: int = 25_000_000) -> str:
-    """PDF text for url, cached. Fetch errors (NSEUnavailable) propagate uncached."""
+    """PDF text for url, cached. Oversize PDFs cache "". Other NSEUnavailable propagates uncached."""
     cached = db.get_doc_text_cached(conn, url)
     if cached is not None:
         return cached
-    text = extract_text(client.fetch_bytes(url, max_bytes=max_bytes))
+    try:
+        text = extract_text(client.fetch_bytes(url, max_bytes=max_bytes))
+    except PayloadTooLarge:
+        text = ""  # permanent: cache the miss so we never download it again
     db.save_doc_text(conn, url, text)
     return text
 

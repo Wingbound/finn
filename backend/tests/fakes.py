@@ -1,6 +1,7 @@
 """Shared test doubles. No network."""
 
 import json
+from collections.abc import Callable
 from pathlib import Path
 
 from finn.ingest.nse import NSEUnavailable
@@ -41,3 +42,22 @@ def tatasteel_fake() -> FakeNSE:
         if r["consolidated"] == "Consolidated" and r["qe_Date"].upper() in names
     }
     return FakeNSE({"TATASTEEL": rows}, files)
+
+
+class FakeRouter:
+    """LLMRouter stand-in. reply: a dict, a callable (task, system, user) -> dict, or an
+    Exception instance to raise."""
+
+    last_model = "groq/openai/gpt-oss-120b"
+
+    def __init__(self, reply: dict | Callable[[str, str, str], dict] | Exception):
+        self.reply = reply
+        self.calls: list[tuple[str, str, str]] = []
+
+    def complete_json(self, task: str, system: str, user: str, *, doc_hash: str = "") -> dict:
+        self.calls.append((task, system, user))
+        if isinstance(self.reply, Exception):
+            raise self.reply
+        if callable(self.reply):
+            return self.reply(task, system, user)
+        return self.reply

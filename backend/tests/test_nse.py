@@ -174,3 +174,13 @@ def test_fetch_bytes_ok():
     respx.get("https://www.nseindia.com/").respond(200)
     respx.get("https://nsearchives.nseindia.com/x.xml").respond(200, content=b"<a/>")
     assert NSEClient().fetch_bytes("https://nsearchives.nseindia.com/x.xml") == b"<a/>"
+
+
+@respx.mock
+def test_fetch_bytes_oversize_is_payload_too_large():
+    respx.get("https://www.nseindia.com/").respond(200)
+    respx.get("https://nsearchives.nseindia.com/x.pdf").respond(
+        200, content=b"abc", headers={"content-length": "30000000"}
+    )
+    with pytest.raises(nse.PayloadTooLarge):
+        NSEClient().fetch_bytes("https://nsearchives.nseindia.com/x.pdf", max_bytes=25_000_000)

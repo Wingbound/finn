@@ -37,6 +37,10 @@ class NSEUnavailable(Exception):
     """NSE could not be reached or kept refusing us."""
 
 
+class PayloadTooLarge(NSEUnavailable):
+    """The document exceeds the size cap. Permanent: retrying fetches the same bytes."""
+
+
 class NSEClient:
     def __init__(self, timeout: float = 30, max_retries: int = 3):
         self.max_retries = max_retries
@@ -129,9 +133,9 @@ class NSEClient:
         resp = self._get(url)
         declared = resp.headers.get("content-length", "")
         if declared.isdigit() and int(declared) > max_bytes:
-            raise NSEUnavailable(f"{url} exceeds {max_bytes} bytes (content-length {declared})")
+            raise PayloadTooLarge(f"{url} exceeds {max_bytes} bytes (content-length {declared})")
         if len(resp.content) > max_bytes:
-            raise NSEUnavailable(f"{url} exceeds {max_bytes} bytes ({len(resp.content)})")
+            raise PayloadTooLarge(f"{url} exceeds {max_bytes} bytes ({len(resp.content)})")
         return resp.content
 
 

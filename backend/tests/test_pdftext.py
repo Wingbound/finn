@@ -1,7 +1,7 @@
 import pytest
 
 from finn.enrich.pdftext import extract_text, get_doc_text, relevant_window
-from finn.ingest.nse import NSEUnavailable
+from finn.ingest.nse import NSEUnavailable, PayloadTooLarge
 from tests.fakes import FIXTURES, FakeNSE
 
 PDF = FIXTURES / "pdf"
@@ -57,3 +57,15 @@ def test_get_doc_text_fetch_error_not_cached(conn):
         get_doc_text(conn, fake, "u")
     fake.files["u"] = (PDF / "hello.pdf").read_bytes()
     assert "Ramesh Iyer" in get_doc_text(conn, fake, "u")
+
+
+def test_get_doc_text_oversize_cached_empty_never_refetched(conn):
+    class Big(FakeNSE):
+        def fetch_bytes(self, url, max_bytes=25_000_000):
+            self.byte_calls.append(url)
+            raise PayloadTooLarge(f"{url} exceeds {max_bytes} bytes")
+
+    fake = Big({}, {})
+    assert get_doc_text(conn, fake, "u") == ""
+    assert get_doc_text(conn, fake, "u") == ""
+    assert fake.byte_calls == ["u"]

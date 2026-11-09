@@ -80,6 +80,16 @@ class ScoredFiling(BaseModel):
     reasons: list[str]
 
 
+class PersonChange(BaseModel):
+    name: str
+    role: str | None = None
+    change: Literal["appointed", "resigned", "retired", "ceased", "redesignated", "other"]
+    effective: str | None = None  # as written in the filing
+    profile: str | None = None  # grounded sentences only, at most 90 words
+    incoming: bool  # change in {"appointed", "redesignated"}
+    source_seq_id: str
+
+
 class Story(BaseModel):
     id: str
     symbol: str
@@ -92,6 +102,7 @@ class Story(BaseModel):
     members: list[ScoredFiling]
     latest_at: datetime
     results: ResultsCard | None = None
+    people: list[PersonChange] = Field(default_factory=list)
 
 
 class SymbolOverride(BaseModel):

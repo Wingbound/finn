@@ -77,6 +77,14 @@ CREATE TABLE IF NOT EXISTS doc_text (
     chars INTEGER NOT NULL,
     text TEXT NOT NULL
 );
+CREATE TABLE IF NOT EXISTS enrichments (
+    seq_id TEXT NOT NULL,
+    kind TEXT NOT NULL,
+    payload_json TEXT NOT NULL,
+    model TEXT,
+    created_at TEXT NOT NULL,
+    PRIMARY KEY (seq_id, kind)
+);
 """
 
 
@@ -337,3 +345,52 @@ def save_doc_text(conn: sqlite3.Connection, url: str, text: str) -> None:
         (url, _ts(datetime.now(IST)), len(text), text),
     )
     conn.commit()
+
+
+def save_enrichment(
+    conn: sqlite3.Connection, seq_id: str, kind: str, payload: dict, model: str | None
+) -> None:
+    conn.execute(
+        """INSERT INTO enrichments (seq_id, kind, payload_json, model, created_at)
+           VALUES (?, ?, ?, ?, ?)
+           ON CONFLICT(seq_id, kind) DO UPDATE SET payload_json = excluded.payload_json,
+               model = excluded.model, created_at = excluded.created_at""",
+        (seq_id, kind, json.dumps(payload), model, _ts(datetime.now(IST))),
+    )
+    conn.commit()
+
+
+def get_enrichments(conn: sqlite3.Connection, seq_ids: list[str], kind: str) -> dict[str, dict]:
+    """Stored payloads of the given kind, keyed by seq_id (missing ids are absent)."""
+    if not seq_ids:
+        return {}
+    marks = ",".join("?" * len(seq_ids))
+    rows = conn.execute(
+        f"SELECT seq_id, payload_json FROM enrichments WHERE kind = ? AND seq_id IN ({marks})",
+        [kind, *seq_ids],
+    ).fetchall()
+    return {r["seq_id"]: json.loads(r["payload_json"]) for r in rows}
+
+
+def filings_missing_enrichment(
+    conn: sqlite3.Connection, kind: str, categories: set[str], start: datetime
+) -> list[tuple[Filing, Classification]]:
+    """Classified filings filed at or after start, in categories, with no enrichment of kind."""
+    if not categories:
+        return []
+    cats = sorted(categories)
+    marks = ",".join("?" * len(cats))
+    rows = conn.execute(
+        f"""SELECT f.* FROM filings f
+            WHERE f.filed_at >= ? AND f.category IN ({marks})
+              AND NOT EXISTS (SELECT 1 FROM enrichments e
+                              WHERE e.seq_id = f.seq_id AND e.kind = ?)
+            ORDER BY f.filed_at, f.seq_id""",
+        [_ts(start), *cats, kind],
+    ).fetchall()
+    out: list[tuple[Filing, Classification]] = []
+    for r in rows:
+        cls = _classification(r)
+        if cls is not None:
+            out.append((_filing(r), cls))
+    return out
