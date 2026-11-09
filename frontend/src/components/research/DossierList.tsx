@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { Tally } from "@/components/Tally";
 import { symbolPath } from "@/lib/api";
-import { day } from "@/lib/format";
+import { day, plural } from "@/lib/format";
 import type { ResearchListItem } from "@/lib/types";
 
 export function DossierList({ items }: { items: ResearchListItem[] }) {
@@ -15,7 +15,7 @@ export function DossierList({ items }: { items: ResearchListItem[] }) {
               <span className="shrink-0 text-caption text-ink-2">{d.symbol}</span>
             </span>
             <span className="block text-caption text-ink-2">
-              {d.counts.ledger_rows} promises tracked, built {day(d.built_at)}
+              {plural(d.counts.ledger_rows, "promise")} tracked, built {day(d.built_at)}
             </span>
             <Tally counts={d.counts.ledger ?? {}} className="mt-2" />
           </Link>
