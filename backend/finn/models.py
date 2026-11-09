@@ -287,3 +287,25 @@ class Point(BaseModel):
 
 class Snapshot(BaseModel):
     summary: list[Point]  # 2-4 cited sentences on what the company does
+
+
+class Dossier(BaseModel):
+    symbol: str
+    name: str | None
+    basis: str
+    built_at: datetime
+    sources: list[Source]  # API responses omit `pages`
+    ledger: Ledger | None
+    snapshot: Snapshot | None
+    trajectory: Trajectory | None
+    health: BalanceSheetHealth | None
+    bull: list[Point]
+    bear: list[Point]
+    notes: list[str]  # every skipped/failed section with its reason
+    cost: dict  # router.stats() delta
+    build_seconds: float
+
+
+def public(dossier: Dossier) -> dict:
+    """JSON-ready dossier without the (large) source pages."""
+    return dossier.model_dump(mode="json", exclude={"sources": {"__all__": {"pages"}}})

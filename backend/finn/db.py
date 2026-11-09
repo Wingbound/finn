@@ -9,7 +9,7 @@ from datetime import date, datetime
 from pathlib import Path
 
 from finn.ingest.xbrl import QuarterFinancials
-from finn.models import IST, Classification, Filing, PriceBar
+from finn.models import IST, Classification, Dossier, Filing, PriceBar
 
 log = logging.getLogger(__name__)
 
@@ -85,6 +85,11 @@ CREATE TABLE IF NOT EXISTS doc_pages (
     page INTEGER NOT NULL,
     text TEXT NOT NULL,
     PRIMARY KEY (url, page)
+);
+CREATE TABLE IF NOT EXISTS dossiers (
+    symbol TEXT PRIMARY KEY,
+    built_at TEXT NOT NULL,
+    payload_json TEXT NOT NULL
 );
 CREATE TABLE IF NOT EXISTS enrichments (
     seq_id TEXT NOT NULL,
@@ -433,3 +438,22 @@ def filings_missing_enrichment(
         if cls is not None:
             out.append((_filing(r), cls))
     return out
+
+
+def save_dossier(conn: sqlite3.Connection, dossier: Dossier) -> None:
+    """Store the whole dossier, source pages included (citation excerpts are served from it)."""
+    conn.execute(
+        "INSERT OR REPLACE INTO dossiers (symbol, built_at, payload_json) VALUES (?,?,?)",
+        (dossier.symbol, _ts(dossier.built_at), dossier.model_dump_json()),
+    )
+    conn.commit()
+
+
+def get_dossier(conn: sqlite3.Connection, symbol: str) -> Dossier | None:
+    r = conn.execute("SELECT payload_json FROM dossiers WHERE symbol = ?", (symbol,)).fetchone()
+    return None if r is None else Dossier.model_validate_json(r["payload_json"])
+
+
+def list_dossiers(conn: sqlite3.Connection) -> list[Dossier]:
+    rows = conn.execute("SELECT payload_json FROM dossiers ORDER BY symbol").fetchall()
+    return [Dossier.model_validate_json(r["payload_json"]) for r in rows]

@@ -2,10 +2,13 @@
 
 from __future__ import annotations
 
+import json
 import logging
+import queue
 import shutil
 import sqlite3
 import statistics
+import threading
 from contextlib import asynccontextmanager
 from datetime import datetime, time, timedelta
 from pathlib import Path
@@ -13,6 +16,7 @@ from typing import Annotated
 
 from fastapi import Depends, FastAPI, HTTPException, Query
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import JSONResponse, StreamingResponse
 from pydantic import BaseModel, Field, model_validator
 
 from finn import db
@@ -27,9 +31,22 @@ from finn.digest import (
     classification_or_default,
     stories_in_window,
 )
+from finn.ingest import screener
 from finn.ingest.prices import completed_sessions
-from finn.models import IST, Alert, Category, PriceBar, ResultsCard, Rules, ScoredFiling
+from finn.llm import LLMRouter
+from finn.models import (
+    IST,
+    Alert,
+    Category,
+    Dossier,
+    PriceBar,
+    ResultsCard,
+    Rules,
+    ScoredFiling,
+    public,
+)
 from finn.portfolio import load_portfolio
+from finn.research.pipeline import build_dossier
 
 log = logging.getLogger(__name__)
 
@@ -237,3 +254,114 @@ def filing(
     f, cls = found
     subs = set(subscribed) if subscribed is not None else set(Rules().categories)
     return score_filing(f, classification_or_default(f, cls), subs)
+
+
+# ---- research dossiers ----
+CACHE_MINUTES = 10
+
+
+def _counts(d: Dossier) -> dict:
+    return {
+        "sources": len(d.sources),
+        "ledger_rows": len(d.ledger.rows) if d.ledger else 0,
+        "bull": len(d.bull),
+        "bear": len(d.bear),
+        "notes": len(d.notes),
+    }
+
+
+@app.get("/research")
+def research_list(conn: Conn) -> list[dict]:
+    return [
+        {
+            "symbol": d.symbol,
+            "name": d.name,
+            "built_at": d.built_at.isoformat(),
+            "counts": _counts(d),
+        }
+        for d in db.list_dossiers(conn)
+    ]
+
+
+@app.get("/research/search")
+def research_search(q: Annotated[str, Query(min_length=1)]) -> list[dict]:
+    try:
+        return screener.search(q)
+    except screener.ScreenerError as e:
+        raise HTTPException(status_code=502, detail=str(e)) from e
+
+
+@app.get("/research/{symbol}", response_model=None)
+def research_get(symbol: str, conn: Conn) -> dict | JSONResponse:
+    sym = symbol.upper()
+    d = db.get_dossier(conn, sym)
+    if d is None:
+        return JSONResponse(
+            status_code=404, content={"detail": "not built", "build": f"/research/{sym}/build"}
+        )
+    return public(d)
+
+
+@app.get("/research/{symbol}/source/{source_id}/{page}")
+def research_source_page(symbol: str, source_id: str, page: int, conn: Conn) -> dict:
+    d = db.get_dossier(conn, symbol.upper())
+    src = next((s for s in d.sources if s.id == source_id), None) if d else None
+    if src is None or not 1 <= page <= len(src.pages):
+        raise HTTPException(status_code=404, detail="source page not found")
+    return {"title": src.title, "page": page, "text": src.pages[page - 1]}
+
+
+_DONE = object()
+
+
+def _sse(event: str, data: object) -> str:
+    return f"event: {event}\ndata: {json.dumps(data)}\n\n"
+
+
+def _build_worker(symbol: str, q: queue.Queue) -> None:
+    """Runs in its own thread with its own connection and router (sqlite is thread-bound)."""
+    conn = None
+    try:
+        settings = get_settings()
+        conn = db.connect(settings.db_path)
+        db.init_db(conn)
+        router = LLMRouter(conn, settings)
+        d = build_dossier(conn, symbol, router, progress=lambda m: q.put(("progress", {"msg": m})))
+        db.save_dossier(conn, d)
+        q.put(("done", public(d)))
+    except screener.ScreenerError as e:
+        q.put(("error", {"detail": str(e) or f"{symbol} not found on screener"}))
+    except Exception as e:
+        log.exception("dossier build failed for %s", symbol)
+        q.put(("error", {"detail": f"build failed: {type(e).__name__}"}))
+    finally:
+        if conn is not None:
+            conn.close()
+        q.put(_DONE)
+
+
+@app.get("/research/{symbol}/build")
+def research_build(symbol: str, conn: Conn) -> StreamingResponse:
+    sym = symbol.upper()
+    cached = db.get_dossier(conn, sym)
+    fresh = cached is not None and datetime.now(IST) - cached.built_at < timedelta(
+        minutes=CACHE_MINUTES
+    )
+    q: queue.Queue = queue.Queue()
+    if fresh:
+        assert cached is not None
+        q.put(("progress", {"msg": "Using cached dossier"}))
+        q.put(("done", public(cached)))
+        q.put(_DONE)
+    else:
+        threading.Thread(target=_build_worker, args=(sym, q), daemon=True).start()
+
+    def gen():
+        while (item := q.get()) is not _DONE:
+            yield _sse(*item)
+
+    return StreamingResponse(
+        gen(),
+        media_type="text/event-stream",
+        headers={"Cache-Control": "no-cache", "X-Accel-Buffering": "no"},
+    )
