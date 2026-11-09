@@ -199,3 +199,22 @@ def test_digest_skips_corrupt_row(conn):
         {"mna"},
     )
     assert next(s for s in d["stories"] if s.category == "mna").brief is None
+
+
+def test_tiny_or_partial_nondigit_facts_dropped():
+    text = "Rating reaffirmed at CRISIL AA+ with a stable outlook in the filing ltd."
+    facts = [
+        {"label": "x", "value": "a"},
+        {"label": "x", "value": "in"},
+        {"label": "x", "value": "ab"},
+        {"label": "x", "value": "ratin"},
+        {"label": "Rating", "value": "CRISIL AA+"},
+    ]
+    b = make_brief(FakeRouter(_reply("Rating reaffirmed.", facts)), _filing(), text)
+    assert [f.value for f in b.facts] == ["CRISIL AA+"]
+
+
+def test_short_quote_dropped_long_quote_kept():
+    assert make_brief(FakeRouter(_reply(quote="the")), _filing(), TEXT).quote is None
+    q = "Completion is expected in 6 months"
+    assert make_brief(FakeRouter(_reply(quote=q)), _filing(), TEXT).quote == q

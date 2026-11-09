@@ -47,6 +47,15 @@ def name_in_text(name: str, text: str) -> bool:
     return re.search(r"(?<!\w)" + re.escape(bare) + r"(?!\w)", normalize(text)) is not None
 
 
+def phrase_in_text(phrase: str, text: str, min_words: int = 1) -> bool:
+    """True if the normalized phrase has at least min_words words and occurs in the
+    normalized text on word boundaries."""
+    bare = normalize(phrase)
+    if not bare or len(bare.split()) < min_words:
+        return False
+    return re.search(r"(?<!\w)" + re.escape(bare) + r"(?!\w)", normalize(text)) is not None
+
+
 def split_sentences(passage: str) -> list[str]:
     """Split after . ! ? but never after an honorific/abbreviation or a capital initial."""
     out: list[str] = []

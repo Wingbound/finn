@@ -11,7 +11,13 @@ from pydantic import ValidationError
 from finn import db
 from finn.classify.materiality import score_filing
 from finn.enrich import EnrichResult
-from finn.enrich.grounding import normalize, numbers_grounded, split_sentences
+from finn.enrich.grounding import (
+    MIN_SENTENCE_WORDS,
+    normalize,
+    numbers_grounded,
+    phrase_in_text,
+    split_sentences,
+)
 from finn.enrich.pdftext import get_doc_text, relevant_window
 from finn.ingest.nse import NSEUnavailable
 from finn.llm.providers import LLMError
@@ -91,7 +97,6 @@ def _fallback(f: Filing) -> Brief | None:
 def _clean_facts(raw: object, source: str) -> list[Fact]:
     if not isinstance(raw, list):
         return []
-    norm_source = normalize(source)
     out: list[Fact] = []
     for item in raw:
         if not isinstance(item, dict):
@@ -99,9 +104,12 @@ def _clean_facts(raw: object, source: str) -> list[Fact]:
         label, value = item.get("label"), item.get("value")
         if not isinstance(label, str) or not isinstance(value, str):
             continue
-        if not label.strip() or not value.strip() or not numbers_grounded(value, source):
+        if not label.strip() or not value.strip():
             continue
-        if not any(ch.isdigit() for ch in value) and normalize(value) not in norm_source:
+        if any(ch.isdigit() for ch in value):
+            if not numbers_grounded(value, source):
+                continue
+        elif len(normalize(value)) < 3 or not phrase_in_text(value, source):
             continue
         out.append(Fact(label=label.strip(), value=value.strip()))
         if len(out) == MAX_FACTS:
@@ -126,7 +134,11 @@ def make_brief(router, f: Filing, text: str, category: str | None = None) -> Bri
     ):
         return _fallback(f)
     quote = reply.get("quote")
-    if not isinstance(quote, str) or not quote.strip() or normalize(quote) not in normalize(source):
+    if (
+        not isinstance(quote, str)
+        or not quote.strip()
+        or not phrase_in_text(quote, source, MIN_SENTENCE_WORDS)
+    ):
         quote = None
     return Brief(
         one_liner=one.strip(),

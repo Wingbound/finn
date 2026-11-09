@@ -86,3 +86,14 @@ def test_bare_honorific_fragment_never_returned():
     text = "Mr. Jayant Balan is an engineer at the firm."
     assert grounded_sentences("Mr. John Doe won a Nobel Prize.", text, 90) is None
     assert grounded_sentences("Mr.", text, 90) is None
+
+
+def test_phrase_in_text():
+    from finn.enrich.grounding import phrase_in_text
+
+    src = "Rating reaffirmed: CRISIL AA+ with stable outlook."
+    assert phrase_in_text("crisil  aa+", src)
+    assert not phrase_in_text("ratin", src)
+    assert not phrase_in_text("", src)
+    assert not phrase_in_text("stable outlook", src, min_words=3)
+    assert phrase_in_text("with stable outlook", src, min_words=3)
