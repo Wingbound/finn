@@ -304,14 +304,15 @@ exist in the filing. It does not prove:
 
 Method:
 
-- **Citation re-verification.** Every citation (ledger promise and evidence, snapshot, bull, bear) is re-located with `cite.locate` in the stored source pages. It must be verbatim, 6+ words, negation-guarded, and land on the stored page. A `FACTS` citation must equal a line of `facts_block` recomputed from the stored dossier. Expected 100%; each failure is listed as `symbol | field | source_id p{page} | quote[:80]`.
-- **Guard drop rate.** `build_dossier` records `guard` (promises and points proposed vs kept). Drop rate = 1 − kept/proposed, shown for promises and for points.
+- **Citation re-verification.** Every citation (ledger promise and evidence, snapshot, bull, bear) is re-located with `cite.locate` in the stored source pages. It must be verbatim, 6+ words, negation-guarded, and land on the stored page. A `FACTS` citation must equal a line of `facts_block` recomputed from the stored dossier; the FACTS citations column counts them. Each failure is listed as `symbol | field | source_id p{page} | quote[:80]`. The figure is 100% *by construction*: the eval re-runs the same matcher that admitted each citation at build time. A failure therefore means stored data changed, or the matcher changed after the build. It does not measure whether the citations are fair.
+- **Guard drop rate.** `build_dossier` records `guard` (promises and points proposed vs kept). Drop rate = 1 − kept/proposed, shown for promises and for points. The promise drop rate counts every filter after the model reply, not only quotes that failed verification: the forward-looking cue filter, the conditional filter, de-duplication of repeated quotes, and the cap of 8 promises per transcript.
 - **Ledger distribution.** Counts per status, and computed vs judged rows.
 - **Cost and latency.** LLM calls, `usd_list_price` and `build_seconds` from the dossier.
-- **Live-build budget.** 4 transcripts, 40 AR pages, at most 12 LLM calls, 240 s soft deadline; the cost and seconds columns show whether builds stay inside it.
+- **Live-build budget.** 4 transcripts and 40 AR pages. About 9 LLM calls by design (4 extractions, at most 3 judge calls, 2 synthesis calls), with no enforced cap. A 240 s soft deadline, with no new stage started under 60 s before it. The cost and seconds columns show whether builds stay inside it.
+- **Hand audit of resolved rows.** The real fairness measure is a hand audit of the resolved ledger rows (kept, partly, missed). For each row: does the evidence quote show the outcome for the same metric and period, and does the status follow from it? Results: pending (controller).
 
 Live results: pending (controller)
 
 ### Limits
 
-The judge's status is an LLM judgement gated by verbatim evidence: the quote is checked, the verdict is not. Computed grades cover only revenue growth, margin and PAT growth with explicit periods. Reaffirmations are treated as pending, not as delivery. Citation verification proves a quote exists on its page, not that the claim built on it is right.
+The judge's status is an LLM judgement gated by verbatim evidence: the quote is checked, the verdict is not. Computed grades cover only revenue growth, margin and PAT growth, and only when the quote itself names the metric and the period (see DESIGN.md, Ledger grading). Reaffirmations are treated as pending, not as delivery. Citation verification proves a quote exists on its page, not that the claim built on it is right.
