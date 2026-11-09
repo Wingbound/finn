@@ -177,10 +177,19 @@ def test_known_model_does_not_warn(caplog):
 
 def test_every_default_model_has_a_list_price():
     from finn.config import ROUTES, route_for
-    from finn.llm.costs import LIST_PRICES_PER_MTOK
+    from finn.llm.costs import LIST_PRICES_PER_MTOK, UNPRICED_MODELS
 
     s = Settings(_env_file=None)
-    assert {route_for(t, s)[1] for t in ROUTES} <= set(LIST_PRICES_PER_MTOK)
+    assert {route_for(t, s)[1] for t in ROUTES} <= set(LIST_PRICES_PER_MTOK) | UNPRICED_MODELS
+
+
+def test_explicitly_unpriced_model_costs_zero_without_warning(caplog):
+    from finn.llm.costs import UNPRICED_MODELS, list_price_usd
+
+    assert "gemini-3.5-flash" in UNPRICED_MODELS
+    with caplog.at_level(logging.WARNING, logger="finn.llm.costs"):
+        assert list_price_usd("gemini-3.5-flash", 1000, 1000) == 0.0
+    assert caplog.text == ""
 
 
 @respx.mock
@@ -217,9 +226,12 @@ def gemini_resp(body):
 def test_gemini_safety_block_raises_clear_error(conn, tmp_path, no_sleep, body, needle):
     s = Settings(groq_api_key="", gemini_api_key="m", data_dir=tmp_path, _env_file=None)
     route = respx.post(GEMINI).mock(return_value=gemini_resp(body))
+    fallback = respx.post(GEMINI.replace("3.5-flash-lite", "3.1-flash-lite")).mock(
+        return_value=gemini_resp(body)
+    )
     with pytest.raises(LLMError, match=needle):
         LLMRouter(conn, s).complete_json("extract_transcript", "s", "u")
-    assert route.call_count == 1 and no_sleep == []
+    assert route.call_count == 1 and fallback.call_count == 1 and no_sleep == []
 
 
 @respx.mock
@@ -271,10 +283,21 @@ def test_chain_for_appends_fallbacks(settings):
 
 
 def test_chain_for_dedupes_primary_and_fallback(tmp_path):
-    s = Settings(finn_model_extract_transcript="gemini-3.5-flash-lite", _env_file=None)
+    s = Settings(finn_model_extract_transcript="gemini-3.1-flash-lite", _env_file=None)
     assert chain_for("extract_transcript", s) == [
+        ("gemini", "gemini-3.1-flash-lite"),
+    ]
+
+
+def test_chain_for_reason_and_transcript(settings):
+    assert chain_for("reason", settings) == [
+        ("gemini", "gemini-3.5-flash"),
         ("gemini", "gemini-3.5-flash-lite"),
-        ("groq", "openai/gpt-oss-120b"),
+        ("gemini", "gemini-3.1-flash-lite"),
+    ]
+    assert chain_for("extract_transcript", settings) == [
+        ("gemini", "gemini-3.5-flash-lite"),
+        ("gemini", "gemini-3.1-flash-lite"),
     ]
 
 
@@ -409,6 +432,20 @@ def test_exhausted_provider_is_skipped_on_later_calls(conn, settings, no_sleep):
     assert r.complete_json("classify", "s", "other") == {"a": 1}
     assert groq.call_count == 1 and gem.call_count == 2
     assert no_sleep == []
+
+
+@respx.mock
+def test_quota_on_one_model_keeps_sibling_model_usable(conn, settings, monkeypatch):
+    monkeypatch.setattr(
+        router_mod, "chain_for", lambda task, s: [("gemini", "model-a"), ("gemini", "model-b")]
+    )
+    url = "https://generativelanguage.googleapis.com/v1beta/models/{}:generateContent"
+    a = respx.post(url.format("model-a")).mock(return_value=quota_429())
+    b = respx.post(url.format("model-b")).mock(return_value=gemini_ok())
+    r = LLMRouter(conn, settings)
+    assert r.complete_json("classify", "s", "u") == {"a": 1}
+    assert r.complete_json("classify", "s", "other") == {"a": 1}
+    assert a.call_count == 1 and b.call_count == 2
 
 
 @respx.mock

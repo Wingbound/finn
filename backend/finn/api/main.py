@@ -2,17 +2,22 @@
 
 from __future__ import annotations
 
+import json
 import logging
+import queue
 import shutil
 import sqlite3
 import statistics
+import threading
 from contextlib import asynccontextmanager
 from datetime import datetime, time, timedelta
 from pathlib import Path
+from time import monotonic
 from typing import Annotated
 
 from fastapi import Depends, FastAPI, HTTPException, Query
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import JSONResponse, StreamingResponse
 from pydantic import BaseModel, Field, model_validator
 
 from finn import db
@@ -20,11 +25,30 @@ from finn.alerts import evaluate_filings, evaluate_prices
 from finn.api.deps import get_conn, get_now
 from finn.classify.materiality import score_filing
 from finn.config import get_settings
-from finn.digest import Floor, build_digest, classification_or_default, stories_in_window
-from finn.enrich.results import card_for
+from finn.digest import (
+    Floor,
+    build_digest,
+    card_or_none,
+    classification_or_default,
+    stories_in_window,
+)
+from finn.ingest import screener
 from finn.ingest.prices import completed_sessions
-from finn.models import IST, Alert, Category, PriceBar, ResultsCard, Rules, ScoredFiling
+from finn.llm import LLMRouter
+from finn.models import (
+    IST,
+    Alert,
+    Category,
+    Dossier,
+    PriceBar,
+    ResultsCard,
+    Rules,
+    ScoredFiling,
+    public,
+)
 from finn.portfolio import load_portfolio
+from finn.research.cite import dossier_citations
+from finn.research.pipeline import build_dossier, is_degraded
 
 log = logging.getLogger(__name__)
 
@@ -212,7 +236,7 @@ def alerts(rules: Rules, conn: Conn, now: Now) -> dict:
 
 @app.get("/results/{symbol}")
 def results_card(symbol: str, conn: Conn) -> ResultsCard:
-    found = card_for(conn, symbol.upper())
+    found = card_or_none(conn, symbol.upper())
     if found is None:
         raise HTTPException(status_code=404, detail="no results on file")
     return found[0]
@@ -232,3 +256,162 @@ def filing(
     f, cls = found
     subs = set(subscribed) if subscribed is not None else set(Rules().categories)
     return score_filing(f, classification_or_default(f, cls), subs)
+
+
+# ---- research dossiers ----
+CACHE_MINUTES = 10
+KEPT_STORED = "Live rebuild was incomplete; showing the last complete dossier"
+
+
+def _counts(d: Dossier) -> dict:
+    return {
+        "sources": len(d.sources),
+        "ledger_rows": len(d.ledger.rows) if d.ledger else 0,
+        "bull": len(d.bull),
+        "bear": len(d.bear),
+        "notes": len(d.notes),
+    }
+
+
+@app.get("/research")
+def research_list(conn: Conn) -> list[dict]:
+    return [
+        {
+            "symbol": d.symbol,
+            "name": d.name,
+            "built_at": d.built_at.isoformat(),
+            "counts": _counts(d),
+        }
+        for d in db.list_dossiers(conn)
+    ]
+
+
+@app.get("/research/search")
+def research_search(q: Annotated[str, Query(min_length=1)]) -> list[dict]:
+    try:
+        return screener.search(q)
+    except screener.ScreenerError as e:
+        raise HTTPException(status_code=502, detail=str(e)) from e
+
+
+@app.get("/research/{symbol}", response_model=None)
+def research_get(symbol: str, conn: Conn) -> dict | JSONResponse:
+    sym = symbol.upper()
+    d = db.get_dossier(conn, sym)
+    if d is None:
+        return JSONResponse(
+            status_code=404, content={"detail": "not built", "build": f"/research/{sym}/build"}
+        )
+    return public(d)
+
+
+@app.get("/research/{symbol}/source/{source_id}/{page}")
+def research_source_page(symbol: str, source_id: str, page: int, conn: Conn) -> dict:
+    d = db.get_dossier(conn, symbol.upper())
+    src = next((s for s in d.sources if s.id == source_id), None) if d else None
+    if src is None or not 1 <= page <= len(src.pages):
+        raise HTTPException(status_code=404, detail="source page not found")
+    return {"title": src.title, "page": page, "text": src.pages[page - 1]}
+
+
+_DONE = object()
+PING_S = 15  # keep-alive comment while a build stage is quiet
+STREAM_LIMIT_S = 285  # Vercel cuts functions at 300 s
+
+
+def _sse(event: str, data: object) -> str:
+    return f"event: {event}\ndata: {json.dumps(data)}\n\n"
+
+
+def _excerpts(d: Dossier) -> dict[str, dict[str, str]]:
+    """{source_id: {page: text}} for every page the dossier cites (FACTS excluded), so the
+    client can show a live-built dossier's citations without another request."""
+    by_id = {s.id: s for s in d.sources}
+    out: dict[str, dict[str, str]] = {}
+    for _, c in dossier_citations(d):
+        src = by_id.get(c.source_id)
+        if src is not None and 1 <= c.page <= len(src.pages):
+            out.setdefault(c.source_id, {})[str(c.page)] = src.pages[c.page - 1]
+    return out
+
+
+def _done(d: Dossier) -> tuple[str, dict]:
+    return "done", {**public(d), "excerpts": _excerpts(d)}
+
+
+def _build_worker(symbol: str, q: queue.Queue) -> None:
+    """Runs in its own thread with its own connection and router (sqlite is thread-bound).
+    `done` goes on the queue before the save, so a failed save cannot cost the client its
+    dossier, and _DONE is always queued last, whatever fails."""
+    conn = None
+    try:
+        try:
+            settings = get_settings()
+            conn = db.connect(settings.db_path)
+            db.init_db(conn)
+            router = LLMRouter(conn, settings)
+            d = build_dossier(
+                conn, symbol, router, progress=lambda m: q.put(("progress", {"msg": m}))
+            )
+            stored = db.get_dossier(conn, d.symbol)
+            keep = is_degraded(d) and stored is not None and not is_degraded(stored)
+            if keep:
+                assert stored is not None
+                q.put(("progress", {"msg": KEPT_STORED}))
+                q.put(_done(stored))
+            else:
+                q.put(_done(d))
+                try:
+                    db.save_dossier(conn, d)
+                except Exception:
+                    log.exception("saving the dossier failed for %s", symbol)
+        except screener.ScreenerError as e:
+            q.put(("error", {"detail": str(e) or f"{symbol} not found on screener"}))
+        except Exception as e:
+            log.exception("dossier build failed for %s", symbol)
+            q.put(("error", {"detail": f"build failed: {type(e).__name__}"}))
+        finally:
+            if conn is not None:
+                conn.close()
+    finally:
+        q.put(_DONE)
+
+
+def _stream(q, clock=monotonic):
+    """SSE frames from the worker queue: a ": ping" comment every PING_S of silence, and an
+    error event once STREAM_LIMIT_S has passed (the worker may still finish and save)."""
+    start = clock()
+    while (left := STREAM_LIMIT_S - (clock() - start)) > 0:
+        try:
+            item = q.get(timeout=min(PING_S, left))
+        except queue.Empty:
+            if STREAM_LIMIT_S - (clock() - start) > 0:
+                yield ": ping\n\n"
+            continue
+        if item is _DONE:
+            return
+        yield _sse(*item)
+    yield _sse("error", {"detail": "build timed out"})
+
+
+@app.get("/research/{symbol}/build")
+def research_build(symbol: str, conn: Conn) -> StreamingResponse:
+    sym = symbol.upper()
+    cached = db.get_dossier(conn, sym)
+    fresh = cached is not None and datetime.now(IST) - cached.built_at < timedelta(
+        minutes=CACHE_MINUTES
+    )
+    q: queue.Queue = queue.Queue()
+    if fresh:
+        assert cached is not None
+        q.put(("progress", {"msg": "Using cached dossier"}))
+        q.put(_done(cached))
+        q.put(_DONE)
+    else:
+        threading.Thread(target=_build_worker, args=(sym, q), daemon=True).start()
+
+    return StreamingResponse(
+        _stream(q),
+        media_type="text/event-stream",
+        headers={"Cache-Control": "no-cache", "X-Accel-Buffering": "no"},
+    )

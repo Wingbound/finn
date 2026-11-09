@@ -9,7 +9,7 @@ from datetime import date, datetime
 from pathlib import Path
 
 from finn.ingest.xbrl import QuarterFinancials
-from finn.models import IST, Classification, Filing, PriceBar
+from finn.models import IST, Classification, Dossier, Filing, PriceBar
 
 log = logging.getLogger(__name__)
 
@@ -79,6 +79,17 @@ CREATE TABLE IF NOT EXISTS doc_text (
     fetched_at TEXT NOT NULL,
     chars INTEGER NOT NULL,
     text TEXT NOT NULL
+);
+CREATE TABLE IF NOT EXISTS doc_pages (
+    url TEXT NOT NULL,
+    page INTEGER NOT NULL,
+    text TEXT NOT NULL,
+    PRIMARY KEY (url, page)
+);
+CREATE TABLE IF NOT EXISTS dossiers (
+    symbol TEXT PRIMARY KEY,
+    built_at TEXT NOT NULL,
+    payload_json TEXT NOT NULL
 );
 CREATE TABLE IF NOT EXISTS enrichments (
     seq_id TEXT NOT NULL,
@@ -350,6 +361,22 @@ def save_doc_text(conn: sqlite3.Connection, url: str, text: str) -> None:
     conn.commit()
 
 
+def get_doc_pages(conn: sqlite3.Connection, url: str) -> list[str] | None:
+    """Cached page texts ordered by page; None if never cached, [] for the empty sentinel."""
+    rows = conn.execute("SELECT page, text FROM doc_pages WHERE url = ? ORDER BY page", (url,))
+    rows = rows.fetchall()
+    if not rows:
+        return None
+    return [r["text"] for r in rows if r["page"] > 0]
+
+
+def save_doc_pages(conn: sqlite3.Connection, url: str, pages: list[str]) -> None:
+    """Cache pages 1..n; an empty list stores the page-0 sentinel so it is not refetched."""
+    rows = [(url, i, t) for i, t in enumerate(pages, 1)] or [(url, 0, "")]
+    conn.executemany("INSERT OR REPLACE INTO doc_pages (url, page, text) VALUES (?,?,?)", rows)
+    conn.commit()
+
+
 def save_enrichment(
     conn: sqlite3.Connection, seq_id: str, kind: str, payload: dict, model: str | None
 ) -> None:
@@ -411,3 +438,22 @@ def filings_missing_enrichment(
         if cls is not None:
             out.append((_filing(r), cls))
     return out
+
+
+def save_dossier(conn: sqlite3.Connection, dossier: Dossier) -> None:
+    """Store the whole dossier, source pages included (citation excerpts are served from it)."""
+    conn.execute(
+        "INSERT OR REPLACE INTO dossiers (symbol, built_at, payload_json) VALUES (?,?,?)",
+        (dossier.symbol, _ts(dossier.built_at), dossier.model_dump_json()),
+    )
+    conn.commit()
+
+
+def get_dossier(conn: sqlite3.Connection, symbol: str) -> Dossier | None:
+    r = conn.execute("SELECT payload_json FROM dossiers WHERE symbol = ?", (symbol,)).fetchone()
+    return None if r is None else Dossier.model_validate_json(r["payload_json"])
+
+
+def list_dossiers(conn: sqlite3.Connection) -> list[Dossier]:
+    rows = conn.execute("SELECT payload_json FROM dossiers ORDER BY symbol").fetchall()
+    return [Dossier.model_validate_json(r["payload_json"]) for r in rows]

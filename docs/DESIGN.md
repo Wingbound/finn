@@ -78,15 +78,28 @@ screener.in ───────┘      │                └─ /research/{t
 | Filing classification | 0 | Deterministic rules on NSE `desc` + subject keywords | Covers most volume at zero cost |
 | Ambiguous classification + one-liners | 1 | Groq `openai/gpt-oss-120b`, reasoning effort medium, batched 20 filings/call, JSON mode | Fast, free; 91.3% vs 85.6% for gpt-oss-20b on the eval, ~$0.001/batch at list price (EVALS.md) |
 | Results number extraction | 2 | XBRL (deterministic, no LLM) | NSE publishes structured XBRL for every results filing; no model needed |
-| Transcript guidance extraction (per transcript) | 2 | Gemini Flash-Lite/Flash, chunked by section | Bulk extraction |
-| Ledger judgment, narrative vs numbers, bull/bear | 3 | Gemini Pro-class (or Flash with thinking) | Only place real reasoning is needed; once per company, cached |
+| Transcript guidance extraction (per transcript) | 2 | Gemini 3.5 Flash-Lite (3.1 Flash-Lite fallback); each transcript is read whole (up to 90,000 characters) in one call | Bulk extraction |
+| Ledger judgment, narrative vs numbers, bull/bear | 3 | Gemini 3.5 Flash (falls back to 3.5 Flash-Lite, then 3.1 Flash-Lite; unpriced on the published list), with evidence gating: a verdict counts only with a verbatim quote from a later call | Pro has no free tier and 3.8 Flash is unavailable on it; once per company, cached |
 | People bio | 2 | Groq gpt-oss-120b over the filing's own text (Brief Profile), behind a grounding guard; Gemini fallback | Push-side enrichment allowed |
 
 - **Arithmetic stays out of the LLM.** QoQ/YoY %, margins, D/E, CFO/PAT and FCF are computed in Python. EBITDA, when not reported, = Revenue from operations − (Expenses − finance costs − D&A), i.e. excludes other income; matches screener's Operating Profit. Flagged "computed".
-- **Caching**: content-hash cache for every downloaded doc and every LLM call (`sha256(model + prompt + doc_hash)`), so re-running costs ₹0. Dossiers are cached per (ticker, doc-set hash).
+- **Caching**: content-hash cache for every downloaded doc and every LLM call (`sha256(model + prompt + doc_hash)`), so re-running costs ₹0. Dossiers are cached per ticker. A rebuild is allowed after 10 minutes, and a degraded rebuild (a model unavailable, an internal error or a deadline skip) never replaces a complete stored dossier.
 - **Cost ledger**: every LLM call logs tokens/model/latency. The UI shows "this dossier: N calls, ~₹X, Ys", and README reports the totals — a direct answer to the efficiency criterion.
 - **Rate-limit aware**: Retry-After-paced backoff on 429 (no early failover on rate limits); fast failover only on outages. Each model waits out up to 3 rate limits (Retry-After, capped at 60 s) before the chain moves on; a 5xx or transport error moves on after 1 retry when a fallback is behind it; a 429 whose Retry-After exceeds 60 s is treated as quota exhaustion: that provider is skipped until its reset and the chain fails over at once (seen live: Groq's 200K tokens/day cap on gpt-oss-120b). Demo-set dossiers are precomputed so the live demo never burns quota.
 - **Model IDs are checked against each provider's list-models endpoint, never typed from memory** (2026-11-09). That check found Groq had retired its Llama models, so classification moved to gpt-oss-120b. It also found that `gemini-3.8-flash` is listed and priced, but on the free tier only 1 of 7 calls succeeded that day; the rest were 503s or 45-second hangs. `gemini-3.5-flash-lite` answered 5 of 5 in about 1.5 s. Plan 2 therefore gives each Gemini task a fallback chain, so a hang on the primary model moves to the fallback within one short timeout. Results numbers come from XBRL with no model; Gemini's role is the fallback for the Groq tasks and, in Plan 3, transcript extraction.
+
+### Pull: research dossiers (Plan 3)
+
+- **Request-time exception.** The deployed API is otherwise read-only, but research has two request-time paths, `/research/search` and `/research/{sym}/build`. Search resolves a ticker; build fetches screener tables and documents and runs the LLM pipeline. Everything else reads the stored dossier.
+- **Live-build budget.** At most 4 transcripts and 40 annual-report pages per build. The LLM budget is about 9 calls by design (4 extractions, at most 3 judge calls, 2 synthesis calls); no cap enforces it. The 240 s soft deadline is checked between stages, before each source read and before each judge group, and nothing new starts with less than 60 s left. Each skip is recorded in `notes`, so the dossier is partial rather than missing. The SSE stream sends a keep-alive every 15 s and ends with an error at 285 s, inside Vercel's 300 s limit.
+- **Ledger grading.**
+  - *Computed in code* only when every gate holds: a % target above 0 for revenue growth, PAT growth or EBITDA margin; a target period that ends after the call; no "this/next year" phrase in a Q4 call; a quote that names the metric and the period; no cue for a different measure (EBIT, QoQ or sequential, CQGR, constant currency, dollars, bps, expansion or improvement, "by N"); not a segment target; not a lender's margin; and a fiscal year that ends in March. Growth ≥ lo is kept and ≥ 0.8·lo is partly; a margin ≥ lo is kept and ≥ lo − 1 pp is partly; anything lower is missed.
+  - *Judged* otherwise, including targets of 0 or below, segment targets, lender margins and non-March fiscal years. The LLM grades against later calls, and kept, partly or missed needs a verbatim quote from a later call. A reaffirmation does not count as delivery; it stays pending.
+  - A judged kept or partly becomes pending when its period ends after the newest call, or when its horizon is long (an FY at least 2 past the newest call, or long-term wording).
+  - "dropped" needs at least 2 later calls, none of them truncated by the evidence budget. Judged promises from the newest call (T1) are always pending, since no later call exists.
+  - Credibility = (kept + 0.5·partly) / (kept + partly + missed), shown only with at least 3 resolved promises.
+- **FACTS citations.** Computed financials (CAGR, margin change, debt to equity, CFO/PAT, FCF, ROCE, flags and the ledger tally) are cited as `FACTS` page 0. The quote must equal a line of the code-built facts block, so numbers the model did not read from a page still trace to code.
+- **Model routing for research.** The judge and synthesis use Gemini 3.5 Flash, falling back to 3.5 Flash-Lite, then 3.1 Flash-Lite; extraction uses 3.5 Flash-Lite with a 3.1 Flash-Lite fallback. 3.5 Flash is not on the published price list, so its cost shows as unpriced. Gemini 3.8 Flash was unreliable on the free tier (see Model routing above).
 
 ### Materiality score (deterministic, explainable)
 `score = category_base × subtype_modifier × user_subscription_boost (+ price-reaction bump)`.
@@ -96,10 +109,10 @@ screener.in ───────┘      │                └─ /research/{t
 
 ### Hosting (2026-11-09)
 
-Docker Spaces on Hugging Face now need HF PRO, so the backend runs on Vercel Python functions instead. The deployed API is read-only over the committed SQLite snapshot. `scripts/refresh.py` runs out-of-band (locally or on a schedule), is the only code that touches NSE, Yahoo, screener or the LLMs, and its output replaces the snapshot.
+Docker Spaces on Hugging Face now need HF PRO, so the backend runs on Vercel Python functions instead. The deployed API is read-only over the committed SQLite snapshot, except `/research/search` and `/research/{sym}/build`, which reach screener (and, for a build, the documents and the LLMs) at request time. `scripts/refresh.py` and `scripts/research.py` run out-of-band (locally or on a schedule); apart from those two routes they are the only code that touches NSE, Yahoo, screener or the LLMs, and their output replaces the snapshot.
 
 ### Robustness ("demo never breaks")
-Every external fetch is cached with an `as_of` timestamp. The deployed API boots from the committed **seeded SQLite snapshot** and never fetches. A GitHub Actions cron (or a local `scripts/refresh.py`) ingests out-of-band and commits a fresh snapshot.
+Every external fetch is cached with an `as_of` timestamp. The deployed API boots from the committed **seeded SQLite snapshot** and never fetches, except on `/research/search` and `/research/{sym}/build`. A GitHub Actions cron (or a local `scripts/refresh.py`) ingests out-of-band and commits a fresh snapshot.
 
 ---
 

@@ -187,8 +187,8 @@ Noise floor: **Critical ≥ 75 · Important ≥ 45 · Everything**.
 - **Model routing:**
   - Rules first (free).
   - Groq `openai/gpt-oss-120b`, batched 20 per call, for ambiguous classification and one-liners.
-  - Gemini Flash for PDF extraction (results, transcripts).
-  - A stronger Gemini model only for ledger judgment and synthesis.
+  - Gemini 3.5 Flash-Lite (3.1 Flash-Lite fallback) for transcript extraction; results numbers come from NSE XBRL with no model.
+  - The same Flash-Lite route for ledger judgment and synthesis; a ledger verdict counts only with a verbatim quote from a later call (Pro has no free tier; 3.8 Flash was unreliable on it).
 - **Efficiency:** content-hash caching of every document and LLM call; every call logged in a per-call cost ledger shown in the UI.
 - **Arithmetic is never done by the LLM.**
 - **Stack:** FastAPI + SQLite on Hugging Face Spaces (Docker); Next.js PWA on Vercel.
@@ -201,7 +201,8 @@ cd backend
 cp .env.example .env          # add GEMINI_API_KEY, GROQ_API_KEY
 uv sync
 uv run pytest
-uv run python scripts/seed.py # ingest portfolio filings + prices, precompute demo dossiers
+uv run python scripts/refresh.py --days 30 --out seed/finn.sqlite  # filings, prices, classifications
+uv run python scripts/research.py PERSISTENT TCS --out seed/finn.sqlite  # precompute demo dossiers
 uv run uvicorn finn.api.main:app --reload --port 8000
 
 # frontend

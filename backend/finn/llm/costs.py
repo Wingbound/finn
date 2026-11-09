@@ -15,6 +15,9 @@ LIST_PRICES_PER_MTOK: dict[str, tuple[float, float]] = {
     "gemini-3.1-flash-lite": (0.25, 1.50),
 }
 
+# Not on the published price list (checked 2026-11-09); calls are counted, cost shown as unpriced.
+UNPRICED_MODELS = {"gemini-3.5-flash"}
+
 
 @cache
 def _warn_unpriced(model: str) -> None:  # once per model, not once per call
@@ -23,7 +26,8 @@ def _warn_unpriced(model: str) -> None:  # once per model, not once per call
 
 def list_price_usd(model: str, input_tokens: int, output_tokens: int) -> float:
     if model not in LIST_PRICES_PER_MTOK:
-        _warn_unpriced(model)
+        if model not in UNPRICED_MODELS:
+            _warn_unpriced(model)
         return 0.0
     price_in, price_out = LIST_PRICES_PER_MTOK[model]
     return (input_tokens * price_in + output_tokens * price_out) / 1_000_000

@@ -104,7 +104,7 @@ class LLMRouter:
     ):
         self.conn = conn
         self.last_model: str | None = None
-        self._exhausted_until: dict[str, float] = {}  # provider -> monotonic reset time
+        self._exhausted_until: dict[tuple[str, str], float] = {}  # (provider, model) -> reset time
         self.settings = settings
         self.client = httpx.Client(
             transport=transport,
@@ -124,8 +124,8 @@ class LLMRouter:
 
         keyed = [i for i, (p, _) in enumerate(chain) if getattr(self.settings, PROVIDERS[p][2])]
         now = _now()
-        self._exhausted_until = {p: t for p, t in self._exhausted_until.items() if t > now}
-        usable = [i for i in keyed if chain[i][0] not in self._exhausted_until]
+        self._exhausted_until = {k: t for k, t in self._exhausted_until.items() if t > now}
+        usable = [i for i in keyed if chain[i] not in self._exhausted_until]
         failures: list[str] = []
         for i, (provider, model) in enumerate(chain):
             call, parse, key_attr, key_name = PROVIDERS[provider]
@@ -133,8 +133,8 @@ class LLMRouter:
             if not api_key:
                 failures.append(f"{provider}/{model}: missing {key_name}")
                 continue
-            if provider in self._exhausted_until:
-                left = self._exhausted_until[provider] - now
+            if (provider, model) in self._exhausted_until:
+                left = self._exhausted_until[(provider, model)] - now
                 failures.append(f"{provider}/{model}: quota exhausted (retry in {left:.0f}s)")
                 continue
             retries = MAX_RETRIES if i == usable[-1] else 1
@@ -146,7 +146,7 @@ class LLMRouter:
                 self._log(task, provider, model, False, tin, tout, latency)
                 result = _parse_json(text)
             except _QuotaExhausted as e:
-                self._exhausted_until[provider] = _now() + e.retry_after
+                self._exhausted_until[(provider, model)] = _now() + e.retry_after
                 failures.append(f"{provider}/{model}: {e}")
                 continue
             except LLMError as e:

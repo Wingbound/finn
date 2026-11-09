@@ -297,3 +297,86 @@ exist in the filing. It does not prove:
 - the units next to a number ("₹1,250 crore" passes wherever "1,250" appears);
 - that a fact's label is right for its value;
 - the one-liner's claims that carry no number.
+
+## 4. Research dossiers
+
+`scripts/eval_research.py [--db PATH]` reads every stored dossier (default `DB_PATH`) and prints one Markdown row per dossier plus a totals row. Offline; no LLM calls.
+
+Method:
+
+- **Citation re-verification.** Every citation (ledger promise and evidence, snapshot, bull, bear) is re-located with `cite.locate` in the stored source pages. It must be verbatim, 6+ words, negation-guarded, and land on the stored page. A `FACTS` citation must equal a line of `facts_block` recomputed from the stored dossier; the FACTS citations column counts them. Each failure is listed as `symbol | field | source_id p{page} | quote[:80]`. The figure is 100% *by construction*: the eval re-runs the same matcher that admitted each citation at build time. A failure therefore means stored data changed, or the matcher changed after the build. It does not measure whether the citations are fair.
+- **Guard drop rate.** `build_dossier` records `guard` (promises and points proposed vs kept). Drop rate = 1 − kept/proposed, shown for promises and for points. The promise drop rate counts every filter after the model reply, not only quotes that failed verification: the forward-looking cue filter, the conditional filter, de-duplication of repeated quotes, and the cap of 8 promises per transcript.
+- **Ledger distribution.** Counts per status, and computed vs judged rows.
+- **Cost and latency.** LLM calls, `usd_list_price` and `build_seconds` from the dossier.
+- **Live-build budget.** 4 transcripts and 40 AR pages. About 9 LLM calls by design (4 extractions, at most 3 judge calls, 2 synthesis calls), with no enforced cap. A 240 s soft deadline, with no new stage started under 60 s before it. The cost and seconds columns show whether builds stay inside it.
+- **Hand audit of resolved rows.** The real fairness measure is a hand audit of the resolved ledger rows (kept, partly, missed). For each row: does the evidence quote show the outcome for the same metric and period, and does the status follow from it? Results are below.
+
+### Live results (2026-11-09, the committed snapshot)
+
+There are 7 dossiers: the 4 demo companies (PERSISTENT, DIXON, POLYCAB, INDIGO) and 3 generalisation checks (HDFCBANK, a bank; BAJFINANCE, an NBFC; IDEA, negative net worth). All were built live from screener, the transcripts and the latest annual report.
+
+| Symbol | Citations verified | FACTS citations | Ledger (kept/partly/missed/pending/dropped) | Promise drop | Point drop | LLM calls | USD (list) | Seconds |
+|---|---|---|---|---|---|---|---|---|
+| BAJFINANCE | 25/25 | 4 | 0/0/0/19/0 | 27% | 0% | 9 | 0.061 | 84 |
+| DIXON | 23/23 | 4 | 0/0/0/16/0 | 50% | 22% | 9 | 0.071 | 97 |
+| HDFCBANK | 13/13 | 2 | 2/0/0/5/0 | 56% | 50% | 9 | 0.059 | 99 |
+| IDEA | 17/17 | 4 | 0/0/0/11/0 | 21% | 14% | 9 | 0.051 | 82 |
+| INDIGO | 22/22 | 3 | 3/0/0/8/1 | 33% | 12% | 9 | 0.054 | 81 |
+| PERSISTENT | 22/22 | 4 | 2/0/1/8/1 | 25% | 22% | 9 | 0.033 | 93 |
+| POLYCAB | 21/21 | 1 | 0/0/0/17/0 | 29% | 56% | 9 | 0.061 | 82 |
+| total | 143/143 | 22 | 7/0/1/84/2 | 36% | 27% | 63 | 0.39 | 618 |
+
+The cost and seconds columns come from the first live build. The verdict guards (below) were then applied by rebuilding from the LLM cache. Those rebuilds made 3 new synthesis calls, because the ledger tally in the prompt changed, and cost $0.017 in all.
+
+- **Cost.** The USD figures understate the real cost a little. The judge and synthesis model, Gemini 3.5 Flash, has no published list price, so its calls are counted but priced at $0 (`UNPRICED_MODELS`). The priced part is the 4 extraction calls per dossier on 3.5 Flash-Lite. Every call ran on the free tier, so the actual spend was $0.
+- **Time.** Every build finished in 81–99 s, well inside the 240 s soft deadline and Vercel's 300 s limit.
+- **Computed grades: 0 of 94 rows.** The computed path fires only when the quote names the metric and the period, and none of these quotes did. Everything was judged.
+
+**Hand audit, before the verdict guards (11 resolved rows).**
+- **Correct: 5.**
+  - INDIGO's Q1 FY27 capacity, 3–4% guided and 3% delivered (kept);
+  - PERSISTENT's FY26 tax rate, 20–24% guided and 22.6% delivered (kept);
+  - PERSISTENT's growth streak (kept);
+  - PERSISTENT's shareholder approval, promised at the July AGM and obtained at an October EGM (missed);
+  - HDFCBANK's interim chairman serving the stated 3 months (kept, trivial).
+- **Debatable: 3.**
+  - HDFCBANK's MD announcement: kept, but the rationale names a person the quote does not;
+  - INDIGO's Middle East recovery: kept on "90, 95 percentage" against "full capacity", where partly is fairer;
+  - INDIGO's flattish Q2 capacity: kept on weak evidence.
+- **Wrong: 3, all mechanical.**
+  - DIXON's Noida plant was judged kept on a later call that restated the target ("we expect the operation to commence by Q2").
+  - IDEA's H1 capex was judged kept at Rs 42 billion against a Rs 50–60 billion target.
+  - INDIGO's Q4 FY26 capacity target was graded missed on evidence about the June quarter (Q1 FY27).
+
+  The 2 dropped rows (an investor day, a groundings forecast) are absences, which no quote can verify.
+
+**Verdict guards (Task 7g).** Three deterministic checks run after the judge and can only downgrade a verdict to pending:
+- the evidence names a different period than the target;
+- the evidence restates the target in the future tense with no delivery wording;
+- a quantitative "kept" whose evidence figures all sit below the target.
+
+On this snapshot they fired 6 times: 1 period, 3 restated and 2 below target. Three of the six were the three wrong rows above. The other three were "kept" verdicts that the not-yet-due rule would have made pending anyway. No correct verdict was lost. After the guards there are 8 resolved rows: 5 correct, 3 debatable, 0 wrong.
+
+**Why most rows are pending (84 of 94).**
+
+| Count | Reason |
+|---|---|
+| 26 | The promise comes from the newest call, so no later call exists to judge it against. |
+| 35 | Later calls hold no evidence of the outcome. These are mostly FY27 or longer targets. |
+| 9 | A "kept" became pending because the target falls after the newest call ("tracking is not delivery"). |
+| 8 | The judge's evidence quote failed verbatim verification. |
+| 6 | Held by a verdict guard: 1 period, 3 restated, 2 below target. |
+
+The UI therefore separates "Open promises (latest call)" from "Track record (earlier calls)".
+
+**Run-to-run variance.** Extraction and judging are not deterministic: Gemini 3.x is run at its default temperature, as Google recommends. The judge A/B earlier the same day, on the same transcripts, found POLYCAB's EHV plant slip (end-CY2026 to FY2028) as a miss. This build did not extract the original EHV promise, only the newer FY2028 restatement (pending). The committed snapshot is one run; a rebuild can surface different promises.
+
+**Judge model A/B** (2026-11-09; POLYCAB, DIXON, INDIGO):
+- `reason` on 3.5 Flash-Lite found 0 misses; it labelled POLYCAB's EHV slip pending.
+- 3.5 Flash found 3 misses, at 72–80 s per dossier: POLYCAB EHV; DIXON Noida, Q2 to Q3 FY27; and INDIGO Q4 FY26 capacity, 10% to 3%. It also found 1 correct kept.
+- On re-audit, the INDIGO miss rested on June-quarter evidence, which is the period error the guard now catches.
+- 3.8 Flash was still returning 503s or timing out, so `reason` defaults to 3.5 Flash.
+
+### Limits
+
+The judge's status is an LLM judgement gated by verbatim evidence. The quote is checked, and three deterministic guards (period, restatement, figure below target) can only downgrade the verdict; beyond those, the verdict itself is not checked. Computed grades cover only revenue growth, margin and PAT growth, and only when the quote itself names the metric and the period (see DESIGN.md, Ledger grading). Reaffirmations are treated as pending, not as delivery. Citation verification proves a quote exists on its page, not that the claim built on it is right.

@@ -58,10 +58,11 @@ def stories_in_window(
     return cluster(score_window(conn, symbols, start, end, subscribed))
 
 
-_CARD_WINDOW = timedelta(days=4)
+_CARD_BEFORE = timedelta(days=4)  # story may precede the XBRL card by this much
+_CARD_AFTER = timedelta(days=45)  # ...or follow it (same-quarter coverage)
 
 
-def _card_or_none(conn: sqlite3.Connection, symbol: str) -> tuple[ResultsCard, datetime] | None:
+def card_or_none(conn: sqlite3.Connection, symbol: str) -> tuple[ResultsCard, datetime] | None:
     """The symbol's latest card, or None when there is none or its stored rows are corrupt."""
     try:
         found = card_for(conn, symbol)
@@ -76,8 +77,8 @@ def _card_or_none(conn: sqlite3.Connection, symbol: str) -> tuple[ResultsCard, d
 def attach_results(conn: sqlite3.Connection, stories: list[Story]) -> None:
     """Give each results story its symbol's latest card, when that card is for this filing.
 
-    The card's filed_at must be within 4 days of the headline filing, so a stale quarter's
-    numbers never sit on a new story. One card lookup per symbol per call. A symbol whose
+    The headline filing must fall from 4 days before to 45 days after the card's filed_at,
+    so a stale quarter's numbers never sit on a new story. One card lookup per symbol per call. A symbol whose
     stored financials are corrupt gets no card ("numbers pending") instead of a 500.
     """
     cache: dict[str, tuple[ResultsCard, datetime] | None] = {}
@@ -85,9 +86,9 @@ def attach_results(conn: sqlite3.Connection, stories: list[Story]) -> None:
         if st.category != "results" or st.subtype == "intimation":
             continue
         if st.symbol not in cache:
-            cache[st.symbol] = _card_or_none(conn, st.symbol)
+            cache[st.symbol] = card_or_none(conn, st.symbol)
         found = cache[st.symbol]
-        if found and abs(found[1] - st.headline.filing.filed_at) <= _CARD_WINDOW:
+        if found and -_CARD_BEFORE <= st.headline.filing.filed_at - found[1] <= _CARD_AFTER:
             st.results = found[0]
 
 
