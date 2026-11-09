@@ -42,14 +42,19 @@ jobs:
           uv run python scripts/refresh.py --days 3 --out seed/finn.sqlite
           code=$?
           echo "code=$code" >> "$GITHUB_OUTPUT"
-          if [ "$code" -eq 2 ]; then
-            echo "::error::Nothing was ingested (NSE and Yahoo both failed); the snapshot is unchanged."
-            exit 1
-          fi
-          if [ "$code" -eq 1 ]; then
-            echo "::warning::Partial refresh; see the summary above."
-          fi
-          exit 0
+          case "$code" in
+            0|1)
+              if [ "$code" -eq 1 ]; then echo "::warning::Partial refresh; see the summary above."; fi
+              ;;
+            2)
+              echo "::error::Nothing was ingested (NSE and Yahoo both failed); the snapshot is unchanged."
+              exit 1
+              ;;
+            *)
+              echo "::error::The refresh crashed or was killed (exit $code); the snapshot is unchanged."
+              exit 1
+              ;;
+          esac
 
       - name: Compact and check size
         run: uv run python scripts/compact_seed.py seed/finn.sqlite --max-mb 20

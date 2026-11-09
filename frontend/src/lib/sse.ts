@@ -58,7 +58,16 @@ export async function buildDossier(
     if (signal?.aborted) throw e;
     throw new BuildError("error", "Couldn't reach FINN's server");
   }
-  if (!res.ok || !res.body) throw new BuildError("error", `The server answered ${res.status}`);
+  if (!res.ok || !res.body) {
+    let detail = `The server answered ${res.status}`;
+    try {
+      const body = await res.json();
+      if (typeof body?.detail === "string") detail = body.detail;
+    } catch {
+      // not JSON; keep the status line
+    }
+    throw new BuildError("error", detail);
+  }
 
   const reader = res.body.getReader();
   const decoder = new TextDecoder();

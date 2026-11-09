@@ -223,7 +223,7 @@ finn/
 - Eval + cost numbers into `docs/EVALS.md`/README.
 - Generalisation run on 3 unseen tickers.
 - `code-review`, `simplify`, `security-review` (no keys in repo or history).
-- Export AI history (`scripts/export_history.py` renders `~/.claude/projects/-home-snig-Desktop-Sem-9-Placement-CV-ENAM/*.jsonl` to Markdown).
+- Export AI history (`scripts/export_history.py` renders `~/.claude/projects/<project>/*.jsonl` to Markdown).
 - Draft the covering email; run `humanizer` over it.
 
 **Day 7 — Sun 15 Nov · Buffer + submit** (user sends the email; Claude never sends it).

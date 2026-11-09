@@ -4,7 +4,9 @@ from __future__ import annotations
 
 import json
 import logging
+import os
 import queue
+import re
 import sqlite3
 import statistics
 import threading
@@ -58,7 +60,17 @@ async def lifespan(_app: FastAPI):
     yield
 
 
-app = FastAPI(title="FINN", lifespan=lifespan)
+def doc_urls() -> dict:
+    """No interactive API docs on the public deployment: "Try it out" would be a one-click way
+    to spend the LLM keys on /build."""
+    return (
+        {"docs_url": None, "redoc_url": None, "openapi_url": None}
+        if os.environ.get("VERCEL")
+        else {}
+    )
+
+
+app = FastAPI(title="FINN", lifespan=lifespan, **doc_urls())
 app.add_middleware(
     CORSMiddleware,
     allow_origins=get_settings().allowed_origins,
@@ -103,12 +115,36 @@ def _completed_history(
     return completed_sessions(db.price_history(conn, symbol, bars), now)
 
 
+_ORIGIN = re.compile(r"^https?://[A-Za-z0-9.-]+(:\d+)?$")
+
+
+def cors_problems(origins: list[str]) -> list[str]:
+    """What is wrong with ALLOWED_ORIGINS, in words; browsers fail these silently."""
+    out = []
+    for o in origins:
+        if o == "*":
+            if os.environ.get("VERCEL"):
+                out.append("*: any site may call this API; set ALLOWED_ORIGINS to the frontend URL")
+        elif o.endswith("/"):
+            out.append(f"{o}: drop the trailing slash")
+        elif not o.startswith(("http://", "https://")):
+            out.append(f"{o}: needs http:// or https://")
+        elif not _ORIGIN.match(o):
+            out.append(f"{o}: an origin is scheme://host[:port] only")
+    if not origins:
+        out.append("ALLOWED_ORIGINS is empty: no browser can call this API")
+    return out
+
+
 @app.get("/health")
 def health(conn: Conn) -> dict:
+    origins = get_settings().allowed_origins
+    problems = cors_problems(origins)
     return {
-        "ok": True,
+        "ok": not problems,
         "seeded": conn.execute("SELECT 1 FROM filings LIMIT 1").fetchone() is not None,
-        "cors": get_settings().allowed_origins,
+        "cors": origins,
+        "cors_problems": problems,
         "filings_as_of": db.get_meta(conn, "filings_as_of"),
         "prices_as_of": db.get_meta(conn, "prices_as_of"),
     }
@@ -259,9 +295,21 @@ def research_search(q: Annotated[str, Query(min_length=1)]) -> list[dict]:
         raise HTTPException(status_code=502, detail=str(e)) from e
 
 
+# NSE symbols are letters, digits, "&" and "-" (M&M, BAJAJ-AUTO). Anything else, such as a
+# percent-encoded "?" that would change which screener page is fetched, never reaches work.
+_SYMBOL = re.compile(r"^[A-Z0-9&-]{1,20}$")
+
+
+def _symbol(raw: str) -> str:
+    sym = raw.strip().upper()
+    if not _SYMBOL.match(sym):
+        raise HTTPException(status_code=400, detail="Not an NSE symbol")
+    return sym
+
+
 @app.get("/research/{symbol}", response_model=None)
 def research_get(symbol: str, conn: Conn) -> dict | JSONResponse:
-    sym = symbol.upper()
+    sym = _symbol(symbol)
     d = db.get_dossier(conn, sym)
     if d is None:
         return JSONResponse(
@@ -272,7 +320,7 @@ def research_get(symbol: str, conn: Conn) -> dict | JSONResponse:
 
 @app.get("/research/{symbol}/source/{source_id}/{page}")
 def research_source_page(symbol: str, source_id: str, page: int, conn: Conn) -> dict:
-    d = db.get_dossier(conn, symbol.upper())
+    d = db.get_dossier(conn, _symbol(symbol))
     src = next((s for s in d.sources if s.id == source_id), None) if d else None
     if src is None or not 1 <= page <= len(src.pages):
         raise HTTPException(status_code=404, detail="source page not found")
@@ -359,9 +407,43 @@ def _stream(q, clock=monotonic):
     yield _sse("error", {"detail": "build timed out"})
 
 
+# The build endpoint is public and every build costs about 9 model calls, so each server
+# instance runs at most MAX_CONCURRENT_BUILDS at once, one per symbol, and at most
+# MAX_BUILDS_PER_HOUR in a rolling hour. Cached answers are free and never limited.
+MAX_CONCURRENT_BUILDS = 2
+MAX_BUILDS_PER_HOUR = 20
+_gate = threading.Lock()
+_inflight: set[str] = set()
+_recent: list[float] = []
+
+
+def _admit(sym: str, clock=monotonic) -> str | None:
+    """None when a build may start (and is now counted), else the reason it may not."""
+    with _gate:
+        now = clock()
+        _recent[:] = [t for t in _recent if now - t < 3600]
+        if sym in _inflight:
+            return f"A build of {sym} is already running. Open it again in a minute."
+        if len(_inflight) >= MAX_CONCURRENT_BUILDS:
+            return "FINN is busy building other dossiers. Try again in a minute."
+        if len(_recent) >= MAX_BUILDS_PER_HOUR:
+            return "FINN has reached its hourly build limit. Try again later."
+        _inflight.add(sym)
+        _recent.append(now)
+        return None
+
+
+def _run_build(sym: str, q: queue.Queue) -> None:
+    try:
+        _build_worker(sym, q)
+    finally:
+        with _gate:
+            _inflight.discard(sym)
+
+
 @app.get("/research/{symbol}/build")
 def research_build(symbol: str, conn: Conn) -> StreamingResponse:
-    sym = symbol.upper()
+    sym = _symbol(symbol)
     cached = db.get_dossier(conn, sym)
     fresh = cached is not None and datetime.now(IST) - cached.built_at < timedelta(
         minutes=CACHE_MINUTES
@@ -372,8 +454,11 @@ def research_build(symbol: str, conn: Conn) -> StreamingResponse:
         q.put(("progress", {"msg": "Using cached dossier"}))
         q.put(_done(cached))
         q.put(_DONE)
+    elif (refused := _admit(sym)) is not None:
+        q.put(("error", {"detail": refused}))
+        q.put(_DONE)
     else:
-        threading.Thread(target=_build_worker, args=(sym, q), daemon=True).start()
+        threading.Thread(target=_run_build, args=(sym, q), daemon=True).start()
 
     return StreamingResponse(
         _stream(q),

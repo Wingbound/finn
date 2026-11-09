@@ -305,3 +305,60 @@ def test_list_carries_the_ledger_status_tally(env):
     assert client.get("/research").json()[0]["counts"]["ledger"] == {"kept": 1, "pending": 2}
     save(path, dossier())  # no ledger at all
     assert client.get("/research").json()[0]["counts"]["ledger"] == {}
+
+
+# ---- abuse limits on the public build endpoint (Plan 5 final review I1) ----
+
+
+def test_non_symbols_are_rejected_before_any_work(env, monkeypatch):
+    client, _ = env
+    monkeypatch.setattr(api_main, "build_dossier", lambda *a, **k: pytest.fail("must not build"))
+    for path in (
+        "/research/TCS%3FX%3D1/build",
+        "/research/TCS%3FX%3D1",
+        "/research/a%20b/source/T1/1",
+    ):
+        r = client.get(path)
+        assert r.status_code == 400, path
+        assert r.json()["detail"] == "Not an NSE symbol"
+    assert client.get("/research/M%26M").status_code == 404  # a real symbol shape is fine
+
+
+def test_a_second_build_of_the_same_symbol_is_refused_while_one_runs(env, monkeypatch):
+    import threading
+    import time
+
+    client, _ = env
+    release = threading.Event()
+
+    def slow(conn, symbol, router, *, progress, **kw):
+        release.wait(5)
+        return dossier(symbol)
+
+    monkeypatch.setattr(api_main, "build_dossier", slow)
+    first = threading.Thread(target=lambda: client.get("/research/ABC/build"))
+    first.start()
+    for _ in range(100):
+        if "ABC" in api_main._inflight:
+            break
+        time.sleep(0.02)
+    ev = events(client.get("/research/ABC/build").text)
+    release.set()
+    first.join(5)
+    assert ev[-1][0] == "error" and "already" in ev[-1][1]["detail"]
+
+
+def test_builds_stop_at_the_hourly_cap(env, monkeypatch):
+    client, _ = env
+    monkeypatch.setattr(api_main, "MAX_BUILDS_PER_HOUR", 1)
+    monkeypatch.setattr(api_main, "build_dossier", lambda conn, s, r, **k: dossier(s))
+    assert events(client.get("/research/ABC/build").text)[-1][0] == "done"
+    ev = events(client.get("/research/XYZ/build").text)
+    assert ev[-1][0] == "error" and "hourly" in ev[-1][1]["detail"]
+
+
+def test_api_docs_are_hidden_on_vercel(monkeypatch):
+    monkeypatch.setenv("VERCEL", "1")
+    assert api_main.doc_urls() == {"docs_url": None, "redoc_url": None, "openapi_url": None}
+    monkeypatch.delenv("VERCEL")
+    assert api_main.doc_urls() == {}

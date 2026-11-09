@@ -81,6 +81,7 @@ def test_health(client):
         "ok": True,
         "seeded": True,
         "cors": ["*"],
+        "cors_problems": [],
         "filings_as_of": "2026-11-08T19:00:00+05:30",
         "prices_as_of": None,
     }

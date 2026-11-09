@@ -77,3 +77,13 @@ describe("broken streams (final review I3)", () => {
     await expect(buildDossier("BAJFINANCE", {})).resolves.toHaveProperty("dossier");
   });
 });
+
+describe("refused builds (Plan 5 review I1)", () => {
+  it("show the server's reason for a 400", async () => {
+    vi.stubGlobal(
+      "fetch",
+      vi.fn(async () => new Response(JSON.stringify({ detail: "Not an NSE symbol" }), { status: 400 })),
+    );
+    await expect(buildDossier("TCS?X", {})).rejects.toMatchObject({ kind: "error", detail: "Not an NSE symbol" });
+  });
+});
