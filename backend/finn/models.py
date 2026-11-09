@@ -184,3 +184,32 @@ class ResultsCard(BaseModel):
     margins: list[MarginRow]
     notes: list[str]
     sources: list[str]
+
+
+class Flag(BaseModel):
+    level: Literal["good", "watch", "concern"]
+    text: str
+
+
+class Trajectory(BaseModel):
+    years: list[str]
+    revenue: list[float | None]
+    operating_profit: list[float | None]
+    margin_pct: list[float | None]
+    pat: list[float | None]
+    revenue_cagr_pct: float | None
+    pat_cagr_pct: float | None
+    margin_change_bps: int | None
+    read: Literal["growing", "compressing", "mixed", "insufficient data"]
+    lender: bool
+
+
+class BalanceSheetHealth(BaseModel):
+    as_of: str
+    debt_to_equity: float | None
+    cfo_to_pat_3y: float | None
+    fcf_3y_cr: float | None
+    working_capital_days: float | None
+    wc_days_change_3y: float | None
+    roce_pct: float | None
+    flags: list[Flag]
