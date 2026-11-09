@@ -227,3 +227,16 @@ how accurate the extraction is across the portfolio.
 ### Live result
 
 Live run over the 18 portfolio symbols: pending (controller)
+
+## 3. People and briefs
+
+### Limits of the grounding guard
+
+The guard proves that names, profile sentences, roles, effective dates, numbers and quotes
+exist in the filing. It does not prove:
+
+- that a profile belongs to that person when several profiles share one PDF;
+- the direction of a change (appointed or resigned) for a person the filing does name;
+- the units next to a number ("₹1,250 crore" passes wherever "1,250" appears);
+- that a fact's label is right for its value;
+- the one-liner's claims that carry no number.
