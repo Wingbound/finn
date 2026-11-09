@@ -1,6 +1,8 @@
+import pytest
+
 from finn.llm.providers import LLMError
-from finn.models import Citation
-from finn.research.guidance import extract_promises
+from finn.models import Citation, Source
+from finn.research.guidance import _forward_looking, extract_promises
 from tests.fakes import FakeRouter
 from tests.test_research_cite import REAL, t1
 
@@ -150,3 +152,90 @@ def test_future_cue_required(monkeypatch):
     monkeypatch.setattr(g, "locate", lambda q, s, h: Citation(source_id=s.id, page=1, quote=q))
     out = g.extract_promises(FakeRouter({"promises": [item(q) for q in sents.values()]}), t1())
     assert [p.citation.quote for p in out] == [sents["expect"], sents["track"]]
+
+
+# ---- I4: conditionals and past facts ----
+PAGE = (
+    "If demand recovers, we will grow revenue by 15% in FY27. "
+    "Assuming the order inflow sustains, we expect EBITDA margin of 12% next year. "
+    "Unless the macro deteriorates further, we will deliver revenue growth of 15% in FY27. "
+    "Our plant utilization was 80% in the quarter. "
+    "As expected, revenue grew 12% this quarter. "
+    "We are willing to consider acquisitions in adjacent areas. "
+    "Provided approvals come through, the new plant will start in Q3 FY27. "
+    "Subject to board approval, we will pay a special dividend this year. "
+    "We expect revenue to grow 15% in FY27."
+)
+
+
+def synthetic() -> Source:
+    return Source(id="S1", kind="transcript", title="Q2 FY27 call", quarter="Q2 FY27", url="u", pages=[PAGE])  # fmt: skip
+
+
+@pytest.mark.parametrize(
+    "quote",
+    [
+        "If demand recovers, we will grow revenue by 15% in FY27.",
+        "we will grow revenue by 15% in FY27",  # fragment after "If demand recovers,"
+        "Assuming the order inflow sustains, we expect EBITDA margin of 12% next year.",
+        "we expect EBITDA margin of 12% next year",
+        "we will deliver revenue growth of 15% in FY27",  # cut after "Unless ... further,"
+        "Our plant utilization was 80% in the quarter.",
+        "As expected, revenue grew 12% this quarter.",
+        "We are willing to consider acquisitions in adjacent areas.",
+        "the new plant will start in Q3 FY27",
+        "we will pay a special dividend this year",
+    ],
+)
+def test_conditional_and_past_statements_dropped(quote):
+    guard: dict = {}
+    out = extract_promises(FakeRouter({"promises": [item(quote)]}), synthetic(), guard)
+    assert out == [] and guard == {"promises_proposed": 1, "promises_kept": 0}
+
+
+def test_plain_forward_statement_kept():
+    out = extract_promises(FakeRouter({"promises": [item("We expect revenue to grow 15% in FY27.")]}), synthetic())  # fmt: skip
+    assert [p.citation.quote for p in out] == ["We expect revenue to grow 15% in FY27."]
+
+
+@pytest.mark.parametrize(
+    "quote",
+    [
+        "We expect growth", "Management expects growth", "We are expecting growth",
+        "Revenue will grow", "We shall invest", "It would help", "We plan to invest",
+        "It plans to invest", "We are planning a plant", "We aim to lead", "It aims to lead",
+        "We are aiming higher", "Our target is 15%", "We are targeting 15%", "Two targets set",
+        "We guide for 15%", "Our guidance is 15%", "We are guiding 15%", "We intend to invest",
+        "It intends to invest", "We are intending to invest", "We anticipate growth",
+        "It anticipates growth", "We are anticipating growth", "We aspire to lead",
+        "It aspires to lead", "Our aspiration is to lead", "We commit capital",
+        "We are committed to growth", "It commits capital", "The outlook is good",
+        "Going forward, margins rise", "We are on track", "The upcoming launch",
+        "Margins should rise", "Growth is likely", "We are confident", "We look to grow",
+        "We are looking to grow", "We look forward to it", "Breakeven by FY27",
+        "Breakeven by FY 27", "The next phase",
+    ],
+)  # fmt: skip
+def test_forward_cues_whole_words(quote):
+    assert _forward_looking(quote)
+
+
+@pytest.mark.parametrize(
+    "quote",
+    [
+        "As expected, revenue grew 12%", "We had planned this", "We targeted 15% and got it",
+        "We aimed high", "Our new plant runs well", "Customers are willing to pay",
+        "We guided 15% last year", "The endeavour paid off", "Our commitment is long",
+    ],
+)  # fmt: skip
+def test_past_forms_and_prefixes_are_not_cues(quote):
+    assert not _forward_looking(quote)
+
+
+def test_system_prompt_excludes_conditionals():
+    from finn.research.guidance import SYSTEM
+
+    assert (
+        "Exclude conditional or hypothetical statements (if, unless, assuming, provided, subject to)."
+        in SYSTEM
+    )

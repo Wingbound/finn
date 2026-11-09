@@ -16,20 +16,41 @@ _SENT_END = re.compile(r"[.!?](?=\s)")
 _WORD = re.compile(r"[\w']+")
 
 
+def _prefixes(q: str, text: str):
+    """For each verbatim occurrence of the normalized quote q in text (word boundaries): the
+    earlier part of its sentence, normalized."""
+    t = normalize(text)
+    for m in re.finditer(r"(?<!\w)" + re.escape(q) + r"(?!\w)", t):
+        prefix = t[: m.start()]
+        ends = list(_SENT_END.finditer(prefix))
+        yield prefix[ends[-1].end() :] if ends else prefix
+
+
+def _clean(prefix: str) -> bool:
+    return not _NEGATIONS.intersection(_WORD.findall(prefix))
+
+
 def _found(quote: str, text: str) -> bool:
     """Quote occurs verbatim (normalized, on word boundaries) with no negation earlier in
     the same sentence, so a fragment cannot flip the meaning of its source sentence."""
     q = normalize(quote)
     if len(q.split()) < MIN_QUOTE_WORDS:
         return False
-    t = normalize(text)
-    for m in re.finditer(r"(?<!\w)" + re.escape(q) + r"(?!\w)", t):
-        prefix = t[: m.start()]
-        ends = list(_SENT_END.finditer(prefix))
-        sentence = prefix[ends[-1].end() :] if ends else prefix
-        if not _NEGATIONS.intersection(_WORD.findall(sentence)):
-            return True
-    return False
+    return any(_clean(p) for p in _prefixes(q, text))
+
+
+def sentence_prefix(c: Citation, source: Source) -> str:
+    """The earlier part of the quote's sentence at the occurrence `locate` accepts on the
+    cited page (or that page joined to the next); "" when the quote starts its sentence."""
+    q, pages, i = normalize(c.quote), source.pages, c.page - 1
+    if not 0 <= i < len(pages):
+        return ""
+    texts = [pages[i]] + ([pages[i] + " " + pages[i + 1]] if i + 1 < len(pages) else [])
+    for text in texts:
+        for p in _prefixes(q, text):
+            if _clean(p):
+                return p.lstrip()
+    return ""
 
 
 def locate(quote: str, source: Source, hint_page: int | None) -> Citation | None:

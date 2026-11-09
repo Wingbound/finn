@@ -1,7 +1,7 @@
 import json
 
-from finn.models import Source
-from finn.research.cite import locate, tagged_text
+from finn.models import Citation, Source
+from finn.research.cite import locate, sentence_prefix, tagged_text
 from tests.fakes import FIXTURES
 
 REAL = (
@@ -96,3 +96,16 @@ def test_locate_other_occurrence_without_negation_accepted():
     )
     c = locate("expect revenue to grow by 20% this year", s, None)
     assert c is not None and c.page == 2
+
+
+def test_sentence_prefix():
+    src = Source(id="S", kind="transcript", title="t", quarter="Q2 FY27", url="u", pages=[
+        "Results were fine. Unless the macro deteriorates further, we will deliver revenue growth of 15% in FY27.",
+        "We will hire more people in the year ahead. Then",
+    ])  # fmt: skip
+    c = locate("we will deliver revenue growth of 15% in FY27", src, None)
+    assert c is not None and c.page == 1
+    assert sentence_prefix(c, src) == "unless the macro deteriorates further, "
+    whole = Citation(source_id="S", page=2, quote="We will hire more people in the year ahead.")
+    assert sentence_prefix(whole, src) == ""
+    assert sentence_prefix(Citation(source_id="S", page=9, quote="x"), src) == ""

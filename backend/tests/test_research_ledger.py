@@ -712,3 +712,66 @@ def test_should_stop_never_blocks_rows_without_later_calls():
     r = FakeRouter({"judgements": []})
     led = build_ledger(r, [promise(1, "PERSISTENT-T1", "Q2 FY27")], sources(), {}, {}, should_stop=lambda: True)  # fmt: skip
     assert led.rows[0].rationale == "Too recent to judge" and r.calls == []
+
+
+# ---- I5: the judged path's period handling ----
+def test_judge_prompt_states_made_in_and_period():
+    from finn.research.ledger import _user_prompt
+
+    later = sources()[:1]
+    p = promise(1, "PERSISTENT-T2", "Q1 FY27", horizon="FY27")
+    assert "(made in Q1 FY27; target period FY27)" in _user_prompt([p], later)
+    q = promise(2, "PERSISTENT-T2", "Q1 FY27", horizon="medium term")
+    assert "(made in Q1 FY27) |" in _user_prompt([q], later)
+
+
+@pytest.mark.parametrize(
+    "horizon,quote",
+    [
+        ("by FY27", "x y z a b c d"),
+        ("end of FY27", "x y z a b c d"),
+        ("exit FY27", "x y z a b c d"),
+        ("by March 2027", "x y z a b c d"),
+        (None, "We will commission the new plant by the end of this financial year"),
+        (None, "We will commission the plant by end of FY27"),
+        (None, "We will exit FY 2027 with the plant running"),
+        (None, "We expect the plant by mar 2027"),
+        ("next year", "x y z a b c d"),
+    ],
+)
+def test_lenient_period_scan_downgrades_kept(horizon, quote):
+    row = _kept(horizon=horizon, citation=_cit(quote))  # made in Q1 FY27, newest Q2 FY27
+    assert row.status == "pending" and row.rationale == "Target not yet due — tracking is not delivery"  # fmt: skip
+
+
+def test_lenient_scan_this_year_in_q4_call_means_next_fy():
+    from finn.research.ledger import _not_yet_due
+
+    ev = Citation(source_id="PERSISTENT-T1", page=7, quote="x y z a b c d")
+    p = promise(1, "PERSISTENT-T3", "Q4 FY26", citation=_cit("We will finish the plant this year"))  # fmt: skip
+    assert _not_yet_due(p, ("kept", ev, "r"), "Q4 FY27")[0] == "kept"  # FY27 has ended
+    assert _not_yet_due(p, ("kept", ev, "r"), "Q2 FY27")[0] == "pending"  # FY27, not FY26
+
+
+@pytest.mark.parametrize(
+    "horizon,quote",
+    [
+        (None, "We delivered the plant in FY26 as planned"),
+        (None, "x y z a b c d"),
+        ("next quarter", "x y z a b c d"),  # Q2 FY27: the newest call reports it
+    ],
+)
+def test_past_or_no_period_stays_kept(horizon, quote):
+    assert _kept(horizon=horizon, citation=_cit(quote)).status == "kept"
+
+
+def test_long_horizon_is_relative_to_newest_call():
+    from finn.research.ledger import _not_yet_due
+
+    ev = Citation(source_id="PERSISTENT-T1", page=7, quote="x y z a b c d")
+    far = promise(1, "PERSISTENT-T2", "Q1 FY27", horizon="FY26", citation=_cit("we did well in FY26 and target 25% by FY29"))  # fmt: skip
+    assert _not_yet_due(far, ("kept", ev, "r"), "Q2 FY27")[0] == "pending"  # FY29 >= FY27 + 2
+    near = far.model_copy(update={"citation": _cit("we did well in FY26 and target 25% by FY28")})
+    assert _not_yet_due(near, ("kept", ev, "r"), "Q2 FY27")[0] == "kept"  # first mention FY26
+    old = far.model_copy(update={"citation": _cit("we did well in FY26 and target 25% by FY30")})
+    assert _not_yet_due(old, ("kept", ev, "r"), "Q2 FY29")[0] == "kept"  # FY30 < FY29 + 2

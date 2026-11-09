@@ -183,11 +183,48 @@ def _target(p: Promise) -> str:
 
 
 _SEGMENT = re.compile(r"segment|division|vertical|business unit|subsidiary")
-_LONG = re.compile(
-    r"long[- ]term|medium[- ]term|aspiration|over the next few years"
-    r"|\bfy\s?(?:20)?(?:28|29|30|31|32)\b|\b20(?:28|29|30|31|32)\b"
-)
 _NOT_DUE = "Target not yet due — tracking is not delivery"
+
+# Lenient period scan, used only to downgrade a judged kept/partly to pending (never to grade).
+_SCAN = re.compile(
+    r"\bq(?P<q>[1-4])\s*fy\s*'?(?P<qy>\d{4}|\d{2})\b"
+    r"|\b(?:fy|fiscal(?: year)?)\s*'?(?P<fy>\d{4}|\d{2})\b"
+    r"|\b(?:march|mar)\s+(?P<mar>20\d{2})\b"
+    r"|\b(?P<rel>this financial year|this fiscal|this year|current financial year|current fiscal"
+    r"|current year|next financial year|next fiscal|next year|next quarter|coming quarter)\b"
+)
+_LONG_WORDS = re.compile(r"long[- ]term|medium[- ]term|aspiration|over the next few years")
+_YEARS = re.compile(r"\b(?:fy|fiscal(?: year)?)\s*'?(\d{4}|\d{2})\b|\b(20\d{2})\b")
+LONG_YEARS = 2  # a fiscal year this far past the newest call is a long-horizon target
+
+
+def _scan_period(text: str, made_in: str) -> tuple[int, int] | None:
+    """(yy, quarter) of the first period mentioned in normalized text. Year-level mentions
+    end at Q4; "march 2027" is FY27. "This year" follows the call: in a Q4 call the new
+    fiscal year has begun, so it means the next FY."""
+    made = _qkey(made_in)
+    for m in _SCAN.finditer(text):
+        if m.group("q"):
+            return _yy(m.group("qy")), int(m.group("q"))
+        if m.group("fy") or m.group("mar"):
+            return _yy(m.group("fy") or m.group("mar")), 4
+        if made is None:
+            continue
+        yy, q = made
+        rel = m.group("rel")
+        if rel in ("next quarter", "coming quarter"):
+            return (yy, q + 1) if q < 4 else (yy + 1, 1)
+        current = yy + 1 if q == 4 else yy
+        return current + (1 if rel.startswith("next") else 0), 4
+    return None
+
+
+def _long_horizon(text: str, newest_fy: int | None) -> bool:
+    if _LONG_WORDS.search(text):
+        return True
+    if newest_fy is None:
+        return False
+    return any(_yy(a or b) >= newest_fy + LONG_YEARS for a, b in _YEARS.findall(text))
 
 
 def _grade(p: Promise, quarters: dict, annual: dict) -> tuple[Status, Actual | None, str] | None:
@@ -285,8 +322,12 @@ Reply JSON only: {"judgements": [{"id", "status", "evidence_quote", "evidence_so
 def _user_prompt(promises: list[Promise], later: list[Source]) -> str:
     lines = ["PROMISES:"]
     for p in promises:
+        hz = parse_horizon(p.horizon, p.made_in)
+        when = f"made in {p.made_in or 'an unknown quarter'}" + (
+            f"; target period {hz[1]}" if hz else ""
+        )
         lines.append(
-            f"- id={p.id} | topic={p.topic} | horizon={p.horizon or 'unspecified'} | "
+            f"- id={p.id} | topic={p.topic} | horizon={p.horizon or 'unspecified'} ({when}) | "
             f'quote: "{p.citation.quote}"'
         )
     cap = min(90_000, JUDGE_EVIDENCE_CHARS // max(len(later), 1))
@@ -350,16 +391,17 @@ def _judge_group(
 
 
 def _not_yet_due(p: Promise, verdict: tuple, newest: str | None) -> tuple:
-    status = verdict[0]
-    if status not in ("kept", "partly"):
+    """A kept/partly verdict becomes pending when the target's period ends after the newest
+    later call, or the target is long-horizon. Only ever downgrades."""
+    if verdict[0] not in ("kept", "partly"):
         return verdict
-    long_term = _LONG.search(normalize(p.citation.quote)) is not None
-    hz, nk = parse_horizon(p.horizon, p.made_in), _qkey(newest)
-    future = False
-    if hz and nk:
-        k = _period_key(hz)
-        future = k is not None and k > nk
-    return ("pending", None, _NOT_DUE) if long_term or future else verdict
+    text = normalize(f"{p.horizon or ''}\n{p.citation.quote}")
+    nk = _qkey(newest)
+    k = _scan_period(text, p.made_in)
+    future = k is not None and nk is not None and k > nk
+    if future or _long_horizon(text, nk[0] if nk else None):
+        return "pending", None, _NOT_DUE
+    return verdict
 
 
 def build_ledger(
