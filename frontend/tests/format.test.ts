@@ -89,3 +89,18 @@ describe("cleanSubject", () => {
     );
   });
 });
+
+describe("decoding exchange text", () => {
+  it("decodes HTML entities NSE leaves in subjects", async () => {
+    const { cleanSubject } = await import("@/lib/format");
+    expect(cleanSubject("Acquisition of 38,222 equity shares of face value &#8377;10/- each &amp; more")).toBe(
+      "Acquisition of 38,222 equity shares of face value ₹10/- each & more",
+    );
+  });
+  it("reads the category out of a story id", async () => {
+    const { storyCategory } = await import("@/lib/format");
+    expect(storyCategory("AMBER:fund_raise:106852048")).toBe("fund_raise");
+    expect(storyCategory("M&M:results:1")).toBe("results");
+    expect(storyCategory("weird")).toBeNull();
+  });
+});

@@ -127,10 +127,30 @@ export function plural(n: number, one: string, many = `${one}s`): string {
 }
 
 const BOILERPLATE = /^.*?\bhas informed the Exchange\s+(?:about|regarding)\s+/i;
+const NAMED: Record<string, string> = { amp: "&", quot: '"', apos: "'", lt: "<", gt: ">", nbsp: " " };
+
+/** NSE text sometimes arrives with HTML entities left in ("&#8377;10" for "₹10"). */
+export function decodeEntities(s: string): string {
+  return s.replace(/&(#x[0-9a-f]+|#\d+|[a-z]+);/gi, (m, e: string) => {
+    if (e[0] === "#") {
+      const code = e[1] === "x" || e[1] === "X" ? Number.parseInt(e.slice(2), 16) : Number.parseInt(e.slice(1), 10);
+      return Number.isFinite(code) && code > 0 && code < 0x110000 ? String.fromCodePoint(code) : m;
+    }
+    return NAMED[e.toLowerCase()] ?? m;
+  });
+}
 
 /** NSE subjects open with "<Company> has informed the Exchange about …"; keep only what follows. */
 export function cleanSubject(subject: string): string {
-  const rest = subject.replace(BOILERPLATE, "");
-  if (rest === subject || !rest) return subject;
+  const text = decodeEntities(subject);
+  const rest = text.replace(BOILERPLATE, "");
+  if (rest === text || !rest) return text;
   return rest.charAt(0).toUpperCase() + rest.slice(1);
+}
+
+/** Story ids are "<SYMBOL>:<category>:<seq>"; the symbol itself may hold "&" but never ":". */
+export function storyCategory(id: string): Category | null {
+  const parts = id.split(":");
+  const c = parts.length >= 3 ? parts[parts.length - 2] : undefined;
+  return c && c in CATEGORY ? (c as Category) : null;
 }

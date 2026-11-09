@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ErrorState, Skeleton } from "@/components/States";
 import { FloorControl } from "@/components/today/FloorControl";
 import { Header } from "@/components/today/Header";
@@ -42,6 +42,13 @@ export default function TodayPage() {
     requestAnimationFrame(() => document.getElementById("routine")?.scrollIntoView({ behavior: "smooth" }));
   };
   const empty = data && data.counts.shown === 0 && data.counts.routine === 0;
+
+  // An alert links here as /#story-<id>: bring that story into view once it has rendered.
+  useEffect(() => {
+    const hash = decodeURIComponent(window.location.hash.slice(1));
+    if (!data || !hash.startsWith("story-")) return;
+    document.getElementById(hash)?.scrollIntoView({ block: "start" });
+  }, [data]);
 
   return (
     <>

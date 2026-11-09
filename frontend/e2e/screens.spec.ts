@@ -17,6 +17,15 @@ const SHOTS: { name: string; path: string; digest?: string; prep?: (p: import("@
     },
   },
   { name: "today-empty", path: "/", digest: "digest-empty.json" },
+  { name: "alerts", path: "/alerts" },
+  {
+    name: "rules",
+    path: "/alerts",
+    prep: async (p) => {
+      await p.getByRole("button", { name: "Edit rules" }).click();
+      await p.waitForTimeout(300);
+    },
+  },
 ];
 
 for (const scheme of ["light", "dark"] as const) {
