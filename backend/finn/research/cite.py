@@ -2,10 +2,34 @@
 
 from __future__ import annotations
 
-from finn.enrich.grounding import phrase_in_text
+import re
+
+from finn.enrich.grounding import normalize
 from finn.models import Citation, Source
 
 MIN_QUOTE_WORDS = 6
+_NEGATIONS = {
+    "not", "no", "never", "cannot", "can't", "won't", "don't", "doesn't", "didn't",
+    "isn't", "aren't", "wasn't", "unlikely", "neither", "nor", "without",
+}  # fmt: skip
+_SENT_END = re.compile(r"[.!?](?=\s)")
+_WORD = re.compile(r"[\w']+")
+
+
+def _found(quote: str, text: str) -> bool:
+    """Quote occurs verbatim (normalized, on word boundaries) with no negation earlier in
+    the same sentence, so a fragment cannot flip the meaning of its source sentence."""
+    q = normalize(quote)
+    if len(q.split()) < MIN_QUOTE_WORDS:
+        return False
+    t = normalize(text)
+    for m in re.finditer(r"(?<!\w)" + re.escape(q) + r"(?!\w)", t):
+        prefix = t[: m.start()]
+        ends = list(_SENT_END.finditer(prefix))
+        sentence = prefix[ends[-1].end() :] if ends else prefix
+        if not _NEGATIONS.intersection(_WORD.findall(sentence)):
+            return True
+    return False
 
 
 def locate(quote: str, source: Source, hint_page: int | None) -> Citation | None:
@@ -19,10 +43,10 @@ def locate(quote: str, source: Source, hint_page: int | None) -> Citation | None
         order.remove(hint_page - 1)
         order.insert(0, hint_page - 1)
     for i in order:
-        if phrase_in_text(q, pages[i], min_words=MIN_QUOTE_WORDS):
+        if _found(q, pages[i]):
             return Citation(source_id=source.id, page=i + 1, quote=q)
     for i in range(len(pages) - 1):
-        if phrase_in_text(q, pages[i] + " " + pages[i + 1], min_words=MIN_QUOTE_WORDS):
+        if _found(q, pages[i] + " " + pages[i + 1]):
             return Citation(source_id=source.id, page=i + 1, quote=q)
     return None
 

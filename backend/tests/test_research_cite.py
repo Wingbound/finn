@@ -63,3 +63,36 @@ def test_tagged_text_markers_and_truncation():
     cut = tagged_text(s, max_chars=len(s.pages[0]) + len(s.pages[1]) + 40)
     assert "[[p2]]" in cut and "[[p3]]" not in cut
     assert len(cut) <= len(s.pages[0]) + len(s.pages[1]) + 40
+
+
+def _page(text):
+    return Source(id="n", kind="transcript", title="t", quarter=None, url="u", pages=[text])
+
+
+NEG = "We do not expect revenue to grow by 20% this year."
+
+
+def test_locate_rejects_fragment_after_negation():
+    assert locate("expect revenue to grow by 20% this year", _page(NEG), None) is None
+
+
+def test_locate_keeps_quote_containing_negation():
+    assert locate(NEG.rstrip("."), _page(NEG), None) is not None
+
+
+def test_locate_negation_in_previous_sentence_ok():
+    s = _page("We did not win that deal. We expect revenue to grow by 20% this year.")
+    assert locate("expect revenue to grow by 20% this year", s, None) is not None
+
+
+def test_locate_other_occurrence_without_negation_accepted():
+    s = Source(
+        id="n",
+        kind="transcript",
+        title="t",
+        quarter=None,
+        url="u",
+        pages=[NEG, "Overall we expect revenue to grow by 20% this year."],
+    )
+    c = locate("expect revenue to grow by 20% this year", s, None)
+    assert c is not None and c.page == 2

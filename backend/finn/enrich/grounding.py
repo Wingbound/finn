@@ -101,8 +101,12 @@ def grounded_sentences(passage: str, text: str, max_words: int) -> str | None:
     return " ".join(kept[0].split()[:max_words]) + "…"
 
 
+_PERIOD = re.compile(r"\b(?:FY\d{2,4}|Q[1-4]|H[12]|9M|[1-4]Q)\b", re.IGNORECASE)
+
+
 def _numbers(s: str) -> set[str]:
-    return {m.replace(",", "") for m in _NUMBER.findall(s)}
+    """Number tokens, commas removed; period labels (FY27, Q2, H1, 9M, 2Q) are not numbers."""
+    return {m.replace(",", "") for m in _NUMBER.findall(_PERIOD.sub(" ", s))}
 
 
 def numbers_grounded(s: str, text: str) -> bool:

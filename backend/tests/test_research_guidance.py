@@ -98,3 +98,12 @@ def test_prompt_header_and_task():
     extract_promises(r, t1())
     task, _, user = r.calls[0]
     assert task == "extract_transcript" and "Q2 FY27" in user and "[[p1]]" in user
+
+
+def test_kind_follows_targets():
+    q = run([item(TAX, kind="qualitative", target_low=22.5, unit="%")])[0]
+    assert q.kind == "quantitative"
+    q = run([item(TAX, kind="quantitative", unit="%")])[0]
+    assert q.kind == "qualitative" and q.unit is None
+    q = run([item(TAX, kind="quantitative", target_low=99, unit="%")])[0]
+    assert q.kind == "qualitative" and q.unit is None and q.target_low is None

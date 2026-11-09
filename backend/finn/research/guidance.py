@@ -86,11 +86,13 @@ def extract_promises(router, source: Source) -> list[Promise]:
         low, high = _num(item.get("target_low")), _num(item.get("target_high"))
         unit = item.get("unit") if item.get("unit") in UNITS else None
         metric = item.get("metric") if item.get("metric") in METRICS else None
-        kind = "quantitative" if item.get("kind") == "quantitative" else "qualitative"
         targets = [v for v in (low, high) if v is not None]
         if any(not numbers_grounded(f"{v:g}", cite.quote) for v in targets):
             low = high = unit = None
-            kind = "qualitative"
+        targets = [v for v in (low, high) if v is not None]
+        kind = "quantitative" if targets else "qualitative"  # kind follows the grounded targets
+        if not targets:
+            unit = None
         seen.add(key)
         out.append(
             Promise(

@@ -97,3 +97,12 @@ def test_phrase_in_text():
     assert not phrase_in_text("", src)
     assert not phrase_in_text("stable outlook", src, min_words=3)
     assert phrase_in_text("with stable outlook", src, min_words=3)
+
+
+def test_period_labels_are_not_numbers():
+    from finn.enrich.grounding import numbers_grounded
+
+    assert not numbers_grounded("27", "margin target for FY27")
+    assert numbers_grounded("27", "27% margin in FY27")
+    assert numbers_grounded("Q2 revenue 100", "revenue was 100")
+    assert not numbers_grounded("2", "Q2 H1 9M 2Q")
