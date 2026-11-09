@@ -469,3 +469,64 @@ def test_digest_story_serialises_results(results_client):
     body = results_client.post("/digest", json={"hours": 48, "floor": "everything"}).json()
     stories = [s for s in body["stories"] if s["symbol"] == "TATASTEEL"]
     assert stories[0]["results"]["metrics"][0]["key"] == "revenue"
+
+
+def test_digest_story_serialises_people_and_brief(client, tmp_path):
+    conn = db.connect(tmp_path / "api.sqlite")
+    when = datetime(2026, 11, 8, 10, 0, tzinfo=IST)
+    filings = [
+        Filing(
+            seq_id="MC-1",
+            symbol="VOLTAS",
+            company="Voltas Limited",
+            nse_desc="Change in Directors/ Key Managerial Personnel",
+            subject="Appointment of Mr. Jayant Balan as Managing Director",
+            filed_at=when,
+        ),
+        Filing(
+            seq_id="MNA-1",
+            symbol="TRENT",
+            company="Trent Limited",
+            nse_desc="Acquisition",
+            subject="Acquisition of 100% of Alpha Ltd",
+            filed_at=when,
+        ),
+    ]
+    db.upsert_filings(conn, filings)
+    db.save_classifications(
+        conn,
+        {
+            "MC-1": Classification(category="management_change", by="rules", confidence=1.0),
+            "MNA-1": Classification(category="mna", by="rules", confidence=1.0),
+        },
+    )
+    person = {
+        "name": "Jayant Balan",
+        "role": "Managing Director",
+        "change": "appointed",
+        "effective": None,
+        "profile": None,
+        "incoming": True,
+        "source_seq_id": "MC-1",
+    }
+    db.save_enrichment(conn, "MC-1", "people", {"people": [person]}, "m")
+    brief = {
+        "one_liner": "Trent buys all of Alpha Ltd.",
+        "facts": [{"label": "Stake", "value": "100%"}],
+        "quote": None,
+        "by": "llm",
+        "source_seq_id": "MNA-1",
+    }
+    db.save_enrichment(conn, "MNA-1", "brief", {"brief": brief}, "m")
+    conn.close()
+
+    body = client.post(
+        "/digest",
+        json={"hours": 24, "floor": "everything", "subscribed": ["management_change", "mna"]},
+    ).json()
+    stories = body["stories"] + [s for v in body["routine"].values() for s in v]
+    by_seq = {s["headline"]["filing"]["seq_id"]: s for s in stories}
+    assert by_seq["MC-1"]["people"] == [person]
+    assert by_seq["MC-1"]["brief"] is None
+    assert by_seq["MNA-1"]["brief"] == brief
+    assert by_seq["MNA-1"]["people"] == []

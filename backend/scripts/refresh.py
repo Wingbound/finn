@@ -16,7 +16,7 @@ from pathlib import Path
 
 from finn import db
 from finn.classify.pipeline import classify_pending
-from finn.config import get_settings, route_for
+from finn.config import chain_for, get_settings
 from finn.enrich.brief import enrich_briefs
 from finn.enrich.people import enrich_people
 from finn.enrich.results import ingest_financials
@@ -27,15 +27,18 @@ from finn.llm.providers import PROVIDERS
 from finn.models import IST, Rules
 from finn.portfolio import load_portfolio
 
+_LLM_TASKS = ("classify", "bio", "oneliner")  # the tasks a refresh sends to an LLM
+
 
 def _router(conn: sqlite3.Connection, use_llm: bool) -> LLMRouter | None:
+    """A router when any provider on a refresh task's chain has a key; else None (rules only)."""
     if not use_llm:
         return None
     settings = get_settings()
-    provider, _model = route_for("classify", settings)
-    _call, _parse, key_attr, key_name = PROVIDERS[provider]
-    if not getattr(settings, key_attr):
-        print(f"note: {key_name} is empty; classifying with rules only (as with --no-llm)")
+    providers = {p for task in _LLM_TASKS for p, _model in chain_for(task, settings)}
+    if not any(getattr(settings, PROVIDERS[p][2]) for p in providers):
+        keys = ", ".join(sorted(PROVIDERS[p][3] for p in providers))
+        print(f"note: no LLM key set ({keys}); rules only, no enrichment (as with --no-llm)")
         return None
     return LLMRouter(conn, settings)
 

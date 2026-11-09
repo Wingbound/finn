@@ -195,6 +195,29 @@ def test_use_llm_without_keys_degrades_to_rules(
     assert "GROQ_API_KEY" in capsys.readouterr().out
 
 
+def _with_keys(monkeypatch, groq="", gemini=""):
+    settings = Settings(_env_file=None, gemini_api_key=gemini, groq_api_key=groq)
+    monkeypatch.setattr(refresh_mod, "get_settings", lambda: settings)
+
+
+def test_router_built_when_only_a_fallback_provider_has_a_key(conn, monkeypatch):
+    from finn.llm import LLMRouter
+
+    _with_keys(monkeypatch, gemini="m")
+    assert isinstance(refresh_mod._router(conn, True), LLMRouter)
+    _with_keys(monkeypatch, groq="g")
+    assert isinstance(refresh_mod._router(conn, True), LLMRouter)
+
+
+def test_router_none_when_no_provider_has_a_key_or_llm_is_off(conn, monkeypatch, capsys):
+    _with_keys(monkeypatch)
+    assert refresh_mod._router(conn, True) is None
+    out = capsys.readouterr().out
+    assert "GROQ_API_KEY" in out and "GEMINI_API_KEY" in out
+    _with_keys(monkeypatch, groq="g", gemini="m")
+    assert refresh_mod._router(conn, False) is None
+
+
 def _groq(req):
     ids = [item["id"] for item in json.loads(json.loads(req.content)["messages"][1]["content"])]
     items = [{"id": i, "category": "press_release", "subtype": None} for i in ids]
