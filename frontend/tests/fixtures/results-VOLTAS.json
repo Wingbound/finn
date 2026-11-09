@@ -1,0 +1,69 @@
+{
+ "symbol": "VOLTAS",
+ "period_end": "2026-09-30",
+ "period_label": "Q2 FY27",
+ "basis": "consolidated",
+ "format": "indas",
+ "audited": false,
+ "compared_qoq": "2026-06-30",
+ "compared_yoy": "2025-09-30",
+ "metrics": [
+  {
+   "key": "revenue",
+   "label": "Revenue",
+   "value": 2706.57,
+   "qoq_pct": -42.1,
+   "yoy_pct": 15.3,
+   "computed": false
+  },
+  {
+   "key": "ebitda",
+   "label": "EBITDA",
+   "value": 127.86,
+   "qoq_pct": -51.8,
+   "yoy_pct": 81.6,
+   "computed": true
+  },
+  {
+   "key": "pbt",
+   "label": "PBT",
+   "value": 124.03,
+   "qoq_pct": -61.6,
+   "yoy_pct": 36.8,
+   "computed": false
+  },
+  {
+   "key": "pat",
+   "label": "PAT",
+   "value": 47.71,
+   "qoq_pct": -77.6,
+   "yoy_pct": 51.5,
+   "computed": false
+  }
+ ],
+ "margins": [
+  {
+   "key": "ebitda_margin",
+   "label": "EBITDA margin",
+   "value_pct": 4.7,
+   "qoq_bps": -96,
+   "yoy_bps": 172
+  },
+  {
+   "key": "pat_margin",
+   "label": "PAT margin",
+   "value_pct": 1.8,
+   "qoq_bps": -279,
+   "yoy_bps": 42
+  }
+ ],
+ "notes": [
+  "EBITDA is computed: revenue from operations minus operating expenses (excludes other income).",
+  "PAT includes a ₹41.10 cr share of loss of associates and joint ventures."
+ ],
+ "sources": [
+  "https://nsearchives.nseindia.com/corporate/xbrl/INTEGRATED_FILING_INDAS_1755186_06112026085901_WEB.xml",
+  "https://nsearchives.nseindia.com/corporate/xbrl/INTEGRATED_FILING_INDAS_1715051_14082026080841_WEB.xml",
+  "https://nsearchives.nseindia.com/corporate/xbrl/INTEGRATED_FILING_INDAS_1574474_13112025095958_WEB.xml"
+ ]
+}

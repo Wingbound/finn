@@ -1,0 +1,6 @@
+event: progress
+data: {"msg": "Resolving ZZZZ on screener"}
+
+event: error
+data: {"detail": "ZZZZ not found on screener"}
+

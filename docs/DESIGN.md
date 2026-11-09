@@ -114,6 +114,39 @@ Docker Spaces on Hugging Face now need HF PRO, so the backend runs on Vercel Pyt
 ### Robustness ("demo never breaks")
 Every external fetch is cached with an `as_of` timestamp. The deployed API boots from the committed **seeded SQLite snapshot** and never fetches, except on `/research/search` and `/research/{sym}/build`. A GitHub Actions cron (or a local `scripts/refresh.py`) ingests out-of-band and commits a fresh snapshot.
 
+### Frontend (Plan 4)
+
+`frontend/` is a Next.js App Router app (React 19, Tailwind 4, SWR). It has no component or chart library. Every screen is a client component that reads the API at `NEXT_PUBLIC_API_URL`. Screenshots are in `docs/screenshots/`.
+
+**Point of view: FINN is the editor.** A blue pencil marks FINN's editorial acts.
+- On Today, a pencil stroke strikes through the routine filings it set aside. It is drawn once, and it is the only motion that runs on its own.
+- Everywhere else the blue is simply the interactive accent: links, the active tab, the focus ring.
+
+**Typography carries provenance.**
+- **Literata** (serif) is used only for text quoted word for word from a document: management's promises, later-call evidence, a filing's own profile text, and the source page.
+- **IBM Plex Sans** is used for filed numbers and FINN's own words.
+
+The dossier says so in one line. A FACTS citation, a figure FINN computed, is never set in the serif. It opens the computed line with "not quoted from a document".
+
+**Screens.**
+- **Today.** "N things matter", the struck routine count, window and noise-floor controls, and cards built for each kind of story (results grid, people, brief). Each card has why-it-ranks and a seen mark in its left margin. The feed ends with "You're caught up." and a drawer of what FINN set aside, including the noise it dropped. An empty window says how old the newest filing is and offers a wider one.
+- **Alerts.** The newest 8 alerts, with filing alerts named by category and linked to their story; holdings with 20-close sparklines; and a rules sheet with thresholds, filing types and per-stock overrides.
+- **Research.** Search any listed company. Known ones open; new ones build live with FINN's progress lines.
+- **Dossier.** The track record from earlier calls comes first, with resolved verdicts at the top of each call, then the newest call's open promises. After that: a snapshot, three single-series trajectory charts with a table view, balance-sheet health, and cited bull and bear points. Every citation chip opens its page with the quote highlighted.
+
+**Colour.**
+- **Status.** Kept is #1E7A4C, partly #B98310, missed #B3261E and pending grey. These were checked with the dataviz palette validator in light and dark modes. A status always carries a glyph and a word as well.
+- **Deltas.** Results deltas stay in ink: a rising credit cost is not good news.
+- **Day moves.** Price day moves use green and red with ▲ and ▼.
+
+**State on the device.**
+- Rules, noise floor, window and seen marks are stored in `localStorage` under `finn:v1:*`. They are validated on read and fall back to defaults when storage is blocked. They are sent with each request, so the server keeps no user state.
+- A service worker caches the app shell and the last API answers, including the POST digest and alerts, keyed by body. On a dead network Today opens with "Offline: showing what FINN had at 14:05".
+
+**Tested.**
+- Vitest, against fixtures captured from the real API by `backend/scripts/export_fixtures.py`, checks every fixture's shape against the TypeScript types.
+- Playwright runs at 390×844 and 360×740 against the same fixtures: the golden path (Today, Dig in, ledger, citation, highlighted quote), the rules round-trip, a live build, the offline fallback, and axe with no serious issues in light and dark.
+
 ---
 
 ## 3. Repo layout (new git repo at `ENAM/finn/`; the PDFs stay outside it, since the JD carries the student ID)

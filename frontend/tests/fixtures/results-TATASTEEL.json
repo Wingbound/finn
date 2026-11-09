@@ -1,0 +1,70 @@
+{
+ "symbol": "TATASTEEL",
+ "period_end": "2026-09-30",
+ "period_label": "Q2 FY27",
+ "basis": "consolidated",
+ "format": "indas",
+ "audited": false,
+ "compared_qoq": "2026-06-30",
+ "compared_yoy": "2025-09-30",
+ "metrics": [
+  {
+   "key": "revenue",
+   "label": "Revenue",
+   "value": 65436.24,
+   "qoq_pct": 7.6,
+   "yoy_pct": 11.5,
+   "computed": false
+  },
+  {
+   "key": "ebitda",
+   "label": "EBITDA",
+   "value": 10533.07,
+   "qoq_pct": 13.7,
+   "yoy_pct": 18.4,
+   "computed": true
+  },
+  {
+   "key": "pbt",
+   "label": "PBT",
+   "value": 5342.88,
+   "qoq_pct": 42.8,
+   "yoy_pct": 28.1,
+   "computed": false
+  },
+  {
+   "key": "pat",
+   "label": "PAT",
+   "value": 3699.59,
+   "qoq_pct": 55.1,
+   "yoy_pct": 16.2,
+   "computed": false
+  }
+ ],
+ "margins": [
+  {
+   "key": "ebitda_margin",
+   "label": "EBITDA margin",
+   "value_pct": 16.1,
+   "qoq_bps": 86,
+   "yoy_bps": 94
+  },
+  {
+   "key": "pat_margin",
+   "label": "PAT margin",
+   "value_pct": 5.7,
+   "qoq_bps": 173,
+   "yoy_bps": 23
+  }
+ ],
+ "notes": [
+  "EBITDA is computed: revenue from operations minus operating expenses (excludes other income).",
+  "PBT includes an exceptional gain of ₹348.68 cr.",
+  "PAT includes ₹112.27 cr share of profit of associates and joint ventures."
+ ],
+ "sources": [
+  "https://nsearchives.nseindia.com/corporate/xbrl/INTEGRATED_FILING_INDAS_1755442_07112026053333_WEB.xml",
+  "https://nsearchives.nseindia.com/corporate/xbrl/INTEGRATED_FILING_INDAS_1705622_30072026075610_WEB.xml",
+  "https://nsearchives.nseindia.com/corporate/xbrl/INTEGRATED_FILING_INDAS_1572729_12112025073451_WEB.xml"
+ ]
+}

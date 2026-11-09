@@ -292,3 +292,16 @@ def test_worker_puts_done_marker_even_if_close_raises(monkeypatch):
         api_main._build_worker("ABC", q)
     items = [q.get_nowait() for _ in range(q.qsize())]
     assert items[0][0] == "done" and items[-1] is api_main._DONE
+
+
+def test_list_carries_the_ledger_status_tally(env):
+    client, path = env
+    from finn.models import Ledger
+
+    d = dossier().model_copy(
+        update={"ledger": Ledger(rows=[], counts={"kept": 1, "pending": 2}, credibility_pct=None)}
+    )
+    save(path, d)
+    assert client.get("/research").json()[0]["counts"]["ledger"] == {"kept": 1, "pending": 2}
+    save(path, dossier())  # no ledger at all
+    assert client.get("/research").json()[0]["counts"]["ledger"] == {}

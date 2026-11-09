@@ -1,0 +1,567 @@
+{
+ "symbol": "POLYCAB",
+ "name": "Polycab India Ltd",
+ "basis": "consolidated",
+ "built_at": "2026-11-09T21:16:59.830145+05:30",
+ "sources": [
+  {
+   "id": "T1",
+   "kind": "transcript",
+   "title": "Q2 FY27 earnings call (Oct 2026)",
+   "quarter": "Q2 FY27",
+   "url": "https://www.bseindia.com/stockinfo/AnnPdfOpen.aspx?Pname=77b6d277-0ffc-440d-ba8a-2bd9bc3dc43e.pdf"
+  },
+  {
+   "id": "T2",
+   "kind": "transcript",
+   "title": "Q1 FY27 earnings call (Jul 2026)",
+   "quarter": "Q1 FY27",
+   "url": "https://www.bseindia.com/stockinfo/AnnPdfOpen.aspx?Pname=e47a217c-cefa-4ff6-8e34-6bbd07d42b13.pdf"
+  },
+  {
+   "id": "T3",
+   "kind": "transcript",
+   "title": "Q4 FY26 earnings call (May 2026)",
+   "quarter": "Q4 FY26",
+   "url": "https://www.bseindia.com/stockinfo/AnnPdfOpen.aspx?Pname=f66f17ac-c40f-4309-afca-3e66af0956a0.pdf"
+  },
+  {
+   "id": "T4",
+   "kind": "transcript",
+   "title": "Q3 FY26 earnings call (Jan 2026)",
+   "quarter": "Q3 FY26",
+   "url": "https://www.bseindia.com/stockinfo/AnnPdfOpen.aspx?Pname=c54bf2c3-22fa-45e1-bf1a-2194e7b46183.pdf"
+  },
+  {
+   "id": "AR",
+   "kind": "annual_report",
+   "title": "Annual Report 2026",
+   "quarter": null,
+   "url": "https://www.bseindia.com/xml-data/corpfiling/AttachHis/ff6bcced-1327-449f-8a82-6fd651a0124f.pdf"
+  }
+ ],
+ "ledger": {
+  "rows": [
+   {
+    "promise": {
+     "id": "T4-1",
+     "citation": {
+      "source_id": "T4",
+      "page": 5,
+      "quote": "Capital expenditure for the quarter was ₹ 3.4 billion, taking the 9M FY26 total to ₹ 10.9 billion, in-line with our Project Spring guidance of investing ₹ 12 billion to ₹ 16 billion annually through FY30."
+     },
+     "topic": "capex",
+     "kind": "quantitative",
+     "metric": "capex",
+     "target_low": 12.0,
+     "target_high": 16.0,
+     "unit": "cr",
+     "horizon": "FY30",
+     "made_in": "Q3 FY26"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "The later figure (6.1) is below the target (12–16)"
+   },
+   {
+    "promise": {
+     "id": "T4-2",
+     "citation": {
+      "source_id": "T4",
+      "page": 7,
+      "quote": "Looking ahead, we are confident in the long -term potential of the FMEG segment and remain on track to achieve our Project Spring targets of 1.5x - 2x industry growth and EBITDA margins in the range of 8% to 10% by FY30, positioning the business for sustai ned growth and value creation."
+     },
+     "topic": "margin",
+     "kind": "quantitative",
+     "metric": "ebitda_margin",
+     "target_low": 8.0,
+     "target_high": 10.0,
+     "unit": "%",
+     "horizon": "FY30",
+     "made_in": "Q3 FY26"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "No verifiable later evidence"
+   },
+   {
+    "promise": {
+     "id": "T4-3",
+     "citation": {
+      "source_id": "T4",
+      "page": 7,
+      "quote": "Looking ahead, the annual sustainable operating margin is expected to remain in the high single digits over mid- to long term."
+     },
+     "topic": "margin",
+     "kind": "qualitative",
+     "metric": null,
+     "target_low": null,
+     "target_high": null,
+     "unit": null,
+     "horizon": "mid- to long term",
+     "made_in": "Q3 FY26"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "No later evidence of the outcome yet"
+   },
+   {
+    "promise": {
+     "id": "T3-1",
+     "citation": {
+      "source_id": "T3",
+      "page": 6,
+      "quote": "We remain on track to execute our planned capex program of INR 60 billion to INR 80 billion over the next 5 years, which will further enhance our capabilities, scale and innovation."
+     },
+     "topic": "capex",
+     "kind": "quantitative",
+     "metric": "capex",
+     "target_low": 60.0,
+     "target_high": 80.0,
+     "unit": "usd_bn",
+     "horizon": "next 5 years",
+     "made_in": "Q4 FY26"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "No later evidence of the outcome yet"
+   },
+   {
+    "promise": {
+     "id": "T3-2",
+     "citation": {
+      "source_id": "T3",
+      "page": 8,
+      "quote": "Looking ahead, the annual sustainable operating margin is expected to remain in the mid- to high single digits over mid- to long term."
+     },
+     "topic": "margin",
+     "kind": "qualitative",
+     "metric": null,
+     "target_low": null,
+     "target_high": null,
+     "unit": null,
+     "horizon": "mid- to long term",
+     "made_in": "Q4 FY26"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "No later evidence of the outcome yet"
+   },
+   {
+    "promise": {
+     "id": "T3-3",
+     "citation": {
+      "source_id": "T3",
+      "page": 8,
+      "quote": "We remain firm on track to achieve our target of greater than 10% contribution from exports by financial year 2030."
+     },
+     "topic": "exports",
+     "kind": "quantitative",
+     "metric": "other",
+     "target_low": 10.0,
+     "target_high": null,
+     "unit": "%",
+     "horizon": "FY2030",
+     "made_in": "Q4 FY26"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "No later evidence of the outcome yet"
+   },
+   {
+    "promise": {
+     "id": "T3-4",
+     "citation": {
+      "source_id": "T3",
+      "page": 9,
+      "quote": "During FY26, we incurred capex of INR 14.8 billion, in line with our annual guidance of INR 12 billion to INR 16 billion per annum."
+     },
+     "topic": "capex",
+     "kind": "quantitative",
+     "metric": "capex",
+     "target_low": 12.0,
+     "target_high": 16.0,
+     "unit": "cr",
+     "horizon": "FY26",
+     "made_in": "Q4 FY26"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "No later evidence of the outcome yet"
+   },
+   {
+    "promise": {
+     "id": "T3-5",
+     "citation": {
+      "source_id": "T3",
+      "page": 15,
+      "quote": "Capacity is expected to come on stream by end of this calendar year."
+     },
+     "topic": "capacity",
+     "kind": "qualitative",
+     "metric": null,
+     "target_low": null,
+     "target_high": null,
+     "unit": null,
+     "horizon": "end of this calendar year",
+     "made_in": "Q4 FY26"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "No later evidence of the outcome yet"
+   },
+   {
+    "promise": {
+     "id": "T2-1",
+     "citation": {
+      "source_id": "T2",
+      "page": 5,
+      "quote": "Consistent with our Project Spring roadmap, we continue to maintain our medium- to long-term margin guidance of 11% to 13% for this business."
+     },
+     "topic": "margin",
+     "kind": "quantitative",
+     "metric": "ebitda_margin",
+     "target_low": 11.0,
+     "target_high": 13.0,
+     "unit": "%",
+     "horizon": "medium to long term",
+     "made_in": "Q1 FY27"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "No later evidence of the outcome yet"
+   },
+   {
+    "promise": {
+     "id": "T2-2",
+     "citation": {
+      "source_id": "T2",
+      "page": 6,
+      "quote": "EBIT margins for the quarter were 8%, very much in line with the milestones laid out under Project Spring, where we target EBITDA margins of 8% to 10% by FY 2030."
+     },
+     "topic": "margin",
+     "kind": "quantitative",
+     "metric": "ebitda_margin",
+     "target_low": 8.0,
+     "target_high": 10.0,
+     "unit": "%",
+     "horizon": "FY 2030",
+     "made_in": "Q1 FY27"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "No verifiable later evidence"
+   },
+   {
+    "promise": {
+     "id": "T2-3",
+     "citation": {
+      "source_id": "T2",
+      "page": 6,
+      "quote": "Over the medium to long term, we continue to expect sustainable operating margins for the EPC business to remain in the high single-digit range."
+     },
+     "topic": "margin",
+     "kind": "qualitative",
+     "metric": null,
+     "target_low": null,
+     "target_high": null,
+     "unit": null,
+     "horizon": "medium to long term",
+     "made_in": "Q1 FY27"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "No later evidence of the outcome yet"
+   },
+   {
+    "promise": {
+     "id": "T2-4",
+     "citation": {
+      "source_id": "T2",
+      "page": 19,
+      "quote": "We have given our guidance of going north of 10% of our overall top line by 2030."
+     },
+     "topic": "exports",
+     "kind": "quantitative",
+     "metric": "other",
+     "target_low": 10.0,
+     "target_high": null,
+     "unit": "%",
+     "horizon": "2030",
+     "made_in": "Q1 FY27"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "No later evidence of the outcome yet"
+   },
+   {
+    "promise": {
+     "id": "T1-1",
+     "citation": {
+      "source_id": "T1",
+      "page": 7,
+      "quote": "In line with our Project Spring roadmap, we remain confident of sustaining medium - to long -term  EBITDA margins within our guided range of 11% to 13%."
+     },
+     "topic": "margin",
+     "kind": "quantitative",
+     "metric": "ebitda_margin",
+     "target_low": 11.0,
+     "target_high": 13.0,
+     "unit": "%",
+     "horizon": "medium- to long-term",
+     "made_in": "Q2 FY27"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "Too recent to judge"
+   },
+   {
+    "promise": {
+     "id": "T1-2",
+     "citation": {
+      "source_id": "T1",
+      "page": 7,
+      "quote": "Over the medium- to long-term, we continue to expect sustainable margins for the EPC business  to remain in the high single -digit range, supported by disciplined project selection, efficient  execution, and a healthy order pipeline."
+     },
+     "topic": "margin",
+     "kind": "qualitative",
+     "metric": null,
+     "target_low": null,
+     "target_high": null,
+     "unit": null,
+     "horizon": "medium- to long-term",
+     "made_in": "Q2 FY27"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "Too recent to judge"
+   },
+   {
+    "promise": {
+     "id": "T1-3",
+     "citation": {
+      "source_id": "T1",
+      "page": 9,
+      "quote": "So over the longer term, I believe we would end up in that kind of a range of 8% to 10% of the  EBITDA margin."
+     },
+     "topic": "margin",
+     "kind": "quantitative",
+     "metric": "ebitda_margin",
+     "target_low": 8.0,
+     "target_high": 10.0,
+     "unit": "%",
+     "horizon": "FY30",
+     "made_in": "Q2 FY27"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "Too recent to judge"
+   },
+   {
+    "promise": {
+     "id": "T1-4",
+     "citation": {
+      "source_id": "T1",
+      "page": 13,
+      "quote": "So that's a long-term way of looking into the volumes. I think you should also look at more on  a 10 to 12-month basis."
+     },
+     "topic": "volume growth",
+     "kind": "qualitative",
+     "metric": null,
+     "target_low": null,
+     "target_high": null,
+     "unit": null,
+     "horizon": "10 to 12-month",
+     "made_in": "Q2 FY27"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "Too recent to judge"
+   },
+   {
+    "promise": {
+     "id": "T1-5",
+     "citation": {
+      "source_id": "T1",
+      "page": 18,
+      "quote": "So I would like to take this opportunity to sort of also let  the investor community know that in terms of our EHV plant timelines, we are expecting the  EHV plant to now commission somewhere in FY 2028, the next year, though, so FY28."
+     },
+     "topic": "capex",
+     "kind": "qualitative",
+     "metric": null,
+     "target_low": null,
+     "target_high": null,
+     "unit": null,
+     "horizon": "FY28",
+     "made_in": "Q2 FY27"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "Too recent to judge"
+   }
+  ],
+  "counts": {
+   "kept": 0,
+   "partly": 0,
+   "missed": 0,
+   "pending": 17,
+   "dropped": 0
+  },
+  "credibility_pct": null,
+  "note": null
+ },
+ "snapshot": {
+  "summary": [
+   {
+    "text": "Polycab operates as India's largest integrated manufacturer of wires and cables while expanding its fast-moving electrical goods segment.",
+    "citation": {
+     "source_id": "AR",
+     "page": 8,
+     "quote": "At Polycab, we are the nation's largest integrated manufacturer of wires and cables and a rapidly expanding force across the broader electrical solutions ecosystem."
+    }
+   },
+   {
+    "text": "The company maintains a dominant cables and wires division that supplies diverse industrial and retail sectors.",
+    "citation": {
+     "source_id": "AR",
+     "page": 9,
+     "quote": "Leading the Indian market, our cables and wires division supplies a diverse range of global retail, industrial and institutional customers across core sectors."
+    }
+   },
+   {
+    "text": "The engineering, procurement, and construction division executes complex electrical infrastructure projects for institutional power customers.",
+    "citation": {
+     "source_id": "AR",
+     "page": 9,
+     "quote": "Driving national grid development, our Engineering, Procurement and Construction division executes complex electrical infrastructure for government and institutional power customers."
+    }
+   }
+  ]
+ },
+ "trajectory": {
+  "years": [
+   "Mar 2022",
+   "Mar 2023",
+   "Mar 2024",
+   "Mar 2025",
+   "Mar 2026"
+  ],
+  "revenue": [
+   12204.0,
+   14108.0,
+   18039.0,
+   22408.0,
+   28884.0
+  ],
+  "operating_profit": [
+   1264.0,
+   1843.0,
+   2492.0,
+   2964.0,
+   4013.0
+  ],
+  "margin_pct": [
+   10.357259914782038,
+   13.06351006521123,
+   13.814512999611953,
+   13.227418779007497,
+   13.893505054701565
+  ],
+  "pat": [
+   917.0,
+   1282.0,
+   1803.0,
+   2046.0,
+   2708.0
+  ],
+  "revenue_cagr_pct": 24.033438729121958,
+  "pat_cagr_pct": 31.090080780606023,
+  "margin_change_bps": 354,
+  "read": "growing",
+  "lender": false
+ },
+ "health": {
+  "as_of": "Mar 2026",
+  "debt_to_equity": 0.01965192772087601,
+  "cfo_to_pat_3y": 1.0547506481622693,
+  "fcf_3y_cr": 3631.0,
+  "working_capital_days": 30.0,
+  "wc_days_change_3y": -28.0,
+  "roce_pct": 33.0,
+  "flags": [
+   {
+    "level": "good",
+    "text": "Virtually debt-free (D/E 0.02)"
+   },
+   {
+    "level": "good",
+    "text": "Profits are backed by cash (CFO/PAT 1.05)"
+   }
+  ]
+ },
+ "bull": [],
+ "bear": [
+  {
+   "text": "The company carries seventeen pending commitments in its promise ledger with zero resolved targets.",
+   "citation": {
+    "source_id": "FACTS",
+    "page": 0,
+    "quote": "Promise ledger: 0 kept, 0 partly, 0 missed, 17 pending, 0 dropped (0 of 17 promises resolved)"
+   }
+  }
+ ],
+ "notes": [],
+ "cost": {
+  "calls": 9,
+  "cached": 9,
+  "input_tokens": 0,
+  "output_tokens": 0,
+  "usd_list_price": 0.0
+ },
+ "build_seconds": 0.4,
+ "guard": {
+  "promises_proposed": 24,
+  "promises_kept": 17,
+  "points_proposed": 9,
+  "points_kept": 4,
+  "verdicts_downgraded": {
+   "other_period": 0,
+   "restated": 0,
+   "below_target": 1
+  }
+ }
+}

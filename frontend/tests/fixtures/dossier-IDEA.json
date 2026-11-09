@@ -1,0 +1,443 @@
+{
+ "symbol": "IDEA",
+ "name": "Vodafone Idea Ltd",
+ "basis": "consolidated",
+ "built_at": "2026-11-09T21:17:25.652379+05:30",
+ "sources": [
+  {
+   "id": "T1",
+   "kind": "transcript",
+   "title": "Q1 FY27 earnings call (Sep 2026)",
+   "quarter": "Q1 FY27",
+   "url": "https://www.bseindia.com/stockinfo/AnnPdfOpen.aspx?Pname=70ef6137-942c-4bf2-b275-5ecff44fe8c3.pdf"
+  },
+  {
+   "id": "T2",
+   "kind": "transcript",
+   "title": "Q4 FY26 earnings call (May 2026)",
+   "quarter": "Q4 FY26",
+   "url": "https://www.bseindia.com/stockinfo/AnnPdfOpen.aspx?Pname=34c923d0-d5da-47f9-835e-cfd23545a462.pdf"
+  },
+  {
+   "id": "T3",
+   "kind": "transcript",
+   "title": "Q2 FY26 earnings call (Nov 2025)",
+   "quarter": "Q2 FY26",
+   "url": "https://www.bseindia.com/stockinfo/AnnPdfOpen.aspx?Pname=832ec65b-f66e-4cc4-baa9-31812da1f9f0.pdf"
+  },
+  {
+   "id": "T4",
+   "kind": "transcript",
+   "title": "Q1 FY26 earnings call (Sep 2025)",
+   "quarter": "Q1 FY26",
+   "url": "https://www.bseindia.com/stockinfo/AnnPdfOpen.aspx?Pname=2f2f18cb-33b5-4a1b-b986-969f77b4a62a.pdf"
+  },
+  {
+   "id": "AR",
+   "kind": "annual_report",
+   "title": "Annual Report 2026",
+   "quarter": null,
+   "url": "https://www.bseindia.com/xml-data/corpfiling/AttachHis/516471f1-18a0-44e7-9726-f8366bebceb4.pdf"
+  }
+ ],
+ "ledger": {
+  "rows": [
+   {
+    "promise": {
+     "id": "T4-1",
+     "citation": {
+      "source_id": "T4",
+      "page": 13,
+      "quote": "That range of INR 50 billion to INR 60 billion, which we had indicated for H1, we should meet that target by September '25."
+     },
+     "topic": "capex",
+     "kind": "quantitative",
+     "metric": "capex",
+     "target_low": 50.0,
+     "target_high": 60.0,
+     "unit": "cr",
+     "horizon": "H1",
+     "made_in": "Q1 FY26"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "The later figure (42) is below the target (50–60)"
+   },
+   {
+    "promise": {
+     "id": "T4-2",
+     "citation": {
+      "source_id": "T4",
+      "page": 11,
+      "quote": "The Company continues to invest in network and will accelerate broader capex plans of Rs. 500–550 billion over three years that we have been mentioning previously once we tie up the bank debt."
+     },
+     "topic": "capex",
+     "kind": "quantitative",
+     "metric": "capex",
+     "target_low": 500.0,
+     "target_high": 550.0,
+     "unit": "cr",
+     "horizon": "three years",
+     "made_in": "Q1 FY26"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "No later evidence of the outcome yet"
+   },
+   {
+    "promise": {
+     "id": "T3-1",
+     "citation": {
+      "source_id": "T3",
+      "page": 11,
+      "quote": "Our guidance is that we would be in a position from a year-on point of view, roughly in the range of Rs. 7,500 crores to Rs. 8,000 crores of capex by the end of FY26."
+     },
+     "topic": "capex",
+     "kind": "quantitative",
+     "metric": "capex",
+     "target_low": 7500.0,
+     "target_high": 8000.0,
+     "unit": "cr",
+     "horizon": "FY26",
+     "made_in": "Q2 FY26"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "No later evidence of the outcome yet"
+   },
+   {
+    "promise": {
+     "id": "T3-2",
+     "citation": {
+      "source_id": "T3",
+      "page": 16,
+      "quote": "We are right now at 84%, and our sense is that over the next couple of quarters, we should be able to get to 90%."
+     },
+     "topic": "network coverage",
+     "kind": "quantitative",
+     "metric": "other",
+     "target_low": 90.0,
+     "target_high": null,
+     "unit": "%",
+     "horizon": "next couple of quarters",
+     "made_in": "Q2 FY26"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "No verifiable later evidence"
+   },
+   {
+    "promise": {
+     "id": "T2-1",
+     "citation": {
+      "source_id": "T2",
+      "page": 15,
+      "quote": "Over the next year or year and a half, we will add another 60,000 to 70,000 4G sites so that is another 125 million population being brought under the fold."
+     },
+     "topic": "network expansion",
+     "kind": "quantitative",
+     "metric": "other",
+     "target_low": 60000.0,
+     "target_high": 70000.0,
+     "unit": null,
+     "horizon": "next year or year and a half",
+     "made_in": "Q4 FY26"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "No later evidence of the outcome yet"
+   },
+   {
+    "promise": {
+     "id": "T2-2",
+     "citation": {
+      "source_id": "T2",
+      "page": 17,
+      "quote": "As you heard Tejas say, our three-year targets are unambiguous: sustained net customer addition, double-digit revenue growth, and 3x EBITDA."
+     },
+     "topic": "revenue growth",
+     "kind": "quantitative",
+     "metric": "revenue_growth",
+     "target_low": 3.0,
+     "target_high": 3.0,
+     "unit": "x",
+     "horizon": "three-year",
+     "made_in": "Q4 FY26"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "No later evidence of the outcome yet"
+   },
+   {
+    "promise": {
+     "id": "T2-3",
+     "citation": {
+      "source_id": "T2",
+      "page": 13,
+      "quote": "So, you will see a far greater intensity of capex starting from quarter 1 and further intensifying in subsequent quarters of this financial year."
+     },
+     "topic": "capex",
+     "kind": "qualitative",
+     "metric": null,
+     "target_low": null,
+     "target_high": null,
+     "unit": null,
+     "horizon": "this financial year",
+     "made_in": "Q4 FY26"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "Target not yet due — tracking is not delivery"
+   },
+   {
+    "promise": {
+     "id": "T2-4",
+     "citation": {
+      "source_id": "T2",
+      "page": 15,
+      "quote": "We are targeting a 0.5% - 0.6% reduction in churn."
+     },
+     "topic": "churn",
+     "kind": "quantitative",
+     "metric": "other",
+     "target_low": 0.5,
+     "target_high": 0.6,
+     "unit": "%",
+     "horizon": null,
+     "made_in": "Q4 FY26"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "No later evidence of the outcome yet"
+   },
+   {
+    "promise": {
+     "id": "T1-1",
+     "citation": {
+      "source_id": "T1",
+      "page": 8,
+      "quote": "We intend to deploy all of this capex over the next 2 quarters or less."
+     },
+     "topic": "capex deployment",
+     "kind": "qualitative",
+     "metric": null,
+     "target_low": null,
+     "target_high": null,
+     "unit": null,
+     "horizon": "next 2 quarters",
+     "made_in": "Q1 FY27"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "Too recent to judge"
+   },
+   {
+    "promise": {
+     "id": "T1-2",
+     "citation": {
+      "source_id": "T1",
+      "page": 8,
+      "quote": "And we intend to kind of cover another 200-plus cities over the next 2 quarters."
+     },
+     "topic": "5G expansion",
+     "kind": "quantitative",
+     "metric": "other",
+     "target_low": 200.0,
+     "target_high": null,
+     "unit": null,
+     "horizon": "next 2 quarters",
+     "made_in": "Q1 FY27"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "Too recent to judge"
+   },
+   {
+    "promise": {
+     "id": "T1-3",
+     "citation": {
+      "source_id": "T1",
+      "page": 13,
+      "quote": "We intend to finish our 4G rollout over the next 18-odd months so that we are at par on what our target is in the 17 circles."
+     },
+     "topic": "4G rollout",
+     "kind": "qualitative",
+     "metric": null,
+     "target_low": null,
+     "target_high": null,
+     "unit": null,
+     "horizon": "next 18-odd months",
+     "made_in": "Q1 FY27"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "Too recent to judge"
+   }
+  ],
+  "counts": {
+   "kept": 0,
+   "partly": 0,
+   "missed": 0,
+   "pending": 11,
+   "dropped": 0
+  },
+  "credibility_pct": null,
+  "note": null
+ },
+ "snapshot": null,
+ "trajectory": {
+  "years": [
+   "Mar 2022",
+   "Mar 2023",
+   "Mar 2024",
+   "Mar 2025",
+   "Mar 2026"
+  ],
+  "revenue": [
+   38516.0,
+   42177.0,
+   42652.0,
+   43572.0,
+   44873.0
+  ],
+  "operating_profit": [
+   15968.0,
+   16753.0,
+   17072.0,
+   18048.0,
+   18859.0
+  ],
+  "margin_pct": [
+   41.4580953370028,
+   39.72070085591673,
+   40.02625902654037,
+   41.42109611677224,
+   42.02749983286163
+  ],
+  "pat": [
+   -28245.0,
+   -29301.0,
+   -31238.0,
+   -27384.0,
+   34552.0
+  ],
+  "revenue_cagr_pct": 3.8929269813334555,
+  "pat_cagr_pct": null,
+  "margin_change_bps": 57,
+  "read": "growing",
+  "lender": false
+ },
+ "health": {
+  "as_of": "Mar 2026",
+  "debt_to_equity": null,
+  "cfo_to_pat_3y": null,
+  "fcf_3y_cr": 26963.0,
+  "working_capital_days": -192.0,
+  "wc_days_change_3y": 215.0,
+  "roce_pct": -2.0,
+  "flags": [
+   {
+    "level": "concern",
+    "text": "Net worth is negative (−₹35,758 cr): debt exceeds the equity base"
+   },
+   {
+    "level": "watch",
+    "text": "Working capital days rose from -407 to -192"
+   }
+  ]
+ },
+ "bull": [
+  {
+   "text": "The company reported positive operating momentum with revenue improving 6.0% year-on-year to Rs. 11,689 Crore alongside a cash EBITDA growth of 13.5%.",
+   "citation": {
+    "source_id": "T1",
+    "page": 3,
+    "quote": "Our revenue improved 6.0% YoY to Rs. 11,689 Crore while Cash EBITDA demonstrated double digit growth of 13.5% and stood at Rs. 2,475 Crore."
+   }
+  },
+  {
+   "text": "Customer ARPU grew by 10.2% year-on-year to Rs. 195, marking twenty consecutive quarters of ARPU increases driven by premiumization.",
+   "citation": {
+    "source_id": "T1",
+    "page": 3,
+    "quote": "Our Customer ARPU grew from Rs. 177 in Q1FY26 to Rs. 195 in Q1FY27, a growth of 10.2% YoY; highest in the industry and a sequential improvement of 2.6%."
+   }
+  },
+  {
+   "text": "Free cash flow over the three-year period reached a positive total of ₹26,963 cr.",
+   "citation": {
+    "source_id": "FACTS",
+    "page": 0,
+    "quote": "Free cash flow (3y): ₹26,963 cr"
+   }
+  }
+ ],
+ "bear": [
+  {
+   "text": "The company's net worth is negative at negative ₹35,758 cr as debt exceeds the equity base.",
+   "citation": {
+    "source_id": "FACTS",
+    "page": 0,
+    "quote": "Net worth is negative (−₹35,758 cr): debt exceeds the equity base"
+   }
+  },
+  {
+   "text": "Working capital days deteriorated significantly, rising from negative 407 to negative 192.",
+   "citation": {
+    "source_id": "FACTS",
+    "page": 0,
+    "quote": "Working capital days rose from -407 to -192"
+   }
+  },
+  {
+   "text": "The company registered a negative ROCE of -2.0%.",
+   "citation": {
+    "source_id": "FACTS",
+    "page": 0,
+    "quote": "ROCE: -2.0%"
+   }
+  }
+ ],
+ "notes": [],
+ "cost": {
+  "calls": 9,
+  "cached": 8,
+  "input_tokens": 16551,
+  "output_tokens": 563,
+  "usd_list_price": 0.006373
+ },
+ "build_seconds": 13.4,
+ "guard": {
+  "promises_proposed": 14,
+  "promises_kept": 11,
+  "points_proposed": 7,
+  "points_kept": 6,
+  "verdicts_downgraded": {
+   "other_period": 0,
+   "restated": 0,
+   "below_target": 1
+  }
+ }
+}

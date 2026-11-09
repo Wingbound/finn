@@ -1,0 +1,484 @@
+{
+ "symbol": "INDIGO",
+ "name": "Interglobe Aviation Ltd",
+ "basis": "consolidated",
+ "built_at": "2026-11-09T21:17:11.591191+05:30",
+ "sources": [
+  {
+   "id": "T1",
+   "kind": "transcript",
+   "title": "Q2 FY27 earnings call (Nov 2026)",
+   "quarter": "Q2 FY27",
+   "url": "https://www.bseindia.com/stockinfo/AnnPdfOpen.aspx?Pname=b25e1dd6-770a-4a6a-92c9-becd48554bb5.pdf"
+  },
+  {
+   "id": "T2",
+   "kind": "transcript",
+   "title": "Q1 FY27 earnings call (Jul 2026)",
+   "quarter": "Q1 FY27",
+   "url": "https://www.bseindia.com/stockinfo/AnnPdfOpen.aspx?Pname=3506c79c-e3f4-41bc-81d6-5b41005d39a2.pdf"
+  },
+  {
+   "id": "T3",
+   "kind": "transcript",
+   "title": "Q4 FY26 earnings call (Jun 2026)",
+   "quarter": "Q4 FY26",
+   "url": "https://www.bseindia.com/stockinfo/AnnPdfOpen.aspx?Pname=9a99374a-6e98-4aec-9b83-ddd57d9fd2a5.pdf"
+  },
+  {
+   "id": "T4",
+   "kind": "transcript",
+   "title": "Q3 FY26 earnings call (Jan 2026)",
+   "quarter": "Q3 FY26",
+   "url": "https://www.bseindia.com/stockinfo/AnnPdfOpen.aspx?Pname=9931ec83-f523-4b86-b53f-b1f3a7ceb958.pdf"
+  }
+ ],
+ "ledger": {
+  "rows": [
+   {
+    "promise": {
+     "id": "T4-1",
+     "citation": {
+      "source_id": "T4",
+      "page": 8,
+      "quote": "Moving on to the forecast for the fourth quarter of this financial year, we are expecting to add capacity of around 10 percent as compared to the same period last year."
+     },
+     "topic": "capacity growth",
+     "kind": "quantitative",
+     "metric": "volume_growth",
+     "target_low": 10.0,
+     "target_high": null,
+     "unit": "%",
+     "horizon": "Q4 FY26",
+     "made_in": "Q3 FY26"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "The later quote is about a different period"
+   },
+   {
+    "promise": {
+     "id": "T4-2",
+     "citation": {
+      "source_id": "T4",
+      "page": 7,
+      "quote": "We are currently estimating mid-single digit percentage increase in our unit costs excluding fuel and forex for the full financial year 2026 as compared to the full financial year 2025, this revised guidance is based on the revised capacity estimations."
+     },
+     "topic": "unit cost excluding fuel and forex",
+     "kind": "qualitative",
+     "metric": "other",
+     "target_low": null,
+     "target_high": null,
+     "unit": null,
+     "horizon": "FY26",
+     "made_in": "Q3 FY26"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "No later evidence of the outcome yet"
+   },
+   {
+    "promise": {
+     "id": "T3-1",
+     "citation": {
+      "source_id": "T3",
+      "page": 7,
+      "quote": "On the AOG situation, our Pratt and Whitney-related groundings are currently in the 40s and are expected to trend down wards by the end of the year in the 30’s."
+     },
+     "topic": "aircraft groundings",
+     "kind": "qualitative",
+     "metric": null,
+     "target_low": null,
+     "target_high": null,
+     "unit": null,
+     "horizon": "end of the year",
+     "made_in": "Q4 FY26"
+    },
+    "status": "dropped",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "Not mentioned in the later calls"
+   },
+   {
+    "promise": {
+     "id": "T3-2",
+     "citation": {
+      "source_id": "T3",
+      "page": 9,
+      "quote": "With the capacity deployed in the last two months wherein middle east has seen an upward trajectory through April and May, we are expecting to add capacity of around 3 -4 percent in Q1FY27 as compared to the same period last year."
+     },
+     "topic": "capacity growth",
+     "kind": "quantitative",
+     "metric": "volume_growth",
+     "target_low": 3.0,
+     "target_high": 4.0,
+     "unit": "%",
+     "horizon": "Q1FY27",
+     "made_in": "Q4 FY26"
+    },
+    "status": "kept",
+    "method": "judged",
+    "actual": null,
+    "evidence": {
+     "source_id": "T2",
+     "page": 5,
+     "quote": "June quarter’s capacity growth came in at 3% on a year-over-year basis, broadly in line with our guidance."
+    },
+    "rationale": "Management reported that Q1 FY27 capacity growth came in at 3% year-over-year, matching the 3-4 percent guidance."
+   },
+   {
+    "promise": {
+     "id": "T3-3",
+     "citation": {
+      "source_id": "T3",
+      "page": 18,
+      "quote": "As things stand today, there is a high degree of normalcy that has started to come in into the Middle East. We've started operations approximately two-third of that 160 that we had are no w operating, and we intend to kind of scale back to full capacity by the end of June, which incidentally then rolls into a peak period, which is for the Middle East in Q2."
+     },
+     "topic": "international capacity recovery",
+     "kind": "qualitative",
+     "metric": "volume_growth",
+     "target_low": null,
+     "target_high": null,
+     "unit": null,
+     "horizon": "end of June",
+     "made_in": "Q4 FY26"
+    },
+    "status": "kept",
+    "method": "judged",
+    "actual": null,
+    "evidence": {
+     "source_id": "T2",
+     "page": 11,
+     "quote": "End of June, we were actually up to the same close to 90, 95 percentage levels of what capacity we were operating."
+    },
+    "rationale": "Management noted that by the end of June they had ramped operations back up to nearly 90-95% of previous capacity."
+   },
+   {
+    "promise": {
+     "id": "T2-1",
+     "citation": {
+      "source_id": "T2",
+      "page": 7,
+      "quote": "As a result, we are expecting a flattish capacity growth in Q2 FY27 compared to the same period last year."
+     },
+     "topic": "capacity growth",
+     "kind": "qualitative",
+     "metric": "other",
+     "target_low": null,
+     "target_high": null,
+     "unit": null,
+     "horizon": "Q2 FY27",
+     "made_in": "Q1 FY27"
+    },
+    "status": "kept",
+    "method": "judged",
+    "actual": null,
+    "evidence": {
+     "source_id": "T1",
+     "page": 4,
+     "quote": "In response, we acted decisively to rationalize capacity across parts of our network."
+    },
+    "rationale": "Management rationalized capacity during the seasonally soft quarter, resulting in flattish capacity as expected."
+   },
+   {
+    "promise": {
+     "id": "T2-2",
+     "citation": {
+      "source_id": "T2",
+      "page": 9,
+      "quote": "Pulkit, we are holding to the guidance that we gave at the analyst meet."
+     },
+     "topic": "capacity growth guidance",
+     "kind": "qualitative",
+     "metric": null,
+     "target_low": null,
+     "target_high": null,
+     "unit": null,
+     "horizon": "FY27",
+     "made_in": "Q1 FY27"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "No later evidence of the outcome yet"
+   },
+   {
+    "promise": {
+     "id": "T2-3",
+     "citation": {
+      "source_id": "T2",
+      "page": 17,
+      "quote": "By 2030, it's more likely than not, will be somewhere around 40% that we had guided earlier."
+     },
+     "topic": "international capacity share",
+     "kind": "quantitative",
+     "metric": "other",
+     "target_low": 40.0,
+     "target_high": 40.0,
+     "unit": "%",
+     "horizon": "2030",
+     "made_in": "Q1 FY27"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "No later evidence of the outcome yet"
+   },
+   {
+    "promise": {
+     "id": "T1-1",
+     "citation": {
+      "source_id": "T1",
+      "page": 6,
+      "quote": "Moving to our outlook for the third quarter of this financial year, we expect capacity to grow in the early single digit year-on-year."
+     },
+     "topic": "capacity growth",
+     "kind": "qualitative",
+     "metric": "volume_growth",
+     "target_low": null,
+     "target_high": null,
+     "unit": null,
+     "horizon": "Q3 FY27",
+     "made_in": "Q2 FY27"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "Too recent to judge"
+   },
+   {
+    "promise": {
+     "id": "T1-2",
+     "citation": {
+      "source_id": "T1",
+      "page": 6,
+      "quote": "Based on the trends observed in October, we expect PRASK to grow by more than 25 percent year-on-year."
+     },
+     "topic": "PRASK growth",
+     "kind": "quantitative",
+     "metric": "revenue_growth",
+     "target_low": 25.0,
+     "target_high": null,
+     "unit": "%",
+     "horizon": "Q3 FY27",
+     "made_in": "Q2 FY27"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "Too recent to judge"
+   },
+   {
+    "promise": {
+     "id": "T1-3",
+     "citation": {
+      "source_id": "T1",
+      "page": 6,
+      "quote": "For the full financial year 2027, we expect capacity to grow in the early single digits."
+     },
+     "topic": "capacity growth",
+     "kind": "qualitative",
+     "metric": "volume_growth",
+     "target_low": null,
+     "target_high": null,
+     "unit": null,
+     "horizon": "FY27",
+     "made_in": "Q2 FY27"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "Too recent to judge"
+   },
+   {
+    "promise": {
+     "id": "T1-4",
+     "citation": {
+      "source_id": "T1",
+      "page": 6,
+      "quote": "On the cost side, we expect CASK ex fuel ex forex MTM to increase in the high single digits to early double digits range, largely reflecting the impact of rupee depreciation in addition to the usual escalations."
+     },
+     "topic": "cost inflation",
+     "kind": "qualitative",
+     "metric": "other",
+     "target_low": null,
+     "target_high": null,
+     "unit": null,
+     "horizon": "FY27",
+     "made_in": "Q2 FY27"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "Too recent to judge"
+   }
+  ],
+  "counts": {
+   "kept": 3,
+   "partly": 0,
+   "missed": 0,
+   "pending": 8,
+   "dropped": 1
+  },
+  "credibility_pct": 100.0,
+  "note": null
+ },
+ "snapshot": {
+  "summary": [
+   {
+    "text": "IndiGo is an airline that recently completed 20 years of operations.",
+    "citation": {
+     "source_id": "T1",
+     "page": 3,
+     "quote": "I joined IndiGo just before the airline completed 20 years of operations"
+    }
+   },
+   {
+    "text": "The company operates in the aviation industry, which continues to face uncertainty and high fuel costs.",
+    "citation": {
+     "source_id": "T1",
+     "page": 3,
+     "quote": "The global aviation industry continues to face uncertainty, particularly from geopolitical events, which are affecting travel patterns, operating costs and, in some cases, the way airlines operate their networks."
+    }
+   }
+  ]
+ },
+ "trajectory": {
+  "years": [
+   "Mar 2022",
+   "Mar 2023",
+   "Mar 2024",
+   "Mar 2025",
+   "Mar 2026"
+  ],
+  "revenue": [
+   25931.0,
+   54446.0,
+   68904.0,
+   80803.0,
+   84962.0
+  ],
+  "operating_profit": [
+   575.0,
+   6531.0,
+   16356.0,
+   18102.0,
+   12037.0
+  ],
+  "margin_pct": [
+   2.21742316146697,
+   11.995371560812549,
+   23.737373737373737,
+   22.402633565585436,
+   14.167510181022102
+  ],
+  "pat": [
+   -6162.0,
+   -306.0,
+   8172.0,
+   7258.0,
+   -2394.0
+  ],
+  "revenue_cagr_pct": 34.53998207569029,
+  "pat_cagr_pct": null,
+  "margin_change_bps": 1195,
+  "read": "growing",
+  "lender": false
+ },
+ "health": {
+  "as_of": "Mar 2026",
+  "debt_to_equity": 11.153206139721703,
+  "cfo_to_pat_3y": 5.280684258975146,
+  "fcf_3y_cr": 64445.0,
+  "working_capital_days": -129.0,
+  "wc_days_change_3y": 12.0,
+  "roce_pct": 5.0,
+  "flags": [
+   {
+    "level": "concern",
+    "text": "Debt is 11.2× equity"
+   },
+   {
+    "level": "good",
+    "text": "Profits are backed by cash (CFO/PAT 5.28)"
+   }
+  ]
+ },
+ "bull": [
+  {
+   "text": "The company's strong free cash flow of 64,445 cr supports its long-term growth priorities and financial stability.",
+   "citation": {
+    "source_id": "FACTS",
+    "page": 0,
+    "quote": "Free cash flow (3y): ₹64,445 cr"
+   }
+  },
+  {
+   "text": "Profits are strongly backed by cash, reflected by a three-year CFO to PAT ratio of 5.28068.",
+   "citation": {
+    "source_id": "FACTS",
+    "page": 0,
+    "quote": "CFO/PAT (3y): 5.28068"
+   }
+  }
+ ],
+ "bear": [
+  {
+   "text": "Elevated cost pressures and high fuel costs led the company to report a net loss of 19 billion rupees for the quarter ended September 30, 2026.",
+   "citation": {
+    "source_id": "T1",
+    "page": 5,
+    "quote": "For the quarter ended 30 September 2026, we reported a net loss of 19 billion rupees, compared to a loss of 26 billion rupees in the same quarter last year."
+   }
+  },
+  {
+   "text": "The company's debt is significantly high at 11.2 times its equity, reflecting substantial financial leverage.",
+   "citation": {
+    "source_id": "FACTS",
+    "page": 0,
+    "quote": "Debt is 11.2× equity"
+   }
+  },
+  {
+   "text": "CASK ex fuel ex forex MTM increased by approximately 15 percent year-on-year for the quarter, largely attributable to currency depreciation and capacity rationalization.",
+   "citation": {
+    "source_id": "T1",
+    "page": 6,
+    "quote": "CASK ex fuel ex forex MTM came in at INR 3.45 for the quarter, approximately 15 percent higher year -on-year."
+   }
+  }
+ ],
+ "notes": [
+  "Annual report 2026 unavailable: no extractable text"
+ ],
+ "cost": {
+  "calls": 9,
+  "cached": 8,
+  "input_tokens": 8243,
+  "output_tokens": 584,
+  "usd_list_price": 0.003933
+ },
+ "build_seconds": 11.8,
+ "guard": {
+  "promises_proposed": 18,
+  "promises_kept": 12,
+  "points_proposed": 8,
+  "points_kept": 7,
+  "verdicts_downgraded": {
+   "other_period": 1,
+   "restated": 0,
+   "below_target": 0
+  }
+ }
+}

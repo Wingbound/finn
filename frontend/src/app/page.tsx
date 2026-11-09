@@ -1,0 +1,132 @@
+"use client";
+
+import { useEffect, useRef, useState, useSyncExternalStore } from "react";
+import { ErrorState, Skeleton } from "@/components/States";
+import { FloorControl } from "@/components/today/FloorControl";
+import { Header } from "@/components/today/Header";
+import { RoutineDrawer } from "@/components/today/RoutineDrawer";
+import { StaleNotice } from "@/components/today/StaleNotice";
+import { StoryList } from "@/components/today/StoryList";
+import { WindowPicker } from "@/components/today/WindowPicker";
+import { useDigest } from "@/lib/hooks";
+import {
+  DEFAULT_FLOOR,
+  DEFAULT_RULES,
+  DEFAULT_WINDOW,
+  KEYS,
+  useStored,
+  validateFloor,
+  validateRules,
+  validateWindow,
+} from "@/lib/store";
+import type { DigestRequest } from "@/lib/types";
+
+function subscribeHash(onChange: () => void) {
+  window.addEventListener("hashchange", onChange);
+  window.addEventListener("popstate", onChange);
+  return () => {
+    window.removeEventListener("hashchange", onChange);
+    window.removeEventListener("popstate", onChange);
+  };
+}
+
+function storyFromHash(hash: string): string | null {
+  try {
+    const h = decodeURIComponent(hash.slice(1));
+    return h.startsWith("story-") ? h.slice("story-".length) : null;
+  } catch {
+    return null;
+  }
+}
+
+export default function TodayPage() {
+  const [rules, , rulesReady] = useStored(KEYS.rules, DEFAULT_RULES, validateRules);
+  const [floor, setFloor, floorReady] = useStored(KEYS.floor, DEFAULT_FLOOR, validateFloor);
+  const [win, setWin, winReady] = useStored(KEYS.window, DEFAULT_WINDOW, validateWindow);
+  const [drawer, setDrawer] = useState(false);
+  const [dismissed, setDismissed] = useState(false);
+  // An alert links here as /#story-<id>. Subscribed, not read once: on a client-side
+  // navigation the URL changes after the first render. A garbled hash is ignored.
+  const hash = useSyncExternalStore(subscribeHash, () => window.location.hash, () => "");
+  const target = storyFromHash(hash);
+  const scrolled = useRef(false);
+
+  const ready = rulesReady && floorReady && winReady;
+  const req: DigestRequest | null = ready
+    ? {
+        ...(win.kind === "hours" ? { hours: win.hours } : { start: win.start, end: win.end }),
+        floor,
+        subscribed: rules.categories,
+      }
+    : null;
+  const { data, error, isLoading, isValidating, mutate } = useDigest(req);
+
+  const openDrawer = () => {
+    setDrawer(true);
+    requestAnimationFrame(() => document.getElementById("routine")?.scrollIntoView({ behavior: "smooth" }));
+  };
+  const empty = data && data.counts.shown === 0 && data.counts.routine === 0;
+
+  const inStories = !!target && !!data?.stories.some((st) => st.id === target);
+  const inRoutine = !!target && Object.values(data?.routine ?? {}).some((list) => list?.some((st) => st.id === target));
+  const drawerOpen = drawer || (inRoutine && !dismissed);
+  const outside = !!data && !!target && !inStories && !inRoutine;
+
+  // Bring the linked story into view once, after it has rendered (the drawer opens for routine ones).
+  useEffect(() => {
+    if (!target || scrolled.current || !(inStories || inRoutine)) return;
+    scrolled.current = true;
+    requestAnimationFrame(() => document.getElementById(`story-${target}`)?.scrollIntoView({ block: inRoutine ? "center" : "start" }));
+  }, [target, inStories, inRoutine]);
+
+  return (
+    <>
+      {data && !empty ? <Header counts={data.counts} onOpenRoutine={openDrawer} /> : null}
+      {empty ? (
+        <StaleNotice latest={data.latest_filing_at} window={win} onChoose={setWin} />
+      ) : null}
+      {!data && !error ? <h1 className="sr-only">Today</h1> : null}
+
+      <div className="space-y-2 pb-2">
+        <WindowPicker value={win} onChange={setWin} />
+        <FloorControl value={floor} onChange={setFloor} />
+      </div>
+      {isValidating && data ? (
+        <p role="status" className="text-caption text-ink-2">
+          Updating
+        </p>
+      ) : null}
+
+      {outside ? <p className="py-2 text-ink-2">That story is outside this window.</p> : null}
+      {error && !data ? <ErrorState message={error.message} onRetry={() => mutate()} /> : null}
+      {error && data ? (
+        <ErrorState
+          message={error.message}
+          note="Below, FINN is still showing the previous window."
+          onRetry={() => mutate()}
+        />
+      ) : null}
+      {isLoading && !data ? <Skeleton label="Loading today's filings" /> : null}
+
+      {data && !empty ? (
+        <>
+          {data.stories.length ? (
+            <StoryList stories={data.stories} subscribed={rules.categories} />
+          ) : (
+            <p className="border-t border-rule py-6 text-ink-2">
+              Nothing at this level. Lower the bar to Everything, or widen the window.
+            </p>
+          )}
+          <RoutineDrawer
+            digest={data}
+            open={drawerOpen}
+            onToggle={() => {
+              if (drawerOpen) setDismissed(true);
+              setDrawer(!drawerOpen);
+            }}
+          />
+        </>
+      ) : null}
+    </>
+  );
+}

@@ -1,0 +1,135 @@
+[
+ {
+  "symbol": "BAJFINANCE",
+  "name": "Bajaj Finance Ltd",
+  "built_at": "2026-11-09T21:17:12.283739+05:30",
+  "counts": {
+   "sources": 5,
+   "ledger_rows": 19,
+   "bull": 3,
+   "bear": 1,
+   "notes": 0,
+   "ledger": {
+    "kept": 0,
+    "partly": 0,
+    "missed": 0,
+    "pending": 19,
+    "dropped": 0
+   }
+  }
+ },
+ {
+  "symbol": "DIXON",
+  "name": "Dixon Technologies (India) Ltd",
+  "built_at": "2026-11-09T21:16:59.423144+05:30",
+  "counts": {
+   "sources": 5,
+   "ledger_rows": 16,
+   "bull": 3,
+   "bear": 3,
+   "notes": 0,
+   "ledger": {
+    "kept": 0,
+    "partly": 0,
+    "missed": 0,
+    "pending": 16,
+    "dropped": 0
+   }
+  }
+ },
+ {
+  "symbol": "HDFCBANK",
+  "name": "HDFC Bank Ltd",
+  "built_at": "2026-11-09T21:17:11.935047+05:30",
+  "counts": {
+   "sources": 5,
+   "ledger_rows": 7,
+   "bull": 0,
+   "bear": 2,
+   "notes": 0,
+   "ledger": {
+    "kept": 2,
+    "partly": 0,
+    "missed": 0,
+    "pending": 5,
+    "dropped": 0
+   }
+  }
+ },
+ {
+  "symbol": "IDEA",
+  "name": "Vodafone Idea Ltd",
+  "built_at": "2026-11-09T21:17:25.652379+05:30",
+  "counts": {
+   "sources": 5,
+   "ledger_rows": 11,
+   "bull": 3,
+   "bear": 3,
+   "notes": 0,
+   "ledger": {
+    "kept": 0,
+    "partly": 0,
+    "missed": 0,
+    "pending": 11,
+    "dropped": 0
+   }
+  }
+ },
+ {
+  "symbol": "INDIGO",
+  "name": "Interglobe Aviation Ltd",
+  "built_at": "2026-11-09T21:17:11.591191+05:30",
+  "counts": {
+   "sources": 4,
+   "ledger_rows": 12,
+   "bull": 2,
+   "bear": 3,
+   "notes": 1,
+   "ledger": {
+    "kept": 3,
+    "partly": 0,
+    "missed": 0,
+    "pending": 8,
+    "dropped": 1
+   }
+  }
+ },
+ {
+  "symbol": "PERSISTENT",
+  "name": "Persistent Systems Ltd",
+  "built_at": "2026-11-09T21:16:45.445032+05:30",
+  "counts": {
+   "sources": 5,
+   "ledger_rows": 12,
+   "bull": 3,
+   "bear": 1,
+   "notes": 0,
+   "ledger": {
+    "kept": 2,
+    "partly": 0,
+    "missed": 1,
+    "pending": 8,
+    "dropped": 1
+   }
+  }
+ },
+ {
+  "symbol": "POLYCAB",
+  "name": "Polycab India Ltd",
+  "built_at": "2026-11-09T21:16:59.830145+05:30",
+  "counts": {
+   "sources": 5,
+   "ledger_rows": 17,
+   "bull": 0,
+   "bear": 1,
+   "notes": 0,
+   "ledger": {
+    "kept": 0,
+    "partly": 0,
+    "missed": 0,
+    "pending": 17,
+    "dropped": 0
+   }
+  }
+ }
+]
