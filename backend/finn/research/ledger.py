@@ -2,22 +2,30 @@
 
 from __future__ import annotations
 
+import logging
 import re
 from typing import Literal
 
-from finn.enrich.grounding import normalize
+from finn.enrich.grounding import normalize, numbers_grounded
 from finn.llm.providers import LLMError
 from finn.models import Actual, Citation, Ledger, LedgerRow, Promise, Source, Status
 from finn.research.cite import locate, tagged_text
 from finn.research.financials import is_lender, year_end_month
+
+log = logging.getLogger(__name__)
 
 STATUSES = ("kept", "partly", "missed", "pending", "dropped")
 _COMPUTED = {"revenue_growth", "ebitda_margin", "pat_growth"}
 _QTR = re.compile(r"\bQ([1-4])\s*FY\s*(\d{2}|\d{4})\b", re.IGNORECASE)
 _FY = re.compile(r"\b(?:FY|fiscal)\s*(\d{2}|\d{4})\b", re.IGNORECASE)
 _QMONTH = {1: "Jun", 2: "Sep", 3: "Dec", 4: "Mar"}
-_NOT_ASSESSED = "Not assessed"
+_NOT_ASSESSED = "Not assessed"  # the judge never returned a verdict for this promise
 _NO_EVIDENCE = "No verifiable later evidence"
+_NO_OUTCOME = "No later evidence of the outcome yet"
+_DROPPED = "Not mentioned in the later calls"
+_SEE_EVIDENCE = "See the later evidence quote."
+_JUDGE_FAILED = "Some promises could not be judged (model unavailable)"
+MAX_RATIONALE_WORDS = 30
 _NAMES = {
     "revenue_growth": "Revenue",
     "pat_growth": "Net profit",
@@ -285,19 +293,20 @@ def _user_prompt(promises: list[Promise], later: list[Source]) -> str:
     return "\n".join(lines) + "\n\nEVIDENCE (later calls, oldest first):\n\n" + "\n\n".join(blocks)
 
 
-def _truncate(text: str, n: int = 30) -> str:
-    words = text.split()
-    return text.strip() if len(words) <= n else " ".join(words[:n]) + "…"
+def _rationale(raw: object, p: Promise, evidence: Citation) -> str:
+    """The judge's sentence, only if short and every number in it is in the promise or the
+    evidence quote; otherwise a pointer to the evidence."""
+    if not isinstance(raw, str) or not raw.strip() or len(raw.split()) > MAX_RATIONALE_WORDS:
+        return _SEE_EVIDENCE
+    if not numbers_grounded(raw, p.citation.quote + "\n" + evidence.quote):
+        return _SEE_EVIDENCE
+    return raw.strip()
 
 
-def _judge_one(raw: object, later: list[Source]) -> tuple[Status, Citation | None, str]:
-    if not isinstance(raw, dict):
-        return "pending", None, _NOT_ASSESSED
+def _judge_one(raw: dict, later: list[Source], p: Promise) -> tuple[Status, Citation | None, str]:
     status = raw.get("status")
     if status not in STATUSES:
         status = "pending"
-    rationale = raw.get("rationale")
-    rationale = _truncate(rationale) if isinstance(rationale, str) and rationale.strip() else ""
     quote, src_id, page = (
         raw.get("evidence_quote"),
         raw.get("evidence_source"),
@@ -310,30 +319,33 @@ def _judge_one(raw: object, later: list[Source]) -> tuple[Status, Citation | Non
         evidence = locate(quote, src, hint) if src else None
         if evidence is None:
             return "pending", None, _NO_EVIDENCE
-    if status in ("kept", "partly", "missed") and evidence is None:
-        return "pending", None, _NO_EVIDENCE
-    if status == "dropped" and (evidence is not None or len(later) < 2):
-        status = "pending"
-    if status == "pending":
-        evidence = None
-    return status, evidence, rationale or _NOT_ASSESSED  # type: ignore[return-value]
+    if status in ("kept", "partly", "missed"):
+        if evidence is None:
+            return "pending", None, _NO_EVIDENCE
+        return status, evidence, _rationale(raw.get("rationale"), p, evidence)  # type: ignore[return-value]
+    if status == "dropped" and evidence is None and len(later) >= 2:
+        return "dropped", None, _DROPPED
+    return "pending", None, _NO_OUTCOME
 
 
 def _judge_group(
     router, promises: list[Promise], later: list[Source]
-) -> dict[str, tuple[Status, Citation | None, str]]:
+) -> tuple[dict[str, tuple[Status, Citation | None, str]], bool]:
+    """Verdicts by promise id, and whether the model call itself failed."""
     try:
         reply = router.complete_json("reason", SYSTEM, _user_prompt(promises, later))
-    except LLMError:
-        return {}
+    except LLMError as e:
+        log.warning("ledger judge failed for %s: %s", promises[0].citation.source_id, e)
+        return {}, True
     items = reply.get("judgements") if isinstance(reply, dict) else None
+    if not isinstance(items, list):
+        return {}, True
     out: dict[str, tuple[Status, Citation | None, str]] = {}
-    ids = {p.id for p in promises}
-    for raw in items if isinstance(items, list) else []:
-        if isinstance(raw, dict) and raw.get("id") in ids:
-            p = next(p for p in promises if p.id == raw["id"])
-            out[p.id] = _not_yet_due(p, _judge_one(raw, later), later[-1].quarter)
-    return out
+    by_id = {p.id: p for p in promises}
+    for raw in items:
+        if isinstance(raw, dict) and (p := by_id.get(raw.get("id"))) is not None:  # type: ignore[arg-type]
+            out[p.id] = _not_yet_due(p, _judge_one(raw, later, p), later[-1].quarter)
+    return out, False
 
 
 def _not_yet_due(p: Promise, verdict: tuple, newest: str | None) -> tuple:
@@ -350,8 +362,17 @@ def _not_yet_due(p: Promise, verdict: tuple, newest: str | None) -> tuple:
 
 
 def build_ledger(
-    router, promises: list[Promise], sources: list[Source], quarters: dict, annual: dict
+    router,
+    promises: list[Promise],
+    sources: list[Source],
+    quarters: dict,
+    annual: dict,
+    *,
+    notes: list[str] | None = None,
 ) -> Ledger:
+    """Grade every promise. Model failures leave rows pending ("Not assessed") and add one
+    plain-English line to `notes`."""
+    judge_failed = False
     transcripts = [s for s in sources if s.kind == "transcript"]
     by_id = {s.id: s for s in sources}
     rows: list[LedgerRow] = []
@@ -381,7 +402,8 @@ def build_ledger(
                 for p in group
             ]
             continue
-        verdicts = _judge_group(router, group, later)
+        verdicts, failed = _judge_group(router, group, later)
+        judge_failed |= failed
         for p in group:
             status, ev, why = verdicts.get(p.id, ("pending", None, _NOT_ASSESSED))
             rows.append(
@@ -399,6 +421,8 @@ def build_ledger(
         )
 
     rows.sort(key=order)
+    if judge_failed and notes is not None:
+        notes.append(_JUDGE_FAILED)
     counts = {s: 0 for s in STATUSES}
     for r in rows:
         counts[r.status] += 1

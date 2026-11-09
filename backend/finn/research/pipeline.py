@@ -19,6 +19,18 @@ from finn.research.synthesis import bull_bear, snapshot
 log = logging.getLogger(__name__)
 
 COST_KEYS = ("calls", "cached", "input_tokens", "output_tokens", "usd_list_price")
+# A note containing any of these means part of the dossier is missing for a transient reason
+# (model down, a bug, the deadline): such a build never replaces a complete stored one.
+DEGRADED_MARKERS = (
+    "model unavailable",
+    "could not be built",
+    "could not be read",
+    "skipped: build deadline reached",
+)
+
+
+def is_degraded(d: Dossier) -> bool:
+    return any(m in n for n in d.notes for m in DEGRADED_MARKERS)
 
 
 def build_dossier(
@@ -50,9 +62,9 @@ def build_dossier(
             return True
         return False
 
-    def failed(stage: str, e: Exception) -> None:
-        log.warning("%s failed for %s: %s", stage, symbol, e)
-        notes.append(f"{stage} failed: {type(e).__name__}")
+    def failed(what: str, e: Exception, verb: str = "built") -> None:
+        log.warning("%s failed for %s: %s: %s", what, symbol, type(e).__name__, e)
+        notes.append(f"{what} could not be {verb} (internal error)")
 
     pl = quarters = None
     traj = health = None
@@ -65,7 +77,7 @@ def build_dossier(
         traj = trajectory(pl)
         health = balance_sheet_health(pl, bs, cf, ratios, is_lender(pl))
     except Exception as e:  # noqa: BLE001
-        failed("financials", e)
+        failed("Financials", e)
 
     sources = []
     documents: dict = {}
@@ -87,47 +99,57 @@ def build_dossier(
                 client.close()
         notes.extend(src_notes)
     except Exception as e:  # noqa: BLE001
-        failed("sources", e)
+        failed("Sources", e)
 
     promises: list[Promise] = []
-    for src in sources:
-        if src.kind != "transcript":
-            continue
-        if late(f"guidance ({src.id})"):
+    transcripts = [s for s in sources if s.kind == "transcript"]
+    unread = 0  # transcripts whose guidance the model did not return
+    for src in transcripts:
+        if late(f"Guidance from {src.title}"):
             continue
         progress(f"Extracting guidance from {src.title}")
+        got: list[str] = []
         try:
-            promises.extend(extract_promises(router, src, guard))
+            promises.extend(extract_promises(router, src, guard, got))
         except Exception as e:  # noqa: BLE001
-            failed(f"guidance ({src.id})", e)
+            failed(f"Guidance from {src.title}", e, "read")
+        unread += bool(got)
+        notes.extend(got)
 
     ledger = None
-    if sources and not late("ledger"):
+    if sources and not late("Ledger"):
         progress(f"Checking delivery on {len(promises)} promises")
         try:
-            ledger = build_ledger(router, promises, sources, quarters or {}, pl or {})
+            ledger = build_ledger(router, promises, sources, quarters or {}, pl or {}, notes=notes)
         except Exception as e:  # noqa: BLE001
-            failed("ledger", e)
+            failed("Ledger", e)
+    if ledger is not None and not ledger.rows and len(transcripts) >= 2:
+        n = len(transcripts)
+        ledger.note = (
+            f"Guidance could not be read from {unread} of {n} calls (model unavailable)"
+            if unread
+            else f"No verifiable forward-looking guidance found in {n} calls"
+        )
 
     snap = None
     bull: list[Point] = []
     bear: list[Point] = []
     if sources:
         progress("Writing snapshot and bull/bear")
-        if not late("snapshot"):
+        if not late("Snapshot"):
             try:
-                snap = snapshot(router, sources, guard)
+                snap = snapshot(router, sources, guard, notes)
             except Exception as e:  # noqa: BLE001
-                failed("snapshot", e)
+                failed("Snapshot", e)
         if ledger is None or traj is None or health is None:
-            notes.append("bull/bear skipped: ledger or financials unavailable")
-        elif not late("bull/bear"):
+            notes.append("Bull/bear skipped: ledger or financials unavailable")
+        elif not late("Bull/bear"):
             try:
-                bull, bear = bull_bear(router, sources, ledger, traj, health, guard)
+                bull, bear = bull_bear(router, sources, ledger, traj, health, guard, notes)
             except Exception as e:  # noqa: BLE001
-                failed("bull/bear", e)
+                failed("Bull/bear", e)
     else:
-        notes.append("snapshot, ledger and bull/bear skipped: no sources")
+        notes.append("Snapshot, ledger and bull/bear skipped: no sources")
 
     after = router.stats() if hasattr(router, "stats") else {}
     cost = {k: after.get(k, 0) - before.get(k, 0) for k in COST_KEYS}

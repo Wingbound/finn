@@ -97,6 +97,16 @@ def test_llm_error_and_bad_shapes():
     assert extract_promises(FakeRouter({"other": []}), t1()) == []
 
 
+def test_llm_error_and_bad_shapes_are_reported():
+    for rep in (LLMError("down"), {"promises": "x"}, {"other": []}, ["not a dict"]):
+        notes: list[str] = []
+        assert extract_promises(FakeRouter(rep), t1(), notes=notes) == []
+        assert notes == ["Guidance from Q2 FY27 call could not be read (model unavailable)"]
+    notes = []
+    extract_promises(FakeRouter({"promises": []}), t1(), notes=notes)
+    assert notes == []  # an empty list is a valid answer
+
+
 def test_prompt_header_and_task():
     r = FakeRouter({"promises": []})
     extract_promises(r, t1())

@@ -162,3 +162,23 @@ def test_bull_facts_number_not_in_line_dropped():
 def test_snapshot_rejects_facts():
     r = FakeRouter({"summary": [_facts_item("Debt to equity is only 0.06 today.", "Debt to equity: 0.06")]})  # fmt: skip
     assert snapshot(r, sources()) is None
+
+
+def test_model_failures_are_reported():
+    ledger, traj, health = analytics()
+    for rep in (LLMError("x"), ["not a dict"], {"summary": "x", "bull": 1}):
+        notes: list[str] = []
+        assert snapshot(FakeRouter(rep), sources(), notes=notes) is None
+        assert bull_bear(FakeRouter(rep), sources(), ledger, traj, health, notes=notes) == ([], [])
+        assert notes == [
+            "Snapshot unavailable (model unavailable)",
+            "Bull/bear unavailable (model unavailable)",
+        ]
+
+
+def test_valid_empty_replies_are_not_failures():
+    ledger, traj, health = analytics()
+    notes: list[str] = []
+    assert snapshot(FakeRouter({"summary": []}), sources(), notes=notes) is None
+    assert bull_bear(FakeRouter({"bull": [], "bear": []}), sources(), ledger, traj, health, notes=notes) == ([], [])  # fmt: skip
+    assert notes == []

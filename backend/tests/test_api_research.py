@@ -157,3 +157,30 @@ def test_build_rebuilds_stale_cache(env, monkeypatch):
     monkeypatch.setattr(api_main, "build_dossier", lambda conn, s, r, **k: dossier(s))
     ev = events(client.get("/research/ABC/build").text)
     assert [e for e, _ in ev] == ["done"]
+
+
+def test_degraded_rebuild_keeps_stored_dossier(env, monkeypatch):
+    client, path = env
+    old = dossier(age_min=30)
+    save(path, old)
+    bad = dossier().model_copy(update={"notes": ["Snapshot unavailable (model unavailable)"]})
+    monkeypatch.setattr(api_main, "build_dossier", lambda conn, s, r, **k: bad)
+    ev = events(client.get("/research/ABC/build").text)
+    msg = "Live rebuild was incomplete; showing the last complete dossier"
+    assert ev[-2] == ("progress", {"msg": msg})
+    assert ev[-1][0] == "done" and ev[-1][1]["notes"] == []
+    assert ev[-1][1]["built_at"] == old.built_at.isoformat()
+    c = db.connect(path)
+    assert db.get_dossier(c, "ABC").notes == []
+    c.close()
+
+
+def test_degraded_first_build_is_saved(env, monkeypatch):
+    client, path = env
+    bad = dossier().model_copy(update={"notes": ["Snapshot unavailable (model unavailable)"]})
+    monkeypatch.setattr(api_main, "build_dossier", lambda conn, s, r, **k: bad)
+    ev = events(client.get("/research/ABC/build").text)
+    assert ev[-1][0] == "done" and ev[-1][1]["notes"] == bad.notes
+    c = db.connect(path)
+    assert db.get_dossier(c, "ABC").notes == bad.notes
+    c.close()

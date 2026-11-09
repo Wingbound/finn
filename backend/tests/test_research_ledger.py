@@ -318,13 +318,13 @@ def test_llm_error_and_bad_reply_do_not_crash():
         assert row.status == "pending" and row.rationale == "Not assessed"
 
 
-def test_unknown_status_and_rationale_truncated():
+def test_unknown_status_becomes_pending_with_code_rationale():
     p = promise(1, "PERSISTENT-T2", "Q1 FY27")
     long = " ".join(f"w{i}" for i in range(50))
     j = {"status": "great", "rationale": long}
     row = build_ledger(FakeRouter(judge({p.id: j})), [p], sources(), {}, {}).rows[0]
     assert row.status == "pending"
-    assert len(row.rationale.split()) == 30 and row.rationale.endswith("…")
+    assert row.rationale == "No later evidence of the outcome yet"
 
 
 def test_nonpositive_target_is_judged_not_computed():
@@ -637,3 +637,58 @@ def test_computed_rationale_for_range():
     m = p_growth(15, hi=18, metric="ebitda_margin", quote="We expect EBITDA margin of 15-18% in Q2 FY27")  # fmt: skip
     row = build_ledger(FakeRouter({"judgements": []}), [m], sources(), q, MAR).rows[0]
     assert row.rationale == "EBITDA margin was 20.0% in Q2 FY27 against a target of 15–18%"
+
+
+# ---- I1: the judge rationale is grounded ----
+def _resolved(rationale, status="kept"):
+    p = promise(1, "PERSISTENT-T2", "Q1 FY27")
+    j = {"status": status, "evidence_quote": REAL_T1, "evidence_source": "PERSISTENT-T1", "rationale": rationale}  # fmt: skip
+    return build_ledger(FakeRouter(judge({p.id: j})), [p], sources(), {}, {}).rows[0]
+
+
+def test_resolved_rationale_with_ungrounded_number_becomes_template():
+    row = _resolved("Revenue grew 22% to USD 640 million, beating the 18% guidance.")
+    assert row.status == "kept" and row.rationale == "See the later evidence quote."
+    assert _resolved("It fell 9% short.", "missed").rationale == "See the later evidence quote."
+
+
+def test_resolved_rationale_grounded_and_short_is_kept():
+    row = _resolved("Revenue grew 20% year on year to USD 487.6 million in Q2 FY27.")
+    assert row.rationale == "Revenue grew 20% year on year to USD 487.6 million in Q2 FY27."
+    assert _resolved("Delivered.", "partly").rationale == "Delivered."
+
+
+def test_resolved_rationale_over_30_words_becomes_template():
+    long = " ".join(["delivered"] * 31)
+    assert _resolved(long).rationale == "See the later evidence quote."
+    assert _resolved("   ").rationale == "See the later evidence quote."
+
+
+def test_pending_rationale_is_a_code_string():
+    p = promise(1, "PERSISTENT-T2", "Q1 FY27")
+    j = {"status": "pending", "evidence_quote": "", "rationale": "Management cut the target to 9% and delayed the plant to FY29."}  # fmt: skip
+    row = build_ledger(FakeRouter(judge({p.id: j})), [p], sources(), {}, {}).rows[0]
+    assert row.status == "pending" and row.rationale == "No later evidence of the outcome yet"
+
+
+def test_dropped_rationale_is_a_code_string():
+    p = promise(2, "PERSISTENT-T4", "Q3 FY26")
+    j = {"status": "dropped", "rationale": "They went quiet after the 12% miss."}
+    row = build_ledger(FakeRouter(judge({p.id: j})), [p], sources(), {}, {}).rows[0]
+    assert row.status == "dropped" and row.rationale == "Not mentioned in the later calls"
+
+
+# ---- I2: judge failures are reported ----
+@pytest.mark.parametrize("rep", [LLMError("down"), {"judgements": "oops"}, ["not", "a", "dict"]])
+def test_judge_failure_is_noted(rep):
+    notes: list[str] = []
+    p = promise(1, "PERSISTENT-T2", "Q1 FY27")
+    led = build_ledger(FakeRouter(rep), [p], sources(), {}, {}, notes=notes)
+    assert led.rows[0].status == "pending" and led.rows[0].rationale == "Not assessed"
+    assert notes == ["Some promises could not be judged (model unavailable)"]
+
+
+def test_judge_success_adds_no_note():
+    notes: list[str] = []
+    build_ledger(FakeRouter({"judgements": []}), [promise(1, "PERSISTENT-T2", "Q1 FY27")], sources(), {}, {}, notes=notes)  # fmt: skip
+    assert notes == []

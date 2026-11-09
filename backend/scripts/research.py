@@ -2,7 +2,8 @@
 
 Run: uv run python scripts/research.py PERSISTENT TCS [--out finn.sqlite]
 
-Prints one line per symbol; always exits 0.
+Prints one line per symbol; always exits 0. A degraded rebuild (model unavailable, an
+internal error or the deadline) never replaces a complete stored dossier; it prints a warning.
 """
 
 from __future__ import annotations
@@ -16,7 +17,7 @@ from finn import db
 from finn.config import get_settings
 from finn.ingest.screener import ScreenerError
 from finn.llm import LLMRouter
-from finn.research.pipeline import build_dossier
+from finn.research.pipeline import build_dossier, is_degraded
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -42,6 +43,13 @@ def main(argv: list[str] | None = None) -> int:
                 continue
             except Exception as e:  # noqa: BLE001 - one bad symbol must not stop the batch
                 print(f"{sym}: failed ({type(e).__name__}: {e})")
+                continue
+            old = db.get_dossier(conn, sym)
+            if is_degraded(d) and old is not None and not is_degraded(old):
+                print(
+                    f"{sym}: warning: rebuild incomplete ({'; '.join(d.notes)}); "
+                    f"kept the stored dossier built {old.built_at:%Y-%m-%d %H:%M}"
+                )
                 continue
             db.save_dossier(conn, d)
             rows = d.ledger.rows if d.ledger else []

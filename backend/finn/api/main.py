@@ -46,7 +46,7 @@ from finn.models import (
     public,
 )
 from finn.portfolio import load_portfolio
-from finn.research.pipeline import build_dossier
+from finn.research.pipeline import build_dossier, is_degraded
 
 log = logging.getLogger(__name__)
 
@@ -258,6 +258,7 @@ def filing(
 
 # ---- research dossiers ----
 CACHE_MINUTES = 10
+KEPT_STORED = "Live rebuild was incomplete; showing the last complete dossier"
 
 
 def _counts(d: Dossier) -> dict:
@@ -327,8 +328,13 @@ def _build_worker(symbol: str, q: queue.Queue) -> None:
         db.init_db(conn)
         router = LLMRouter(conn, settings)
         d = build_dossier(conn, symbol, router, progress=lambda m: q.put(("progress", {"msg": m})))
-        db.save_dossier(conn, d)
-        q.put(("done", public(d)))
+        stored = db.get_dossier(conn, d.symbol)
+        if is_degraded(d) and stored is not None and not is_degraded(stored):
+            q.put(("progress", {"msg": KEPT_STORED}))
+            q.put(("done", public(stored)))
+        else:
+            db.save_dossier(conn, d)
+            q.put(("done", public(d)))
     except screener.ScreenerError as e:
         q.put(("error", {"detail": str(e) or f"{symbol} not found on screener"}))
     except Exception as e:

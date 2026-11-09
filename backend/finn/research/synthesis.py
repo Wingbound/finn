@@ -142,7 +142,15 @@ def _by_id(sources: list[Source]) -> dict[str, Source]:
     return {s.id: s for s in sources}
 
 
-def snapshot(router, sources: list[Source], guard: dict | None = None) -> Snapshot | None:
+def _note(notes: list[str] | None, text: str) -> None:
+    if notes is not None:
+        notes.append(text)
+
+
+def snapshot(
+    router, sources: list[Source], guard: dict | None = None, notes: list[str] | None = None
+) -> Snapshot | None:
+    """Cited snapshot, or None. A model failure also adds a line to `notes`."""
     parts: list[str] = []
     ar, t1 = _ar(sources), _t1(sources)
     if ar:
@@ -154,8 +162,12 @@ def snapshot(router, sources: list[Source], guard: dict | None = None) -> Snapsh
     try:
         reply = router.complete_json("reason", SNAPSHOT_SYSTEM, "\n\n".join(parts))
     except LLMError:
+        _note(notes, "Snapshot unavailable (model unavailable)")
         return None
     raw = reply.get("summary") if isinstance(reply, dict) else None
+    if not isinstance(raw, list):
+        _note(notes, "Snapshot unavailable (model unavailable)")
+        return None
     points = _validate(raw, _by_id(sources), "", guard, 4)
     return Snapshot(summary=points) if points else None
 
@@ -167,7 +179,9 @@ def bull_bear(
     trajectory: Trajectory,
     health: BalanceSheetHealth,
     guard: dict | None = None,
+    notes: list[str] | None = None,
 ) -> tuple[list[Point], list[Point]]:
+    """Cited bull and bear points. A model failure also adds a line to `notes`."""
     facts = facts_block(trajectory, health, ledger)
     rows = [
         f'{r.status}: {r.promise.topic}, "{r.promise.citation.quote[:160]}" ({r.promise.made_in})'
@@ -182,8 +196,12 @@ def bull_bear(
     try:
         reply = router.complete_json("reason", BULL_BEAR_SYSTEM, "\n\n".join(parts))
     except LLMError:
+        _note(notes, "Bull/bear unavailable (model unavailable)")
         return [], []
-    if not isinstance(reply, dict):
+    if not isinstance(reply, dict) or not any(
+        isinstance(reply.get(k), list) for k in ("bull", "bear")
+    ):
+        _note(notes, "Bull/bear unavailable (model unavailable)")
         return [], []
     by_id = _by_id(sources)
     bull = _validate(reply.get("bull"), by_id, facts, guard, 3, True)

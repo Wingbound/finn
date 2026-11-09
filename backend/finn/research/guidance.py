@@ -68,16 +68,26 @@ def _opt_str(v: object) -> str | None:
     return v.strip() or None if isinstance(v, str) else None
 
 
-def extract_promises(router, source: Source, guard: dict | None = None) -> list[Promise]:
+def extract_promises(
+    router, source: Source, guard: dict | None = None, notes: list[str] | None = None
+) -> list[Promise]:
+    """Grounded promises from one transcript. A model failure (LLMError or a reply of the
+    wrong shape) returns [] and adds a plain-English line to `notes`."""
     user = f"Transcript: {source.title} ({source.quarter or 'quarter unknown'})\n\n" + tagged_text(
         source
     )
+    unread = f"Guidance from {source.title} could not be read (model unavailable)"
     try:
         reply = router.complete_json("extract_transcript", SYSTEM, user)
     except LLMError as e:
         log.warning("guidance extraction failed for %s: %s", source.id, e)
+        if notes is not None:
+            notes.append(unread)
         return []
     if not isinstance(reply, dict) or not isinstance(reply.get("promises"), list):
+        log.warning("guidance extraction for %s returned an unusable reply", source.id)
+        if notes is not None:
+            notes.append(unread)
         return []
 
     if guard is not None:

@@ -1,14 +1,16 @@
 import itertools
 import json
+from datetime import datetime
 from types import SimpleNamespace
 
 import pytest
 
 from finn import db
 from finn.ingest.screener import ScreenerError
-from finn.models import Dossier, public
+from finn.llm.providers import LLMError
+from finn.models import IST, Dossier, public
 from finn.research.docs import DocError
-from finn.research.pipeline import build_dossier
+from finn.research.pipeline import build_dossier, is_degraded
 from tests.fakes import FIXTURES, FakeRouter
 
 HTML = (FIXTURES / "research" / "PERSISTENT_screener.html").read_text()
@@ -101,8 +103,8 @@ def test_deadline_skips_llm_sections(seeded):
     assert router.calls == []
     assert d.trajectory is not None and d.health is not None
     assert d.ledger is None and d.snapshot is None and d.bull == [] and d.bear == []
-    assert any("snapshot skipped: build deadline reached" in n for n in d.notes)
-    assert any("ledger skipped: build deadline reached" in n for n in d.notes)
+    assert "Snapshot skipped: build deadline reached" in d.notes
+    assert "Ledger skipped: build deadline reached" in d.notes
 
 
 def test_stage_failure_becomes_note(seeded, monkeypatch):
@@ -114,8 +116,73 @@ def test_stage_failure_becomes_note(seeded, monkeypatch):
         seeded, "PERSISTENT", FakeRouter(reply), screener_client=FakeScreener(),
         doc_client=FailingDocs(),
     )  # fmt: skip
-    assert "snapshot failed: ValueError" in d.notes
+    assert "Snapshot could not be built (internal error)" in d.notes
+    assert not any("ValueError" in n for n in d.notes)
     assert d.ledger is not None
+    assert is_degraded(d)
+
+
+def test_ledger_internal_error_note(seeded, monkeypatch):
+    def boom(*a, **k):
+        raise KeyError("x")
+
+    monkeypatch.setattr("finn.research.pipeline.build_ledger", boom)
+    d = build_dossier(
+        seeded, "PERSISTENT", FakeRouter(reply), screener_client=FakeScreener(),
+        doc_client=FailingDocs(),
+    )  # fmt: skip
+    assert "Ledger could not be built (internal error)" in d.notes
+    assert not any("KeyError" in n for n in d.notes)
+
+
+def test_llm_down_everywhere_is_visible(seeded):
+    d = build_dossier(
+        seeded, "PERSISTENT", FakeRouter(LLMError("503 everywhere")),
+        screener_client=FakeScreener(), doc_client=FailingDocs(),
+    )  # fmt: skip
+    guidance = [n for n in d.notes if n.startswith("Guidance from")]
+    assert len(guidance) == 4
+    assert all(n.endswith("could not be read (model unavailable)") for n in guidance)
+    assert "Snapshot unavailable (model unavailable)" in d.notes
+    assert "Bull/bear unavailable (model unavailable)" in d.notes
+    assert d.ledger is not None and d.ledger.rows == []
+    assert d.ledger.note == "Guidance could not be read from 4 of 4 calls (model unavailable)"
+    assert is_degraded(d)
+
+
+def test_empty_ledger_note_when_calls_have_no_guidance(seeded):
+    def none(task, system, user):
+        return {"promises": []} if task == "extract_transcript" else reply(task, system, user)
+
+    d = build_dossier(
+        seeded, "PERSISTENT", FakeRouter(none), screener_client=FakeScreener(),
+        doc_client=FailingDocs(),
+    )  # fmt: skip
+    assert d.ledger is not None and d.ledger.rows == []
+    assert d.ledger.note == "No verifiable forward-looking guidance found in 4 calls"
+    assert not is_degraded(d)
+
+
+def build_stub() -> Dossier:
+    return Dossier(
+        symbol="X", name=None, basis="consolidated", built_at=datetime.now(IST), sources=[],
+        ledger=None, snapshot=None, trajectory=None, health=None, bull=[], bear=[], notes=[],
+        cost={}, build_seconds=0.0,
+    )  # fmt: skip
+
+
+def test_is_degraded_markers():
+    base = build_stub()
+    assert not is_degraded(base)
+    for n in (
+        "Snapshot unavailable (model unavailable)",
+        "Ledger could not be built (internal error)",
+        "Guidance from Q2 FY27 call could not be read (internal error)",
+        "Remaining sources skipped: build deadline reached",
+    ):
+        assert is_degraded(base.model_copy(update={"notes": [n]})), n
+    ok = base.model_copy(update={"notes": ["Annual report 2026 unavailable: offline"]})
+    assert not is_degraded(ok)
 
 
 def test_unknown_symbol_propagates(conn):
