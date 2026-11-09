@@ -252,3 +252,29 @@ class Promise(BaseModel):
     unit: Literal["%", "cr", "x", "usd_mn", "usd_bn"] | None = None
     horizon: str | None = None  # as said: "Q3 FY27", "FY27", "next year"
     made_in: str  # the source's quarter
+
+
+Status = Literal["kept", "partly", "missed", "pending", "dropped"]
+
+
+class Actual(BaseModel):
+    value: float
+    unit: str
+    period: str  # "Q2 FY27" | "FY26"
+    basis: str  # e.g. "YoY revenue growth from screener quarterly table"
+
+
+class LedgerRow(BaseModel):
+    promise: Promise
+    status: Status
+    method: Literal["computed", "judged"]
+    actual: Actual | None = None
+    evidence: Citation | None = None  # from a LATER source than the promise
+    rationale: str  # one plain sentence
+
+
+class Ledger(BaseModel):
+    rows: list[LedgerRow]
+    counts: dict[str, int]  # per status
+    credibility_pct: float | None  # (kept + 0.5*partly) / (kept + partly + missed) * 100
+    note: str | None = None

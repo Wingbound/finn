@@ -1,0 +1,292 @@
+"""Promise Ledger: grade each past promise, by code where numbers allow, else by evidence."""
+
+from __future__ import annotations
+
+import re
+from typing import Literal
+
+from finn.enrich.pdftext import relevant_window
+from finn.llm.providers import LLMError
+from finn.models import Actual, Citation, Ledger, LedgerRow, Promise, Source, Status
+from finn.research.cite import locate, tagged_text
+
+STATUSES = ("kept", "partly", "missed", "pending", "dropped")
+_COMPUTED = {"revenue_growth", "ebitda_margin", "pat_growth"}
+_METRIC_WORDS = ["revenue", "margin", "profit", "capex", "deal", "order", "pipeline", "growth"]
+_QTR = re.compile(r"\bQ([1-4])\s*FY\s*(\d{2}|\d{4})\b", re.IGNORECASE)
+_FY = re.compile(r"\b(?:FY|fiscal)\s*(\d{2}|\d{4})\b", re.IGNORECASE)
+_QMONTH = {1: "Jun", 2: "Sep", 3: "Dec", 4: "Mar"}
+_NOT_ASSESSED = "Not assessed"
+_NO_EVIDENCE = "No verifiable later evidence"
+_NAMES = {
+    "revenue_growth": "Revenue",
+    "pat_growth": "Net profit",
+    "ebitda_margin": "EBITDA margin",
+}
+
+Horizon = tuple[Literal["quarter", "fy"], str]
+
+
+def _yy(s: str) -> int:
+    return int(s) % 100
+
+
+def _qkey(label: str | None) -> tuple[int, int] | None:
+    """'Q2 FY27' -> (27, 2); None when empty or unparseable."""
+    m = _QTR.search(label or "")
+    return (_yy(m.group(2)), int(m.group(1))) if m else None
+
+
+def _fy_of(made_in: str) -> int | None:
+    k = _qkey(made_in)
+    return k[0] if k else None
+
+
+def parse_horizon(horizon: str | None, made_in: str) -> Horizon | None:
+    h = (horizon or "").strip()
+    if not h:
+        return None
+    m = _QTR.search(h)
+    if m:
+        return "quarter", f"Q{m.group(1)} FY{_yy(m.group(2)):02d}"
+    m = _FY.search(h)
+    if m:
+        return "fy", f"FY{_yy(m.group(1)):02d}"
+    low = h.lower()
+    k = _qkey(made_in)
+    if k is None:
+        return None
+    yy, q = k
+    if re.search(r"\b(next|coming) quarter\b", low):
+        return ("quarter", f"Q{q + 1} FY{yy:02d}") if q < 4 else ("quarter", f"Q1 FY{yy + 1:02d}")
+    if re.search(r"\bnext (year|fiscal)\b", low):
+        return "fy", f"FY{(yy + 1) % 100:02d}"
+    if re.search(r"\b(this year|current year|this fiscal)\b", low) or low == "fy":
+        return "fy", f"FY{yy:02d}"
+    return None
+
+
+def _column(kind: str, label: str, years_back: int = 0) -> str | None:
+    if kind == "fy":
+        m = re.fullmatch(r"FY(\d{2})", label)
+        return f"Mar {2000 + int(m.group(1)) - years_back}" if m else None
+    m = _QTR.fullmatch(label)
+    if not m:
+        return None
+    q, yy = int(m.group(1)), _yy(m.group(2))
+    year = 2000 + yy - (1 if q < 4 else 0) - years_back
+    return f"{_QMONTH[q]} {year}"
+
+
+def _get(table: dict, col: str | None, *labels: str) -> float | None:
+    row = table.get(col) if col else None
+    for label in labels:
+        if row and label in row:
+            return row[label]
+    return None
+
+
+def _fmt(x: float) -> str:
+    return f"{x:g}"
+
+
+def _grade(p: Promise, quarters: dict, annual: dict) -> tuple[Status, Actual | None, str] | None:
+    if (
+        p.kind != "quantitative"
+        or p.metric not in _COMPUTED
+        or p.unit != "%"
+        or p.target_low is None
+    ):
+        return None
+    hz = parse_horizon(p.horizon, p.made_in)
+    if hz is None:
+        return None
+    kind, label = hz
+    table = quarters if kind == "quarter" else annual
+    col = _column(kind, label)
+    if col is None:
+        return None
+    lo = p.target_low
+    name = _NAMES[p.metric]
+    if p.metric == "ebitda_margin":
+        rev = _get(table, col, "Sales", "Revenue")
+        op = _get(table, col, "Operating Profit", "Financing Profit")
+        if rev is None or op is None:
+            return "pending", None, ""
+        if rev == 0:
+            return None
+        v = round(op / rev * 100, 2)
+        status: Status = "kept" if v >= lo else "partly" if v >= lo - 1.0 else "missed"
+        basis = f"operating profit / revenue from screener {kind} table"
+        why = f"{name} was {v:.1f}% in {label} against a target of at least {_fmt(lo)}%"
+    else:
+        labels = ("Net Profit",) if p.metric == "pat_growth" else ("Sales", "Revenue")
+        cur = _get(table, col, *labels)
+        if cur is None:
+            return "pending", None, ""
+        prev = _get(table, _column(kind, label, 1), *labels)
+        if prev is None or prev <= 0:
+            return None
+        v = round((cur / prev - 1) * 100, 2)
+        status = "kept" if v >= lo else "partly" if v >= 0.8 * lo else "missed"
+        basis = f"YoY {name.lower()} growth from screener {kind} table"
+        verb = f"grew {v:.1f}%" if v >= 0 else f"fell {-v:.1f}%"
+        why = f"{name} {verb} YoY in {label} against a target of at least {_fmt(lo)}%"
+    act = Actual(value=v, unit="%", period=label, basis=basis)
+    return status, act, why
+
+
+def compute_status(p: Promise, quarters: dict, annual: dict) -> tuple[Status, Actual | None] | None:
+    """Grade by arithmetic. None means this promise cannot be computed (judge it instead);
+    ("pending", None) means the period's actuals are not out yet."""
+    out = _grade(p, quarters, annual)
+    return None if out is None else (out[0], out[1])
+
+
+def _computed_row(p: Promise, quarters: dict, annual: dict) -> LedgerRow | None:
+    out = _grade(p, quarters, annual)
+    if out is None:
+        return None
+    status, actual, why = out
+    if actual is None:
+        hz = parse_horizon(p.horizon, p.made_in)
+        why = f"Actuals for {hz[1] if hz else 'the period'} are not published yet"
+    return LedgerRow(promise=p, status=status, method="computed", actual=actual, rationale=why)
+
+
+SYSTEM = """You grade whether company management kept promises made on an earlier earnings call, \
+using only excerpts of LATER calls.
+Statuses: kept = delivered, or on track as promised. partly = some but not all delivered. \
+missed = clearly not delivered, or reversed. pending = too early or unclear. \
+dropped = management stopped mentioning it (only if no later call mentions it).
+Rules: evidence_quote must be copied exactly, word for word, from the evidence block, at least \
+6 words, from one later source. Give that source's id as evidence_source and the page number from \
+its [[pN]] marker as evidence_page. Without a verbatim quote use pending (or dropped). \
+rationale is one plain sentence of at most 30 words.
+Reply JSON only: {"judgements": [{"id", "status", "evidence_quote", "evidence_source", \
+"evidence_page", "rationale"}]} with one entry per promise id."""
+
+
+def _terms(promises: list[Promise]) -> list[str]:
+    words = {w.lower() for p in promises for w in re.findall(r"[A-Za-z0-9]{4,}", p.topic)}
+    return sorted(words | set(_METRIC_WORDS))
+
+
+def _user_prompt(promises: list[Promise], later: list[Source]) -> str:
+    terms = _terms(promises)
+    lines = ["PROMISES:"]
+    for p in promises:
+        lines.append(
+            f"- id={p.id} | topic={p.topic} | horizon={p.horizon or 'unspecified'} | "
+            f'quote: "{p.citation.quote}"'
+        )
+    blocks = [
+        f"=== {s.id}: {s.title} ===\n{relevant_window(tagged_text(s), terms, 6000)}" for s in later
+    ]
+    return "\n".join(lines) + "\n\nEVIDENCE (later calls, oldest first):\n\n" + "\n\n".join(blocks)
+
+
+def _truncate(text: str, n: int = 30) -> str:
+    words = text.split()
+    return text.strip() if len(words) <= n else " ".join(words[:n]) + "…"
+
+
+def _judge_one(raw: object, later: list[Source]) -> tuple[Status, Citation | None, str]:
+    if not isinstance(raw, dict):
+        return "pending", None, _NOT_ASSESSED
+    status = raw.get("status")
+    if status not in STATUSES:
+        status = "pending"
+    rationale = raw.get("rationale")
+    rationale = _truncate(rationale) if isinstance(rationale, str) and rationale.strip() else ""
+    quote, src_id, page = (
+        raw.get("evidence_quote"),
+        raw.get("evidence_source"),
+        raw.get("evidence_page"),
+    )
+    evidence = None
+    if isinstance(quote, str) and quote.strip():
+        src = next((s for s in later if s.id == src_id), None)
+        hint = page if isinstance(page, int) and not isinstance(page, bool) else None
+        evidence = locate(quote, src, hint) if src else None
+        if evidence is None:
+            return "pending", None, _NO_EVIDENCE
+    if status in ("kept", "partly", "missed") and evidence is None:
+        return "pending", None, _NO_EVIDENCE
+    if status == "dropped" and (evidence is not None or len(later) < 2):
+        status = "pending"
+    return status, evidence, rationale or _NOT_ASSESSED  # type: ignore[return-value]
+
+
+def _judge_group(
+    router, promises: list[Promise], later: list[Source]
+) -> dict[str, tuple[Status, Citation | None, str]]:
+    try:
+        reply = router.complete_json("reason", SYSTEM, _user_prompt(promises, later))
+    except LLMError:
+        return {}
+    items = reply.get("judgements") if isinstance(reply, dict) else None
+    out: dict[str, tuple[Status, Citation | None, str]] = {}
+    ids = {p.id for p in promises}
+    for raw in items if isinstance(items, list) else []:
+        if isinstance(raw, dict) and raw.get("id") in ids:
+            out[raw["id"]] = _judge_one(raw, later)
+    return out
+
+
+def build_ledger(
+    router, promises: list[Promise], sources: list[Source], quarters: dict, annual: dict
+) -> Ledger:
+    transcripts = [s for s in sources if s.kind == "transcript"]
+    by_id = {s.id: s for s in sources}
+    rows: list[LedgerRow] = []
+    groups: dict[str, list[Promise]] = {}
+    for p in promises:
+        row = _computed_row(p, quarters, annual)
+        if row is not None:
+            rows.append(row)
+        else:
+            groups.setdefault(p.citation.source_id, []).append(p)
+
+    for sid, group in groups.items():
+        made = _qkey(group[0].made_in)
+        src = by_id.get(sid)
+        key = made or (_qkey(src.quarter) if src else None)
+        later = sorted(
+            (s for s in transcripts if key and (k := _qkey(s.quarter)) and k > key),
+            key=lambda s: _qkey(s.quarter),  # type: ignore[arg-type,return-value]
+        )
+        if not later:
+            rows += [
+                LedgerRow(
+                    promise=p,
+                    status="pending",
+                    method="judged",
+                    rationale="Too recent to judge",
+                )
+                for p in group
+            ]
+            continue
+        verdicts = _judge_group(router, group, later)
+        for p in group:
+            status, ev, why = verdicts.get(p.id, ("pending", None, _NOT_ASSESSED))
+            rows.append(
+                LedgerRow(promise=p, status=status, method="judged", evidence=ev, rationale=why)
+            )
+
+    def order(r: LedgerRow) -> tuple:
+        k = _qkey(r.promise.made_in)
+        return (k is not None, k or (0, 0), r.promise.id)
+
+    rows.sort(key=order)
+    counts = {s: 0 for s in STATUSES}
+    for r in rows:
+        counts[r.status] += 1
+    resolved = counts["kept"] + counts["partly"] + counts["missed"]
+    cred = (counts["kept"] + 0.5 * counts["partly"]) / resolved * 100 if resolved else None
+    note = (
+        f"Not enough concall transcripts on file (found {len(transcripts)})"
+        if len(transcripts) < 2
+        else None
+    )
+    return Ledger(rows=rows, counts=counts, credibility_pct=cred, note=note)
