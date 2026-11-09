@@ -51,7 +51,8 @@ def facts_block(trajectory: Trajectory, health: BalanceSheetHealth, ledger: Ledg
     if t.pat_cagr_pct is not None:
         lines.append(f"Net profit CAGR: {t.pat_cagr_pct:.1f}%")
     if t.margin_change_bps is not None:
-        lines.append(f"Operating margin change: {t.margin_change_bps:+d} bps")
+        kind = "Financing" if t.lender else "Operating"
+        lines.append(f"{kind} margin change: {t.margin_change_bps:+d} bps")
     if h.debt_to_equity is not None:
         lines.append(f"Debt to equity: {h.debt_to_equity:g}")
     if h.cfo_to_pat_3y is not None:

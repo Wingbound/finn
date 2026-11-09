@@ -68,6 +68,12 @@ def test_eval_report_has_columns(stored, capsys):
     g = d.guard
     assert f"{g['promises_kept']}/{g['promises_proposed']}" in out
     assert f"{g['points_kept']}/{g['points_proposed']}" in out
+    assert "| FACTS citations |" in out
+    r = eval_research.evaluate(stored)[0]
+    row = next(ln for ln in out.splitlines() if ln.startswith("| PERSISTENT |"))
+    cells = [c.strip() for c in row.strip("|").split("|")]
+    head = [c.strip() for c in out.splitlines()[0].strip("|").split("|")]
+    assert cells[head.index("FACTS citations")] == str(r.facts) and r.facts >= 1
 
 
 def test_corrupt_ledger_quote_is_listed(stored, capsys):

@@ -175,7 +175,7 @@ def fetch_company(symbol: str, client: httpx.Client | None = None) -> tuple[str,
                 continue
             if r.status_code >= 400:
                 raise ScreenerError(f"screener returned {r.status_code} for {symbol}")
-            if parse_table(r.text, "profit-loss"):
+            if any(parse_table(r.text, "profit-loss").values()):  # headers alone are not data
                 return r.text, basis
     finally:
         if own:

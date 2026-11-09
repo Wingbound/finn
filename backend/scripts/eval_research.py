@@ -92,11 +92,12 @@ def _drop(kept: int, proposed: int) -> str:
 
 def render(results: list[DossierEval]) -> str:
     head = (
-        "| Symbol | Citations verified | Ledger (kept/partly/missed/pending/dropped) "
+        "| Symbol | Citations verified | FACTS citations "
+        "| Ledger (kept/partly/missed/pending/dropped) "
         "| Computed/judged | Promises kept/proposed | Promise drop | Points kept/proposed "
         "| Point drop | Calls | USD (list) | Seconds |"
     )
-    lines = [head, "|" + "---|" * 11]
+    lines = [head, "|" + "---|" * 12]
     tot = DossierEval("total")
     for r in results:
         g = r.guard
@@ -105,6 +106,7 @@ def render(results: list[DossierEval]) -> str:
         lines.append(_row(r.symbol, r, pk, pp, tk, tp))
         tot.total += r.total
         tot.verified += r.verified
+        tot.facts += r.facts
         tot.computed += r.computed
         tot.judged += r.judged
         tot.calls += r.calls
@@ -140,7 +142,7 @@ def render(results: list[DossierEval]) -> str:
 def _row(label: str, r: DossierEval, pk: int, pp: int, tk: int, tp: int) -> str:
     st = "/".join(str(r.statuses.get(k, 0)) for k in STATUSES)
     return (
-        f"| {label} | {r.verified}/{r.total} ({_pct(r.verified, r.total)}) | {st} "
+        f"| {label} | {r.verified}/{r.total} ({_pct(r.verified, r.total)}) | {r.facts} | {st} "
         f"| {r.computed}/{r.judged} | {pk}/{pp} | {_drop(pk, pp)} | {tk}/{tp} | {_drop(tk, tp)} "
         f"| {r.calls} | {r.usd:.4f} | {r.seconds:.1f} |"
     )

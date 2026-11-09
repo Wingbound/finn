@@ -73,8 +73,9 @@ def locate(quote: str, source: Source, hint_page: int | None) -> Citation | None
     return None
 
 
-def tagged_text(source: Source, max_chars: int = 90_000) -> str:
-    """'[[p1]]\\n...\\n[[p2]]\\n...', truncated at a page boundary."""
+def tag_pages(source: Source, max_chars: int = 90_000) -> tuple[str, bool]:
+    """('[[p1]]\\n...\\n[[p2]]\\n...', truncated): pages in order up to max_chars, cut at a
+    page boundary; truncated is True when any page was left out."""
     out: list[str] = []
     used = 0
     for n, page in enumerate(source.pages, 1):
@@ -84,7 +85,12 @@ def tagged_text(source: Source, max_chars: int = 90_000) -> str:
             break
         out.append(chunk)
         used += cost
-    return "\n\n".join(out)
+    return "\n\n".join(out), len(out) < len(source.pages)
+
+
+def tagged_text(source: Source, max_chars: int = 90_000) -> str:
+    """'[[p1]]\\n...\\n[[p2]]\\n...', truncated at a page boundary."""
+    return tag_pages(source, max_chars)[0]
 
 
 def dossier_citations(d: Dossier) -> Iterator[tuple[str, Citation]]:

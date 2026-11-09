@@ -10,7 +10,7 @@ from typing import Literal
 from finn.enrich.grounding import normalize, numbers_grounded
 from finn.llm.providers import LLMError
 from finn.models import Actual, Citation, Ledger, LedgerRow, Promise, Source, Status
-from finn.research.cite import locate, tagged_text
+from finn.research.cite import locate, tag_pages
 from finn.research.financials import is_lender, year_end_month
 
 log = logging.getLogger(__name__)
@@ -305,8 +305,9 @@ using only LATER calls. Search all of the later calls; management often revisits
 with new numbers or a new date. Prefer the most recent mention.
 Statuses: kept = later evidence shows the promise was achieved or delivered, by its stated \
 time if it had one. partly = later evidence shows partial delivery. missed = later evidence \
-shows it was not achieved, was cut or lowered, or slipped past its stated time. \
-dropped = management stopped mentioning it in the later calls. \
+shows it was not achieved: missed only if management cut, lowered or moved the target, or the \
+stated time passed without it. dropped = management stopped mentioning it in the later calls; \
+never use dropped for a call marked TRUNCATED, whose later pages are not shown. \
 pending = not yet due, or no later evidence of the outcome.
 The evidence must concern the same metric and the same period as the promise; a number for a \
 different quarter or year is not evidence for this promise.
@@ -331,9 +332,21 @@ def _user_prompt(promises: list[Promise], later: list[Source]) -> str:
             f"- id={p.id} | topic={p.topic} | horizon={p.horizon or 'unspecified'} ({when}) | "
             f'quote: "{p.citation.quote}"'
         )
+    tagged = _evidence(later)
+    blocks = [
+        f"=== {s.id}: {s.title} ===\n{text}" for s, (text, _) in zip(later, tagged, strict=True)
+    ]
+    cut = [s.id for s, (_, truncated) in zip(later, tagged, strict=True) if truncated]
+    head = "\n\nEVIDENCE (later calls, oldest first):\n\n"
+    if cut:
+        head += f"TRUNCATED (later pages not shown): {', '.join(cut)}.\n\n"
+    return "\n".join(lines) + head + "\n\n".join(blocks)
+
+
+def _evidence(later: list[Source]) -> list[tuple[str, bool]]:
+    """Each later call's tagged pages under the shared evidence budget, and whether cut."""
     cap = min(90_000, JUDGE_EVIDENCE_CHARS // max(len(later), 1))
-    blocks = [f"=== {s.id}: {s.title} ===\n{tagged_text(s, cap)}" for s in later]
-    return "\n".join(lines) + "\n\nEVIDENCE (later calls, oldest first):\n\n" + "\n\n".join(blocks)
+    return [tag_pages(s, cap) for s in later]
 
 
 def _rationale(raw: object, p: Promise, evidence: Citation) -> str:
@@ -346,7 +359,10 @@ def _rationale(raw: object, p: Promise, evidence: Citation) -> str:
     return raw.strip()
 
 
-def _judge_one(raw: dict, later: list[Source], p: Promise) -> tuple[Status, Citation | None, str]:
+def _judge_one(
+    raw: dict, later: list[Source], p: Promise, truncated: bool = False
+) -> tuple[Status, Citation | None, str]:
+    """Validate one verdict. dropped needs 2+ later calls, none of them truncated."""
     status = raw.get("status")
     if status not in STATUSES:
         status = "pending"
@@ -366,7 +382,7 @@ def _judge_one(raw: dict, later: list[Source], p: Promise) -> tuple[Status, Cita
         if evidence is None:
             return "pending", None, _NO_EVIDENCE
         return status, evidence, _rationale(raw.get("rationale"), p, evidence)  # type: ignore[return-value]
-    if status == "dropped" and evidence is None and len(later) >= 2:
+    if status == "dropped" and evidence is None and len(later) >= 2 and not truncated:
         return "dropped", None, _DROPPED
     return "pending", None, _NO_OUTCOME
 
@@ -385,9 +401,11 @@ def _judge_group(
         return {}, True
     out: dict[str, tuple[Status, Citation | None, str]] = {}
     by_id = {p.id: p for p in promises}
+    truncated = any(cut for _, cut in _evidence(later))
     for raw in items:
         if isinstance(raw, dict) and (p := by_id.get(raw.get("id"))) is not None:  # type: ignore[arg-type]
-            out[p.id] = _not_yet_due(p, _judge_one(raw, later, p), later[-1].quarter)
+            verdict = _judge_one(raw, later, p, truncated)
+            out[p.id] = _not_yet_due(p, verdict, later[-1].quarter)
     return out, False
 
 

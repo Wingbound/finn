@@ -158,6 +158,16 @@ def test_fetch_company_falls_back_to_standalone():
 
 
 @respx.mock
+def test_fetch_company_headers_without_rows_is_not_data():
+    respx.get("https://www.screener.in/company/ABC/consolidated/").respond(
+        text='<section id="profit-loss"><table><thead><tr><th></th><th>Mar 2025</th>'
+        "<th>Mar 2026</th></tr></thead><tbody></tbody></table></section>"
+    )
+    respx.get("https://www.screener.in/company/ABC/").respond(text=PAGE)
+    assert fetch_company("ABC") == (PAGE, "standalone")
+
+
+@respx.mock
 def test_fetch_company_consolidated_and_errors():
     respx.get("https://www.screener.in/company/P/consolidated/").respond(text=PAGE)
     assert fetch_company("P")[1] == "consolidated"

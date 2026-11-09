@@ -243,8 +243,9 @@ def test_evidence_from_non_later_source_rejected():
 
 def test_dropped_needs_two_later_sources_and_no_evidence():
     one = promise(1, "PERSISTENT-T2", "Q1 FY27")  # later: T1 only
-    two = promise(2, "PERSISTENT-T4", "Q3 FY26")  # later: T3, T2, T1
-    withev = promise(3, "PERSISTENT-T4", "Q3 FY26")
+    two = promise(2, "PERSISTENT-T3", "Q4 FY26")  # later: T2, T1, both shown whole
+    withev = promise(3, "PERSISTENT-T3", "Q4 FY26")
+    cut = promise(4, "PERSISTENT-T4", "Q3 FY26")  # later: T3, T2, T1; T2 is cut at 66,666
     table = {
         one.id: {"status": "dropped", "rationale": "Not mentioned again."},
         two.id: {"status": "dropped", "rationale": "Not mentioned again."},
@@ -254,12 +255,14 @@ def test_dropped_needs_two_later_sources_and_no_evidence():
             "evidence_source": "PERSISTENT-T1",
             "rationale": "r",
         },
+        cut.id: {"status": "dropped", "rationale": "Not mentioned again."},
     }
-    led = build_ledger(FakeRouter(judge(table)), [one, two, withev], sources(), {}, {})
+    led = build_ledger(FakeRouter(judge(table)), [one, two, withev, cut], sources(), {}, {})
     by = {r.promise.id: r for r in led.rows}
     assert by[one.id].status == "pending"
     assert by[two.id].status == "dropped" and by[two.id].evidence is None
     assert by[withev.id].status == "pending"
+    assert by[cut.id].status == "pending"
 
 
 def test_newest_source_pending_no_llm_call():
@@ -672,7 +675,7 @@ def test_pending_rationale_is_a_code_string():
 
 
 def test_dropped_rationale_is_a_code_string():
-    p = promise(2, "PERSISTENT-T4", "Q3 FY26")
+    p = promise(2, "PERSISTENT-T3", "Q4 FY26")
     j = {"status": "dropped", "rationale": "They went quiet after the 12% miss."}
     row = build_ledger(FakeRouter(judge({p.id: j})), [p], sources(), {}, {}).rows[0]
     assert row.status == "dropped" and row.rationale == "Not mentioned in the later calls"
@@ -786,3 +789,43 @@ def test_credibility_none_under_three_resolved():
     led = build_ledger(FakeRouter(judge(table)), [a, b], sources(), {}, {})
     assert led.counts["kept"] == 1 and led.counts["missed"] == 1
     assert led.credibility_pct is None
+
+
+# ---- minors ----
+def test_judge_prompt_missed_rule():
+    from finn.research.ledger import SYSTEM
+
+    assert (
+        "missed only if management cut, lowered or moved the target, or the stated time passed "
+        "without it" in " ".join(SYSTEM.split())
+    )
+
+
+def _big(i, quarter):
+    return Source(id=f"B{i}", kind="transcript", title=f"{quarter} call", quarter=quarter, url="u", pages=["word " * 2_000] * 30)  # fmt: skip
+
+
+def test_truncated_evidence_is_flagged_and_blocks_dropped():
+    from finn.research.ledger import _user_prompt
+
+    srcs = [_big(1, "Q2 FY27"), _big(2, "Q1 FY27"), _big(3, "Q4 FY26")]
+    p = promise(1, "B3", "Q4 FY26")
+    user = _user_prompt([p], [srcs[1], srcs[0]])  # oldest first, as build_ledger passes them
+    assert "TRUNCATED (later pages not shown): B2, B1." in user
+    led = build_ledger(FakeRouter(judge({p.id: {"status": "dropped", "rationale": "r"}})), [p], srcs, {}, {})  # fmt: skip
+    assert led.rows[0].status == "pending"
+
+
+def test_untruncated_evidence_has_no_flag():
+    from finn.research.ledger import _user_prompt
+
+    p = promise(2, "PERSISTENT-T3", "Q4 FY26")
+    assert "TRUNCATED" not in _user_prompt([p], [sources()[1], sources()[0]])
+    q = promise(3, "PERSISTENT-T4", "Q3 FY26")
+    later = [sources()[2], sources()[1], sources()[0]]
+    assert "TRUNCATED (later pages not shown): PERSISTENT-T2." in _user_prompt([q], later)
+
+
+def test_no_transcripts_note():
+    led = build_ledger(FakeRouter({"judgements": []}), [], [], {}, {})
+    assert led.note == "Not enough concall transcripts on file (found 0)" and led.rows == []

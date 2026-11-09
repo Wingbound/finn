@@ -195,3 +195,9 @@ def test_facts_ledger_line_without_credibility():
     f = facts_block(traj, health, small)
     assert "Promise ledger: 1 kept, 0 partly, 1 missed, 3 pending, 0 dropped (2 of 5 promises resolved)" in f  # fmt: skip
     assert "credibility" not in f
+
+
+def test_lender_facts_say_financing_margin():
+    ledger, traj, health = analytics()
+    f = facts_block(traj.model_copy(update={"lender": True}), health, ledger)
+    assert "Financing margin change: +120 bps" in f and "Operating margin" not in f
