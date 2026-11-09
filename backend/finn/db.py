@@ -71,6 +71,12 @@ CREATE TABLE IF NOT EXISTS financials (
     facts_json TEXT NOT NULL,
     PRIMARY KEY (symbol, period_end, basis)
 );
+CREATE TABLE IF NOT EXISTS doc_text (
+    url TEXT PRIMARY KEY,
+    fetched_at TEXT NOT NULL,
+    chars INTEGER NOT NULL,
+    text TEXT NOT NULL
+);
 """
 
 
@@ -315,3 +321,19 @@ def latest_financials(conn: sqlite3.Connection, symbol: str) -> tuple[date, str,
         r["basis"],
         datetime.fromisoformat(r["filed_at"]),
     )
+
+
+def get_doc_text_cached(conn: sqlite3.Connection, url: str) -> str | None:
+    """Cached PDF text for url; None if never fetched ("" is a valid cached value)."""
+    r = conn.execute("SELECT text FROM doc_text WHERE url = ?", (url,)).fetchone()
+    return None if r is None else r["text"]
+
+
+def save_doc_text(conn: sqlite3.Connection, url: str, text: str) -> None:
+    conn.execute(
+        """INSERT INTO doc_text (url, fetched_at, chars, text) VALUES (?, ?, ?, ?)
+           ON CONFLICT(url) DO UPDATE SET fetched_at = excluded.fetched_at,
+               chars = excluded.chars, text = excluded.text""",
+        (url, _ts(datetime.now(IST)), len(text), text),
+    )
+    conn.commit()
