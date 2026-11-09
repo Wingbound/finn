@@ -4,6 +4,7 @@ import { mockApi } from "./mock";
 
 const DIR = process.env.SCREENS;
 test.skip(!DIR, "set SCREENS=<dir> to capture");
+test.use({ deviceScaleFactor: 2 });
 
 const SHOTS: { name: string; path: string; digest?: string; prep?: (p: import("@playwright/test").Page) => Promise<void> }[] = [
   { name: "today", path: "/", digest: "digest-7d.json" },
@@ -36,10 +37,11 @@ const SHOTS: { name: string; path: string; digest?: string; prep?: (p: import("@
   },
   {
     name: "source",
-    path: "/research/PERSISTENT",
+    path: "/research/BAJFINANCE",
     prep: async (p) => {
-      await p.getByRole("button", { name: /call, p\. \d+$/ }).first().click();
-      await p.waitForTimeout(500);
+      // the chip whose page the source fixture holds, so the highlight shows
+      await p.getByRole("button", { name: "Q4 FY26 call (May 2026), p. 4" }).first().click();
+      await p.waitForTimeout(600);
     },
   },
   {

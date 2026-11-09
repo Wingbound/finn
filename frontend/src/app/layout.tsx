@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { IBM_Plex_Sans, Literata } from "next/font/google";
+import { ServiceWorker } from "@/components/ServiceWorker";
 import { TabBar } from "@/components/TabBar";
 import "./globals.css";
 
@@ -44,6 +45,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           {children}
         </main>
         <TabBar />
+        <ServiceWorker />
       </body>
     </html>
   );

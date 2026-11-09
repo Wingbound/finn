@@ -15,6 +15,8 @@ export default defineConfig({
     browserName: "chromium",
     viewport: { width: 390, height: 844 },
     trace: "retain-on-failure",
+    // page.route can't see requests a service worker makes; tests that need the worker opt back in
+    serviceWorkers: "block",
   },
   webServer: {
     command: `NEXT_PUBLIC_API_URL=${API} npx next build && npx next start -p ${PORT}`,

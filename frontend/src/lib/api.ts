@@ -1,6 +1,8 @@
 export const API_BASE = (process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000").replace(/\/+$/, "");
 export const TIMEOUT_MS = 15_000;
 export const UNREACHABLE = "Couldn't reach FINN's server";
+/** Fired with the saved-at time when the service worker answered from its cache, null when live. */
+export const OFFLINE_EVENT = "finn:offline";
 
 export class ApiError extends Error {
   constructor(
@@ -27,6 +29,10 @@ async function request<T>(path: string, init: RequestInit = {}): Promise<T> {
     throw new ApiError(0, UNREACHABLE);
   } finally {
     clearTimeout(timer);
+  }
+  if (typeof window !== "undefined") {
+    const saved = res.headers.get("x-finn-offline");
+    window.dispatchEvent(new CustomEvent(OFFLINE_EVENT, { detail: saved === null ? null : saved }));
   }
   if (!res.ok) {
     let detail = `The server answered ${res.status}`;

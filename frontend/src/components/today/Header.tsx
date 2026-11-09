@@ -16,10 +16,10 @@ export function Header({ counts, onOpenRoutine }: { counts: Digest["counts"]; on
           type="button"
           onClick={onOpenRoutine}
           className="mt-2 min-h-11 text-left text-title text-ink-2"
-          aria-label={`${plural(counts.routine, "routine filing")} set aside. Show them`}
         >
-          <PencilStrike>{plural(counts.routine, "routine filing")}</PencilStrike>
-          <span className="ml-2 text-caption text-pencil">set aside</span>
+          <PencilStrike>{plural(counts.routine, "routine filing")}</PencilStrike>{" "}
+          <span className="ml-1 text-caption text-pencil">set aside</span>
+          <span className="sr-only">. Show them</span>
         </button>
       ) : null}
       {counts.hidden > 0 ? (

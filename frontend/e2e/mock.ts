@@ -1,7 +1,7 @@
 import { readFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
-import type { Page, Route } from "@playwright/test";
+import type { BrowserContext, Page, Route } from "@playwright/test";
 import { API } from "../playwright.config";
 
 const FIX = join(dirname(fileURLToPath(import.meta.url)), "..", "tests", "fixtures");
@@ -15,7 +15,7 @@ export interface MockOptions {
 }
 
 /** Serves every API route from tests/fixtures so e2e runs need no backend. */
-export async function mockApi(page: Page, opts: MockOptions = {}) {
+export async function mockApi(page: Page | BrowserContext, opts: MockOptions = {}) {
   const built = new Set<string>(); // symbols the mocked build endpoint has "saved"
   await page.route(`${API}/**`, async (route: Route) => {
     const req = route.request();
