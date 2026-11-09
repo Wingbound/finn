@@ -9,6 +9,7 @@ from finn.enrich.grounding import normalize
 from finn.llm.providers import LLMError
 from finn.models import Actual, Citation, Ledger, LedgerRow, Promise, Source, Status
 from finn.research.cite import locate, tagged_text
+from finn.research.financials import is_lender, year_end_month
 
 STATUSES = ("kept", "partly", "missed", "pending", "dropped")
 _COMPUTED = {"revenue_growth", "ebitda_margin", "pat_growth"}
@@ -44,12 +45,20 @@ def _fy_of(made_in: str) -> int | None:
 
 _H_QTR = re.compile(r"q([1-4])\s*fy\s*(\d{2}|\d{4})")
 _H_FY = re.compile(r"(?:fy\s*|fiscal\s+(?:year\s+)?)(\d{2}|\d{4})")
+_REL_YEAR = {
+    "this year", "current year", "this fiscal", "this financial year",
+    "next year", "next fiscal", "next financial year",
+}  # fmt: skip
+
+
+def _horizon_text(horizon: str | None) -> str:
+    low = re.sub(r"\s+", " ", (horizon or "").strip().lower())
+    return re.sub(r"^(in|for|during) ", "", low)
 
 
 def parse_horizon(horizon: str | None, made_in: str) -> Horizon | None:
     """Resolve only when the whole phrase is an explicit label or a known relative phrase."""
-    low = re.sub(r"\s+", " ", (horizon or "").strip().lower())
-    low = re.sub(r"^(in|for|during) ", "", low)
+    low = _horizon_text(horizon)
     m = _H_QTR.fullmatch(low)
     if m:
         return "quarter", f"Q{m.group(1)} FY{_yy(m.group(2)):02d}"
@@ -93,6 +102,77 @@ def _fmt(x: float) -> str:
     return f"{x:g}"
 
 
+def _period_key(hz: Horizon) -> tuple[int, int] | None:
+    """Comparable (yy, quarter) for a resolved horizon; a fiscal year ends at its Q4."""
+    kind, label = hz
+    return _qkey(label) if kind == "quarter" else (int(label[2:]), 4)
+
+
+# C1 gates. A computed grade is the authoritative one, so it is given only when the quote
+# itself names the metric and the period, and nothing in it hints at a different measure.
+_METRIC_WORDS = {
+    "revenue_growth": re.compile(r"\b(?:revenues?|sales|top line|topline|turnover)\b"),
+    "pat_growth": re.compile(r"\b(?:pat|net profits?|profit after tax)\b"),
+    "ebitda_margin": re.compile(r"\b(?:ebitda|operating margins?|opm)\b"),
+}
+_MISMATCH = re.compile(
+    r"\bebit\b|\bqoq\b|\bquarter[- ]on[- ]quarter\b|\bsequential\w*|\bcqgr\b"
+    r"|\bconstant currency\b|\bdollar\w*|\busd\b|\bus\$|\$|\bbps\b|\bbasis points?\b"
+    r"|\bexpan\w*|\bimprov\w*|\bby \d"
+)
+_Q_MENTION = re.compile(r"\bq([1-4])\s*fy\s*'?(\d{4}|\d{2})\b")
+_FY_MENTION = re.compile(r"\b(?:fy|fiscal(?: year)?)\s*'?(\d{4}|\d{2})\b")
+_PART_OF_YEAR = re.compile(r"\b(?:q[1-4]|h[12]|[1-4]q|9m|quarter|half)\s*(?:of\s+)?(?:the\s+)?$")
+_SPAN = re.compile(r"\s*(?:-|–|to)\s*(?:fy\s*)?\d{2}")
+
+
+def _horizon_in_quote(horizon: str | None, hz: Horizon, quote: str) -> bool:
+    """The resolved period, or the relative phrase, is stated in the (normalized) quote.
+    FY27, FY 27, FY2027 and fiscal 2027 match each other; Q3 FY27 matches Q3FY27. A fiscal
+    year inside a quarter or half label ("Q3 FY27") or a span ("FY27-28") does not count."""
+    low = _horizon_text(horizon)
+    kind, label = hz
+    if not (_H_QTR.fullmatch(low) or _H_FY.fullmatch(low)):
+        return re.search(r"(?<!\w)" + re.escape(low) + r"(?!\w)", quote) is not None
+    if kind == "quarter":
+        return any(
+            f"Q{m.group(1)} FY{_yy(m.group(2)):02d}" == label for m in _Q_MENTION.finditer(quote)
+        )
+    for m in _FY_MENTION.finditer(quote):
+        if f"FY{_yy(m.group(1)):02d}" != label:
+            continue
+        if _PART_OF_YEAR.search(quote[: m.start()]) or _SPAN.match(quote, m.end()):
+            continue
+        return True
+    return False
+
+
+def _gated(p: Promise, quote: str, annual: dict) -> Horizon | None:
+    """The horizon to compute against, or None when any C1 gate sends the promise to the judge."""
+    if year_end_month(annual) != "Mar":
+        return None  # quarter and FY columns are mapped for a March fiscal year only
+    if p.metric == "ebitda_margin" and is_lender(annual):
+        return None
+    if not _METRIC_WORDS[p.metric].search(quote) or _MISMATCH.search(quote):  # type: ignore[index]
+        return None
+    hz = parse_horizon(p.horizon, p.made_in)
+    made = _qkey(p.made_in)
+    if hz is None or made is None:
+        return None
+    key = _period_key(hz)
+    if key is None or key <= made:
+        return None  # the period must end after the call
+    if made[1] == 4 and _horizon_text(p.horizon) in _REL_YEAR:
+        return None  # "this year" in a Q4 call may mean the year just ended or the new one
+    return hz if _horizon_in_quote(p.horizon, hz, quote) else None
+
+
+def _target(p: Promise) -> str:
+    lo, hi = p.target_low, p.target_high
+    assert lo is not None
+    return f"{_fmt(lo)}–{_fmt(hi)}%" if hi is not None and hi > lo else f"at least {_fmt(lo)}%"
+
+
 _SEGMENT = re.compile(r"segment|division|vertical|business unit|subsidiary")
 _LONG = re.compile(
     r"long[- ]term|medium[- ]term|aspiration|over the next few years"
@@ -102,7 +182,8 @@ _NOT_DUE = "Target not yet due — tracking is not delivery"
 
 
 def _grade(p: Promise, quarters: dict, annual: dict) -> tuple[Status, Actual | None, str] | None:
-    if _SEGMENT.search(normalize(p.citation.quote)):
+    quote = normalize(p.citation.quote)
+    if _SEGMENT.search(quote):
         return None
     if (
         p.kind != "quantitative"
@@ -112,7 +193,7 @@ def _grade(p: Promise, quarters: dict, annual: dict) -> tuple[Status, Actual | N
         or p.target_low <= 0
     ):
         return None
-    hz = parse_horizon(p.horizon, p.made_in)
+    hz = _gated(p, quote, annual)
     if hz is None:
         return None
     kind, label = hz
@@ -134,7 +215,7 @@ def _grade(p: Promise, quarters: dict, annual: dict) -> tuple[Status, Actual | N
         v = round(op / rev * 100, 2)
         status: Status = "kept" if v >= lo else "partly" if v >= lo - 1.0 else "missed"
         basis = f"operating profit / revenue from screener {kind} table"
-        why = f"{name} was {v:.1f}% in {label} against a target of at least {_fmt(lo)}%"
+        why = f"{name} was {v:.1f}% in {label} against a target of {_target(p)}"
     else:
         labels = ("Net Profit",) if p.metric == "pat_growth" else ("Sales", "Revenue")
         cur = _get(table, col, *labels)
@@ -149,7 +230,7 @@ def _grade(p: Promise, quarters: dict, annual: dict) -> tuple[Status, Actual | N
         status = "kept" if v >= lo else "partly" if v >= 0.8 * lo else "missed"
         basis = f"YoY {name.lower()} growth from screener {kind} table"
         verb = f"grew {v:.1f}%" if v >= 0 else f"fell {-v:.1f}%"
-        why = f"{name} {verb} YoY in {label} against a target of at least {_fmt(lo)}%"
+        why = f"{name} {verb} YoY in {label} against a target of {_target(p)}"
     act = Actual(value=v, unit="%", period=label, basis=basis)
     return status, act, why
 
@@ -263,7 +344,7 @@ def _not_yet_due(p: Promise, verdict: tuple, newest: str | None) -> tuple:
     hz, nk = parse_horizon(p.horizon, p.made_in), _qkey(newest)
     future = False
     if hz and nk:
-        k = _qkey(hz[1]) if hz[0] == "quarter" else (int(hz[1][2:]), 4)
+        k = _period_key(hz)
         future = k is not None and k > nk
     return ("pending", None, _NOT_DUE) if long_term or future else verdict
 

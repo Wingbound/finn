@@ -23,7 +23,7 @@ def is_lender(pl: Table) -> bool:
     return "Sales" not in labels and "Revenue" in labels
 
 
-def _year_end_month(pl: Table) -> str | None:
+def year_end_month(pl: Table) -> str | None:
     for col in reversed(list(pl)):
         m = _COL.match(col)
         if m:
@@ -59,7 +59,7 @@ def _cagr(series: list[float | None], years: list[str]) -> float | None:
 def trajectory(pl: Table) -> Trajectory:
     lender = is_lender(pl)
     rev_k, op_k = ("Revenue", "Financing Profit") if lender else ("Sales", "Operating Profit")
-    years = _fy_cols(pl, _year_end_month(pl))[-5:]
+    years = _fy_cols(pl, year_end_month(pl))[-5:]
     rev = [_get(pl, y, rev_k) for y in years]
     op = [_get(pl, y, op_k) for y in years]
     pat = [_get(pl, y, "Net Profit") for y in years]
@@ -100,7 +100,7 @@ def _sum3(cols: list[str], getter) -> float | None:
 def balance_sheet_health(
     pl: Table, bs: Table, cf: Table, ratios: Table, lender: bool
 ) -> BalanceSheetHealth:
-    month = _year_end_month(pl)
+    month = year_end_month(pl)
     bs_cols = _fy_cols(bs, month)
     as_of = bs_cols[-1] if bs_cols else ""
 

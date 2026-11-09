@@ -92,20 +92,35 @@ def test_parse_horizon(h, made, want):
 
 
 # ---- compute_status ----
+MAR = {"Mar 2026": {"Sales": 400.0, "Operating Profit": 80.0, "Net Profit": 40.0}}  # Mar FY-end
+LENDER = {"Mar 2026": {"Revenue": 400.0, "Financing Profit": 80.0, "Net Profit": 40.0}}
+_SAYS = {
+    "revenue_growth": "revenue to grow",
+    "pat_growth": "net profit to grow",
+    "ebitda_margin": "EBITDA margin of",
+}
+
+
 def qtab(cur, prev):
     return {"Sep 2026": cur, "Sep 2025": prev}
 
 
-def p_growth(lo, metric="revenue_growth", unit="%", horizon="Q2 FY27"):
+def p_growth(
+    lo, metric="revenue_growth", unit="%", horizon="Q2 FY27", quote=None, made_in="Q1 FY27", hi=None
+):
+    """A quantitative promise whose quote names the metric and the horizon, as C1 requires."""
+    q = quote or f"We expect {_SAYS.get(metric, 'capex of')} {lo:g}% in {horizon}"
     return promise(
         1,
         "PERSISTENT-T2",
-        "Q1 FY27",
+        made_in,
         kind="quantitative",
         metric=metric,
         target_low=lo,
+        target_high=hi,
         unit=unit,
         horizon=horizon,
+        citation=Citation(source_id="PERSISTENT-T2", page=1, quote=q),
     )
 
 
@@ -115,7 +130,7 @@ def p_growth(lo, metric="revenue_growth", unit="%", horizon="Q2 FY27"):
 )
 def test_compute_growth(lo, status):
     q = qtab({"Sales": 118.0}, {"Sales": 100.0})  # +18%
-    s, a = compute_status(p_growth(lo), q, {})
+    s, a = compute_status(p_growth(lo), q, MAR)
     assert s == status
     assert a.value == pytest.approx(18.0) and a.unit == "%" and a.period == "Q2 FY27"
 
@@ -125,8 +140,8 @@ def test_compute_growth_lender_and_pat():
         "Sep 2026": {"Revenue": 110.0, "Net Profit": 30.0},
         "Sep 2025": {"Revenue": 100.0, "Net Profit": 20.0},
     }
-    assert compute_status(p_growth(10), q, {})[0] == "kept"
-    s, a = compute_status(p_growth(40, metric="pat_growth"), q, {})
+    assert compute_status(p_growth(10), q, LENDER)[0] == "kept"
+    s, a = compute_status(p_growth(40, metric="pat_growth"), q, LENDER)
     assert s == "kept" and a.value == pytest.approx(50.0)
 
 
@@ -140,27 +155,30 @@ def test_compute_fy_growth_uses_annual():
 def test_compute_margin(lo, status):
     q = {"Sep 2026": {"Sales": 200.0, "Operating Profit": 40.0}}  # 20%
     p = p_growth(lo, metric="ebitda_margin")
-    s, a = compute_status(p, q, {})
+    s, a = compute_status(p, q, MAR)
     assert s == status and a.value == pytest.approx(20.0)
 
 
-def test_compute_margin_lender():
+def test_lender_margin_is_judged_not_computed():
     q = {"Sep 2026": {"Revenue": 200.0, "Financing Profit": 100.0}}
-    assert compute_status(p_growth(45, metric="ebitda_margin"), q, {})[0] == "kept"
+    assert compute_status(p_growth(45, metric="ebitda_margin"), q, LENDER) is None
+    # the same table for a non-lender P&L would compute
+    assert compute_status(p_growth(45, metric="ebitda_margin", quote="We expect EBITDA margin of 45% in Q2 FY27"), {"Sep 2026": {"Sales": 200.0, "Operating Profit": 100.0}}, MAR)[0] == "kept"  # fmt: skip
 
 
 def test_compute_pending_when_period_missing():
     q = {"Jun 2026": {"Sales": 1.0}}
-    assert compute_status(p_growth(15), q, {}) == ("pending", None)
-    assert compute_status(p_growth(15, horizon="FY28"), q, {}) == ("pending", None)
+    assert compute_status(p_growth(15), q, MAR) == ("pending", None)
+    assert compute_status(p_growth(15, horizon="FY28"), q, MAR) == ("pending", None)
 
 
 def test_compute_none_cases():
     q = qtab({"Sales": 118.0}, {"Sales": 100.0})
-    assert compute_status(p_growth(15, unit="cr"), q, {}) is None
-    assert compute_status(p_growth(15, metric="capex"), q, {}) is None
-    assert compute_status(p_growth(15, horizon="medium term"), q, {}) is None
-    assert compute_status(promise(1, "PERSISTENT-T2", "Q1 FY27"), q, {}) is None
+    assert compute_status(p_growth(15), q, MAR) is not None  # control
+    assert compute_status(p_growth(15, unit="cr"), q, MAR) is None
+    assert compute_status(p_growth(15, metric="capex"), q, MAR) is None
+    assert compute_status(p_growth(15, horizon="medium term"), q, MAR) is None
+    assert compute_status(promise(1, "PERSISTENT-T2", "Q1 FY27"), q, MAR) is None
 
 
 # ---- build_ledger ----
@@ -168,7 +186,7 @@ def test_computed_row_and_rationale():
     p = p_growth(15)
     q = {"Sep 2026": {"Sales": 118.2}, "Sep 2025": {"Sales": 100.0}}
     r = FakeRouter({"judgements": []})
-    led = build_ledger(r, [p], sources(), q, {})
+    led = build_ledger(r, [p], sources(), q, MAR)
     row = led.rows[0]
     assert row.method == "computed" and row.status == "kept" and row.actual.value == 18.2
     assert row.rationale == "Revenue grew 18.2% YoY in Q2 FY27 against a target of at least 15%"
@@ -312,16 +330,16 @@ def test_unknown_status_and_rationale_truncated():
 def test_nonpositive_target_is_judged_not_computed():
     p = p_growth(-5)
     q = qtab({"Sales": 118.0}, {"Sales": 100.0})
-    assert compute_status(p, q, {}) is None
+    assert compute_status(p, q, MAR) is None
     r = FakeRouter({"judgements": []})
-    row = build_ledger(r, [p], sources(), q, {}).rows[0]
+    row = build_ledger(r, [p], sources(), q, MAR).rows[0]
     assert row.method == "judged" and len(r.calls) == 1
 
 
 def test_missing_row_labels_is_judged_not_pending_computed():
     q = {"Sep 2026": {"Other": 1.0}, "Sep 2025": {"Other": 1.0}}
-    assert compute_status(p_growth(15), q, {}) is None
-    assert compute_status(p_growth(15, metric="ebitda_margin"), q, {}) is None
+    assert compute_status(p_growth(15), q, MAR) is None
+    assert compute_status(p_growth(15, metric="ebitda_margin"), q, MAR) is None
 
 
 def test_later_key_uses_source_quarter_over_made_in():
@@ -398,18 +416,18 @@ def test_segment_promise_judged_not_computed():
     seg = promise(
         1, "PERSISTENT-T2", "Q1 FY27", kind="quantitative", metric="ebitda_margin",
         target_low=15, unit="%", horizon="Q2 FY27",
-        citation=Citation(source_id="PERSISTENT-T2", page=1, quote="we expect segment margin of 15% in the quarter"),
+        citation=Citation(source_id="PERSISTENT-T2", page=1, quote="we expect segment EBITDA margin of 15% in Q2 FY27"),
     )  # fmt: skip
-    row = build_ledger(FakeRouter({"judgements": []}), [seg], sources(), q, {}).rows[0]
+    row = build_ledger(FakeRouter({"judgements": []}), [seg], sources(), q, MAR).rows[0]
     assert row.method == "judged"
     plain = seg.model_copy(
         update={
             "citation": seg.citation.model_copy(
-                update={"quote": "we expect margin of 15% in the quarter"}
+                update={"quote": "we expect EBITDA margin of 15% in Q2 FY27"}
             )
         }
     )
-    assert build_ledger(FakeRouter({"judgements": []}), [plain], sources(), q, {}).rows[0].method == "computed"  # fmt: skip
+    assert build_ledger(FakeRouter({"judgements": []}), [plain], sources(), q, MAR).rows[0].method == "computed"  # fmt: skip
 
 
 def _kept(status="kept", **kw):
@@ -445,3 +463,177 @@ def test_same_metric_period_sentence():
     from finn.research.ledger import SYSTEM
 
     assert "The evidence must concern the same metric and the same period as the promise; a number for a different quarter or year is not evidence for this promise." in SYSTEM  # fmt: skip
+
+
+# ---- C1: gates on the computed path ----
+_ROW = {"Sales": 118.0, "Operating Profit": 23.6, "Net Profit": 12.0}
+_PREV = {"Sales": 100.0, "Operating Profit": 20.0, "Net Profit": 10.0}
+GQ = {"Jun 2025": _PREV, "Sep 2025": _PREV, "Jun 2026": _ROW, "Sep 2026": _ROW}
+GA = {"Mar 2025": _PREV, "Mar 2026": _ROW, "Mar 2027": {"Sales": 139.24, "Operating Profit": 27.0, "Net Profit": 14.0}}  # fmt: skip
+
+
+def graded(p, quarters=GQ, annual=GA):
+    return compute_status(p, quarters, annual)
+
+
+@pytest.mark.parametrize(
+    "horizon,made_in",
+    [("Q2 FY27", "Q2 FY27"), ("Q1 FY27", "Q2 FY27"), ("FY27", "Q4 FY27"), ("FY26", "Q1 FY27")],
+)
+def test_gate_period_must_end_after_the_call(horizon, made_in):
+    assert graded(p_growth(15, horizon=horizon, made_in=made_in)) is None
+    assert graded(p_growth(15, horizon=horizon, made_in="Q4 FY25")) is not None  # control
+
+
+@pytest.mark.parametrize(
+    "phrase",
+    ["this year", "current year", "this fiscal", "this financial year", "next year", "next fiscal",
+     "next financial year"],
+)  # fmt: skip
+def test_gate_relative_year_in_q4_call(phrase):
+    q = f"We expect revenue to grow 15% {phrase}"
+    assert graded(p_growth(15, horizon=phrase, quote=q, made_in="Q4 FY26")) is None
+    assert graded(p_growth(15, horizon=phrase, quote=q, made_in="Q3 FY26")) is not None
+
+
+@pytest.mark.parametrize(
+    "horizon,quote",
+    [
+        ("FY27", "We expect revenue to grow 15% next year"),
+        ("Q2 FY27", "We expect revenue to grow 15% in Q3 FY27"),
+        ("next year", "We expect revenue to grow 15% in FY27"),
+        ("FY27", "We expect revenue to grow 15% in Q3 FY27"),
+        ("FY27", "We expect revenue to grow 15% over FY27-28"),
+    ],
+)
+def test_gate_horizon_must_be_in_quote(horizon, quote):
+    assert graded(p_growth(15, horizon=horizon, quote=quote)) is None
+
+
+@pytest.mark.parametrize(
+    "horizon,quote",
+    [
+        ("FY27", "We expect revenue to grow 15% in FY 27"),
+        ("FY27", "We expect revenue to grow 15% in FY2027"),
+        ("FY 2027", "We expect revenue to grow 15% in FY27"),
+        ("FY27", "We expect revenue to grow 15% in fiscal 2027"),
+        ("Q2 FY27", "We expect revenue to grow 15% in Q2FY27"),
+        ("Q2FY27", "We expect revenue to grow 15% in Q2 FY 27"),
+    ],
+)
+def test_gate_horizon_label_forms_match(horizon, quote):
+    assert graded(p_growth(15, horizon=horizon, quote=quote)) is not None
+
+
+@pytest.mark.parametrize(
+    "metric,quote",
+    [
+        ("revenue_growth", "We expect to grow 15% in Q2 FY27"),
+        ("revenue_growth", "We expect the business to grow 15% in Q2 FY27"),
+        ("pat_growth", "We expect revenue to grow 15% in Q2 FY27"),
+        ("pat_growth", "We expect patent income to grow 15% in Q2 FY27"),
+        ("ebitda_margin", "We expect margin of 15% in Q2 FY27"),
+        ("ebitda_margin", "We expect gross margin of 15% in Q2 FY27"),
+    ],
+)
+def test_gate_quote_must_name_the_metric(metric, quote):
+    assert graded(p_growth(15, metric=metric, quote=quote)) is None
+
+
+@pytest.mark.parametrize(
+    "metric,quote",
+    [
+        ("revenue_growth", "We expect sales to grow 15% in Q2 FY27"),
+        ("revenue_growth", "We expect top line to grow 15% in Q2 FY27"),
+        ("revenue_growth", "We expect topline to grow 15% in Q2 FY27"),
+        ("revenue_growth", "We expect turnover to grow 15% in Q2 FY27"),
+        ("revenue_growth", "We expect revenues to grow 15% in Q2 FY27"),
+        ("pat_growth", "We expect PAT to grow 15% in Q2 FY27"),
+        ("pat_growth", "We expect profit after tax to grow 15% in Q2 FY27"),
+        ("ebitda_margin", "We expect operating margin of 15% in Q2 FY27"),
+        ("ebitda_margin", "We expect OPM of 15% in Q2 FY27"),
+        ("ebitda_margin", "We expect EBITDA margins of 15% in Q2 FY27"),
+    ],
+)
+def test_gate_metric_words_accepted(metric, quote):
+    assert graded(p_growth(15, metric=metric, quote=quote)) is not None
+
+
+@pytest.mark.parametrize(
+    "metric,quote",
+    [
+        ("ebitda_margin", "We expect operating margin of 15% at the EBIT level in Q2 FY27"),
+        ("revenue_growth", "We expect revenue to grow 15% QoQ in Q2 FY27"),
+        ("revenue_growth", "We expect revenue to grow 15% quarter-on-quarter in Q2 FY27"),
+        ("revenue_growth", "We expect revenue to grow 15% quarter on quarter in Q2 FY27"),
+        ("revenue_growth", "We expect revenue to grow 15% sequentially in Q2 FY27"),
+        ("revenue_growth", "We expect a revenue CQGR of 15% in Q2 FY27"),
+        ("revenue_growth", "We expect revenue to grow 15% in constant currency in Q2 FY27"),
+        ("revenue_growth", "We expect revenue to grow 15% in dollar terms in Q2 FY27"),
+        ("revenue_growth", "We expect USD revenue to grow 15% in Q2 FY27"),
+        ("revenue_growth", "We expect revenue to grow 15% to US$ 500 million in Q2 FY27"),
+        ("revenue_growth", "We expect revenue to grow 15% to $500 million in Q2 FY27"),
+        ("ebitda_margin", "We expect EBITDA margin of 15% in Q2 FY27, up 200 bps"),
+        ("ebitda_margin", "We expect EBITDA margin of 15% in Q2 FY27, up 200 basis points"),
+        ("ebitda_margin", "We expect EBITDA margin expansion to 15% in Q2 FY27"),
+        ("ebitda_margin", "We expect EBITDA margin to improve to 15% in Q2 FY27"),
+        ("ebitda_margin", "We expect EBITDA margin to rise by 2% in Q2 FY27"),
+    ],
+)
+def test_gate_metric_mismatch_cues(metric, quote):
+    assert graded(p_growth(15, metric=metric, quote=quote)) is None
+
+
+def test_gate_ebitda_is_not_ebit():
+    assert graded(p_growth(15, metric="ebitda_margin")) is not None
+
+
+def test_gate_lender_margin():
+    q = {"Sep 2026": {"Revenue": 200.0, "Financing Profit": 100.0}}
+    assert graded(p_growth(45, metric="ebitda_margin"), q, LENDER) is None
+    s, _ = graded(p_growth(15), {"Sep 2026": {"Revenue": 118.0}, "Sep 2025": {"Revenue": 100.0}}, LENDER)  # fmt: skip
+    assert s == "kept"  # lender revenue growth still computes
+
+
+@pytest.mark.parametrize(
+    "annual",
+    [
+        {"Dec 2024": _PREV, "Dec 2025": _ROW, "TTM": _ROW},
+        {"TTM": _ROW},
+        {},
+    ],
+)
+def test_gate_fiscal_year_must_end_in_march(annual):
+    assert graded(p_growth(15), GQ, annual) is None
+    assert graded(p_growth(15), GQ, {**GA, "TTM": _ROW}) is not None  # TTM is ignored
+
+
+def test_probe_cases_are_judged():
+    """The reviewer's probe1 cases: each was confidently computed before C1."""
+    annual = {
+        "Mar 2025": {"Sales": 100.0, "Operating Profit": 20.0, "Net Profit": 10.0},
+        "Mar 2026": {"Sales": 118.0, "Operating Profit": 24.0, "Net Profit": 12.0},
+    }
+    quarters = {"Sep 2025": {"Sales": 25.0, "Operating Profit": 5.0, "Net Profit": 2.5},
+                "Jun 2026": {"Sales": 29.0, "Operating Profit": 6.0, "Net Profit": 3.0},
+                "Sep 2026": {"Sales": 30.0, "Operating Profit": 6.3, "Net Profit": 3.0}}  # fmt: skip
+    cases = [
+        ("We expect revenue to grow 15% this quarter on strong demand", "revenue_growth", 15, "Q2 FY27", "Q2 FY27"),
+        ("We expect revenue to grow 15% this year with new launches", "revenue_growth", 15, "this year", "Q4 FY26"),
+        ("We will expand EBIT margin to 18% in FY26 driven by utilisation", "ebitda_margin", 18, "FY26", "Q1 FY26"),
+        ("We will improve our margins by 2% in FY26 through cost actions", "ebitda_margin", 2, "FY26", "Q1 FY26"),
+        ("We expect to grow 3% quarter on quarter in Q2 FY27 in dollar terms", "revenue_growth", 3, "Q2 FY27", "Q1 FY27"),
+    ]  # fmt: skip
+    for quote, metric, lo, hz, made in cases:
+        p = p_growth(lo, metric=metric, horizon=hz, quote=quote, made_in=made)
+        assert compute_status(p, quarters, annual) is None, quote
+
+
+def test_computed_rationale_for_range():
+    q = {"Sep 2026": {"Sales": 118.2, "Operating Profit": 23.64}, "Sep 2025": {"Sales": 100.0}}
+    p = p_growth(15, hi=18, quote="We expect revenue to grow 15-18% in Q2 FY27")
+    row = build_ledger(FakeRouter({"judgements": []}), [p], sources(), q, MAR).rows[0]
+    assert row.rationale == "Revenue grew 18.2% YoY in Q2 FY27 against a target of 15–18%"
+    m = p_growth(15, hi=18, metric="ebitda_margin", quote="We expect EBITDA margin of 15-18% in Q2 FY27")  # fmt: skip
+    row = build_ledger(FakeRouter({"judgements": []}), [m], sources(), q, MAR).rows[0]
+    assert row.rationale == "EBITDA margin was 20.0% in Q2 FY27 against a target of 15–18%"
