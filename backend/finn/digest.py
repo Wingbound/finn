@@ -2,16 +2,24 @@
 
 from __future__ import annotations
 
+import logging
 import sqlite3
-from datetime import datetime
+from datetime import datetime, timedelta
 from typing import Literal
+
+from pydantic import ValidationError
 
 from finn import db
 from finn.classify import default_classification
 from finn.classify.cluster import cluster
 from finn.classify.materiality import score_filing
 from finn.classify.rules import classify_rules
-from finn.models import Category, Classification, Filing, ScoredFiling, Story
+from finn.enrich.brief import attach_briefs
+from finn.enrich.people import attach_people
+from finn.enrich.results import card_for
+from finn.models import Category, Classification, Filing, ResultsCard, ScoredFiling, Story
+
+log = logging.getLogger(__name__)
 
 Floor = Literal["critical", "important", "everything"]
 
@@ -50,6 +58,39 @@ def stories_in_window(
     return cluster(score_window(conn, symbols, start, end, subscribed))
 
 
+_CARD_WINDOW = timedelta(days=4)
+
+
+def _card_or_none(conn: sqlite3.Connection, symbol: str) -> tuple[ResultsCard, datetime] | None:
+    """The symbol's latest card, or None when there is none or its stored rows are corrupt."""
+    try:
+        found = card_for(conn, symbol)
+        if found is not None and found[1].utcoffset() is None:
+            raise ValueError(f"filed_at {found[1].isoformat()} has no timezone")
+    except (ValidationError, ValueError, KeyError, TypeError) as e:
+        log.warning("numbers pending for %s: corrupt financials: %s", symbol, type(e).__name__)
+        return None
+    return found
+
+
+def attach_results(conn: sqlite3.Connection, stories: list[Story]) -> None:
+    """Give each results story its symbol's latest card, when that card is for this filing.
+
+    The card's filed_at must be within 4 days of the headline filing, so a stale quarter's
+    numbers never sit on a new story. One card lookup per symbol per call. A symbol whose
+    stored financials are corrupt gets no card ("numbers pending") instead of a 500.
+    """
+    cache: dict[str, tuple[ResultsCard, datetime] | None] = {}
+    for st in stories:
+        if st.category != "results" or st.subtype == "intimation":
+            continue
+        if st.symbol not in cache:
+            cache[st.symbol] = _card_or_none(conn, st.symbol)
+        found = cache[st.symbol]
+        if found and abs(found[1] - st.headline.filing.filed_at) <= _CARD_WINDOW:
+            st.results = found[0]
+
+
 def build_digest(
     conn: sqlite3.Connection,
     symbols: list[str],
@@ -79,6 +120,11 @@ def build_digest(
             shown.append(st)
         else:
             routine.setdefault(st.category, []).append(st)
+
+    visible = shown + [st for v in routine.values() for st in v]
+    attach_results(conn, visible)
+    attach_people(conn, visible)
+    attach_briefs(conn, visible)
 
     latest = db.latest_filed_at(conn, symbols)
     return {

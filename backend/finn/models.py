@@ -80,6 +80,29 @@ class ScoredFiling(BaseModel):
     reasons: list[str]
 
 
+class PersonChange(BaseModel):
+    name: str
+    role: str | None = None
+    change: Literal["appointed", "resigned", "retired", "ceased", "redesignated", "other"]
+    effective: str | None = None  # as written in the filing
+    profile: str | None = None  # grounded sentences only, at most 90 words
+    incoming: bool  # change in {"appointed", "redesignated"}
+    source_seq_id: str
+
+
+class Fact(BaseModel):
+    label: str
+    value: str
+
+
+class Brief(BaseModel):
+    one_liner: str
+    facts: list[Fact] = []
+    quote: str | None = None
+    by: Literal["llm", "nse_summary"]
+    source_seq_id: str
+
+
 class Story(BaseModel):
     id: str
     symbol: str
@@ -91,6 +114,9 @@ class Story(BaseModel):
     headline: ScoredFiling
     members: list[ScoredFiling]
     latest_at: datetime
+    results: ResultsCard | None = None
+    people: list[PersonChange] = Field(default_factory=list)
+    brief: Brief | None = None
 
 
 class SymbolOverride(BaseModel):
@@ -126,3 +152,35 @@ class Alert(BaseModel):
     message: str
     story_id: str | None = None
     seq_id: str | None = None  # filing alerts: the headline filing, a stable link target
+
+
+class MetricRow(BaseModel):
+    key: str
+    label: str
+    value: float | None  # INR crore, 2 dp
+    qoq_pct: float | None = None
+    yoy_pct: float | None = None
+    computed: bool = False  # derived by FINN, not a reported line
+
+
+class MarginRow(BaseModel):
+    key: str
+    label: str
+    value_pct: float | None
+    qoq_bps: int | None = None
+    yoy_bps: int | None = None
+
+
+class ResultsCard(BaseModel):
+    symbol: str
+    period_end: date
+    period_label: str
+    basis: Literal["consolidated", "standalone"]
+    format: Literal["indas", "nbfc", "bank"]
+    audited: bool | None
+    compared_qoq: date | None
+    compared_yoy: date | None
+    metrics: list[MetricRow]
+    margins: list[MarginRow]
+    notes: list[str]
+    sources: list[str]

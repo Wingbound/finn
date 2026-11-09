@@ -28,7 +28,7 @@ Most investor tools are infinite feeds. FINN is *finite*: it tells you how many 
    - **Event clustering**: the 3–5 filings one event generates (board-meeting outcome + results + press release + newspaper ad) collapse into **one story card** ("4 filings → 1 story").
    - Bespoke card per category — the judgment the brief asks for:
      - **Results card**: Revenue / EBITDA / PBT / PAT grid, QoQ & YoY deltas, margin, plus a **"vs promise" chip** from the Promise Ledger (e.g. "Guided 15–18% growth → delivered 11%: MISSED").
-     - **People card** (management change): who's in/out, role, and a short bio. Source 1 is the filing itself (SEBI LODR Reg 30 appointment filings must include a "brief profile"). Source 2 is Gemini with Google Search grounding for LinkedIn-style background, linked. Push-side enrichment is explicitly allowed.
+     - **People card** (management change): who's in/out, role, and a short bio. Source 1 is the filing itself (SEBI LODR Reg 30 appointment filings must include a "brief profile"). Source 2 is Gemini with Google Search grounding for LinkedIn-style background, linked (not built: filing profile only). Push-side enrichment is explicitly allowed.
      - **Deal / Rating / Pledge / Litigation / Fund-raise cards**: one-line "why it matters" summary (cheap model) + key fields (size, counterparty, rating up/down arrow).
      - Everything else: filing surfaced at its priority, no summary (no tokens spent on noise).
    - Each card shows a **"why it ranks here"** chip, so the materiality score is explainable, plus actions: **Dig in** (opens the dossier at the relevant section), **Open filing** (PDF), **Mark seen**.
@@ -68,8 +68,8 @@ screener.in ───────┘      │                └─ /research/{t
                                  ─► guidance extraction (cheap) ─► ledger + synthesis (strong) ─► grounding guard
 ```
 
-**Backend:** Python 3.12+, FastAPI, uv, SQLite (WAL), httpx, PyMuPDF, yfinance, APScheduler. Deployed as a Docker Space on HF (port 7860).
-**Frontend:** Next.js (App Router) + TypeScript + Tailwind, installable PWA (manifest + service worker), deployed on Vercel; `NEXT_PUBLIC_API_URL` points to the Space.
+**Backend:** Python 3.12+, FastAPI, uv, SQLite (WAL), httpx, pypdf (BSD; PyMuPDF is AGPL), yfinance. No scheduler: `scripts/refresh.py` runs out-of-band. Deployed as Vercel Python functions serving a read-only snapshot (see Hosting below).
+**Frontend:** Next.js (App Router) + TypeScript + Tailwind, installable PWA (manifest + service worker), deployed on Vercel; `NEXT_PUBLIC_API_URL` points to the Vercel backend deployment.
 
 ### Model routing (verify current free-tier model IDs and limits at build time via each provider's list-models endpoint; never hard-code from memory)
 
@@ -77,16 +77,16 @@ screener.in ───────┘      │                └─ /research/{t
 |---|---|---|---|
 | Filing classification | 0 | Deterministic rules on NSE `desc` + subject keywords | Covers most volume at zero cost |
 | Ambiguous classification + one-liners | 1 | Groq `openai/gpt-oss-120b`, reasoning effort medium, batched 20 filings/call, JSON mode | Fast, free; 91.3% vs 85.6% for gpt-oss-20b on the eval, ~$0.001/batch at list price (EVALS.md) |
-| Results-PDF number extraction | 2 | Gemini Flash (native PDF; handles scanned filings) | Needs vision/PDF; structured JSON |
+| Results number extraction | 2 | XBRL (deterministic, no LLM) | NSE publishes structured XBRL for every results filing; no model needed |
 | Transcript guidance extraction (per transcript) | 2 | Gemini Flash-Lite/Flash, chunked by section | Bulk extraction |
 | Ledger judgment, narrative vs numbers, bull/bear | 3 | Gemini Pro-class (or Flash with thinking) | Only place real reasoning is needed; once per company, cached |
-| People bio | 2 | Gemini + Google Search grounding | Push-side enrichment allowed |
+| People bio | 2 | Groq gpt-oss-120b over the filing's own text (Brief Profile), behind a grounding guard; Gemini fallback | Push-side enrichment allowed |
 
-- **Arithmetic stays out of the LLM.** QoQ/YoY %, margins, D/E, CFO/PAT and FCF are computed in Python. EBITDA, when not reported, = PBT + finance cost + D&A − other income, flagged "computed".
+- **Arithmetic stays out of the LLM.** QoQ/YoY %, margins, D/E, CFO/PAT and FCF are computed in Python. EBITDA, when not reported, = Revenue from operations − (Expenses − finance costs − D&A), i.e. excludes other income; matches screener's Operating Profit. Flagged "computed".
 - **Caching**: content-hash cache for every downloaded doc and every LLM call (`sha256(model + prompt + doc_hash)`), so re-running costs ₹0. Dossiers are cached per (ticker, doc-set hash).
 - **Cost ledger**: every LLM call logs tokens/model/latency. The UI shows "this dossier: N calls, ~₹X, Ys", and README reports the totals — a direct answer to the efficiency criterion.
-- **Rate-limit aware**: token-bucket per provider and backoff on 429. Demo-set dossiers are precomputed so the live demo never burns quota.
-- **Model IDs are checked against each provider's list-models endpoint, never typed from memory** (2026-11-09). That check found Groq had retired its Llama models, so classification moved to gpt-oss-120b. It also found that `gemini-3.8-flash` is listed and priced, but on the free tier only 1 of 7 calls succeeded that day; the rest were 503s or 45-second hangs. `gemini-3.5-flash-lite` answered 5 of 5 in about 1.5 s. Plan 2 therefore gives each Gemini task a fallback chain, so a hang on the primary model moves to the fallback within one short timeout. Plan 2 also picks the primary model from the results-extraction eval, not from the version number.
+- **Rate-limit aware**: Retry-After-paced backoff on 429 (no early failover on rate limits); fast failover only on outages. Each model waits out up to 3 rate limits (Retry-After, capped at 60 s) before the chain moves on; a 5xx or transport error moves on after 1 retry when a fallback is behind it; a 429 whose Retry-After exceeds 60 s is treated as quota exhaustion: that provider is skipped until its reset and the chain fails over at once (seen live: Groq's 200K tokens/day cap on gpt-oss-120b). Demo-set dossiers are precomputed so the live demo never burns quota.
+- **Model IDs are checked against each provider's list-models endpoint, never typed from memory** (2026-11-09). That check found Groq had retired its Llama models, so classification moved to gpt-oss-120b. It also found that `gemini-3.8-flash` is listed and priced, but on the free tier only 1 of 7 calls succeeded that day; the rest were 503s or 45-second hangs. `gemini-3.5-flash-lite` answered 5 of 5 in about 1.5 s. Plan 2 therefore gives each Gemini task a fallback chain, so a hang on the primary model moves to the fallback within one short timeout. Results numbers come from XBRL with no model; Gemini's role is the fallback for the Groq tasks and, in Plan 3, transcript extraction.
 
 ### Materiality score (deterministic, explainable)
 `score = category_base × subtype_modifier × user_subscription_boost (+ price-reaction bump)`.
@@ -94,8 +94,12 @@ screener.in ───────┘      │                └─ /research/{t
 - Hidden as noise: "Loss of Share Certificates", "Copy of Newspaper Publication", duplicate filings.
 - Noise floor thresholds: Critical ≥ 75, Important ≥ 45, Everything = all.
 
+### Hosting (2026-11-09)
+
+Docker Spaces on Hugging Face now need HF PRO, so the backend runs on Vercel Python functions instead. The deployed API is read-only over the committed SQLite snapshot. `scripts/refresh.py` runs out-of-band (locally or on a schedule), is the only code that touches NSE, Yahoo, screener or the LLMs, and its output replaces the snapshot.
+
 ### Robustness ("demo never breaks")
-Every external fetch is cached with an `as_of` timestamp. The Space boots from a **seeded SQLite snapshot** baked into the image, then refreshes on a schedule. If NSE/Yahoo block HF's IPs, a GitHub Actions cron (or a local `scripts/refresh.py`) ingests and pushes a fresh snapshot to the Space. **A reachability spike on Day 0 decides which path we take.**
+Every external fetch is cached with an `as_of` timestamp. The deployed API boots from the committed **seeded SQLite snapshot** and never fetches. A GitHub Actions cron (or a local `scripts/refresh.py`) ingests out-of-band and commits a fresh snapshot.
 
 ---
 
@@ -144,10 +148,10 @@ finn/
 
 **Day 1 — Mon 9 Nov · Push backbone**
 - SQLite schema, NSE ingest, rule classifier, Groq fallback, materiality, clustering, `/digest`.
-- Gold set: hand-label ~60 filings → `eval_classify.py`. Use superpowers:test-driven-development for rules, scoring and clustering.
+- Gold set: 104 filings (AI-labelled, see EVALS.md) → `eval_classify.py`. Use superpowers:test-driven-development for rules, scoring and clustering.
 
 **Day 2 — Tue 10 Nov · Push enrichment + alerts**
-- Results extraction (Gemini PDF → JSON → Python math → cross-check against the screener quarterly table; flag mismatches).
+- Results from NSE XBRL, with the figures computed in Python and cross-checked against the screener quarterly table (`scripts/eval_results.py`; no LLM).
 - People enrichment, one-liners.
 - Price ingest + alert engine + `/rules` and `/alerts`.
 - `eval_results.py` over ~15 results filings.
@@ -165,7 +169,7 @@ finn/
 - PWA manifest.
 
 **Day 5 — Fri 13 Nov · Integrate + deploy**
-- HF Space (Docker, secrets) + Vercel.
+- Vercel (backend Python functions + frontend), secrets in Vercel env.
 - Playwright MCP at iPhone/Android viewports: screenshots, console errors, golden-path e2e.
 - Polish loading/empty/error states. Stretch features only if all of this is green.
 

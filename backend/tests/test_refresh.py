@@ -9,6 +9,8 @@ import respx
 
 from finn import db
 from finn.config import Settings
+from finn.enrich import EnrichResult
+from finn.enrich import results as results_mod
 from finn.ingest import nse
 from finn.models import IST, PriceBar
 from finn.portfolio import load_portfolio
@@ -23,6 +25,17 @@ GROQ_URL = "https://api.groq.com/openai/v1/chat/completions"
 @pytest.fixture(autouse=True)
 def no_sleep(monkeypatch):
     monkeypatch.setattr(nse, "_sleep", lambda s: None)
+
+
+@pytest.fixture(autouse=True)
+def no_enrichment(monkeypatch):
+    """Existing tests cover filings/prices/classify; the new stages are stubbed out here and
+    switched on (via `fin_env`) in the tests that exercise them."""
+    monkeypatch.setattr(
+        refresh_mod, "ingest_financials", lambda *a, **k: results_mod.FinancialsResult()
+    )
+    monkeypatch.setattr(refresh_mod, "enrich_people", lambda *a, **k: EnrichResult())
+    monkeypatch.setattr(refresh_mod, "enrich_briefs", lambda *a, **k: EnrichResult())
 
 
 @pytest.fixture
@@ -182,6 +195,29 @@ def test_use_llm_without_keys_degrades_to_rules(
     assert "GROQ_API_KEY" in capsys.readouterr().out
 
 
+def _with_keys(monkeypatch, groq="", gemini=""):
+    settings = Settings(_env_file=None, gemini_api_key=gemini, groq_api_key=groq)
+    monkeypatch.setattr(refresh_mod, "get_settings", lambda: settings)
+
+
+def test_router_built_when_only_a_fallback_provider_has_a_key(conn, monkeypatch):
+    from finn.llm import LLMRouter
+
+    _with_keys(monkeypatch, gemini="m")
+    assert isinstance(refresh_mod._router(conn, True), LLMRouter)
+    _with_keys(monkeypatch, groq="g")
+    assert isinstance(refresh_mod._router(conn, True), LLMRouter)
+
+
+def test_router_none_when_no_provider_has_a_key_or_llm_is_off(conn, monkeypatch, capsys):
+    _with_keys(monkeypatch)
+    assert refresh_mod._router(conn, True) is None
+    out = capsys.readouterr().out
+    assert "GROQ_API_KEY" in out and "GEMINI_API_KEY" in out
+    _with_keys(monkeypatch, groq="g", gemini="m")
+    assert refresh_mod._router(conn, False) is None
+
+
 def _groq(req):
     ids = [item["id"] for item in json.loads(json.loads(req.content)["messages"][1]["content"])]
     items = [{"id": i, "category": "press_release", "subtype": None} for i in ids]
@@ -233,3 +269,134 @@ def test_cli_writes_out_path_without_wal_files(tmp_path, keyless, month_by_symbo
     c = db.connect(out)
     assert c.execute("SELECT COUNT(*) FROM filings").fetchone()[0] == 323
     c.close()
+
+
+@pytest.fixture
+def fin_env(monkeypatch):
+    monkeypatch.setattr(results_mod, "_sleep", lambda s: None)
+    monkeypatch.setattr(refresh_mod, "ingest_financials", results_mod.ingest_financials)
+    monkeypatch.setattr(refresh_mod, "fetch_eod", _bars)
+    monkeypatch.setattr(refresh_mod, "ingest_filings", lambda *a, **k: nse.IngestResult())
+
+
+def test_refresh_runs_financials_without_llm(conn, keyless, fin_env, monkeypatch):
+    from tests.fakes import tatasteel_fake
+
+    fake = tatasteel_fake()
+    monkeypatch.setattr(refresh_mod, "NSEClient", lambda: _Closing(fake))
+    summary = refresh(conn, use_llm=False)
+    assert summary["financials"]["fetched"] == 3
+    assert summary["enrich"] == {} and "people" not in summary["enrich"]
+    failed = summary["financials"]["failed"]
+    assert "TATASTEEL" not in failed
+    assert all(e.startswith("financials: ") for e in summary["errors"])
+    assert len(summary["errors"]) == len(failed) == 17
+
+
+def test_refresh_records_financials_failure_in_errors(conn, keyless, fin_env, monkeypatch):
+    from tests.fakes import FakeNSE
+
+    monkeypatch.setattr(refresh_mod, "NSEClient", lambda: _Closing(FakeNSE({}, {})))
+    summary = refresh(conn, use_llm=False)
+    assert summary["financials"]["fetched"] == 0
+    assert "financials: TATASTEEL: NSEUnavailable: no rows for TATASTEEL" in summary["errors"]
+
+
+def test_financials_stage_crash_is_reported_not_raised(conn, keyless, fin_env, monkeypatch):
+    def crash(*a, **k):
+        raise RuntimeError("boom")
+
+    monkeypatch.setattr(refresh_mod, "ingest_financials", crash)
+    summary = refresh(conn, use_llm=False)
+    assert "financials: RuntimeError: boom" in summary["errors"]
+    assert summary["price_bars"] == 18
+
+
+def test_llm_stages_run_with_router_and_report_failures(conn, keyless, fin_env, monkeypatch):
+    from tests.fakes import FakeNSE
+
+    monkeypatch.setattr(refresh_mod, "NSEClient", lambda: _Closing(FakeNSE({}, {})))
+    monkeypatch.setattr(refresh_mod, "_router", lambda conn, use_llm: _StubRouter())
+    monkeypatch.setattr(
+        refresh_mod,
+        "enrich_people",
+        lambda *a, **k: EnrichResult(done=1, empty=2, failed={"s1": "bad"}),
+    )
+    seen = {}
+
+    def briefs(conn, client, router, since, subscribed):
+        seen["subscribed"] = subscribed
+        return EnrichResult(done=3, failed={"s2": "worse"})
+
+    monkeypatch.setattr(refresh_mod, "enrich_briefs", briefs)
+    monkeypatch.setattr(refresh_mod, "classify_pending", lambda c, r: {})
+    summary = refresh(conn, use_llm=True)
+    assert summary["enrich"]["people"] == {"done": 1, "empty": 2, "failed": {"s1": "bad"}}
+    assert summary["enrich"]["briefs"]["done"] == 3
+    assert "people: s1: bad" in summary["errors"] and "briefs: s2: worse" in summary["errors"]
+    assert "results" in seen["subscribed"]
+
+
+def test_enrichers_see_filings_classified_in_the_same_run(conn, keyless, fin_env, monkeypatch):
+    from datetime import timedelta
+
+    from finn.enrich.people import enrich_people
+    from finn.models import Filing
+    from tests.fakes import FakeNSE, FakeRouter
+
+    url = "https://nsearchives.nseindia.com/corporate/new.pdf"
+    when = datetime.now(IST) - timedelta(hours=2)
+
+    def ingest(conn_, client, symbols, start, end):
+        db.upsert_filings(
+            conn_,
+            [
+                Filing(
+                    seq_id="NEW1",
+                    symbol="VOLTAS",
+                    company="Voltas Limited",
+                    nse_desc="Change in Director(s)",
+                    subject="Appointment of Mr. Jayant Balan as Managing Director",
+                    pdf_url=url,
+                    filed_at=when,
+                )
+            ],
+        )
+        return nse.IngestResult(added=1)
+
+    db.save_doc_text(conn, url, "Mr. Jayant Balan is appointed as Managing Director.")
+
+    class Router(FakeRouter):
+        def stats(self):
+            return {"calls": len(self.calls)}
+
+    router = Router(
+        {"people": [{"name": "Jayant Balan", "role": "Managing Director", "change": "appointed"}]}
+    )
+    monkeypatch.setattr(refresh_mod, "ingest_filings", ingest)
+    monkeypatch.setattr(refresh_mod, "enrich_people", enrich_people)
+    monkeypatch.setattr(refresh_mod, "_router", lambda conn_, use_llm: router)
+    monkeypatch.setattr(refresh_mod, "NSEClient", lambda: _Closing(FakeNSE({}, {})))
+    assert db.get_enrichments(conn, ["NEW1"], "people") == {}
+    summary = refresh(conn, use_llm=True)
+    assert summary["enrich"]["people"]["done"] == 1
+    saved = db.get_enrichments(conn, ["NEW1"], "people")
+    assert saved["NEW1"]["people"][0]["name"] == "Jayant Balan"
+
+
+class _StubRouter:
+    def stats(self):
+        return {"calls": 0}
+
+
+class _Closing:
+    """Delegates to a FakeNSE and tolerates close()."""
+
+    def __init__(self, fake):
+        self._f = fake
+
+    def __getattr__(self, name):
+        return getattr(self._f, name)
+
+    def close(self):
+        pass

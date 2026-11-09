@@ -2,11 +2,16 @@
 
 from __future__ import annotations
 
+import json
+import logging
 import sqlite3
 from datetime import date, datetime
 from pathlib import Path
 
+from finn.ingest.xbrl import QuarterFinancials
 from finn.models import IST, Classification, Filing, PriceBar
+
+log = logging.getLogger(__name__)
 
 _SCHEMA = """
 CREATE TABLE IF NOT EXISTS filings (
@@ -56,6 +61,32 @@ CREATE TABLE IF NOT EXISTS llm_calls (
     output_tokens INTEGER,
     latency_ms INTEGER,
     usd_list_price REAL
+);
+CREATE TABLE IF NOT EXISTS financials (
+    symbol TEXT NOT NULL,
+    period_end TEXT NOT NULL,
+    basis TEXT NOT NULL,
+    format TEXT NOT NULL,
+    period_start TEXT NOT NULL,
+    audited INTEGER,
+    filed_at TEXT NOT NULL,
+    xbrl_url TEXT NOT NULL,
+    facts_json TEXT NOT NULL,
+    PRIMARY KEY (symbol, period_end, basis)
+);
+CREATE TABLE IF NOT EXISTS doc_text (
+    url TEXT PRIMARY KEY,
+    fetched_at TEXT NOT NULL,
+    chars INTEGER NOT NULL,
+    text TEXT NOT NULL
+);
+CREATE TABLE IF NOT EXISTS enrichments (
+    seq_id TEXT NOT NULL,
+    kind TEXT NOT NULL,
+    payload_json TEXT NOT NULL,
+    model TEXT,
+    created_at TEXT NOT NULL,
+    PRIMARY KEY (seq_id, kind)
 );
 """
 
@@ -236,3 +267,147 @@ def get_filing(
 ) -> tuple[Filing, Classification | None] | None:
     row = conn.execute("SELECT * FROM filings WHERE seq_id=?", (seq_id,)).fetchone()
     return (_filing(row), _classification(row)) if row else None
+
+
+def upsert_financials(
+    conn: sqlite3.Connection, q: QuarterFinancials, filed_at: datetime, xbrl_url: str
+) -> None:
+    conn.execute(
+        """INSERT OR REPLACE INTO financials
+           (symbol, period_end, basis, format, period_start, audited, filed_at,
+            xbrl_url, facts_json)
+           VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)""",
+        (
+            q.symbol,
+            q.period_end.isoformat(),
+            q.basis,
+            q.format,
+            q.period_start.isoformat(),
+            None if q.audited is None else int(q.audited),
+            _ts(filed_at),
+            xbrl_url,
+            json.dumps(q.facts),
+        ),
+    )
+    conn.commit()
+
+
+def get_financials(
+    conn: sqlite3.Connection, symbol: str, period_end: date, basis: str
+) -> tuple[QuarterFinancials, datetime, str] | None:
+    r = conn.execute(
+        "SELECT * FROM financials WHERE symbol = ? AND period_end = ? AND basis = ?",
+        (symbol, period_end.isoformat(), basis),
+    ).fetchone()
+    if r is None:
+        return None
+    q = QuarterFinancials(
+        symbol=r["symbol"],
+        period_start=date.fromisoformat(r["period_start"]),
+        period_end=date.fromisoformat(r["period_end"]),
+        basis=r["basis"],
+        format=r["format"],
+        audited=None if r["audited"] is None else bool(r["audited"]),
+        facts=json.loads(r["facts_json"]),
+    )
+    return q, datetime.fromisoformat(r["filed_at"]), r["xbrl_url"]
+
+
+def stored_financials_urls(conn: sqlite3.Connection, symbol: str) -> set[str]:
+    rows = conn.execute("SELECT xbrl_url FROM financials WHERE symbol = ?", (symbol,))
+    return {r["xbrl_url"] for r in rows}
+
+
+def latest_financials(conn: sqlite3.Connection, symbol: str) -> tuple[date, str, datetime] | None:
+    """(period_end, basis, filed_at) of the newest period; consolidated preferred."""
+    r = conn.execute(
+        """SELECT period_end, basis, filed_at FROM financials WHERE symbol = ?
+           ORDER BY period_end DESC, basis = 'consolidated' DESC LIMIT 1""",
+        (symbol,),
+    ).fetchone()
+    if r is None:
+        return None
+    return (
+        date.fromisoformat(r["period_end"]),
+        r["basis"],
+        datetime.fromisoformat(r["filed_at"]),
+    )
+
+
+def get_doc_text_cached(conn: sqlite3.Connection, url: str) -> str | None:
+    """Cached PDF text for url; None if never fetched ("" is a valid cached value)."""
+    r = conn.execute("SELECT text FROM doc_text WHERE url = ?", (url,)).fetchone()
+    return None if r is None else r["text"]
+
+
+def save_doc_text(conn: sqlite3.Connection, url: str, text: str) -> None:
+    conn.execute(
+        """INSERT INTO doc_text (url, fetched_at, chars, text) VALUES (?, ?, ?, ?)
+           ON CONFLICT(url) DO UPDATE SET fetched_at = excluded.fetched_at,
+               chars = excluded.chars, text = excluded.text""",
+        (url, _ts(datetime.now(IST)), len(text), text),
+    )
+    conn.commit()
+
+
+def save_enrichment(
+    conn: sqlite3.Connection, seq_id: str, kind: str, payload: dict, model: str | None
+) -> None:
+    conn.execute(
+        """INSERT INTO enrichments (seq_id, kind, payload_json, model, created_at)
+           VALUES (?, ?, ?, ?, ?)
+           ON CONFLICT(seq_id, kind) DO UPDATE SET payload_json = excluded.payload_json,
+               model = excluded.model, created_at = excluded.created_at""",
+        (seq_id, kind, json.dumps(payload), model, _ts(datetime.now(IST))),
+    )
+    conn.commit()
+
+
+def get_enrichments(conn: sqlite3.Connection, seq_ids: list[str], kind: str) -> dict[str, dict]:
+    """Stored payloads of the given kind, keyed by seq_id.
+
+    Missing ids are absent, and so are rows whose payload is not a JSON object: the digest
+    reads these at request time and must not fail on one corrupt row.
+    """
+    if not seq_ids:
+        return {}
+    marks = ",".join("?" * len(seq_ids))
+    rows = conn.execute(
+        f"SELECT seq_id, payload_json FROM enrichments WHERE kind = ? AND seq_id IN ({marks})",
+        [kind, *seq_ids],
+    ).fetchall()
+    out: dict[str, dict] = {}
+    for r in rows:
+        try:
+            payload = json.loads(r["payload_json"])
+        except (TypeError, ValueError):
+            payload = None
+        if not isinstance(payload, dict):
+            log.warning("skipping unreadable %s enrichment for %s", kind, r["seq_id"])
+            continue
+        out[r["seq_id"]] = payload
+    return out
+
+
+def filings_missing_enrichment(
+    conn: sqlite3.Connection, kind: str, categories: set[str], start: datetime
+) -> list[tuple[Filing, Classification]]:
+    """Classified filings filed at or after start, in categories, with no enrichment of kind."""
+    if not categories:
+        return []
+    cats = sorted(categories)
+    marks = ",".join("?" * len(cats))
+    rows = conn.execute(
+        f"""SELECT f.* FROM filings f
+            WHERE f.filed_at >= ? AND f.category IN ({marks})
+              AND NOT EXISTS (SELECT 1 FROM enrichments e
+                              WHERE e.seq_id = f.seq_id AND e.kind = ?)
+            ORDER BY f.filed_at, f.seq_id""",
+        [_ts(start), *cats, kind],
+    ).fetchall()
+    out: list[tuple[Filing, Classification]] = []
+    for r in rows:
+        cls = _classification(r)
+        if cls is not None:
+            out.append((_filing(r), cls))
+    return out
