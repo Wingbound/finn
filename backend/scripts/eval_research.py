@@ -19,7 +19,7 @@ from finn import db
 from finn.config import get_settings
 from finn.enrich.grounding import normalize
 from finn.models import Citation, Dossier
-from finn.research.cite import locate
+from finn.research.cite import dossier_citations, locate
 from finn.research.synthesis import facts_block
 
 STATUSES = ("kept", "partly", "missed", "pending", "dropped")
@@ -39,21 +39,6 @@ class DossierEval:
     calls: int = 0
     usd: float = 0.0
     seconds: float = 0.0
-
-
-def _citations(d: Dossier):
-    """Yield (field, citation) for every citation the dossier carries."""
-    if d.ledger:
-        for i, r in enumerate(d.ledger.rows):
-            yield f"ledger[{i}].promise", r.promise.citation
-            if r.evidence is not None:
-                yield f"ledger[{i}].evidence", r.evidence
-    if d.snapshot:
-        for i, p in enumerate(d.snapshot.summary):
-            yield f"snapshot[{i}]", p.citation
-    for name, pts in (("bull", d.bull), ("bear", d.bear)):
-        for i, p in enumerate(pts):
-            yield f"{name}[{i}]", p.citation
 
 
 def _facts_lines(d: Dossier) -> set[str]:
@@ -76,7 +61,7 @@ def evaluate_dossier(d: Dossier) -> DossierEval:
     r = DossierEval(d.symbol, guard=dict(d.guard))
     by_id = {s.id: s for s in d.sources}
     facts = _facts_lines(d)
-    for fld, c in _citations(d):
+    for fld, c in dossier_citations(d):
         r.total += 1
         r.facts += c.source_id == "FACTS"
         if _ok(c, by_id, facts):

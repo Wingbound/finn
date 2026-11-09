@@ -47,6 +47,7 @@ from finn.models import (
     public,
 )
 from finn.portfolio import load_portfolio
+from finn.research.cite import dossier_citations
 from finn.research.pipeline import build_dossier, is_degraded
 
 log = logging.getLogger(__name__)
@@ -322,30 +323,57 @@ def _sse(event: str, data: object) -> str:
     return f"event: {event}\ndata: {json.dumps(data)}\n\n"
 
 
+def _excerpts(d: Dossier) -> dict[str, dict[str, str]]:
+    """{source_id: {page: text}} for every page the dossier cites (FACTS excluded), so the
+    client can show a live-built dossier's citations without another request."""
+    by_id = {s.id: s for s in d.sources}
+    out: dict[str, dict[str, str]] = {}
+    for _, c in dossier_citations(d):
+        src = by_id.get(c.source_id)
+        if src is not None and 1 <= c.page <= len(src.pages):
+            out.setdefault(c.source_id, {})[str(c.page)] = src.pages[c.page - 1]
+    return out
+
+
+def _done(d: Dossier) -> tuple[str, dict]:
+    return "done", {**public(d), "excerpts": _excerpts(d)}
+
+
 def _build_worker(symbol: str, q: queue.Queue) -> None:
-    """Runs in its own thread with its own connection and router (sqlite is thread-bound)."""
+    """Runs in its own thread with its own connection and router (sqlite is thread-bound).
+    `done` goes on the queue before the save, so a failed save cannot cost the client its
+    dossier, and _DONE is always queued last, whatever fails."""
     conn = None
     try:
-        settings = get_settings()
-        conn = db.connect(settings.db_path)
-        db.init_db(conn)
-        router = LLMRouter(conn, settings)
-        d = build_dossier(conn, symbol, router, progress=lambda m: q.put(("progress", {"msg": m})))
-        stored = db.get_dossier(conn, d.symbol)
-        if is_degraded(d) and stored is not None and not is_degraded(stored):
-            q.put(("progress", {"msg": KEPT_STORED}))
-            q.put(("done", public(stored)))
-        else:
-            db.save_dossier(conn, d)
-            q.put(("done", public(d)))
-    except screener.ScreenerError as e:
-        q.put(("error", {"detail": str(e) or f"{symbol} not found on screener"}))
-    except Exception as e:
-        log.exception("dossier build failed for %s", symbol)
-        q.put(("error", {"detail": f"build failed: {type(e).__name__}"}))
+        try:
+            settings = get_settings()
+            conn = db.connect(settings.db_path)
+            db.init_db(conn)
+            router = LLMRouter(conn, settings)
+            d = build_dossier(
+                conn, symbol, router, progress=lambda m: q.put(("progress", {"msg": m}))
+            )
+            stored = db.get_dossier(conn, d.symbol)
+            keep = is_degraded(d) and stored is not None and not is_degraded(stored)
+            if keep:
+                assert stored is not None
+                q.put(("progress", {"msg": KEPT_STORED}))
+                q.put(_done(stored))
+            else:
+                q.put(_done(d))
+                try:
+                    db.save_dossier(conn, d)
+                except Exception:
+                    log.exception("saving the dossier failed for %s", symbol)
+        except screener.ScreenerError as e:
+            q.put(("error", {"detail": str(e) or f"{symbol} not found on screener"}))
+        except Exception as e:
+            log.exception("dossier build failed for %s", symbol)
+            q.put(("error", {"detail": f"build failed: {type(e).__name__}"}))
+        finally:
+            if conn is not None:
+                conn.close()
     finally:
-        if conn is not None:
-            conn.close()
         q.put(_DONE)
 
 
@@ -377,7 +405,7 @@ def research_build(symbol: str, conn: Conn) -> StreamingResponse:
     if fresh:
         assert cached is not None
         q.put(("progress", {"msg": "Using cached dossier"}))
-        q.put(("done", public(cached)))
+        q.put(_done(cached))
         q.put(_DONE)
     else:
         threading.Thread(target=_build_worker, args=(sym, q), daemon=True).start()

@@ -775,3 +775,14 @@ def test_long_horizon_is_relative_to_newest_call():
     assert _not_yet_due(near, ("kept", ev, "r"), "Q2 FY27")[0] == "kept"  # first mention FY26
     old = far.model_copy(update={"citation": _cit("we did well in FY26 and target 25% by FY30")})
     assert _not_yet_due(old, ("kept", ev, "r"), "Q2 FY29")[0] == "kept"  # FY30 < FY29 + 2
+
+
+# ---- I7: credibility needs 3 resolved promises ----
+def test_credibility_none_under_three_resolved():
+    a = promise(1, "PERSISTENT-T4", "Q3 FY26")
+    b = promise(2, "PERSISTENT-T4", "Q3 FY26")
+    ev = {"evidence_quote": REAL_T1, "evidence_source": "PERSISTENT-T1"}
+    table = {a.id: dict(status="kept", rationale="ok", **ev), b.id: dict(status="missed", rationale="no", **ev)}  # fmt: skip
+    led = build_ledger(FakeRouter(judge(table)), [a, b], sources(), {}, {})
+    assert led.counts["kept"] == 1 and led.counts["missed"] == 1
+    assert led.credibility_pct is None

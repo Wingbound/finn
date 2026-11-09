@@ -27,6 +27,7 @@ _DROPPED = "Not mentioned in the later calls"
 _SEE_EVIDENCE = "See the later evidence quote."
 _JUDGE_FAILED = "Some promises could not be judged (model unavailable)"
 MAX_RATIONALE_WORDS = 30
+MIN_RESOLVED = 3  # credibility is not shown on fewer resolved promises
 _NAMES = {
     "revenue_growth": "Revenue",
     "pat_growth": "Net profit",
@@ -479,7 +480,11 @@ def build_ledger(
     for r in rows:
         counts[r.status] += 1
     resolved = counts["kept"] + counts["partly"] + counts["missed"]
-    cred = (counts["kept"] + 0.5 * counts["partly"]) / resolved * 100 if resolved else None
+    cred = (
+        (counts["kept"] + 0.5 * counts["partly"]) / resolved * 100
+        if resolved >= MIN_RESOLVED
+        else None
+    )
     note = (
         f"Not enough concall transcripts on file (found {len(transcripts)})"
         if len(transcripts) < 2

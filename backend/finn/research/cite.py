@@ -3,9 +3,10 @@
 from __future__ import annotations
 
 import re
+from collections.abc import Iterator
 
 from finn.enrich.grounding import normalize
-from finn.models import Citation, Source
+from finn.models import Citation, Dossier, Source
 
 MIN_QUOTE_WORDS = 6
 _NEGATIONS = {
@@ -84,3 +85,19 @@ def tagged_text(source: Source, max_chars: int = 90_000) -> str:
         out.append(chunk)
         used += cost
     return "\n\n".join(out)
+
+
+def dossier_citations(d: Dossier) -> Iterator[tuple[str, Citation]]:
+    """(field, citation) for every citation a dossier carries: ledger promises and evidence,
+    snapshot, bull and bear."""
+    if d.ledger:
+        for i, r in enumerate(d.ledger.rows):
+            yield f"ledger[{i}].promise", r.promise.citation
+            if r.evidence is not None:
+                yield f"ledger[{i}].evidence", r.evidence
+    if d.snapshot:
+        for i, p in enumerate(d.snapshot.summary):
+            yield f"snapshot[{i}]", p.citation
+    for name, pts in (("bull", d.bull), ("bear", d.bear)):
+        for i, p in enumerate(pts):
+            yield f"{name}[{i}]", p.citation

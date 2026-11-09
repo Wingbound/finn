@@ -1,5 +1,7 @@
 import json
+import sqlite3
 from datetime import datetime, timedelta
+from types import SimpleNamespace
 
 import pytest
 from fastapi.testclient import TestClient
@@ -8,7 +10,17 @@ from finn import db
 from finn.api import main as api_main
 from finn.api.deps import get_conn
 from finn.ingest.screener import ScreenerError
-from finn.models import IST, Citation, Dossier, Point, Snapshot, Source
+from finn.models import (
+    IST,
+    Citation,
+    Dossier,
+    Ledger,
+    LedgerRow,
+    Point,
+    Promise,
+    Snapshot,
+    Source,
+)
 
 
 @pytest.fixture
@@ -111,6 +123,7 @@ def test_build_streams_progress_then_done(env, monkeypatch):
     assert [e for e, _ in ev] == ["progress", "progress", "done"]
     assert ev[0][1] == {"msg": "one"}
     assert ev[2][1]["symbol"] == "ABC" and "pages" not in ev[2][1]["sources"][0]
+    assert ev[2][1]["excerpts"] == {"T1": {"2": "page two"}}
     c = db.connect(path)
     assert db.get_dossier(c, "ABC").sources[0].pages == ["page one", "page two"]
     c.close()
@@ -218,3 +231,64 @@ def test_stream_times_out_at_285s():
     assert out[-1] == 'event: error\ndata: {"detail": "build timed out"}\n\n'
     assert set(out[:-1]) == {": ping\n\n"} and len(out) == 19
     assert clock["t"] == 285 and max(q.timeouts) <= 15
+
+
+FACTS_CITE = Citation(source_id="FACTS", page=0, quote="Debt to equity: 1")
+
+
+def test_done_payload_has_excerpts_for_every_cited_page(env, monkeypatch):
+    client, _ = env
+    src = Source(id="T1", kind="transcript", title="Q2 call", quarter="Q2 FY27", url="u", pages=["p1", "p2", "p3", "p4"])  # fmt: skip
+    t2 = Source(id="T2", kind="transcript", title="Q1 call", quarter="Q1 FY27", url="u", pages=["q1", "q2"])  # fmt: skip
+    promise = Promise(id="T2-1", citation=Citation(source_id="T2", page=2, quote="a b c d e f"), topic="t", kind="qualitative", made_in="Q1 FY27")  # fmt: skip
+    row = LedgerRow(promise=promise, status="kept", method="judged", evidence=Citation(source_id="T1", page=3, quote="a b c d e f"), rationale="r")  # fmt: skip
+    d = dossier().model_copy(
+        update={
+            "sources": [src, t2],
+            "ledger": Ledger(rows=[row], counts={"kept": 1}, credibility_pct=None),
+            "bull": [Point(text="b", citation=Citation(source_id="T1", page=4, quote="x"))],
+            "bear": [Point(text="f", citation=FACTS_CITE)],
+        }
+    )
+    monkeypatch.setattr(api_main, "build_dossier", lambda conn, s, r, **k: d)
+    done = events(client.get("/research/ABC/build").text)[-1][1]
+    assert done["excerpts"] == {"T1": {"2": "p2", "3": "p3", "4": "p4"}, "T2": {"2": "q2"}}
+
+
+def test_cached_done_has_excerpts(env, monkeypatch):
+    client, path = env
+    save(path, dossier(age_min=3))
+    ev = events(client.get("/research/ABC/build").text)
+    assert ev[-1][1]["excerpts"] == {"T1": {"2": "page two"}}
+
+
+def test_save_failure_still_streams_done(env, monkeypatch):
+    client, _ = env
+    monkeypatch.setattr(api_main, "build_dossier", lambda conn, s, r, **k: dossier(s))
+
+    def broken(conn, d):
+        raise sqlite3.OperationalError("database is locked")
+
+    monkeypatch.setattr(api_main.db, "save_dossier", broken)
+    ev = events(client.get("/research/ABC/build").text)
+    assert [e for e, _ in ev] == ["done"] and ev[0][1]["symbol"] == "ABC"
+
+
+def test_worker_puts_done_marker_even_if_close_raises(monkeypatch):
+    class Conn:
+        def close(self):
+            raise RuntimeError("close failed")
+
+    fake_db = SimpleNamespace(
+        connect=lambda path: Conn(), init_db=lambda c: None, get_dossier=lambda c, s: None,
+        save_dossier=lambda c, d: None,
+    )  # fmt: skip
+    monkeypatch.setattr(api_main, "db", fake_db)
+    monkeypatch.setattr(api_main, "get_settings", lambda: SimpleNamespace(db_path="x"))
+    monkeypatch.setattr(api_main, "LLMRouter", lambda conn, settings: object())
+    monkeypatch.setattr(api_main, "build_dossier", lambda conn, s, r, **k: dossier(s))
+    q = api_main.queue.Queue()
+    with pytest.raises(RuntimeError):
+        api_main._build_worker("ABC", q)
+    items = [q.get_nowait() for _ in range(q.qsize())]
+    assert items[0][0] == "done" and items[-1] is api_main._DONE

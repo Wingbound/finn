@@ -36,8 +36,9 @@ BULL_BEAR_SYSTEM = f"""You write the bull case and the bear case for a listed co
 only the FACTS, the promise ledger lines and the sources below. Give up to 3 bull points and \
 up to 3 bear points. Each point is one plain sentence of at most 30 words, backed by a \
 verbatim quote: cite a transcript or annual report page, or a FACTS line for computed \
-financials (source_id FACTS, page 0, quote copied from that line). Any number in your sentence must appear in the quote or in \
-the FACTS. Do not predict prices or recommend buying or selling. Reply as JSON: \
+financials (source_id FACTS, page 0, quote copied from that line). Any number in your \
+sentence must appear in the quote you cite. Do not predict prices or recommend buying or \
+selling. Reply as JSON: \
 {{"bull": [{_ITEM}], "bear": [{_ITEM}]}}"""
 
 
@@ -64,15 +65,13 @@ def facts_block(trajectory: Trajectory, health: BalanceSheetHealth, ledger: Ledg
     lines.extend(f.text for f in h.flags)
     c = ledger.counts
     if c:
-        cred = (
-            f" (credibility {ledger.credibility_pct:g}%)"
-            if ledger.credibility_pct is not None
-            else ""
-        )
-        counts = ", ".join(
-            f"{c.get(k, 0)} {k}" for k in ("kept", "partly", "missed", "pending", "dropped")
-        )
-        lines.append(f"Promise ledger: {counts}{cred}")
+        keys = ("kept", "partly", "missed", "pending", "dropped")
+        counts = ", ".join(f"{c.get(k, 0)} {k}" for k in keys)
+        resolved = sum(c.get(k, 0) for k in ("kept", "partly", "missed"))
+        tally = f"{resolved} of {sum(c.get(k, 0) for k in keys)} promises resolved"
+        if ledger.credibility_pct is not None:
+            tally += f", credibility {ledger.credibility_pct:g}%"
+        lines.append(f"Promise ledger: {counts} ({tally})")
     return "\n".join(lines)
 
 
@@ -130,7 +129,7 @@ def _validate(
                 continue
             hint = page if isinstance(page, int) and not isinstance(page, bool) else None
             cit = locate(quote, sources[sid], hint)
-            if cit is None or not numbers_grounded(text, quote + "\n" + facts):
+            if cit is None or not numbers_grounded(text, cit.quote):  # its own quote only
                 continue
         kept.append(Point(text=text.strip(), citation=cit))
     if guard is not None:

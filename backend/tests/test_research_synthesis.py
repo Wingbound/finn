@@ -56,7 +56,8 @@ def test_facts_block_lines_and_skips_none():
     assert "Debt to equity: 0.06" in f
     assert "Free cash flow (3y): ₹3,483 cr" in f
     assert (
-        "Promise ledger: 3 kept, 1 partly, 2 missed, 4 pending, 0 dropped (credibility 62.5%)" in f
+        "Promise ledger: 3 kept, 1 partly, 2 missed, 4 pending, 0 dropped "
+        "(6 of 10 promises resolved, credibility 62.5%)" in f
     )
     assert "Net cash balance sheet" in f
     assert "ROCE" not in f and "Working capital" not in f
@@ -98,25 +99,28 @@ def test_snapshot_none_when_nothing_survives_or_llm_error():
     assert snapshot(FakeRouter(LLMError("x")), sources()) is None  # fmt: skip
 
 
-def test_bull_point_number_from_facts_kept_invented_dropped():
+def test_page_cited_point_grounds_numbers_in_its_quote_only():
     ledger, traj, health = analytics()
     r = FakeRouter(
         {
             "bull": [
-                item("Revenue compounding at 18.2% with growth continuing.", REAL_A),
+                item("Revenue grew 20% year on year to USD 487.6 million.", REAL_A),
+                item("Revenue compounding at 18.2% with growth continuing.", REAL_A),  # FACTS-only
                 item("Revenue compounding at 99.9% with growth continuing.", REAL_A),
             ],
             "bear": [],
         }
     )
     bull, bear = bull_bear(r, sources(), ledger, traj, health)
-    assert len(bull) == 1 and "18.2%" in bull[0].text and bear == []
+    assert [p.text for p in bull] == ["Revenue grew 20% year on year to USD 487.6 million."]
+    assert bear == []
     assert "FACTS" in r.calls[0][2] and "Debt to equity: 0.06" in r.calls[0][2]
+    assert "Any number in your sentence must appear in the quote you cite." in r.calls[0][1]
 
 
 def test_bull_bear_cap_three_and_long_text_dropped():
     ledger, traj, health = analytics()
-    many = [item(f"Point number {i} on growth.", REAL_A) for i in range(5)]
+    many = [item(f"Point {c} on growth.", REAL_A) for c in "abcde"]
     many.append(item(" ".join(["word"] * 31), REAL_A))
     r = FakeRouter({"bull": many, "bear": [item("Financing risk via bridge loan.", REAL_B, 7)]})
     bull, bear = bull_bear(r, sources(), ledger, traj, health)
@@ -182,3 +186,12 @@ def test_valid_empty_replies_are_not_failures():
     assert snapshot(FakeRouter({"summary": []}), sources(), notes=notes) is None
     assert bull_bear(FakeRouter({"bull": [], "bear": []}), sources(), ledger, traj, health, notes=notes) == ([], [])  # fmt: skip
     assert notes == []
+
+
+def test_facts_ledger_line_without_credibility():
+    ledger, traj, health = analytics()
+    counts = {"kept": 1, "partly": 0, "missed": 1, "pending": 3, "dropped": 0}
+    small = ledger.model_copy(update={"counts": counts, "credibility_pct": None})
+    f = facts_block(traj, health, small)
+    assert "Promise ledger: 1 kept, 0 partly, 1 missed, 3 pending, 0 dropped (2 of 5 promises resolved)" in f  # fmt: skip
+    assert "credibility" not in f
