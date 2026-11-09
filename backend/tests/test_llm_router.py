@@ -177,10 +177,19 @@ def test_known_model_does_not_warn(caplog):
 
 def test_every_default_model_has_a_list_price():
     from finn.config import ROUTES, route_for
-    from finn.llm.costs import LIST_PRICES_PER_MTOK
+    from finn.llm.costs import LIST_PRICES_PER_MTOK, UNPRICED_MODELS
 
     s = Settings(_env_file=None)
-    assert {route_for(t, s)[1] for t in ROUTES} <= set(LIST_PRICES_PER_MTOK)
+    assert {route_for(t, s)[1] for t in ROUTES} <= set(LIST_PRICES_PER_MTOK) | UNPRICED_MODELS
+
+
+def test_explicitly_unpriced_model_costs_zero_without_warning(caplog):
+    from finn.llm.costs import UNPRICED_MODELS, list_price_usd
+
+    assert "gemini-3.5-flash" in UNPRICED_MODELS
+    with caplog.at_level(logging.WARNING, logger="finn.llm.costs"):
+        assert list_price_usd("gemini-3.5-flash", 1000, 1000) == 0.0
+    assert caplog.text == ""
 
 
 @respx.mock
@@ -282,6 +291,7 @@ def test_chain_for_dedupes_primary_and_fallback(tmp_path):
 
 def test_chain_for_reason_and_transcript(settings):
     assert chain_for("reason", settings) == [
+        ("gemini", "gemini-3.5-flash"),
         ("gemini", "gemini-3.5-flash-lite"),
         ("gemini", "gemini-3.1-flash-lite"),
     ]

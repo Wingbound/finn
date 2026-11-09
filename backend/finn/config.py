@@ -19,9 +19,10 @@ class Settings(BaseSettings):
     finn_model_oneliner: str = "openai/gpt-oss-120b"
     finn_model_extract_pdf: str = "gemini-3.8-flash"
     finn_model_extract_transcript: str = "gemini-3.5-flash-lite"
-    # Pro (gemini-3.1-pro-preview) has no free tier. gemini-3.8-flash was unreliable on the
-    # free tier on 2026-11-09 (503s, 45 s hangs), so reason uses Flash-Lite.
-    finn_model_reason: str = "gemini-3.5-flash-lite"
+    # Pro (gemini-3.1-pro-preview) has no free tier. 3.5 Flash judges more decisively and
+    # correctly than Flash-Lite in the live A/B (2026-11-09); 3.8 Flash is unavailable on
+    # the free tier (503s, timeouts).
+    finn_model_reason: str = "gemini-3.5-flash"
     finn_model_bio: str = "openai/gpt-oss-120b"
     data_dir: Path = Path("data")
     db_path: Path | None = None
@@ -75,7 +76,7 @@ FALLBACKS: dict[str, list[tuple[str, str]]] = {
     "oneliner": [_FLASH_LITE],
     "bio": [_FLASH_LITE],
     "extract_pdf": [_FLASH_LITE],
-    "reason": [_FLASH_LITE_31],
+    "reason": [_FLASH_LITE, _FLASH_LITE_31],
     # Transcript prompts (15-25k tokens) exceed Groq's 8K TPM, so Groq cannot be the fallback.
     "extract_transcript": [_FLASH_LITE_31],
 }

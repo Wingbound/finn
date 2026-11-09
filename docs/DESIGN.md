@@ -79,7 +79,7 @@ screener.in ───────┘      │                └─ /research/{t
 | Ambiguous classification + one-liners | 1 | Groq `openai/gpt-oss-120b`, reasoning effort medium, batched 20 filings/call, JSON mode | Fast, free; 91.3% vs 85.6% for gpt-oss-20b on the eval, ~$0.001/batch at list price (EVALS.md) |
 | Results number extraction | 2 | XBRL (deterministic, no LLM) | NSE publishes structured XBRL for every results filing; no model needed |
 | Transcript guidance extraction (per transcript) | 2 | Gemini 3.5 Flash-Lite (3.1 Flash-Lite fallback); each transcript is read whole (up to 90,000 characters) in one call | Bulk extraction |
-| Ledger judgment, narrative vs numbers, bull/bear | 3 | Gemini 3.5 Flash-Lite (3.1 Flash-Lite fallback), with evidence gating: a verdict counts only with a verbatim quote from a later call | Pro has no free tier and 3.8 Flash was unreliable on it; once per company, cached |
+| Ledger judgment, narrative vs numbers, bull/bear | 3 | Gemini 3.5 Flash (falls back to 3.5 Flash-Lite, then 3.1 Flash-Lite; unpriced on the published list), with evidence gating: a verdict counts only with a verbatim quote from a later call | Pro has no free tier and 3.8 Flash is unavailable on it; once per company, cached |
 | People bio | 2 | Groq gpt-oss-120b over the filing's own text (Brief Profile), behind a grounding guard; Gemini fallback | Push-side enrichment allowed |
 
 - **Arithmetic stays out of the LLM.** QoQ/YoY %, margins, D/E, CFO/PAT and FCF are computed in Python. EBITDA, when not reported, = Revenue from operations − (Expenses − finance costs − D&A), i.e. excludes other income; matches screener's Operating Profit. Flagged "computed".
@@ -99,7 +99,7 @@ screener.in ───────┘      │                └─ /research/{t
   - "dropped" needs at least 2 later calls, none of them truncated by the evidence budget. Judged promises from the newest call (T1) are always pending, since no later call exists.
   - Credibility = (kept + 0.5·partly) / (kept + partly + missed), shown only with at least 3 resolved promises.
 - **FACTS citations.** Computed financials (CAGR, margin change, debt to equity, CFO/PAT, FCF, ROCE, flags and the ledger tally) are cited as `FACTS` page 0. The quote must equal a line of the code-built facts block, so numbers the model did not read from a page still trace to code.
-- **Model routing for research.** Gemini 3.5 Flash-Lite first, then 3.1 Flash-Lite as fallback. Gemini 3.8 Flash was unreliable on the free tier (see Model routing above).
+- **Model routing for research.** The judge and synthesis use Gemini 3.5 Flash, falling back to 3.5 Flash-Lite, then 3.1 Flash-Lite; extraction uses 3.5 Flash-Lite with a 3.1 Flash-Lite fallback. 3.5 Flash is not on the published price list, so its cost shows as unpriced. Gemini 3.8 Flash was unreliable on the free tier (see Model routing above).
 
 ### Materiality score (deterministic, explainable)
 `score = category_base × subtype_modifier × user_subscription_boost (+ price-reaction bump)`.

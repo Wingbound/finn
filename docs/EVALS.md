@@ -313,6 +313,8 @@ Method:
 
 Live results: pending (controller)
 
+Judge model A/B (2026-11-09, POLYCAB, DIXON, INDIGO): `reason` on 3.5 Flash-Lite found 0 misses (it labelled POLYCAB's EHV slip pending); 3.5 Flash found 3 correct misses (POLYCAB EHV; DIXON Noida Q2 to Q3 FY27; INDIGO Q4 FY26 capacity 10% to 3%) and 1 correct kept, at 72-80 s per dossier. 3.8 Flash was still 503ing or timing out, so `reason` defaults to 3.5 Flash.
+
 ### Limits
 
 The judge's status is an LLM judgement gated by verbatim evidence: the quote is checked, the verdict is not. Computed grades cover only revenue growth, margin and PAT growth, and only when the quote itself names the metric and the period (see DESIGN.md, Ledger grading). Reaffirmations are treated as pending, not as delivery. Citation verification proves a quote exists on its page, not that the claim built on it is right.
