@@ -125,3 +125,12 @@ export function statusLabel(s: Status): { glyph: string; word: string } {
 export function plural(n: number, one: string, many = `${one}s`): string {
   return `${n} ${n === 1 ? one : many}`;
 }
+
+const BOILERPLATE = /^.*?\bhas informed the Exchange\s+(?:about|regarding)\s+/i;
+
+/** NSE subjects open with "<Company> has informed the Exchange about …"; keep only what follows. */
+export function cleanSubject(subject: string): string {
+  const rest = subject.replace(BOILERPLATE, "");
+  if (rest === subject || !rest) return subject;
+  return rest.charAt(0).toUpperCase() + rest.slice(1);
+}

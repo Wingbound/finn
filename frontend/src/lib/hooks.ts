@@ -26,8 +26,10 @@ async function orNull<T>(p: Promise<T>): Promise<T | null> {
 }
 
 export function useDigest(req: DigestRequest | null) {
-  return useSWR<Digest, ApiError>(req ? ["digest", JSON.stringify(req)] : null, () =>
-    apiPost<Digest>("/digest", req),
+  return useSWR<Digest, ApiError>(
+    req ? ["digest", JSON.stringify(req)] : null,
+    () => apiPost<Digest>("/digest", req),
+    { keepPreviousData: true }, // a window change keeps the old stories up until the new ones land
   );
 }
 
@@ -36,8 +38,10 @@ export function usePortfolio() {
 }
 
 export function useAlerts(rules: Rules | null) {
-  return useSWR<AlertsResponse, ApiError>(rules ? ["alerts", JSON.stringify(rules)] : null, () =>
-    apiPost<AlertsResponse>("/alerts", rules),
+  return useSWR<AlertsResponse, ApiError>(
+    rules ? ["alerts", JSON.stringify(rules)] : null,
+    () => apiPost<AlertsResponse>("/alerts", rules),
+    { keepPreviousData: true },
   );
 }
 

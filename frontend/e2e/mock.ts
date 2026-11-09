@@ -80,7 +80,7 @@ export async function mockApi(page: Page, opts: MockOptions = {}) {
 export function watchErrors(page: Page): string[] {
   const errors: string[] = [];
   page.on("console", (m) => {
-    if (m.type() === "error") errors.push(m.text());
+    if (m.type() === "error") errors.push(`${m.text()} ${m.location().url ?? ""}`.trim());
   });
   page.on("pageerror", (e) => errors.push(e.message));
   return errors;

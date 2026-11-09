@@ -72,3 +72,20 @@ describe("labels", () => {
     expect(plural(4, "thing")).toBe("4 things");
   });
 });
+
+describe("cleanSubject", () => {
+  it("drops NSE's 'has informed the Exchange' boilerplate", async () => {
+    const { cleanSubject } = await import("@/lib/format");
+    expect(cleanSubject("Zydus Lifesciences Limited has informed the Exchange about Transcript")).toBe("Transcript");
+    expect(cleanSubject("Tata Steel Limited has informed the Exchange about Link of Recording")).toBe("Link of Recording");
+    expect(
+      cleanSubject('Zydus Lifesciences Limited has informed the Exchange regarding a press release dated November 06, 2026, titled "Press Release".'),
+    ).toBe('A press release dated November 06, 2026, titled "Press Release".');
+  });
+  it("leaves other subjects alone", async () => {
+    const { cleanSubject } = await import("@/lib/format");
+    expect(cleanSubject("Please note that the Company executives will be participating")).toBe(
+      "Please note that the Company executives will be participating",
+    );
+  });
+});
