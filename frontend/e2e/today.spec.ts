@@ -46,3 +46,26 @@ test("Today: an unreachable server offers a retry", async ({ page }) => {
   await expect(page.getByRole("alert").filter({ hasText: "Couldn’t" }).or(page.getByRole("alert").filter({ hasText: "Couldn't" }))).toBeVisible();
   await expect(page.getByRole("button", { name: "Retry" })).toBeVisible();
 });
+
+test("Today: a failed refresh after a window change says so above the older stories", async ({ page }) => {
+  await mockApi(page, { digest: () => "digest-24h.json" });
+  await page.goto("/");
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText("7 things matter");
+  await page.route("http://api.finn.test/digest", (r) => r.abort("connectionrefused"));
+  await page.getByRole("radio", { name: "7 days" }).click();
+  const alert = page.getByRole("alert").filter({ hasText: /Couldn.t reach FINN/ });
+  await expect(alert).toBeVisible();
+  await expect(alert).toContainText("still showing the previous window");
+});
+
+test("Today: a link to a routine story opens the drawer at it (final review I5)", async ({ page }) => {
+  await mockApi(page, { digest: () => "digest-24h.json" });
+  await page.goto("/#story-ZYDUSLIFE%3Apress_release%3A106851457");
+  await expect(page.locator('[id="story-ZYDUSLIFE:press_release:106851457"]')).toBeInViewport();
+});
+
+test("Today: a link to a story outside the window says so (final review I5)", async ({ page }) => {
+  await mockApi(page, { digest: () => "digest-24h.json" });
+  await page.goto("/#story-NOPE%3Aresults%3A1");
+  await expect(page.getByText("That story is outside this window.")).toBeVisible();
+});

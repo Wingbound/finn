@@ -58,10 +58,20 @@ export function useResearchList() {
 const dossierKey = (symbol: string) => ["dossier", symbol.trim().toUpperCase()];
 const excerptsKey = (symbol: string) => ["excerpts", symbol.trim().toUpperCase()];
 
-/** The stored dossier, or null when none has been built for this symbol. */
+// Dossiers this tab built live. On Vercel a build is saved to one instance's /tmp, so a
+// later GET can land on another instance and 404; the dossier the user just watched being
+// built must not vanish because of that.
+const builtHere = new Map<string, Dossier>();
+
+/** The stored dossier (or the one built live in this tab), or null when there is neither. */
 export function useDossier(symbol: string | null) {
-  return useSWR<Dossier | null, ApiError>(symbol ? dossierKey(symbol) : null, () =>
-    orNull(apiGet<Dossier>(`/research/${symbolPath(symbol as string)}`)),
+  return useSWR<Dossier | null, ApiError>(
+    symbol ? dossierKey(symbol) : null,
+    async () => {
+      const stored = await orNull(apiGet<Dossier>(`/research/${symbolPath(symbol as string)}`));
+      return stored ?? builtHere.get((symbol as string).trim().toUpperCase()) ?? null;
+    },
+    { revalidateOnFocus: false },
   );
 }
 
@@ -83,6 +93,7 @@ export function useSource(symbol: string | null, sourceId: string | null, page: 
 
 /** After a live build: seed the caches so the dossier page renders without refetching. */
 export async function primeDossier(dossier: Dossier, excerpts: Excerpts) {
+  builtHere.set(dossier.symbol.trim().toUpperCase(), dossier);
   await mutate(dossierKey(dossier.symbol), dossier, { revalidate: false });
   await mutate(excerptsKey(dossier.symbol), excerpts, { revalidate: false });
   await mutate("research");

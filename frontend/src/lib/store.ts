@@ -96,17 +96,34 @@ export function validateSeen(v: unknown): string[] | null {
   return Array.isArray(v) ? v.filter((x): x is string => typeof x === "string").slice(-SEEN_CAP) : null;
 }
 
+// The session's own copy of every write. When storage is blocked it is the only copy, so a
+// setting saved on one screen still holds on the next.
+const memory = new Map<string, unknown>();
+
+/** Clears the session copy (tests start each case from nothing). */
+export function resetMemoryStore(): void {
+  memory.clear();
+}
+
 export function readStore<T>(key: string, fallback: T, validate: (v: unknown) => T | null): T {
+  const fromMemory = () => (memory.has(key) ? (validate(memory.get(key)) ?? fallback) : fallback);
+  let raw: string | null;
   try {
-    const raw = window.localStorage.getItem(key);
-    return raw === null ? fallback : (validate(JSON.parse(raw)) ?? fallback);
+    raw = window.localStorage.getItem(key);
   } catch {
-    return fallback;
+    return fromMemory(); // storage blocked
+  }
+  if (raw === null) return fromMemory();
+  try {
+    return validate(JSON.parse(raw)) ?? fallback;
+  } catch {
+    return fallback; // corrupt value
   }
 }
 
 /** Saves when it can and tells same-page readers; false when storage refused the write. */
 export function writeStore(key: string, value: unknown): boolean {
+  memory.set(key, value);
   let saved = true;
   try {
     window.localStorage.setItem(key, JSON.stringify(value));

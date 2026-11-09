@@ -48,8 +48,15 @@ export default function AlertsPage() {
           </p>
         ) : null}
         {alerts.error && !alerts.data ? <ErrorState message={alerts.error.message} onRetry={() => alerts.mutate()} /> : null}
+        {alerts.error && alerts.data ? (
+          <ErrorState
+            message={alerts.error.message}
+            note="The alerts below are from before your last change."
+            onRetry={() => alerts.mutate()}
+          />
+        ) : null}
         {!alerts.data && !alerts.error ? <Skeleton lines={4} label="Loading alerts" /> : null}
-        {alerts.data ? <AlertLog alerts={alerts.data.alerts} /> : null}
+        {alerts.data ? <AlertLog alerts={alerts.data.alerts} window={alerts.data.window} /> : null}
       </section>
 
       <section aria-labelledby="holdings" className="pt-6">

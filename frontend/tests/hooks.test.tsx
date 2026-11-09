@@ -31,3 +31,15 @@ describe("useDossier", () => {
     expect(f.mock.calls[0]?.[0]).toMatch(/\/research\/M%26M$/);
   });
 });
+
+describe("live-built dossiers (final review C1)", () => {
+  it("keep showing after a build even when the server's copy 404s", async () => {
+    const { primeDossier } = await import("@/lib/hooks");
+    const built = { symbol: "NEWCO", name: "Newco Ltd" } as unknown as import("@/lib/types").Dossier;
+    await primeDossier(built, {});
+    vi.stubGlobal("fetch", vi.fn(async () => new Response(JSON.stringify({ detail: "not built" }), { status: 404 })));
+    const { result } = renderHook(() => useDossier("NEWCO"), { wrapper });
+    await waitFor(() => expect(result.current.isLoading).toBe(false));
+    expect(result.current.data?.symbol).toBe("NEWCO");
+  });
+});

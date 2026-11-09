@@ -63,10 +63,27 @@ describe("AlertLog", () => {
     const { readFileSync } = await import("node:fs");
     const { join } = await import("node:path");
     const alerts = JSON.parse(readFileSync(join(__dirname, "fixtures", "alerts.json"), "utf8")).alerts;
-    render(<AlertLog alerts={alerts} />);
+    render(<AlertLog alerts={alerts} window={{ start: "2026-10-31T00:00:00+05:30", end: "2026-11-07T18:00:00+05:30" }} />);
     expect(screen.getAllByRole("listitem")).toHaveLength(8);
     expect(screen.getAllByText("Fund-raise").length).toBeGreaterThan(0);
     fireEvent.click(screen.getByRole("button", { name: `Show all ${alerts.length}` }));
     expect(screen.getAllByRole("listitem")).toHaveLength(alerts.length);
+  });
+});
+
+describe("alert links (final review I5)", () => {
+  it("open Today on the alert log's own window", async () => {
+    const { AlertLog } = await import("@/components/alerts/AlertLog");
+    const { readFileSync } = await import("node:fs");
+    const { join } = await import("node:path");
+    const data = JSON.parse(readFileSync(join(__dirname, "fixtures", "alerts.json"), "utf8"));
+    render(<AlertLog alerts={data.alerts} window={data.window} />);
+    const link = screen.getAllByRole("link").find((a) => a.getAttribute("href")?.startsWith("/#story-")) as HTMLElement;
+    fireEvent.click(link);
+    expect(JSON.parse(localStorage.getItem(KEYS.window) ?? "null")).toEqual({
+      kind: "range",
+      start: data.window.start,
+      end: data.window.end,
+    });
   });
 });

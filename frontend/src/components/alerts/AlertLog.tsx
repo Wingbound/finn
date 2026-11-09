@@ -15,7 +15,7 @@ function kindLabel(a: Alert): string {
   return c ? categoryLabel(c) : KIND[a.kind];
 }
 
-export function AlertLog({ alerts }: { alerts: Alert[] }) {
+export function AlertLog({ alerts, window }: { alerts: Alert[]; window: { start: string; end: string } }) {
   const [all, setAll] = useState(false);
   if (!alerts.length) {
     return <p className="border-t border-rule py-4 text-ink-2">No alerts in the last 7 days under these rules.</p>;
@@ -37,7 +37,7 @@ export function AlertLog({ alerts }: { alerts: Alert[] }) {
                 {a.kind === "filing" && a.story_id ? (
                   <Link
                     href={`/#story-${encodeURIComponent(a.story_id)}`}
-                    onClick={() => writeStore(KEYS.window, { kind: "hours", hours: 168 })}
+                    onClick={() => writeStore(KEYS.window, { kind: "range", start: window.start, end: window.end })}
                     className="line-clamp-2 text-pencil"
                   >
                     {text}

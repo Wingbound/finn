@@ -59,3 +59,21 @@ describe("buildDossier", () => {
     await expect(buildDossier("X", {})).rejects.toMatchObject({ kind: "error" });
   });
 });
+
+describe("broken streams (final review I3)", () => {
+  it("reports a connection that drops mid-body as incomplete", async () => {
+    const body = new ReadableStream<Uint8Array>({
+      start(c) {
+        c.enqueue(new TextEncoder().encode('event: progress\ndata: {"msg":"a"}\n\n'));
+        c.error(new TypeError("network error"));
+      },
+    });
+    vi.stubGlobal("fetch", vi.fn(async () => new Response(body, { status: 200 })));
+    await expect(buildDossier("ABC", {})).rejects.toMatchObject({ kind: "incomplete" });
+  });
+  it("skips a malformed frame instead of failing the build", async () => {
+    const text = 'event: progress\ndata: {oops\n\n' + fixture("build-BAJFINANCE.sse");
+    vi.stubGlobal("fetch", vi.fn(async () => streamOf(text)));
+    await expect(buildDossier("BAJFINANCE", {})).resolves.toHaveProperty("dossier");
+  });
+});

@@ -69,3 +69,18 @@ describe("Tally", () => {
     expect(container).toBeEmptyDOMElement();
   });
 });
+
+describe("BuildProgress after a dropped stream (final review I3)", () => {
+  it("offers to look for the saved copy", async () => {
+    build.mockRejectedValueOnce(new BuildError("incomplete", STOPPED));
+    const check = vi.fn();
+    render(<BuildProgress symbol="ABC" onDone={() => {}} onCheckSaved={check} />);
+    fireEvent.click(await screen.findByRole("button", { name: "Check for a saved copy" }));
+    expect(check).toHaveBeenCalled();
+  });
+  it("treats an unexpected failure as a stopped build, not a failed one", async () => {
+    build.mockRejectedValueOnce(new TypeError("network error"));
+    render(<BuildProgress symbol="ABC" onDone={() => {}} onCheckSaved={() => {}} />);
+    expect(await screen.findByText(/The build stopped before finishing/)).toBeInTheDocument();
+  });
+});

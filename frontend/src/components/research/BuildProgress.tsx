@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useEffectEvent, useRef, useState } from "react";
-import { BuildError, buildDossier } from "@/lib/sse";
+import { BuildError, STOPPED, buildDossier } from "@/lib/sse";
 import type { Dossier, Excerpts } from "@/lib/types";
 
 type Phase = { kind: "running" } | { kind: "failed"; detail: string; incomplete: boolean };
@@ -11,10 +11,13 @@ export function BuildProgress({
   symbol,
   onDone,
   onCancel,
+  onCheckSaved,
 }: {
   symbol: string;
   onDone: (r: { dossier: Dossier; excerpts: Excerpts }) => void;
   onCancel?: () => void;
+  /** After a dropped stream: the server may have finished and saved the dossier anyway. */
+  onCheckSaved?: () => void;
 }) {
   const [lines, setLines] = useState<string[]>([]);
   const [phase, setPhase] = useState<Phase>({ kind: "running" });
@@ -33,7 +36,7 @@ export function BuildProgress({
       .catch((e: unknown) => {
         if (c.signal.aborted) return;
         if (e instanceof BuildError) setPhase({ kind: "failed", detail: e.detail, incomplete: e.kind === "incomplete" });
-        else setPhase({ kind: "failed", detail: "The build failed", incomplete: false });
+        else setPhase({ kind: "failed", detail: STOPPED, incomplete: true });
       })
       .finally(() => clearInterval(tick));
     return () => {
@@ -69,9 +72,16 @@ export function BuildProgress({
           {phase.incomplete ? (
             <p className="text-caption text-ink-2">The server may still finish and save it. Try again in a minute.</p>
           ) : null}
-          <button type="button" onClick={retry} className="mt-2 min-h-11 rounded-lg border border-rule px-4 font-medium text-pencil">
-            Try again
-          </button>
+          <div className="mt-2 flex flex-wrap gap-3">
+            {phase.incomplete && onCheckSaved ? (
+              <button type="button" onClick={onCheckSaved} className="min-h-11 rounded-lg bg-pencil px-4 font-semibold text-paper">
+                Check for a saved copy
+              </button>
+            ) : null}
+            <button type="button" onClick={retry} className="min-h-11 rounded-lg border border-rule px-4 font-medium text-pencil">
+              Try again
+            </button>
+          </div>
         </div>
       ) : (
         <button

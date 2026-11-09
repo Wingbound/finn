@@ -27,6 +27,10 @@ export function DossierScreen({ symbol }: { symbol: string }) {
             router.replace(`/research/${encodeURIComponent(symbol)}`);
           }}
           onCancel={() => setBuilding(false)}
+          onCheckSaved={() => {
+            setBuilding(false);
+            router.replace(`/research/${encodeURIComponent(symbol)}`);
+          }}
         />
       </>
     );

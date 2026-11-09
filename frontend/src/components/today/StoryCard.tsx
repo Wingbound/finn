@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useState } from "react";
 import { symbolPath } from "@/lib/api";
-import { ago, categoryLabel, cleanSubject, plural, stamp } from "@/lib/format";
+import { categoryLabel, cleanSubject, plural, stamp, when } from "@/lib/format";
 import type { Story } from "@/lib/types";
 import { BriefBlock } from "./BriefBlock";
 import { PeopleList } from "./PeopleList";
@@ -61,7 +61,7 @@ export function StoryCard({
             <span className="ml-2 text-caption text-ink-2">{categoryLabel(story.category)}</span>
           </p>
           <time dateTime={story.latest_at} title={stamp(story.latest_at, now)} className="shrink-0 text-caption text-ink-2">
-            {ago(story.latest_at, now)}
+            {when(story.latest_at, now)}
           </time>
         </div>
         <p className="truncate text-caption text-ink-2">{story.company}</p>

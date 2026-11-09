@@ -74,13 +74,53 @@ describe("StaleNotice", () => {
       <StaleNotice
         latest={d.latest_filing_at}
         window={{ kind: "hours", hours: 24 }}
-        onWiden={widen}
+        onChoose={widen}
         now={new Date("2026-11-09T09:00:00+05:30")}
       />,
     );
     expect(screen.getByText("Nothing new in the last 24 hours.")).toBeInTheDocument();
     expect(screen.getByText(/Newest filing: 7 Nov, 16:58/)).toBeInTheDocument();
     fireEvent.click(screen.getByRole("button", { name: "Show 7 days" }));
-    expect(widen).toHaveBeenCalledWith(168);
+    expect(widen).toHaveBeenCalledWith({ kind: "hours", hours: 168 });
+  });
+  it("only offers presets that reach the newest filing (final review I4)", () => {
+    render(
+      <StaleNotice
+        latest="2026-11-07T16:58:42+05:30"
+        window={{ kind: "hours", hours: 24 }}
+        onChoose={() => {}}
+        now={new Date("2026-11-11T09:00:00+05:30")}
+      />,
+    );
+    // 88 hours old: 3 days can't reach it, 7 days can
+    expect(screen.queryByRole("button", { name: "Show 3 days" })).toBeNull();
+    expect(screen.getByRole("button", { name: "Show 7 days" })).toBeInTheDocument();
+  });
+  it("offers the week up to the newest filing when no preset reaches it (final review I4)", () => {
+    const choose = vi.fn();
+    render(
+      <StaleNotice
+        latest="2026-11-07T16:58:42+05:30"
+        window={{ kind: "hours", hours: 168 }}
+        onChoose={choose}
+        now={new Date("2026-11-19T09:00:00+05:30")}
+      />,
+    );
+    fireEvent.click(screen.getByRole("button", { name: "Show the week up to 7 Nov" }));
+    const w = choose.mock.calls[0]?.[0];
+    expect(w.kind).toBe("range");
+    expect(Date.parse(w.end)).toBeGreaterThan(Date.parse("2026-11-07T16:58:42+05:30"));
+    expect(Date.parse(w.end) - Date.parse(w.start)).toBeGreaterThanOrEqual(7 * 86_400_000);
+  });
+});
+
+describe("story times (final review M3, re-graded)", () => {
+  it("are relative within a day and absolute beyond it", async () => {
+    const { StoryCard } = await import("@/components/today/StoryCard");
+    const story = load<Digest>("digest-24h.json").stories[0]!;
+    const now = new Date(Date.parse(story.latest_at) + 3 * 86_400_000);
+    render(<StoryCard story={story} seen={false} onToggleSeen={() => {}} now={now} />);
+    expect(screen.getByText(/^\d{1,2} [A-Z][a-z]{2}, \d{2}:\d{2}$/)).toBeInTheDocument();
+    expect(screen.queryByText(/d ago$/)).toBeNull();
   });
 });

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 import { ErrorState, Skeleton } from "@/components/States";
 import { FloorControl } from "@/components/today/FloorControl";
 import { Header } from "@/components/today/Header";
@@ -21,11 +21,35 @@ import {
 } from "@/lib/store";
 import type { DigestRequest } from "@/lib/types";
 
+function subscribeHash(onChange: () => void) {
+  window.addEventListener("hashchange", onChange);
+  window.addEventListener("popstate", onChange);
+  return () => {
+    window.removeEventListener("hashchange", onChange);
+    window.removeEventListener("popstate", onChange);
+  };
+}
+
+function storyFromHash(hash: string): string | null {
+  try {
+    const h = decodeURIComponent(hash.slice(1));
+    return h.startsWith("story-") ? h.slice("story-".length) : null;
+  } catch {
+    return null;
+  }
+}
+
 export default function TodayPage() {
   const [rules, , rulesReady] = useStored(KEYS.rules, DEFAULT_RULES, validateRules);
   const [floor, setFloor, floorReady] = useStored(KEYS.floor, DEFAULT_FLOOR, validateFloor);
   const [win, setWin, winReady] = useStored(KEYS.window, DEFAULT_WINDOW, validateWindow);
   const [drawer, setDrawer] = useState(false);
+  const [dismissed, setDismissed] = useState(false);
+  // An alert links here as /#story-<id>. Subscribed, not read once: on a client-side
+  // navigation the URL changes after the first render. A garbled hash is ignored.
+  const hash = useSyncExternalStore(subscribeHash, () => window.location.hash, () => "");
+  const target = storyFromHash(hash);
+  const scrolled = useRef(false);
 
   const ready = rulesReady && floorReady && winReady;
   const req: DigestRequest | null = ready
@@ -43,18 +67,23 @@ export default function TodayPage() {
   };
   const empty = data && data.counts.shown === 0 && data.counts.routine === 0;
 
-  // An alert links here as /#story-<id>: bring that story into view once it has rendered.
+  const inStories = !!target && !!data?.stories.some((st) => st.id === target);
+  const inRoutine = !!target && Object.values(data?.routine ?? {}).some((list) => list?.some((st) => st.id === target));
+  const drawerOpen = drawer || (inRoutine && !dismissed);
+  const outside = !!data && !!target && !inStories && !inRoutine;
+
+  // Bring the linked story into view once, after it has rendered (the drawer opens for routine ones).
   useEffect(() => {
-    const hash = decodeURIComponent(window.location.hash.slice(1));
-    if (!data || !hash.startsWith("story-")) return;
-    document.getElementById(hash)?.scrollIntoView({ block: "start" });
-  }, [data]);
+    if (!target || scrolled.current || !(inStories || inRoutine)) return;
+    scrolled.current = true;
+    requestAnimationFrame(() => document.getElementById(`story-${target}`)?.scrollIntoView({ block: inRoutine ? "center" : "start" }));
+  }, [target, inStories, inRoutine]);
 
   return (
     <>
       {data && !empty ? <Header counts={data.counts} onOpenRoutine={openDrawer} /> : null}
       {empty ? (
-        <StaleNotice latest={data.latest_filing_at} window={win} onWiden={(h) => setWin({ kind: "hours", hours: h })} />
+        <StaleNotice latest={data.latest_filing_at} window={win} onChoose={setWin} />
       ) : null}
       {!data && !error ? <h1 className="sr-only">Today</h1> : null}
 
@@ -68,7 +97,15 @@ export default function TodayPage() {
         </p>
       ) : null}
 
+      {outside ? <p className="py-2 text-ink-2">That story is outside this window.</p> : null}
       {error && !data ? <ErrorState message={error.message} onRetry={() => mutate()} /> : null}
+      {error && data ? (
+        <ErrorState
+          message={error.message}
+          note="Below, FINN is still showing the previous window."
+          onRetry={() => mutate()}
+        />
+      ) : null}
       {isLoading && !data ? <Skeleton label="Loading today's filings" /> : null}
 
       {data && !empty ? (
@@ -80,7 +117,14 @@ export default function TodayPage() {
               Nothing at this level. Lower the bar to Everything, or widen the window.
             </p>
           )}
-          <RoutineDrawer digest={data} open={drawer} onToggle={() => setDrawer((v) => !v)} />
+          <RoutineDrawer
+            digest={data}
+            open={drawerOpen}
+            onToggle={() => {
+              if (drawerOpen) setDismissed(true);
+              setDrawer(!drawerOpen);
+            }}
+          />
         </>
       ) : null}
     </>

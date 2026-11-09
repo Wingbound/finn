@@ -106,3 +106,26 @@ describe("useStored", () => {
     expect(h.result.current[0]).toBe("everything");
   });
 });
+
+describe("blocked storage across remounts (final review I2)", () => {
+  it("keeps a saved setting for the session when a new screen mounts", async () => {
+    vi.spyOn(Storage.prototype, "getItem").mockImplementation(() => {
+      throw new Error("blocked");
+    });
+    vi.spyOn(Storage.prototype, "setItem").mockImplementation(() => {
+      throw new Error("blocked");
+    });
+    const first = renderHook(() => useStored(KEYS.rules, DEFAULT_RULES, validateRules));
+    await act(async () => {
+      first.result.current[1]({ ...DEFAULT_RULES, volume_multiple: 1 });
+      await Promise.resolve();
+    });
+    first.unmount();
+    const second = renderHook(() => useStored(KEYS.rules, DEFAULT_RULES, validateRules));
+    await act(async () => {
+      await Promise.resolve();
+    });
+    expect(second.result.current[0].volume_multiple).toBe(1);
+    expect(readStore(KEYS.rules, DEFAULT_RULES, validateRules).volume_multiple).toBe(1);
+  });
+});

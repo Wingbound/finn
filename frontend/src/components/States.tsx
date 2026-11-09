@@ -12,11 +12,13 @@ export function Skeleton({ lines = 6, label = "Loading" }: { lines?: number; lab
 }
 
 /** What went wrong, and the one thing to do about it. */
-export function ErrorState({ message, onRetry }: { message: string; onRetry?: () => void }) {
+export function ErrorState({ message, onRetry, note }: { message: string; onRetry?: () => void; note?: string }) {
   return (
-    <div role="alert" className="my-6 border-l-2 border-missed py-1 pl-3">
+    <div role="alert" className="my-4 border-l-2 border-missed py-1 pl-3">
       <p className="font-medium">{message}</p>
-      <p className="text-caption text-ink-2">Check your connection, then try again. The server may be waking up.</p>
+      <p className="text-caption text-ink-2">
+        {note ?? "Check your connection, then try again. The server may be waking up."}
+      </p>
       {onRetry ? (
         <button type="button" onClick={onRetry} className="mt-2 min-h-11 font-semibold text-pencil">
           Retry

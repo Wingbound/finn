@@ -64,17 +64,29 @@ export async function buildDossier(
   const decoder = new TextDecoder();
   let buffer = "";
   for (;;) {
-    const { done, value } = await reader.read();
+    let chunk: ReadableStreamReadResult<Uint8Array>;
+    try {
+      chunk = await reader.read();
+    } catch (e) {
+      if (signal?.aborted) throw e;
+      throw new BuildError("incomplete", STOPPED); // the connection dropped mid-stream
+    }
+    const { done, value } = chunk;
     buffer += decoder.decode(value, { stream: !done });
     const { events, rest } = parseFrames(done ? `${buffer}\n\n` : buffer);
     buffer = rest;
     for (const ev of events) {
-      const payload = JSON.parse(ev.data);
+      let payload: Record<string, unknown>;
+      try {
+        payload = JSON.parse(ev.data);
+      } catch {
+        continue; // a garbled frame; the rest of the stream may still finish the build
+      }
       if (ev.event === "progress" && typeof payload?.msg === "string") onProgress?.(payload.msg);
       else if (ev.event === "error") throw new BuildError("error", String(payload?.detail ?? "The build failed"));
       else if (ev.event === "done") {
         const { excerpts = {}, ...dossier } = payload;
-        return { dossier: dossier as Dossier, excerpts: excerpts as Excerpts };
+        return { dossier: dossier as unknown as Dossier, excerpts: excerpts as Excerpts };
       }
     }
     if (done) throw new BuildError("incomplete", STOPPED);

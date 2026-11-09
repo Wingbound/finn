@@ -1,6 +1,6 @@
 "use client";
 
-import { ago, categoryLabel, cleanSubject, plural } from "@/lib/format";
+import { categoryLabel, cleanSubject, plural, when } from "@/lib/format";
 import type { Category, Digest } from "@/lib/types";
 
 /** The end of the feed: what FINN set aside, grouped and counted, one tap away. */
@@ -33,7 +33,7 @@ export function RoutineDrawer({
               </h3>
               <ul className="mt-1">
                 {stories.map((s) => (
-                  <li key={s.id} className="flex items-baseline gap-3 border-t border-rule py-2 text-caption">
+                  <li key={s.id} id={`story-${s.id}`} className="flex scroll-mt-4 items-baseline gap-3 border-t border-rule py-2 text-caption">
                     <span className="w-24 shrink-0 truncate font-semibold">{s.symbol}</span>
                     <span className="min-w-0 flex-1 text-ink-2">
                       {s.headline.filing.pdf_url ? (
@@ -44,7 +44,7 @@ export function RoutineDrawer({
                         cleanSubject(s.headline.filing.subject)
                       )}
                     </span>
-                    <span className="shrink-0 text-ink-2">{ago(s.latest_at, now)}</span>
+                    <span className="shrink-0 text-ink-2">{when(s.latest_at, now)}</span>
                   </li>
                 ))}
               </ul>
