@@ -391,3 +391,57 @@ def test_judge_evidence_total_budget():
         block = user.split(f"=== {s.id}: t ===\n")[1].split("\n\n=== ")[0]
         assert len(block) <= JUDGE_EVIDENCE_CHARS // 3 == 66_666
     assert len(user) <= JUDGE_EVIDENCE_CHARS + 2_000
+
+
+def test_segment_promise_judged_not_computed():
+    q = {"Sep 2026": {"Sales": 100.0, "Operating Profit": 20.0}}
+    seg = promise(
+        1, "PERSISTENT-T2", "Q1 FY27", kind="quantitative", metric="ebitda_margin",
+        target_low=15, unit="%", horizon="Q2 FY27",
+        citation=Citation(source_id="PERSISTENT-T2", page=1, quote="we expect segment margin of 15% in the quarter"),
+    )  # fmt: skip
+    row = build_ledger(FakeRouter({"judgements": []}), [seg], sources(), q, {}).rows[0]
+    assert row.method == "judged"
+    plain = seg.model_copy(
+        update={
+            "citation": seg.citation.model_copy(
+                update={"quote": "we expect margin of 15% in the quarter"}
+            )
+        }
+    )
+    assert build_ledger(FakeRouter({"judgements": []}), [plain], sources(), q, {}).rows[0].method == "computed"  # fmt: skip
+
+
+def _kept(status="kept", **kw):
+    p = promise(1, "PERSISTENT-T2", "Q1 FY27", **kw)
+    j = {"status": status, "evidence_quote": REAL_T1, "evidence_source": "PERSISTENT-T1", "rationale": "r"}  # fmt: skip
+    return build_ledger(FakeRouter(judge({p.id: j})), [p], sources(), {}, {}).rows[0]
+
+
+def _cit(q):
+    return Citation(source_id="PERSISTENT-T2", page=1, quote=q)
+
+
+@pytest.mark.parametrize(
+    "q", ["we target a margin of 25% by FY30", "our long-term margin goal is 25%"]
+)
+def test_long_horizon_kept_becomes_pending(q):
+    row = _kept(citation=_cit(q))
+    assert row.status == "pending" and row.evidence is None
+    assert row.rationale == "Target not yet due — tracking is not delivery"
+    assert _kept("partly", citation=_cit(q)).status == "pending"
+
+
+def test_long_horizon_missed_stays_missed():
+    assert _kept("missed", citation=_cit("we target a margin of 25% by FY30")).status == "missed"
+
+
+def test_future_horizon_pending_past_horizon_kept():
+    assert _kept(horizon="Q3 FY27").status == "pending"
+    assert _kept(horizon="Q1 FY27").status == "kept"
+
+
+def test_same_metric_period_sentence():
+    from finn.research.ledger import SYSTEM
+
+    assert "The evidence must concern the same metric and the same period as the promise; a number for a different quarter or year is not evidence for this promise." in SYSTEM  # fmt: skip

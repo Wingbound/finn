@@ -5,6 +5,7 @@ from __future__ import annotations
 import re
 from typing import Literal
 
+from finn.enrich.grounding import normalize
 from finn.llm.providers import LLMError
 from finn.models import Actual, Citation, Ledger, LedgerRow, Promise, Source, Status
 from finn.research.cite import locate, tagged_text
@@ -92,7 +93,17 @@ def _fmt(x: float) -> str:
     return f"{x:g}"
 
 
+_SEGMENT = re.compile(r"segment|division|vertical|business unit|subsidiary")
+_LONG = re.compile(
+    r"long[- ]term|medium[- ]term|aspiration|over the next few years"
+    r"|\bfy\s?(?:20)?(?:28|29|30|31|32)\b|\b20(?:28|29|30|31|32)\b"
+)
+_NOT_DUE = "Target not yet due — tracking is not delivery"
+
+
 def _grade(p: Promise, quarters: dict, annual: dict) -> tuple[Status, Actual | None, str] | None:
+    if _SEGMENT.search(normalize(p.citation.quote)):
+        return None
     if (
         p.kind != "quantitative"
         or p.metric not in _COMPUTED
@@ -169,6 +180,8 @@ time if it had one. partly = later evidence shows partial delivery. missed = lat
 shows it was not achieved, was cut or lowered, or slipped past its stated time. \
 dropped = management stopped mentioning it in the later calls. \
 pending = not yet due, or no later evidence of the outcome.
+The evidence must concern the same metric and the same period as the promise; a number for a \
+different quarter or year is not evidence for this promise.
 Restating, reaffirming or repeating the same target is NOT evidence of delivery: use pending. \
 The evidence quote must show the outcome, not the promise being repeated.
 Rules: evidence_quote must be copied exactly, word for word, from the evidence block, at least \
@@ -237,8 +250,22 @@ def _judge_group(
     ids = {p.id for p in promises}
     for raw in items if isinstance(items, list) else []:
         if isinstance(raw, dict) and raw.get("id") in ids:
-            out[raw["id"]] = _judge_one(raw, later)
+            p = next(p for p in promises if p.id == raw["id"])
+            out[p.id] = _not_yet_due(p, _judge_one(raw, later), later[-1].quarter)
     return out
+
+
+def _not_yet_due(p: Promise, verdict: tuple, newest: str | None) -> tuple:
+    status = verdict[0]
+    if status not in ("kept", "partly"):
+        return verdict
+    long_term = _LONG.search(normalize(p.citation.quote)) is not None
+    hz, nk = parse_horizon(p.horizon, p.made_in), _qkey(newest)
+    future = False
+    if hz and nk:
+        k = _qkey(hz[1]) if hz[0] == "quarter" else (int(hz[1][2:]), 4)
+        future = k is not None and k > nk
+    return ("pending", None, _NOT_DUE) if long_term or future else verdict
 
 
 def build_ledger(

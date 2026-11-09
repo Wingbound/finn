@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import logging
+import re
 import typing
 
 from finn.enrich.grounding import normalize, numbers_grounded
@@ -23,6 +24,17 @@ METRICS = {
     "other",
 }
 UNITS = {"%", "cr", "x", "usd_mn", "usd_bn"}
+
+_CUES = re.compile(
+    r"\b(?:expect|will|shall|would|target|guid|aim|plan|intend|aspir|anticipat|commit"
+    r"|endeavou?r)|\b(?:outlook|going forward|on track|by fy|next|upcoming|should|likely"
+    r"|confident|look to|looking to|look forward)\b"
+)
+
+
+def _forward_looking(quote: str) -> bool:
+    return _CUES.search(normalize(quote)) is not None
+
 
 SYSTEM = """You extract management guidance from an earnings-call transcript for an investor.
 The transcript has page markers like [[p3]].
@@ -83,6 +95,8 @@ def extract_promises(router, source: Source, guard: dict | None = None) -> list[
         hint = hint if isinstance(hint, int) and not isinstance(hint, bool) else None
         cite = locate(quote, source, hint)
         if cite is None:
+            continue
+        if not _forward_looking(cite.quote):
             continue
         key = normalize(cite.quote)
         if key in seen:

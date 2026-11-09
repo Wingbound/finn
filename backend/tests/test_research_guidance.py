@@ -1,9 +1,13 @@
 from finn.llm.providers import LLMError
+from finn.models import Citation
 from finn.research.guidance import extract_promises
 from tests.fakes import FakeRouter
 from tests.test_research_cite import REAL, t1
 
-TAX = "Effective tax rate for the quarter came in at 22.5%, same as last quarter."
+TAX = (
+    "Over the next two quarters, we expect an incremental amount ranging between USD 25 to 30 "
+    "million to be incurred towards the Nagarro transaction."
+)
 
 
 def item(quote, page=1, **kw):
@@ -51,14 +55,14 @@ def test_grounded_target_kept():
                 TAX,
                 kind="quantitative",
                 metric="other",
-                target_low=22.5,
+                target_low=25,
                 unit="%",
                 horizon="Q3 FY27",
             )
         ]
     )
     p = out[0]
-    assert p.kind == "quantitative" and p.target_low == 22.5 and p.unit == "%"
+    assert p.kind == "quantitative" and p.target_low == 25 and p.unit == "%"
     assert p.horizon == "Q3 FY27" and p.citation.page == 9
 
 
@@ -101,7 +105,7 @@ def test_prompt_header_and_task():
 
 
 def test_kind_follows_targets():
-    q = run([item(TAX, kind="qualitative", target_low=22.5, unit="%")])[0]
+    q = run([item(TAX, kind="qualitative", target_low=25, unit="%")])[0]
     assert q.kind == "quantitative"
     q = run([item(TAX, kind="quantitative", unit="%")])[0]
     assert q.kind == "qualitative" and q.unit is None
@@ -116,3 +120,23 @@ def test_system_prompt_forward_looking_only():
     extract_promises(r, t1())
     assert "forward-looking" in r.calls[0][1] and r is not None
     assert "Exclude statements of current or past fact" in SYSTEM
+
+
+def _quote_in_t1(sentence):
+    from finn.research.cite import locate
+
+    return locate(sentence, t1(), None)
+
+
+def test_future_cue_required(monkeypatch):
+    import finn.research.guidance as g
+
+    sents = {
+        "past": "Segment profitability stood at ₹ 272 million, translating to a margin of 6.7%.",
+        "cond": "If Vivo comes in, then it's a very major trigger.",
+        "expect": "We expect margins to improve over the coming quarters.",
+        "track": "we remain on track to reach the stated margin goal.",
+    }
+    monkeypatch.setattr(g, "locate", lambda q, s, h: Citation(source_id=s.id, page=1, quote=q))
+    out = g.extract_promises(FakeRouter({"promises": [item(q) for q in sents.values()]}), t1())
+    assert [p.citation.quote for p in out] == [sents["expect"], sents["track"]]
