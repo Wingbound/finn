@@ -19,6 +19,14 @@ const SHOTS: { name: string; path: string; digest?: string; prep?: (p: import("@
   { name: "today-empty", path: "/", digest: "digest-empty.json" },
   { name: "alerts", path: "/alerts" },
   {
+    name: "research",
+    path: "/research",
+    prep: async (p) => {
+      await p.getByLabel("Search a company or NSE symbol").fill("pi");
+      await p.waitForTimeout(800);
+    },
+  },
+  {
     name: "rules",
     path: "/alerts",
     prep: async (p) => {

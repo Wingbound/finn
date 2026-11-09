@@ -16,6 +16,7 @@ export interface MockOptions {
 
 /** Serves every API route from tests/fixtures so e2e runs need no backend. */
 export async function mockApi(page: Page, opts: MockOptions = {}) {
+  const built = new Set<string>(); // symbols the mocked build endpoint has "saved"
   await page.route(`${API}/**`, async (route: Route) => {
     const req = route.request();
     const url = new URL(req.url());
@@ -43,6 +44,7 @@ export async function mockApi(page: Page, opts: MockOptions = {}) {
     let m = path.match(/^\/research\/([^/]+)\/build$/);
     if (m) {
       const sse = fixture("build-BAJFINANCE.sse").replaceAll("BAJFINANCE", m[1] as string);
+      built.add(m[1] as string);
       return route.fulfill({ status: 200, contentType: "text/event-stream", body: sse });
     }
     m = path.match(/^\/research\/([^/]+)\/source\/([^/]+)\/(\d+)$/);
@@ -56,6 +58,10 @@ export async function mockApi(page: Page, opts: MockOptions = {}) {
     m = path.match(/^\/research\/([^/]+)$/);
     if (m) {
       const sym = m[1] as string;
+      if (built.has(sym)) {
+        const body = fixture("dossier-BAJFINANCE.json").replaceAll("BAJFINANCE", sym);
+        return route.fulfill({ status: 200, contentType: "application/json", body });
+      }
       if (opts.missingDossiers?.includes(sym)) return notFound("not built");
       try {
         return ok(`dossier-${sym}.json`);
