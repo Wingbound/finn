@@ -6,13 +6,11 @@ requires-python = ">=3.12"
 dependencies = [
     "fastapi>=0.162.2",
     "httpx>=0.28.1",
-    "pandas>=3.1.1",
     "pydantic>=2.14.3",
     "pydantic-settings>=2.16.2",
     "pypdf>=7.0.0",
     "pyyaml>=6.0.3",
     "uvicorn[standard]>=0.54.0",
-    "yfinance>=1.8.0",
 ]
 
 [build-system]
@@ -31,7 +29,15 @@ filterwarnings = ["ignore:Using `httpx` with `starlette.testclient`"]
 [tool.ruff]
 line-length = 100
 
+[tool.uv]
+# The API (what Vercel installs) never needs prices tooling; refresh jobs and tests do.
+default-groups = ["dev", "refresh"]
+
 [dependency-groups]
+refresh = [
+    "pandas>=3.1.1",
+    "yfinance>=1.8.0",
+]
 dev = [
     "pytest>=9.2.0",
     "respx>=0.23.1",

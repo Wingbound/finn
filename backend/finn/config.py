@@ -1,17 +1,19 @@
+import os
 from datetime import date
 from functools import lru_cache
 from pathlib import Path
-from typing import Literal
+from typing import Annotated, Literal
 
-from pydantic import model_validator
-from pydantic_settings import BaseSettings, SettingsConfigDict
+from pydantic import SecretStr, field_validator, model_validator
+from pydantic_settings import BaseSettings, NoDecode, SettingsConfigDict
 
 
 class Settings(BaseSettings):
     model_config = SettingsConfigDict(env_file=".env", extra="ignore")
 
-    gemini_api_key: str = ""
-    groq_api_key: str = ""
+    # Secret: never shown by repr() or a model dump; read with api_key().
+    gemini_api_key: SecretStr = SecretStr("")
+    groq_api_key: SecretStr = SecretStr("")
     # Model IDs, each overridable via env (FINN_MODEL_<TASK>). Verified against each
     # provider's list-models endpoint on 2026-11-09 (Groq has retired its Llama models).
     # gpt-oss-120b over -20b: 91.3% vs 85.6% on the classification eval (docs/EVALS.md).
@@ -28,13 +30,35 @@ class Settings(BaseSettings):
     db_path: Path | None = None
     # Committed snapshot the API copies into an empty store on startup (env SEED_PATH).
     seed_path: Path = Path(__file__).resolve().parents[1] / "seed" / "finn.sqlite"
-    allowed_origins: list[str] = ["*"]
+    # Env ALLOWED_ORIGINS: a JSON list or "https://a.app, http://localhost:3000".
+    allowed_origins: Annotated[list[str], NoDecode] = ["*"]
+
+    @field_validator("allowed_origins", mode="before")
+    @classmethod
+    def _origins(cls, v: object) -> object:
+        if isinstance(v, str):
+            v = v.strip()
+            if v.startswith("["):
+                import json
+
+                return json.loads(v)
+            return [o.strip() for o in v.split(",") if o.strip()]
+        return v
 
     @model_validator(mode="after")
     def _default_db_path(self) -> "Settings":
+        # Vercel's function filesystem is read-only except /tmp.
+        explicit = {"data_dir", "db_path"} & self.model_fields_set
+        if os.environ.get("VERCEL") and not explicit:
+            self.data_dir = Path("/tmp/finn")
         if self.db_path is None:
             self.db_path = self.data_dir / "finn.sqlite"
         return self
+
+    def api_key(self, attr: str) -> str:
+        """The plain value of a provider key field ("gemini_api_key" or "groq_api_key")."""
+        value = getattr(self, attr)
+        return value.get_secret_value() if isinstance(value, SecretStr) else str(value or "")
 
     @property
     def llm_cache_path(self) -> Path:

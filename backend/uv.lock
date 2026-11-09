@@ -360,16 +360,15 @@ wheels = [
 name = "finn"
 version = "0.1.0"
 source = { editable = "." }
+default-groups = ["dev", "refresh"]
 dependencies = [
     { name = "fastapi" },
     { name = "httpx" },
-    { name = "pandas" },
     { name = "pydantic" },
     { name = "pydantic-settings" },
     { name = "pypdf" },
     { name = "pyyaml" },
     { name = "uvicorn", extra = ["standard"] },
-    { name = "yfinance" },
 ]
 
 [package.dev-dependencies]
@@ -378,18 +377,20 @@ dev = [
     { name = "respx" },
     { name = "ruff" },
 ]
+refresh = [
+    { name = "pandas" },
+    { name = "yfinance" },
+]
 
 [package.metadata]
 requires-dist = [
     { name = "fastapi", specifier = ">=0.162.2" },
     { name = "httpx", specifier = ">=0.28.1" },
-    { name = "pandas", specifier = ">=3.1.1" },
     { name = "pydantic", specifier = ">=2.14.3" },
     { name = "pydantic-settings", specifier = ">=2.16.2" },
     { name = "pypdf", specifier = ">=7.0.0" },
     { name = "pyyaml", specifier = ">=6.0.3" },
     { name = "uvicorn", extras = ["standard"], specifier = ">=0.54.0" },
-    { name = "yfinance", specifier = ">=1.8.0" },
 ]
 
 [package.metadata.requires-dev]
@@ -397,6 +398,10 @@ dev = [
     { name = "pytest", specifier = ">=9.2.0" },
     { name = "respx", specifier = ">=0.23.1" },
     { name = "ruff", specifier = ">=0.17.4" },
+]
+refresh = [
+    { name = "pandas", specifier = ">=3.1.1" },
+    { name = "yfinance", specifier = ">=1.8.0" },
 ]
 
 [[package]]

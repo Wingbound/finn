@@ -109,4 +109,4 @@ M4 (unit-aware numbers), the rest of M5 (name-near-change-term proximity), M7 (c
 - At the end, run `cd backend && uv run pytest -q`, then `uv run ruff check . && uv run ruff format --check .`.
 - Do NOT run live refresh or live eval.
 - Commit in logical commits (for example C1, I1, I2+M-guards, notes/M1-M3, docs), each message ending with `Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>`.
-- Write your report to `/home/snig/Desktop/Sem 9/Placement CV/ENAM/finn/.superpowers/sdd/2026-11-09-plan2-push-enrichment/final-fix-report.md`, listing per item what changed, the covering tests, and the commands with their output.
+- Write your report to `finn/.superpowers/sdd/2026-11-09-plan2-push-enrichment/final-fix-report.md`, listing per item what changed, the covering tests, and the commands with their output.

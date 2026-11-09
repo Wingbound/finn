@@ -1,0 +1,67 @@
+# Daily snapshot refresh: NSE filings, EOD prices, classification and enrichment, committed
+# as backend/seed/finn.sqlite. Vercel redeploys the API from the new commit.
+# Keys come from repository secrets (Settings -> Secrets and variables -> Actions).
+name: Refresh snapshot
+
+on:
+  schedule:
+    - cron: "30 0 * * *" # 06:00 IST, before the market opens
+  workflow_dispatch:
+
+concurrency:
+  group: refresh
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    defaults:
+      run:
+        working-directory: backend
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: astral-sh/setup-uv@v10
+        with:
+          enable-cache: true
+
+      - name: Install
+        run: uv sync --frozen
+
+      - name: Refresh
+        id: refresh
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
+        run: |
+          set +e
+          uv run python scripts/refresh.py --days 3 --out seed/finn.sqlite
+          code=$?
+          echo "code=$code" >> "$GITHUB_OUTPUT"
+          if [ "$code" -eq 2 ]; then
+            echo "::error::Nothing was ingested (NSE and Yahoo both failed); the snapshot is unchanged."
+            exit 1
+          fi
+          if [ "$code" -eq 1 ]; then
+            echo "::warning::Partial refresh; see the summary above."
+          fi
+          exit 0
+
+      - name: Compact and check size
+        run: uv run python scripts/compact_seed.py seed/finn.sqlite --max-mb 20
+
+      - name: Commit if changed
+        run: |
+          if git diff --quiet -- seed/finn.sqlite; then
+            echo "No change to the snapshot."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add seed/finn.sqlite
+          git commit -m "Refresh snapshot (exit ${{ steps.refresh.outputs.code }})"
+          git push
