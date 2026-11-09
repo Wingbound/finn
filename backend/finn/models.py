@@ -90,6 +90,19 @@ class PersonChange(BaseModel):
     source_seq_id: str
 
 
+class Fact(BaseModel):
+    label: str
+    value: str
+
+
+class Brief(BaseModel):
+    one_liner: str
+    facts: list[Fact] = []
+    quote: str | None = None
+    by: Literal["llm", "nse_summary"]
+    source_seq_id: str
+
+
 class Story(BaseModel):
     id: str
     symbol: str
@@ -103,6 +116,7 @@ class Story(BaseModel):
     latest_at: datetime
     results: ResultsCard | None = None
     people: list[PersonChange] = Field(default_factory=list)
+    brief: Brief | None = None
 
 
 class SymbolOverride(BaseModel):

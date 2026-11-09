@@ -11,6 +11,7 @@ from finn.classify import default_classification
 from finn.classify.cluster import cluster
 from finn.classify.materiality import score_filing
 from finn.classify.rules import classify_rules
+from finn.enrich.brief import attach_briefs
 from finn.enrich.people import attach_people
 from finn.enrich.results import card_for
 from finn.models import Category, Classification, Filing, ResultsCard, ScoredFiling, Story
@@ -105,6 +106,7 @@ def build_digest(
     visible = shown + [st for v in routine.values() for st in v]
     attach_results(conn, visible)
     attach_people(conn, visible)
+    attach_briefs(conn, visible)
 
     latest = db.latest_filed_at(conn, symbols)
     return {
