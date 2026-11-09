@@ -84,7 +84,7 @@ Entirely ours. Experiment, mobile-first, with a point of view on *how* an invest
 
 | Source | Status | Notes / gotchas |
 |---|---|---|
-| NSE `https://www.nseindia.com/api/corporate-announcements?index=equities&symbol=TCS` | ✅ works | Returned 3,384 TCS filings. Fields: `symbol, sm_name, desc` (NSE's own category), `attchmntText` (one-line subject), `attchmntFile` (PDF on nsearchives), `an_dt`, `sort_date`, `seq_id`, `smIndustry`, `hasXbrl`. Homepage returns 403 to curl, but the API answered with browser-like headers + Referer. Cloud IPs may be blocked; to be tested from HF Spaces. |
+| NSE `https://www.nseindia.com/api/corporate-announcements?index=equities&symbol=TCS` | ✅ works | Returned 3,384 TCS filings. Fields: `symbol, sm_name, desc` (NSE's own category), `attchmntText` (one-line subject), `attchmntFile` (PDF on nsearchives), `an_dt`, `sort_date`, `seq_id`, `smIndustry`, `hasXbrl`. Homepage returns 403 to curl, but the API answered with browser-like headers + Referer. Cloud IPs may be blocked; the scheduled refresh tests this from GitHub's runners. |
 | BSE `api.bseindia.com/BseIndiaAPI/api/AnnSubCategoryGetData` | ❌ Access Denied | Not used for filings. BSE-hosted PDFs (linked from screener) still to be verified. |
 | screener.in `/company/<SYMBOL>/consolidated/` | ✅ works | Sections `#quarters #profit-loss #balance-sheet #cash-flow #ratios #shareholding #documents`. Documents list Annual Reports (TCS: 2013–2026) and Concalls (Transcript / PPT / REC links, mostly BSE-hosted PDFs). |
 | Yahoo chart API (raw) | ⚠️ 429 | `yfinance` (cookie + crumb) to be verified; fallback needed (NSE historical endpoint or another EOD source). |
@@ -188,10 +188,10 @@ Noise floor: **Critical ≥ 75 · Important ≥ 45 · Everything**.
   - Rules first (free).
   - Groq `openai/gpt-oss-120b`, batched 20 per call, for ambiguous classification and one-liners.
   - Gemini 3.5 Flash-Lite (3.1 Flash-Lite fallback) for transcript extraction; results numbers come from NSE XBRL with no model.
-  - The same Flash-Lite route for ledger judgment and synthesis; a ledger verdict counts only with a verbatim quote from a later call (Pro has no free tier; 3.8 Flash was unreliable on it).
+  - Gemini 3.5 Flash (falling back to 3.5 and 3.1 Flash-Lite) for ledger judgment and synthesis. A ledger verdict counts only with a verbatim quote from a later call, and three code checks (period, restated target, figure below target) can only downgrade it. Pro has no free tier, and 3.8 Flash was unreliable on it.
 - **Efficiency:** content-hash caching of every document and LLM call; every call logged in a per-call cost ledger shown in the UI.
 - **Arithmetic is never done by the LLM.**
-- **Stack:** FastAPI + SQLite on Hugging Face Spaces (Docker); Next.js PWA on Vercel.
+- **Stack:** FastAPI + SQLite and a Next.js PWA, both on Vercel. HF Docker Spaces now need PRO, so the API runs as Vercel Python functions over the committed snapshot. A daily GitHub Actions job refreshes the snapshot.
 
 ## 8. Build & run (filled in as the build progresses)
 
@@ -211,13 +211,14 @@ npm install
 NEXT_PUBLIC_API_URL=http://localhost:8000 npm run dev
 ```
 
-Deploy:
-- **Backend:** Docker Space on Hugging Face, port 7860, with keys set as Space secrets.
-- **Frontend:** Vercel, with env `NEXT_PUBLIC_API_URL` set to the Space URL.
+Deploy (both on Vercel, imported from the GitHub repo):
+- **Backend:** Vercel project with Root Directory `backend` (FastAPI preset, entrypoint `index.py`). Env: `GEMINI_API_KEY`, `GROQ_API_KEY` and `ALLOWED_ORIGINS` (the frontend URL). The store lives in `/tmp/finn`, seeded from the committed snapshot on first request.
+- **Frontend:** Vercel project with Root Directory `frontend` (Next.js). Env: `NEXT_PUBLIC_API_URL` = the backend URL.
+- **Refresh:** `.github/workflows/refresh.yml`, daily at 06:00 IST, with the same two keys as repository secrets.
 
 ## 9. Submission checklist (due Sun 15 Nov 2026)
 
-- [ ] **Mobile-first prototype link.** Deployed and easy to try on a phone. Test on a real phone first, and check that the first load works after the Space has been idle.
+- [ ] **Mobile-first prototype link.** Deployed and easy to try on a phone. Test on a real phone first, and check that the first load works after the API has been idle (a cold start).
 - [ ] **GitHub repository** (public), with a README containing the live link, architecture, eval and cost numbers, and how to run.
 - [ ] **AI build history.** Claude Code session exports (`ai-history/`, redacted, reviewed by me) and/or share links for any other LLM chats used.
 - [ ] **Covering email writeup**, short, covering:

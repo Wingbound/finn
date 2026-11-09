@@ -186,4 +186,4 @@ Everything the reviewer triaged STAY-DEFERRED, plus:
 - `cd backend && uv run pytest -q` (full), `uv run ruff check .` and `uv run ruff format --check .`.
 - Logical commits (C1, C2, I1–I2, I3, I4–I5, I6–I8, minors, docs), each message ending with `Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>`.
 - No network and no live builds. Never read `backend/.env`.
-- Report to `/home/snig/Desktop/Sem 9/Placement CV/ENAM/finn/.superpowers/sdd/2026-11-09-plan3-pull-research/final-fix-report.md`, per item, with the covering tests, commands and pasted output lines.
+- Report to `finn/.superpowers/sdd/2026-11-09-plan3-pull-research/final-fix-report.md`, per item, with the covering tests, commands and pasted output lines.
