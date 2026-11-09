@@ -222,3 +222,33 @@ class Source(BaseModel):
     quarter: str | None
     url: str
     pages: list[str]
+
+
+class Citation(BaseModel):
+    source_id: str
+    page: int  # 1-based
+    quote: str
+
+
+class Promise(BaseModel):
+    id: str  # f"{source_id}-{n}"
+    citation: Citation
+    topic: str
+    kind: Literal["quantitative", "qualitative"]
+    metric: (
+        Literal[
+            "revenue_growth",
+            "ebitda_margin",
+            "pat_growth",
+            "capex",
+            "order_book",
+            "volume_growth",
+            "other",
+        ]
+        | None
+    ) = None
+    target_low: float | None = None
+    target_high: float | None = None
+    unit: Literal["%", "cr", "x", "usd_mn", "usd_bn"] | None = None
+    horizon: str | None = None  # as said: "Q3 FY27", "FY27", "next year"
+    made_in: str  # the source's quarter

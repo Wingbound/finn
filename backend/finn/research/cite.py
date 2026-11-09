@@ -1,0 +1,41 @@
+"""Citation guard: a quote is kept only if it is verbatim in the source."""
+
+from __future__ import annotations
+
+from finn.enrich.grounding import phrase_in_text
+from finn.models import Citation, Source
+
+MIN_QUOTE_WORDS = 6
+
+
+def locate(quote: str, source: Source, hint_page: int | None) -> Citation | None:
+    """Find quote verbatim (after normalization) in source. Tries the hint page, then every
+    page in order, then adjacent page pairs (a quote straddling a page break, cited to the
+    first page of the pair). Returns None if nowhere or under 6 words."""
+    q = quote.strip()
+    pages = source.pages
+    order = list(range(len(pages)))
+    if hint_page is not None and 1 <= hint_page <= len(pages):
+        order.remove(hint_page - 1)
+        order.insert(0, hint_page - 1)
+    for i in order:
+        if phrase_in_text(q, pages[i], min_words=MIN_QUOTE_WORDS):
+            return Citation(source_id=source.id, page=i + 1, quote=q)
+    for i in range(len(pages) - 1):
+        if phrase_in_text(q, pages[i] + " " + pages[i + 1], min_words=MIN_QUOTE_WORDS):
+            return Citation(source_id=source.id, page=i + 1, quote=q)
+    return None
+
+
+def tagged_text(source: Source, max_chars: int = 90_000) -> str:
+    """'[[p1]]\\n...\\n[[p2]]\\n...', truncated at a page boundary."""
+    out: list[str] = []
+    used = 0
+    for n, page in enumerate(source.pages, 1):
+        chunk = f"[[p{n}]]\n{page.strip()}"
+        cost = len(chunk) + (2 if out else 0)
+        if used + cost > max_chars:
+            break
+        out.append(chunk)
+        used += cost
+    return "\n\n".join(out)
