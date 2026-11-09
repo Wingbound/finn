@@ -465,6 +465,16 @@ def test_results_endpoint_404(client):
     assert r.json() == {"detail": "no results on file"}
 
 
+def test_results_endpoint_corrupt_row_is_404(results_client, tmp_path):
+    conn = db.connect(tmp_path / "api.sqlite")
+    conn.execute("UPDATE financials SET facts_json = '{not json'")
+    conn.commit()
+    conn.close()
+    r = results_client.get("/results/tatasteel")
+    assert r.status_code == 404
+    assert r.json() == {"detail": "no results on file"}
+
+
 def test_digest_story_serialises_results(results_client):
     body = results_client.post("/digest", json={"hours": 48, "floor": "everything"}).json()
     stories = [s for s in body["stories"] if s["symbol"] == "TATASTEEL"]

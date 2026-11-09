@@ -68,8 +68,20 @@ def test_results_story_gets_card(conn):
 
 
 def test_card_not_attached_when_dates_far_apart(conn):
-    _seed(conn, datetime(2026, 12, 20, 13, 6, 33, tzinfo=IST))
-    (story,) = _stories(_digest(conn, datetime(2026, 12, 20)))
+    _seed(conn, datetime(2027, 1, 15, 13, 6, 33, tzinfo=IST))
+    (story,) = _stories(_digest(conn, datetime(2027, 1, 15)))
+    assert story.category == "results" and story.results is None
+
+
+def test_same_quarter_story_45_days_later_gets_card(conn):
+    _seed(conn, datetime(2026, 11, 26, 13, 6, 33, tzinfo=IST))
+    (story,) = _stories(_digest(conn, datetime(2026, 11, 26)))
+    assert story.results is not None and story.results.period_label == "Q2 FY27"
+
+
+def test_story_60_days_later_gets_no_card(conn):
+    _seed(conn, datetime(2027, 1, 6, 13, 6, 33, tzinfo=IST))
+    (story,) = _stories(_digest(conn, datetime(2027, 1, 6)))
     assert story.category == "results" and story.results is None
 
 

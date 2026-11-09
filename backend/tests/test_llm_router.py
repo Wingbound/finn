@@ -412,6 +412,20 @@ def test_exhausted_provider_is_skipped_on_later_calls(conn, settings, no_sleep):
 
 
 @respx.mock
+def test_quota_on_one_model_keeps_sibling_model_usable(conn, settings, monkeypatch):
+    monkeypatch.setattr(
+        router_mod, "chain_for", lambda task, s: [("gemini", "model-a"), ("gemini", "model-b")]
+    )
+    url = "https://generativelanguage.googleapis.com/v1beta/models/{}:generateContent"
+    a = respx.post(url.format("model-a")).mock(return_value=quota_429())
+    b = respx.post(url.format("model-b")).mock(return_value=gemini_ok())
+    r = LLMRouter(conn, settings)
+    assert r.complete_json("classify", "s", "u") == {"a": 1}
+    assert r.complete_json("classify", "s", "other") == {"a": 1}
+    assert a.call_count == 1 and b.call_count == 2
+
+
+@respx.mock
 def test_exhausted_provider_returns_after_reset(conn, settings, monkeypatch):
     now = [1000.0]
     monkeypatch.setattr(router_mod, "_now", lambda: now[0])
