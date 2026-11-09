@@ -74,8 +74,9 @@ def test_tatasteel_q2_card():
     assert g["ebitda_margin"].yoy_bps == pytest.approx(94, abs=1)
     assert g["pat_margin"].qoq_bps == pytest.approx(173, abs=1)
     assert g["pat_margin"].yoy_bps == pytest.approx(23, abs=1)
-    assert any("exceptional item of ₹348.68 cr" in n for n in card.notes)
-    assert any("₹112.27 cr share of associates" in n for n in card.notes)
+    # XBRL sign convention: PBT = profit before exceptional items + ExceptionalItemsBeforeTax
+    assert "PBT includes an exceptional gain of ₹348.68 cr." in card.notes
+    assert "PAT includes ₹112.27 cr share of profit of associates and joint ventures." in card.notes
     assert not any("No QoQ" in n or "No YoY" in n for n in card.notes)
 
 
@@ -99,7 +100,11 @@ def test_bank_card_idfc():
     assert all(r.yoy_pct is None for r in card.metrics)
     assert card.compared_yoy is None
     assert any("No YoY comparison" in n for n in card.notes)
-    assert any("net interest income and pre-provision profit" in n for n in card.notes)
+    assert (
+        "Banks are shown on net interest income and pre-provision profit; EBITDA does not apply."
+        in card.notes
+    )
+    assert not any("exceptional" in n for n in card.notes)  # the fixture's item is 0
     assert card.margins == []
 
 
@@ -113,6 +118,58 @@ def test_nbfc_card_bajaj():
     assert all(r.qoq_pct is None and r.yoy_pct is None for r in card.metrics)
     assert card.compared_qoq is None
     assert any("No QoQ comparison" in n for n in card.notes)
+    assert (
+        "NBFCs are shown on net interest income and credit cost; EBITDA does not apply."
+        in card.notes
+    )
+
+
+def test_negative_exceptional_is_a_loss():
+    q = tata("2026-06-30")
+    assert q.facts["ExceptionalItemsBeforeTax"] == -3454800000.0
+    card = build_card(q, None, None, [])
+    assert "PBT includes an exceptional loss of ₹345.48 cr." in card.notes
+    assert not any("exceptional gain" in n for n in card.notes)
+
+
+def test_nbfc_exceptional_uses_gain_or_loss():
+    q = load("BAJFINANCE_2026-09-30_sa.xml").model_copy(deep=True)
+    q.facts["ExceptionalItemsBeforeTax"] = -1.5e9
+    card = build_card(q, None, None, [])
+    assert "PBT includes an exceptional loss of ₹150.00 cr." in card.notes
+
+
+@pytest.mark.parametrize(
+    ("value", "note"),
+    [
+        (-1.5e9, "PBT includes exceptional items of −₹150.00 cr."),
+        (2.5e9, "PBT includes exceptional items of ₹250.00 cr."),
+    ],
+)
+def test_bank_exceptional_note_is_neutral_and_signed(value, note):
+    q = load("IDFCFIRSTB_2026-09-30_sa.xml").model_copy(deep=True)
+    q.facts["ExceptionalItems"] = value
+    card = build_card(q, None, None, [])
+    assert note in card.notes
+    assert not any("gain" in n or "loss of" in n for n in card.notes)
+
+
+def test_negative_associates_share_is_a_loss():
+    q = tata("2026-09-30").model_copy(deep=True)
+    q.facts["ShareOfProfitLossOfAssociatesAndJointVenturesAccountedForUsingEquityMethod"] = -5e8
+    card = build_card(q, None, None, [])
+    assert "PAT includes a ₹50.00 cr share of loss of associates and joint ventures." in card.notes
+
+
+def test_format_mismatch_is_ignored():
+    cur = tata("2026-09-30")
+    prev = tata("2026-06-30").model_copy(update={"format": "nbfc"})
+    year_ago = tata("2025-09-30").model_copy(update={"format": "bank"})
+    card = build_card(cur, prev, year_ago, [])
+    assert card.compared_qoq is None and card.compared_yoy is None
+    assert all(r.qoq_pct is None and r.yoy_pct is None for r in card.metrics)
+    assert any("No QoQ comparison" in n for n in card.notes)
+    assert any("No YoY comparison" in n for n in card.notes)
 
 
 def test_missing_element_gives_none_row():

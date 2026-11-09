@@ -173,7 +173,10 @@ def _r(x: float | None, nd: int) -> float | None:
 
 
 def _usable(cur: QuarterFinancials, other: QuarterFinancials | None):
-    return other if other is not None and other.basis == cur.basis else None
+    """A comparison quarter only on the same basis and statement format as cur."""
+    if other is None or other.basis != cur.basis or other.format != cur.format:
+        return None
+    return other
 
 
 def build_card(
@@ -237,6 +240,23 @@ def _nonzero_crore(q: QuarterFinancials, name: str) -> float | None:
     return v / CRORE
 
 
+_BASIS_NOTES: dict[XbrlFormat, str] = {
+    "indas": (
+        "EBITDA is computed: revenue from operations minus operating "
+        "expenses (excludes other income)."
+    ),
+    "bank": (
+        "Banks are shown on net interest income and pre-provision profit; EBITDA does not apply."
+    ),
+    "nbfc": "NBFCs are shown on net interest income and credit cost; EBITDA does not apply.",
+}
+
+
+def _signed_crore(x: float) -> str:
+    """₹1,234.50 cr, or −₹1,234.50 cr with the minus sign before the rupee symbol."""
+    return f"{'−' if x < 0 else ''}₹{abs(x):,.2f} cr"
+
+
 def _notes(
     cur: QuarterFinancials,
     cv: dict[str, float | None],
@@ -245,28 +265,31 @@ def _notes(
     year_ago: QuarterFinancials | None,
     yv: dict[str, float | None],
 ) -> list[str]:
-    notes: list[str] = []
-    if cur.format == "indas":
-        notes.append(
-            "EBITDA is computed: revenue from operations minus operating "
-            "expenses (excludes other income)."
-        )
-    else:
-        notes.append(
-            "Lenders are shown on net interest income and pre-provision "
-            "profit; EBITDA does not apply."
-        )
+    notes: list[str] = [_BASIS_NOTES[cur.format]]
 
-    exc_name = "ExceptionalItems" if cur.format == "bank" else "ExceptionalItemsBeforeTax"
-    exc = _nonzero_crore(cur, exc_name)
-    if exc is not None:
-        notes.append(f"PBT includes an exceptional item of ₹{exc:,.2f} cr.")
+    if cur.format == "bank":
+        # The banking taxonomy's sign convention is not confirmed, so the note is neutral.
+        exc = _nonzero_crore(cur, "ExceptionalItems")
+        if exc is not None:
+            notes.append(f"PBT includes exceptional items of {_signed_crore(exc)}.")
+    else:
+        # Ind-AS and NBFC: PBT = ProfitBeforeExceptionalItemsAndTax + this item (+ = gain).
+        exc = _nonzero_crore(cur, "ExceptionalItemsBeforeTax")
+        if exc is not None:
+            kind = "gain" if exc > 0 else "loss"
+            notes.append(f"PBT includes an exceptional {kind} of ₹{abs(exc):,.2f} cr.")
     assoc = _nonzero_crore(
         cur,
         "ShareOfProfitLossOfAssociatesAndJointVenturesAccountedForUsingEquityMethod",
     )
-    if assoc is not None:
-        notes.append(f"PAT includes ₹{assoc:,.2f} cr share of associates and joint ventures.")
+    if assoc is not None and assoc > 0:
+        notes.append(
+            f"PAT includes ₹{assoc:,.2f} cr share of profit of associates and joint ventures."
+        )
+    elif assoc is not None:
+        notes.append(
+            f"PAT includes a ₹{abs(assoc):,.2f} cr share of loss of associates and joint ventures."
+        )
 
     cpat = cv.get(_PAT_KEY)
     for other, vals in ((prev, pv), (year_ago, yv)):
