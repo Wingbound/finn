@@ -68,8 +68,8 @@ screener.in ───────┘      │                └─ /research/{t
                                  ─► guidance extraction (cheap) ─► ledger + synthesis (strong) ─► grounding guard
 ```
 
-**Backend:** Python 3.12+, FastAPI, uv, SQLite (WAL), httpx, PyMuPDF, yfinance, APScheduler. Deployed as a Docker Space on HF (port 7860).
-**Frontend:** Next.js (App Router) + TypeScript + Tailwind, installable PWA (manifest + service worker), deployed on Vercel; `NEXT_PUBLIC_API_URL` points to the Space.
+**Backend:** Python 3.12+, FastAPI, uv, SQLite (WAL), httpx, PyMuPDF, yfinance, APScheduler. Deployed as Vercel Python functions serving a read-only snapshot (see Hosting below).
+**Frontend:** Next.js (App Router) + TypeScript + Tailwind, installable PWA (manifest + service worker), deployed on Vercel; `NEXT_PUBLIC_API_URL` points to the Vercel backend deployment.
 
 ### Model routing (verify current free-tier model IDs and limits at build time via each provider's list-models endpoint; never hard-code from memory)
 
@@ -94,8 +94,12 @@ screener.in ───────┘      │                └─ /research/{t
 - Hidden as noise: "Loss of Share Certificates", "Copy of Newspaper Publication", duplicate filings.
 - Noise floor thresholds: Critical ≥ 75, Important ≥ 45, Everything = all.
 
+### Hosting (2026-11-09)
+
+Docker Spaces on Hugging Face now need HF PRO, so the backend runs on Vercel Python functions instead. The deployed API is read-only over the committed SQLite snapshot. `scripts/refresh.py` runs out-of-band (locally or on a schedule), is the only code that touches NSE, Yahoo, screener or the LLMs, and its output replaces the snapshot.
+
 ### Robustness ("demo never breaks")
-Every external fetch is cached with an `as_of` timestamp. The Space boots from a **seeded SQLite snapshot** baked into the image, then refreshes on a schedule. If NSE/Yahoo block HF's IPs, a GitHub Actions cron (or a local `scripts/refresh.py`) ingests and pushes a fresh snapshot to the Space. **A reachability spike on Day 0 decides which path we take.**
+Every external fetch is cached with an `as_of` timestamp. The deployed API boots from the committed **seeded SQLite snapshot** and never fetches. A GitHub Actions cron (or a local `scripts/refresh.py`) ingests out-of-band and commits a fresh snapshot.
 
 ---
 
@@ -147,7 +151,7 @@ finn/
 - Gold set: 104 filings (AI-labelled, see EVALS.md) → `eval_classify.py`. Use superpowers:test-driven-development for rules, scoring and clustering.
 
 **Day 2 — Tue 10 Nov · Push enrichment + alerts**
-- Results extraction (Gemini PDF → JSON → Python math → cross-check against the screener quarterly table; flag mismatches).
+- Results from NSE XBRL, with the figures computed in Python and cross-checked against the screener quarterly table (`scripts/eval_results.py`; no LLM).
 - People enrichment, one-liners.
 - Price ingest + alert engine + `/rules` and `/alerts`.
 - `eval_results.py` over ~15 results filings.
@@ -165,7 +169,7 @@ finn/
 - PWA manifest.
 
 **Day 5 — Fri 13 Nov · Integrate + deploy**
-- HF Space (Docker, secrets) + Vercel.
+- Vercel (backend Python functions + frontend), secrets in Vercel env.
 - Playwright MCP at iPhone/Android viewports: screenshots, console errors, golden-path e2e.
 - Polish loading/empty/error states. Stretch features only if all of this is green.
 
@@ -217,8 +221,3 @@ Execution method: after approval, superpowers:writing-plans produces the task-le
 - Deployed app: Playwright MCP at 390×844, covering Today → card → Dig in → Ledger → citation, a rules change producing a new alert, and an unknown-ticker live build. No console errors. Cold start measured.
 - Manual check on a real phone (user) + PWA install.
 - Final `security-review`: no secrets in repo or git history.
-
-
-## Hosting (2026-11-09)
-
-Docker Spaces on Hugging Face now need HF PRO, so the backend runs on Vercel Python functions instead. The deployed API is read-only over the committed SQLite snapshot. `scripts/refresh.py` runs out-of-band (locally or on a schedule), is the only code that touches NSE, Yahoo, screener or the LLMs, and its output replaces the snapshot.

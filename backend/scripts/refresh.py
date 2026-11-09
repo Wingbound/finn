@@ -105,6 +105,8 @@ def refresh(conn: sqlite3.Connection, days: int = 30, use_llm: bool = True) -> d
             errors.append(f"prices: no bars for {', '.join(prices_missing)}")
 
     router = _router(conn, use_llm)
+    # Classify first: the enrichers select filings by their stored category.
+    classify = classify_pending(conn, router)
     since = now - timedelta(days=days)
     financials = {"fetched": 0, "skipped": 0, "failed": {}}
     enrich: dict[str, dict] = {}
@@ -136,7 +138,7 @@ def refresh(conn: sqlite3.Connection, days: int = 30, use_llm: bool = True) -> d
         "price_bars": len(bars),
         "price_symbols": len(priced),
         "prices_missing": prices_missing,
-        "classify": classify_pending(conn, router),
+        "classify": classify,
         "filings_total": _count(conn),
         "unclassified_left": _count(conn, "category IS NULL"),
         "financials": financials,

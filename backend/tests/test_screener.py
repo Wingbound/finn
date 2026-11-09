@@ -39,3 +39,20 @@ def test_parse_quarters_numbers_and_gaps():
         "Jun 2026": {"Sales": 1234.0, "Other Income": -17.0},
         "Sep 2026": {"Other Income": 5.0},
     }
+
+
+def test_parse_quarters_ignores_other_sections_of_a_full_page():
+    quarters = (FIX / "TATASTEEL_consolidated_quarters.html").read_text()
+    page = (
+        '<html><body><section id="top"><table><thead><tr><th></th><th>Mar 2019</th></tr>'
+        "</thead><tbody><tr><td>Sales</td><td>1</td></tr></tbody></table></section>"
+        + quarters
+        + '<section id="profit-loss"><table><thead><tr><th></th><th>Mar 2020</th>'
+        "<th>Mar 2021</th></tr></thead><tbody><tr><td>Sales</td><td>999</td><td>888</td></tr>"
+        "<tr><td>Net Profit</td><td>7</td><td>8</td></tr></tbody></table></section></body></html>"
+    )
+    q = parse_quarters(page)
+    assert q["Sep 2026"]["Sales"] == 65436.0
+    # (the real quarters table already has Mar 2025/Mar 2026 columns, so the decoys use older years)
+    assert not {"Mar 2019", "Mar 2020", "Mar 2021"} & set(q)
+    assert q["Mar 2025"]["Sales"] != 999.0 and 999.0 not in q["Sep 2026"].values()

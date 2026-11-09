@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import re
 from html.parser import HTMLParser
 
 import httpx
@@ -62,13 +63,30 @@ def _number(text: str) -> float | None:
         return None
 
 
+def _quarters_section(html: str) -> str:
+    """The <section id="quarters"> block of a full page; the input itself if there is none."""
+    m = re.search(r'<section\b[^>]*\bid="quarters"[^>]*>', html)
+    if m is None:
+        return html
+    end = html.find("</section>", m.end())
+    return html[m.start() : end if end != -1 else len(html)]
+
+
+def _first_table(html: str) -> str:
+    start = html.find("<table")
+    if start == -1:
+        return html
+    end = html.find("</table>", start)
+    return html[start : end + len("</table>") if end != -1 else len(html)]
+
+
 def parse_quarters(html: str) -> dict[str, dict[str, float]]:
     """Column header ("Sep 2026") -> row label -> value in INR crore.
 
     Skips "%" rows, the "Raw PDF" row and empty or non-numeric cells.
     """
     p = _TableParser()
-    p.feed(html)
+    p.feed(_first_table(_quarters_section(html)))
     cols = p.headers[1:]  # first <th> is the empty label column
     out: dict[str, dict[str, float]] = {c: {} for c in cols}
     for row in p.rows:

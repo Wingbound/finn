@@ -30,7 +30,7 @@ def no_sleep(monkeypatch):
 @pytest.fixture(autouse=True)
 def no_enrichment(monkeypatch):
     """Existing tests cover filings/prices/classify; the new stages are stubbed out here and
-    switched on (via `real_financials`) in the tests that exercise them."""
+    switched on (via `fin_env`) in the tests that exercise them."""
     monkeypatch.setattr(
         refresh_mod, "ingest_financials", lambda *a, **k: results_mod.FinancialsResult()
     )
@@ -312,6 +312,53 @@ def test_llm_stages_run_with_router_and_report_failures(conn, keyless, fin_env, 
     assert summary["enrich"]["briefs"]["done"] == 3
     assert "people: s1: bad" in summary["errors"] and "briefs: s2: worse" in summary["errors"]
     assert "results" in seen["subscribed"]
+
+
+def test_enrichers_see_filings_classified_in_the_same_run(conn, keyless, fin_env, monkeypatch):
+    from datetime import timedelta
+
+    from finn.enrich.people import enrich_people
+    from finn.models import Filing
+    from tests.fakes import FakeNSE, FakeRouter
+
+    url = "https://nsearchives.nseindia.com/corporate/new.pdf"
+    when = datetime.now(IST) - timedelta(hours=2)
+
+    def ingest(conn_, client, symbols, start, end):
+        db.upsert_filings(
+            conn_,
+            [
+                Filing(
+                    seq_id="NEW1",
+                    symbol="VOLTAS",
+                    company="Voltas Limited",
+                    nse_desc="Change in Director(s)",
+                    subject="Appointment of Mr. Jayant Balan as Managing Director",
+                    pdf_url=url,
+                    filed_at=when,
+                )
+            ],
+        )
+        return nse.IngestResult(added=1)
+
+    db.save_doc_text(conn, url, "Mr. Jayant Balan is appointed as Managing Director.")
+
+    class Router(FakeRouter):
+        def stats(self):
+            return {"calls": len(self.calls)}
+
+    router = Router(
+        {"people": [{"name": "Jayant Balan", "role": "Managing Director", "change": "appointed"}]}
+    )
+    monkeypatch.setattr(refresh_mod, "ingest_filings", ingest)
+    monkeypatch.setattr(refresh_mod, "enrich_people", enrich_people)
+    monkeypatch.setattr(refresh_mod, "_router", lambda conn_, use_llm: router)
+    monkeypatch.setattr(refresh_mod, "NSEClient", lambda: _Closing(FakeNSE({}, {})))
+    assert db.get_enrichments(conn, ["NEW1"], "people") == {}
+    summary = refresh(conn, use_llm=True)
+    assert summary["enrich"]["people"]["done"] == 1
+    saved = db.get_enrichments(conn, ["NEW1"], "people")
+    assert saved["NEW1"]["people"][0]["name"] == "Jayant Balan"
 
 
 class _StubRouter:

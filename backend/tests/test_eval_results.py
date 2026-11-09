@@ -1,3 +1,4 @@
+from finn.enrich.results import card_for
 from scripts import eval_results
 from scripts.eval_results import evaluate_offline, render
 
@@ -30,3 +31,26 @@ def test_render_has_table_rates_and_misses():
     assert "| symbol | basis | metric | ours | screener | diff % | match |" in out
     assert "skipped: basis mismatch" in out
     assert "TATASTEEL" in out
+
+
+def _cards():
+    conn = eval_results._fixture_conn()
+    return conn, {s: card_for(conn, s)[0] for s in ("TATASTEEL", "IDFCFIRSTB", "BAJFINANCE")}
+
+
+def test_pairs_reference_metrics_build_card_produces():
+    _conn, cards = _cards()
+    for sym, card in cards.items():
+        keys = {m.key for m in card.metrics}
+        if card.format == "indas":
+            keys.add("pbt+assoc")
+        assert {k for k, _ in eval_results.PAIRS[card.format]} <= keys, sym
+    assert {c.format for c in cards.values()} == {"indas", "bank", "nbfc"}
+
+
+def test_bank_compare_runs_when_basis_matches():
+    conn = eval_results._fixture_conn()
+    html = (eval_results.FIX / "screener" / "IDFCFIRSTB_consolidated_quarters.html").read_text()
+    rows = eval_results.compare(conn, "IDFCFIRSTB", "standalone", html)
+    assert {r.metric for r in rows} == {"interest_earned", "pbt", "pat"}
+    assert all(r.note != "missing value" and r.match is not None for r in rows)
