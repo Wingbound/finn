@@ -224,11 +224,68 @@ skipped rather than compared against the wrong basis. Only TATASTEEL is compared
 Match rate: 4/4 on the compared pairs. That is one symbol, so it says the method works, not
 how accurate the extraction is across the portfolio.
 
-### Live result
+### Live result (2026-11-09)
 
-Live run over the 18 portfolio symbols: pending (controller)
+`uv run python scripts/eval_results.py --db <refreshed snapshot>` compared all 18 portfolio
+symbols. Each symbol's latest card is Q2 FY27 (Sep 2026), except AMBER, whose Sep 2026
+integrated filing was not posted yet, so its Q1 FY27 card was compared. Every card was
+consolidated, matching screener's consolidated pages.
+
+| metric | pairs | matched |
+|---|---|---|
+| revenue (indas and NBFC) | 17 | 17 |
+| interest earned (bank) | 1 | 1 |
+| EBITDA (indas) | 16 | 14 |
+| PBT + associates (indas) | 16 | 16 |
+| PBT (bank, NBFC) | 2 | 2 |
+| PAT | 18 | 18 |
+| **all** | **70** | **68 (97.1%)** |
+
+**Both misses are a definition difference.** They are not extraction errors:
+
+| symbol | our EBITDA | screener "Operating Profit" | share of JV/associate result | ours + share |
+|---|---|---|---|---|
+| VOLTAS | 127.86 | 87 | −41.10 | 86.76 |
+| TRENT | 1,078.09 | 1,057 | −21.06 | 1,057.03 |
+
+- Screener nets a negative share of joint-venture results into expenses. For TATASTEEL, whose
+  share was positive (+112.27), screener's Operating Profit equals ours exactly.
+- FINN's EBITDA excludes equity-accounted JV and associate results, the usual definition of
+  operating profit.
+- The results card states the JV loss in its notes ("PAT includes a ₹41.10 cr share of loss
+  of associates and joint ventures"), so the reader sees it either way.
+
+With that convention accounted for, all 70 pairs agree within 1% or ₹1 cr.
+
+**The run also checked the revised-filing fix.** On the first live refresh, CGPOWER and
+IDFCFIRSTB lost their year-ago comparison. NSE had replaced their Sep 2025 filings with
+revisions (`broadcast_Date` null, `revised_Date` set), and the parser dropped those rows and
+fell back to the erroneous originals, whose "quarter" context spans six months. After the
+fix, both symbols carry all three quarters.
 
 ## 3. People and briefs
+
+### Live run (2026-11-09, 30-day backfill)
+
+Counts only. These outputs are not hand-checked against a labelled set.
+
+- **People.** 30 management-change filings: 25 yielded people, and 5 had no extractable text
+  (scanned or empty), recorded as "no text".
+  - 66 people kept after grounding. Every one has a role found in the filing.
+  - 24 carry a profile copied verbatim from the filing's Brief Profile.
+  - The rest are retirements, resignations, or appointments whose filing omits a profile.
+    The card shows less in those cases rather than inventing a bio.
+- **Briefs.** 41 eligible filings: 40 got an LLM brief that passed number grounding, and 1 had
+  no text and no NSE summary.
+  - Briefs carry 116 grounded key facts in total.
+  - 37 carry a verbatim supporting quote of 4 or more words.
+- **Cost and limits.** The backfill used about 167k tokens.
+  - It exhausted Groq's free daily cap of 200k tokens for gpt-oss-120b, including the eval runs
+    the same day.
+  - Groq answered 37 enrichment calls and Gemini 3.5 Flash-Lite answered 28 after the router
+    failed over.
+  - Total cost was $0.06 at list price, and $0 actually paid.
+  - A daily incremental refresh needs a handful of calls, well inside the free caps.
 
 ### Limits of the grounding guard
 
