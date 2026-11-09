@@ -42,26 +42,29 @@ def _fy_of(made_in: str) -> int | None:
     return k[0] if k else None
 
 
+_H_QTR = re.compile(r"q([1-4])\s*fy\s*(\d{2}|\d{4})")
+_H_FY = re.compile(r"(?:fy\s*|fiscal\s+(?:year\s+)?)(\d{2}|\d{4})")
+
+
 def parse_horizon(horizon: str | None, made_in: str) -> Horizon | None:
-    h = (horizon or "").strip()
-    if not h:
-        return None
-    m = _QTR.search(h)
+    """Resolve only when the whole phrase is an explicit label or a known relative phrase."""
+    low = re.sub(r"\s+", " ", (horizon or "").strip().lower())
+    low = re.sub(r"^(in|for|during) ", "", low)
+    m = _H_QTR.fullmatch(low)
     if m:
         return "quarter", f"Q{m.group(1)} FY{_yy(m.group(2)):02d}"
-    m = _FY.search(h)
+    m = _H_FY.fullmatch(low)
     if m:
         return "fy", f"FY{_yy(m.group(1)):02d}"
-    low = h.lower()
     k = _qkey(made_in)
     if k is None:
         return None
     yy, q = k
-    if re.search(r"\b(next|coming) quarter\b", low):
+    if low in ("next quarter", "coming quarter"):
         return ("quarter", f"Q{q + 1} FY{yy:02d}") if q < 4 else ("quarter", f"Q1 FY{yy + 1:02d}")
-    if re.search(r"\bnext (year|fiscal)\b", low):
+    if low in ("next year", "next fiscal", "next financial year"):
         return "fy", f"FY{(yy + 1) % 100:02d}"
-    if re.search(r"\b(this year|current year|this fiscal)\b", low) or low == "fy":
+    if low in ("this year", "current year", "this fiscal", "this financial year"):
         return "fy", f"FY{yy:02d}"
     return None
 
@@ -96,6 +99,7 @@ def _grade(p: Promise, quarters: dict, annual: dict) -> tuple[Status, Actual | N
         or p.metric not in _COMPUTED
         or p.unit != "%"
         or p.target_low is None
+        or p.target_low <= 0
     ):
         return None
     hz = parse_horizon(p.horizon, p.made_in)
@@ -111,8 +115,10 @@ def _grade(p: Promise, quarters: dict, annual: dict) -> tuple[Status, Actual | N
     if p.metric == "ebitda_margin":
         rev = _get(table, col, "Sales", "Revenue")
         op = _get(table, col, "Operating Profit", "Financing Profit")
-        if rev is None or op is None:
+        if col not in table:
             return "pending", None, ""
+        if rev is None or op is None:
+            return None
         if rev == 0:
             return None
         v = round(op / rev * 100, 2)
@@ -122,8 +128,10 @@ def _grade(p: Promise, quarters: dict, annual: dict) -> tuple[Status, Actual | N
     else:
         labels = ("Net Profit",) if p.metric == "pat_growth" else ("Sales", "Revenue")
         cur = _get(table, col, *labels)
-        if cur is None:
+        if col not in table:
             return "pending", None, ""
+        if cur is None:
+            return None
         prev = _get(table, _column(kind, label, 1), *labels)
         if prev is None or prev <= 0:
             return None
@@ -249,9 +257,8 @@ def build_ledger(
             groups.setdefault(p.citation.source_id, []).append(p)
 
     for sid, group in groups.items():
-        made = _qkey(group[0].made_in)
         src = by_id.get(sid)
-        key = made or (_qkey(src.quarter) if src else None)
+        key = (_qkey(src.quarter) if src else None) or _qkey(group[0].made_in)
         later = sorted(
             (s for s in transcripts if key and (k := _qkey(s.quarter)) and k > key),
             key=lambda s: _qkey(s.quarter),  # type: ignore[arg-type,return-value]
@@ -276,7 +283,13 @@ def build_ledger(
 
     def order(r: LedgerRow) -> tuple:
         k = _qkey(r.promise.made_in)
-        return (k is not None, k or (0, 0), r.promise.id)
+        m = re.search(r"-(\d+)$", r.promise.id)
+        return (
+            k is not None,
+            k or (0, 0),
+            r.promise.id.rsplit("-", 1)[0],
+            int(m.group(1)) if m else 0,
+        )
 
     rows.sort(key=order)
     counts = {s: 0 for s in STATUSES}

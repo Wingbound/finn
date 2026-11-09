@@ -66,7 +66,6 @@ def judge(table):
         ("this year", "Q4 FY26", ("fy", "FY26")),
         ("current year", "Q1 FY27", ("fy", "FY27")),
         ("this fiscal", "Q2 FY27", ("fy", "FY27")),
-        ("FY", "Q3 FY26", ("fy", "FY26")),
         ("next year", "Q4 FY26", ("fy", "FY27")),
         ("next fiscal", "Q2 FY27", ("fy", "FY28")),
         ("medium term", "Q2 FY27", None),
@@ -74,6 +73,18 @@ def judge(table):
         ("next 2-3 years", "Q2 FY27", None),
         (None, "Q2 FY27", None),
         ("next quarter", "", None),
+        ("H2 FY27", "Q1 FY27", None),
+        ("H1 FY27", "Q1 FY27", None),
+        ("exit FY27", "Q1 FY27", None),
+        ("by end of FY27", "Q1 FY27", None),
+        ("FY27-28", "Q1 FY27", None),
+        ("FY27 to FY28", "Q1 FY27", None),
+        ("end of this year", "Q1 FY27", None),
+        ("in FY27", "Q1 FY27", ("fy", "FY27")),
+        ("for Q3 FY27", "Q1 FY27", ("quarter", "Q3 FY27")),
+        ("fiscal year 2027", "Q1 FY27", ("fy", "FY27")),
+        ("Q3 FY2027", "Q1 FY27", ("quarter", "Q3 FY27")),
+        ("this financial year", "Q1 FY27", ("fy", "FY27")),
     ],
 )
 def test_parse_horizon(h, made, want):
@@ -296,3 +307,33 @@ def test_unknown_status_and_rationale_truncated():
     row = build_ledger(FakeRouter(judge({p.id: j})), [p], sources(), {}, {}).rows[0]
     assert row.status == "pending"
     assert len(row.rationale.split()) == 30 and row.rationale.endswith("…")
+
+
+def test_nonpositive_target_is_judged_not_computed():
+    p = p_growth(-5)
+    q = qtab({"Sales": 118.0}, {"Sales": 100.0})
+    assert compute_status(p, q, {}) is None
+    r = FakeRouter({"judgements": []})
+    row = build_ledger(r, [p], sources(), q, {}).rows[0]
+    assert row.method == "judged" and len(r.calls) == 1
+
+
+def test_missing_row_labels_is_judged_not_pending_computed():
+    q = {"Sep 2026": {"Other": 1.0}, "Sep 2025": {"Other": 1.0}}
+    assert compute_status(p_growth(15), q, {}) is None
+    assert compute_status(p_growth(15, metric="ebitda_margin"), q, {}) is None
+
+
+def test_later_key_uses_source_quarter_over_made_in():
+    # made_in claims Q3 FY26 but the source is T2 (Q1 FY27): only T1 is later.
+    p = promise(1, "PERSISTENT-T2", "Q3 FY26")
+    r = FakeRouter({"judgements": []})
+    build_ledger(r, [p], sources(), {}, {})
+    u = r.calls[0][2]
+    assert "=== PERSISTENT-T1:" in u and "PERSISTENT-T2:" not in u and "PERSISTENT-T3:" not in u
+
+
+def test_ids_order_numerically():
+    ps = [promise(10, "PERSISTENT-T1", "Q2 FY27"), promise(2, "PERSISTENT-T1", "Q2 FY27")]
+    rows = build_ledger(FakeRouter({"judgements": []}), ps, sources(), {}, {}).rows
+    assert [r.promise.id for r in rows] == ["PERSISTENT-T1-2", "PERSISTENT-T1-10"]
