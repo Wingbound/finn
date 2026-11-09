@@ -10,7 +10,7 @@ from datetime import datetime
 
 from finn.ingest import screener
 from finn.models import IST, Dossier, Point, Promise
-from finn.research.docs import DocClient, collect_sources
+from finn.research.docs import MAX_TRANSCRIPTS, DocClient, collect_sources
 from finn.research.financials import balance_sheet_health, is_lender, trajectory
 from finn.research.guidance import extract_promises
 from finn.research.ledger import build_ledger
@@ -72,7 +72,11 @@ def build_dossier(
         documents = screener.parse_documents(html)
         n_t = sum(1 for c in documents.get("concalls", []) if c.get("transcript_url"))
         n_ar = len(documents.get("annual_reports", []))
-        progress(f"Found {n_t} transcripts and {n_ar} annual report(s)")
+        ar_part = f"{n_ar} annual report(s) (reading the latest)" if n_ar else "no annual report"
+        progress(
+            f"Found {n_t} transcripts (reading the latest {min(n_t, MAX_TRANSCRIPTS)}) "
+            f"and {ar_part}"
+        )
         own = doc_client is None
         client = doc_client or DocClient()
         try:

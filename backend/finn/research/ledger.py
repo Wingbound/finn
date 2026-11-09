@@ -5,14 +5,12 @@ from __future__ import annotations
 import re
 from typing import Literal
 
-from finn.enrich.pdftext import relevant_window
 from finn.llm.providers import LLMError
 from finn.models import Actual, Citation, Ledger, LedgerRow, Promise, Source, Status
 from finn.research.cite import locate, tagged_text
 
 STATUSES = ("kept", "partly", "missed", "pending", "dropped")
 _COMPUTED = {"revenue_growth", "ebitda_margin", "pat_growth"}
-_METRIC_WORDS = ["revenue", "margin", "profit", "capex", "deal", "order", "pipeline", "growth"]
 _QTR = re.compile(r"\bQ([1-4])\s*FY\s*(\d{2}|\d{4})\b", re.IGNORECASE)
 _FY = re.compile(r"\b(?:FY|fiscal)\s*(\d{2}|\d{4})\b", re.IGNORECASE)
 _QMONTH = {1: "Jun", 2: "Sep", 3: "Dec", 4: "Mar"}
@@ -163,7 +161,8 @@ def _computed_row(p: Promise, quarters: dict, annual: dict) -> LedgerRow | None:
 
 
 SYSTEM = """You grade whether company management kept promises made on an earlier earnings call, \
-using only excerpts of LATER calls.
+using only LATER calls. Search all of the later calls; management often revisits a target \
+with new numbers or a new date. Prefer the most recent mention.
 Statuses: kept = delivered, or on track as promised. partly = some but not all delivered. \
 missed = clearly not delivered, or reversed. pending = too early or unclear. \
 dropped = management stopped mentioning it (only if no later call mentions it).
@@ -175,22 +174,14 @@ Reply JSON only: {"judgements": [{"id", "status", "evidence_quote", "evidence_so
 "evidence_page", "rationale"}]} with one entry per promise id."""
 
 
-def _terms(promises: list[Promise]) -> list[str]:
-    words = {w.lower() for p in promises for w in re.findall(r"[A-Za-z0-9]{4,}", p.topic)}
-    return sorted(words | set(_METRIC_WORDS))
-
-
 def _user_prompt(promises: list[Promise], later: list[Source]) -> str:
-    terms = _terms(promises)
     lines = ["PROMISES:"]
     for p in promises:
         lines.append(
             f"- id={p.id} | topic={p.topic} | horizon={p.horizon or 'unspecified'} | "
             f'quote: "{p.citation.quote}"'
         )
-    blocks = [
-        f"=== {s.id}: {s.title} ===\n{relevant_window(tagged_text(s), terms, 6000)}" for s in later
-    ]
+    blocks = [f"=== {s.id}: {s.title} ===\n{tagged_text(s, 90_000)}" for s in later]
     return "\n".join(lines) + "\n\nEVIDENCE (later calls, oldest first):\n\n" + "\n\n".join(blocks)
 
 

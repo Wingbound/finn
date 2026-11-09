@@ -125,3 +125,34 @@ def test_bull_bear_llm_error_and_bad_types():
         {"bull": "oops", "bear": [None, {"text": 3}, item("ok text", REAL_A, 8, "NOPE")]}
     )
     assert bull_bear(r, sources(), ledger, traj, health) == ([], [])
+
+
+def _facts_item(text, quote, sid="FACTS"):
+    return {"text": text, "quote": quote, "source_id": sid, "page": 0}
+
+
+def test_bull_facts_citation_kept_with_full_line():
+    ledger, traj, health = analytics()
+    r = FakeRouter({"bull": [_facts_item("Debt to equity is only 0.06 today.", "debt to equity: 0.06")], "bear": []})  # fmt: skip
+    bull, _ = bull_bear(r, sources(), ledger, traj, health)
+    assert len(bull) == 1
+    c = bull[0].citation
+    assert (c.source_id, c.page, c.quote) == ("FACTS", 0, "Debt to equity: 0.06")
+    assert "source_id FACTS" in r.calls[0][1]
+
+
+def test_bull_facts_quote_matching_no_line_dropped():
+    ledger, traj, health = analytics()
+    r = FakeRouter({"bull": [_facts_item("Margins are great and widening fast.", "Gross margin: 55%")], "bear": []})  # fmt: skip
+    assert bull_bear(r, sources(), ledger, traj, health)[0] == []
+
+
+def test_bull_facts_number_not_in_line_dropped():
+    ledger, traj, health = analytics()
+    r = FakeRouter({"bull": [_facts_item("Debt to equity is only 0.99 today.", "Debt to equity: 0.06")], "bear": []})  # fmt: skip
+    assert bull_bear(r, sources(), ledger, traj, health)[0] == []
+
+
+def test_snapshot_rejects_facts():
+    r = FakeRouter({"summary": [_facts_item("Debt to equity is only 0.06 today.", "Debt to equity: 0.06")]})  # fmt: skip
+    assert snapshot(r, sources()) is None

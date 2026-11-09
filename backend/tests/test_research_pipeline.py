@@ -75,7 +75,9 @@ def test_build_end_to_end(seeded):
     assert any("nnual" in n for n in d.notes)
     assert set(d.cost) >= {"calls", "cached", "input_tokens", "output_tokens", "usd_list_price"}
     assert msgs[0] == "Resolving PERSISTENT on screener"
-    assert msgs[1].startswith("Found 34 transcripts and 15 annual")
+    assert msgs[1] == (
+        "Found 34 transcripts (reading the latest 4) and 15 annual report(s) (reading the latest)"
+    )
     order = [
         m for m in msgs if m.startswith(("Reading", "Extracting", "Checking", "Writing", "Done"))
     ]

@@ -4,10 +4,11 @@ from __future__ import annotations
 
 from typing import Any
 
-from finn.enrich.grounding import numbers_grounded
+from finn.enrich.grounding import normalize, numbers_grounded
 from finn.llm.providers import LLMError
 from finn.models import (
     BalanceSheetHealth,
+    Citation,
     Ledger,
     Point,
     Snapshot,
@@ -33,7 +34,8 @@ say. Reply as JSON: {{"summary": [{_ITEM}]}}"""
 BULL_BEAR_SYSTEM = f"""You write the bull case and the bear case for a listed company, using \
 only the FACTS, the promise ledger lines and the sources below. Give up to 3 bull points and \
 up to 3 bear points. Each point is one plain sentence of at most 30 words, backed by a \
-verbatim quote from the sources. Any number in your sentence must appear in the quote or in \
+verbatim quote: cite a transcript or annual report page, or a FACTS line for computed \
+financials (source_id FACTS, page 0, quote copied from that line). Any number in your sentence must appear in the quote or in \
 the FACTS. Do not predict prices or recommend buying or selling. Reply as JSON: \
 {{"bull": [{_ITEM}], "bear": [{_ITEM}]}}"""
 
@@ -85,8 +87,23 @@ def _t1(sources: list[Source]) -> Source | None:
     return next((s for s in sources if s.kind == "transcript"), None)
 
 
+def _facts_cite(quote: str, facts: str) -> Citation | None:
+    """The FACTS line equal to, or uniquely containing (3+ words), the quote."""
+    q = normalize(quote)
+    lines = [ln for ln in facts.splitlines() if ln.strip()]
+    hit = [ln for ln in lines if normalize(ln) == q]
+    if not hit and len(q.split()) >= 3:
+        hit = [ln for ln in lines if q in normalize(ln)]
+    return Citation(source_id="FACTS", page=0, quote=hit[0]) if len(hit) == 1 else None
+
+
 def _validate(
-    raw: Any, sources: dict[str, Source], facts: str, guard: dict | None, cap: int
+    raw: Any,
+    sources: dict[str, Source],
+    facts: str,
+    guard: dict | None,
+    cap: int,
+    allow_facts: bool = False,
 ) -> list[Point]:
     if not isinstance(raw, list):
         return []
@@ -101,12 +118,19 @@ def _validate(
         text, quote, sid, page = (it.get(k) for k in ("text", "quote", "source_id", "page"))
         if not (isinstance(text, str) and isinstance(quote, str) and isinstance(sid, str)):
             continue
-        if not text.strip() or len(text.split()) > MAX_WORDS or sid not in sources:
+        if not text.strip() or len(text.split()) > MAX_WORDS:
             continue
-        hint = page if isinstance(page, int) and not isinstance(page, bool) else None
-        cit = locate(quote, sources[sid], hint)
-        if cit is None or not numbers_grounded(text, quote + "\n" + facts):
-            continue
+        if allow_facts and sid == "FACTS":
+            cit = _facts_cite(quote, facts)
+            if cit is None or not numbers_grounded(text, cit.quote):
+                continue
+        else:
+            if sid not in sources:
+                continue
+            hint = page if isinstance(page, int) and not isinstance(page, bool) else None
+            cit = locate(quote, sources[sid], hint)
+            if cit is None or not numbers_grounded(text, quote + "\n" + facts):
+                continue
         kept.append(Point(text=text.strip(), citation=cit))
     if guard is not None:
         guard["points_kept"] = guard.get("points_kept", 0) + len(kept)
@@ -161,6 +185,6 @@ def bull_bear(
     if not isinstance(reply, dict):
         return [], []
     by_id = _by_id(sources)
-    bull = _validate(reply.get("bull"), by_id, facts, guard, 3)
-    bear = _validate(reply.get("bear"), by_id, facts, guard, 3)
+    bull = _validate(reply.get("bull"), by_id, facts, guard, 3, True)
+    bear = _validate(reply.get("bear"), by_id, facts, guard, 3, True)
     return bull, bear

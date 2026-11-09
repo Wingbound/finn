@@ -337,3 +337,14 @@ def test_ids_order_numerically():
     ps = [promise(10, "PERSISTENT-T1", "Q2 FY27"), promise(2, "PERSISTENT-T1", "Q2 FY27")]
     rows = build_ledger(FakeRouter({"judgements": []}), ps, sources(), {}, {}).rows
     assert [r.promise.id for r in rows] == ["PERSISTENT-T1-2", "PERSISTENT-T1-10"]
+
+
+def test_judge_prompt_includes_whole_later_transcript():
+    late = "deal, let's say the intangibles are up like $ 100 odd million, and you did"
+    assert late in sources()[0].pages[16]  # T1 page 17
+    p = promise(1, "PERSISTENT-T4", "Q3 FY26")
+    r = FakeRouter({"judgements": []})
+    build_ledger(r, [p], sources(), {}, {})
+    system, user = r.calls[0][1], r.calls[0][2]
+    assert late in user
+    assert "=== PERSISTENT-T1:" in user and "Prefer the most recent mention" in system

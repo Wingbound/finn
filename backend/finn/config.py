@@ -19,8 +19,9 @@ class Settings(BaseSettings):
     finn_model_oneliner: str = "openai/gpt-oss-120b"
     finn_model_extract_pdf: str = "gemini-3.8-flash"
     finn_model_extract_transcript: str = "gemini-3.5-flash-lite"
-    # Pro (gemini-3.1-pro-preview) has no free tier, so reason uses Flash.
-    finn_model_reason: str = "gemini-3.8-flash"
+    # Pro (gemini-3.1-pro-preview) has no free tier. gemini-3.8-flash was unreliable on the
+    # free tier on 2026-11-09 (503s, 45 s hangs), so reason uses Flash-Lite.
+    finn_model_reason: str = "gemini-3.5-flash-lite"
     finn_model_bio: str = "openai/gpt-oss-120b"
     data_dir: Path = Path("data")
     db_path: Path | None = None
@@ -67,14 +68,16 @@ def route_for(task: str, settings: Settings) -> tuple[str, str]:
 
 
 _FLASH_LITE = ("gemini", "gemini-3.5-flash-lite")
+_FLASH_LITE_31 = ("gemini", "gemini-3.1-flash-lite")
 # Tried in order after the primary route, so one provider's outage doesn't stop a task.
 FALLBACKS: dict[str, list[tuple[str, str]]] = {
     "classify": [_FLASH_LITE],
     "oneliner": [_FLASH_LITE],
     "bio": [_FLASH_LITE],
     "extract_pdf": [_FLASH_LITE],
-    "reason": [_FLASH_LITE],
-    "extract_transcript": [("groq", "openai/gpt-oss-120b")],
+    "reason": [_FLASH_LITE_31],
+    # Transcript prompts (15-25k tokens) exceed Groq's 8K TPM, so Groq cannot be the fallback.
+    "extract_transcript": [_FLASH_LITE_31],
 }
 
 

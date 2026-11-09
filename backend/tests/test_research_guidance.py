@@ -107,3 +107,12 @@ def test_kind_follows_targets():
     assert q.kind == "qualitative" and q.unit is None
     q = run([item(TAX, kind="quantitative", target_low=99, unit="%")])[0]
     assert q.kind == "qualitative" and q.unit is None and q.target_low is None
+
+
+def test_system_prompt_forward_looking_only():
+    from finn.research.guidance import SYSTEM
+
+    r = FakeRouter({"promises": []})
+    extract_promises(r, t1())
+    assert "forward-looking" in r.calls[0][1] and r is not None
+    assert "Exclude statements of current or past fact" in SYSTEM

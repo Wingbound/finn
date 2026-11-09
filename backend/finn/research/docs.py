@@ -23,6 +23,7 @@ _UA = (
     "Chrome/124.0 Safari/537.36"
 )
 _RETRIES = 2
+MAX_TRANSCRIPTS = 4
 _MONTHS = ["jan", "feb", "mar", "apr", "may", "jun", "jul", "aug", "sep", "oct", "nov", "dec"]
 
 
@@ -131,7 +132,7 @@ def collect_sources(
     conn: sqlite3.Connection,
     client: DocClient,
     documents: dict,
-    max_transcripts: int = 4,
+    max_transcripts: int = MAX_TRANSCRIPTS,
     ar_pages: int = 40,
     progress: Callable[[str], None] = lambda m: None,
 ) -> tuple[list[Source], list[str]]:

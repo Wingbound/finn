@@ -29,6 +29,9 @@ The transcript has page markers like [[p3]].
 Return up to 8 forward-looking statements made by management: guidance, targets, plans and
 expectations. Prioritise headline guidance on growth, margins, capex, deals or pipeline, and
 strategy. Analyst questions are not promises; skip them.
+Only forward-looking statements: targets, guidance, plans, expectations, intentions or
+commitments about the future. Exclude statements of current or past fact (results achieved,
+the company's current size or margins), even if they contain numbers.
 For each item give:
 - quote: one complete sentence copied EXACTLY from the transcript, character for character.
   Never paraphrase or stitch sentences together.

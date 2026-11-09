@@ -217,9 +217,12 @@ def gemini_resp(body):
 def test_gemini_safety_block_raises_clear_error(conn, tmp_path, no_sleep, body, needle):
     s = Settings(groq_api_key="", gemini_api_key="m", data_dir=tmp_path, _env_file=None)
     route = respx.post(GEMINI).mock(return_value=gemini_resp(body))
+    fallback = respx.post(GEMINI.replace("3.5-flash-lite", "3.1-flash-lite")).mock(
+        return_value=gemini_resp(body)
+    )
     with pytest.raises(LLMError, match=needle):
         LLMRouter(conn, s).complete_json("extract_transcript", "s", "u")
-    assert route.call_count == 1 and no_sleep == []
+    assert route.call_count == 1 and fallback.call_count == 1 and no_sleep == []
 
 
 @respx.mock
@@ -271,10 +274,20 @@ def test_chain_for_appends_fallbacks(settings):
 
 
 def test_chain_for_dedupes_primary_and_fallback(tmp_path):
-    s = Settings(finn_model_extract_transcript="gemini-3.5-flash-lite", _env_file=None)
+    s = Settings(finn_model_extract_transcript="gemini-3.1-flash-lite", _env_file=None)
     assert chain_for("extract_transcript", s) == [
+        ("gemini", "gemini-3.1-flash-lite"),
+    ]
+
+
+def test_chain_for_reason_and_transcript(settings):
+    assert chain_for("reason", settings) == [
         ("gemini", "gemini-3.5-flash-lite"),
-        ("groq", "openai/gpt-oss-120b"),
+        ("gemini", "gemini-3.1-flash-lite"),
+    ]
+    assert chain_for("extract_transcript", settings) == [
+        ("gemini", "gemini-3.5-flash-lite"),
+        ("gemini", "gemini-3.1-flash-lite"),
     ]
 
 

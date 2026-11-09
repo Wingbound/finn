@@ -225,6 +225,8 @@ class Source(BaseModel):
 
 
 class Citation(BaseModel):
+    """A verbatim quote. source_id FACTS (page 0) marks a code-computed FACTS line."""
+
     source_id: str
     page: int  # 1-based
     quote: str
