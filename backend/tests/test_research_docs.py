@@ -53,6 +53,7 @@ def test_call_quarter():
         "May": "Q4 FY26", "Jun": "Q4 FY26", "Jul": "Q1 FY27", "Aug": "Q1 FY27",
         "Sep": "Q1 FY27", "Oct": "Q2 FY27", "Nov": "Q2 FY27", "Dec": "Q2 FY27",
     }  # fmt: skip
+    assert call_quarter("Jan 2027") == "Q3 FY27"
     for m, q in exp.items():
         assert call_quarter(f"{m} 2026") == q
 
@@ -182,3 +183,29 @@ def test_docclient_errors(monkeypatch):
 
     with pytest.raises(DocError):
         _client(boom).fetch_bytes("https://a/x")
+
+
+def test_collect_sources_odd_rows_skipped(conn):
+    _seed(conn, TRANSCRIPTS[:2])
+    d = {
+        "annual_reports": [{"url": "u"}],
+        "concalls": [
+            {"date": "Sometime", "transcript_url": "u1", "ppt_url": None},
+            {"transcript_url": "u2"},
+            DOCS["concalls"][0],
+            DOCS["concalls"][2],
+        ],
+    }
+    sources, notes = collect_sources(conn, FakeClient(), d)
+    assert [s.id for s in sources] == ["T1", "T2"]
+    assert any(n.startswith("Sometime skipped: ValueError") for n in notes)
+    assert any(n.startswith("unknown skipped: KeyError") for n in notes)
+    assert any(n.startswith("annual report skipped: KeyError") for n in notes)
+
+
+def test_collect_sources_invalid_url_skipped(conn):
+    c = FakeClient(exc=httpx.InvalidURL("bad"))
+    sources, notes = collect_sources(conn, c, DOCS)
+    assert sources == []
+    assert any("Oct 2026 skipped: InvalidURL" in n for n in notes)
+    assert any(n.startswith("annual report skipped: InvalidURL") for n in notes)

@@ -80,7 +80,10 @@ class DocClient:
 
 
 def call_quarter(date_label: str) -> str:
-    """Quarter reported on a call held in this month: "Oct 2026" -> "Q2 FY27"."""
+    """Quarter reported on a call held in this month: "Oct 2026" -> "Q2 FY27".
+
+    Raises ValueError on an unparseable label.
+    """
     mon, year = date_label.split()
     m, y = _MONTHS.index(mon[:3].lower()) + 1, int(year)
     if m <= 3:
@@ -142,49 +145,57 @@ def collect_sources(
         if not url:
             continue  # not posted yet
         n += 1
-        date = call["date"]
-        quarter = call_quarter(date)
-        title = f"{quarter} earnings call ({date})"
-        progress(f"Reading {title}")
+        label = "unknown"
         try:
-            pages = get_pages(conn, client, url)
-        except DocError as e:
-            notes.append(f"{date} transcript unavailable: {e}")
-            continue
-        if not any(p.strip() for p in pages):
-            notes.append(f"{date} transcript unavailable: no extractable text")
-            continue
-        sources.append(
-            Source(
-                id=f"T{len(sources) + 1}",
-                kind="transcript",
-                title=title,
-                quarter=quarter,
-                url=url,
-                pages=pages,
+            date = call["date"]
+            label = date
+            quarter = call_quarter(date)
+            title = f"{quarter} earnings call ({date})"
+            progress(f"Reading {title}")
+            try:
+                pages = get_pages(conn, client, url)
+            except DocError as e:
+                notes.append(f"{date} transcript unavailable: {e}")
+                continue
+            if not any(p.strip() for p in pages):
+                notes.append(f"{date} transcript unavailable: no extractable text")
+                continue
+            sources.append(
+                Source(
+                    id=f"T{len(sources) + 1}",
+                    kind="transcript",
+                    title=title,
+                    quarter=quarter,
+                    url=url,
+                    pages=pages,
+                )
             )
-        )
+        except Exception as e:  # noqa: BLE001 - one odd row must not abort the whole collection
+            notes.append(f"{label} skipped: {type(e).__name__}: {e}")
     reports = documents.get("annual_reports", [])
     if reports:
-        ar = reports[0]
-        title = f"Annual Report {ar['year']}"
-        progress(f"Reading {title}")
         try:
-            pages = get_pages(conn, client, ar["url"], max_pages=ar_pages)
-        except DocError as e:
-            notes.append(f"Annual report {ar['year']} unavailable: {e}")
-        else:
-            if any(p.strip() for p in pages):
-                sources.append(
-                    Source(
-                        id="AR",
-                        kind="annual_report",
-                        title=title,
-                        quarter=None,
-                        url=ar["url"],
-                        pages=pages,
-                    )
-                )
+            ar = reports[0]
+            title = f"Annual Report {ar['year']}"
+            progress(f"Reading {title}")
+            try:
+                pages = get_pages(conn, client, ar["url"], max_pages=ar_pages)
+            except DocError as e:
+                notes.append(f"Annual report {ar['year']} unavailable: {e}")
             else:
-                notes.append(f"Annual report {ar['year']} unavailable: no extractable text")
+                if any(p.strip() for p in pages):
+                    sources.append(
+                        Source(
+                            id="AR",
+                            kind="annual_report",
+                            title=title,
+                            quarter=None,
+                            url=ar["url"],
+                            pages=pages,
+                        )
+                    )
+                else:
+                    notes.append(f"Annual report {ar['year']} unavailable: no extractable text")
+        except Exception as e:  # noqa: BLE001 - one odd row must not abort the whole collection
+            notes.append(f"annual report skipped: {type(e).__name__}: {e}")
     return sources, notes
