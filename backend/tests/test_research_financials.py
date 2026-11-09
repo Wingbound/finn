@@ -129,7 +129,7 @@ def test_flag_thresholds():
     assert not any("CFO" in t or "Only" in t for _, t in texts(_h(cfo=90)))
     assert ("watch", "Working capital days rose from 10 to 26") in texts(_h(wc=(10, 26)))
     assert not any("Working" in t for _, t in texts(_h(wc=(10, 25))))
-    assert ("watch", "Free cash flow was negative over 3 years (₹-30 cr)") in texts(_h(fcf=-10))
+    assert ("watch", "Free cash flow was negative over 3 years (−₹30 cr)") in texts(_h(fcf=-10))
 
 
 def test_lender_skips_leverage_flags():
@@ -153,3 +153,20 @@ def test_cagr_uses_year_labels_with_missing_column():
     }
     t = trajectory(pl)
     assert t.revenue_cagr_pct == A(10.0, abs=0.01)
+
+
+def test_negative_net_worth():
+    pl = {f"Mar {y}": {"Net Profit": -50.0} for y in (2024, 2025, 2026)}
+    bs = {"Mar 2026": {"Equity Capital": 100.0, "Reserves": -5000.0, "Borrowings": 20000.0}}
+    h = balance_sheet_health(pl, bs, {}, {}, False)
+    assert h.debt_to_equity is None
+    want = "Net worth is negative (−₹4,900 cr): debt exceeds the equity base"
+    assert ("concern", want) in texts(h)
+    assert not any("debt-free" in t for _, t in texts(h))
+    assert not any(t.startswith("Debt is") for _, t in texts(h))
+
+
+def test_zero_net_worth_is_flagged_without_de():
+    h = _h(borrow=50, eq=0)
+    assert h.debt_to_equity is None
+    assert any(t.startswith("Net worth is negative") for _, t in texts(h))

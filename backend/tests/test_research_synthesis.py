@@ -62,6 +62,12 @@ def test_facts_block_lines_and_skips_none():
     assert "ROCE" not in f and "Working capital" not in f
 
 
+def test_facts_negative_fcf_sign_before_rupee():
+    ledger, traj, health = analytics()
+    f = facts_block(traj, health.model_copy(update={"fcf_3y_cr": -1234.0}), ledger)
+    assert "Free cash flow (3y): −₹1,234 cr" in f and "₹-" not in f
+
+
 def test_snapshot_keeps_real_quote_drops_invented():
     r = FakeRouter(
         {

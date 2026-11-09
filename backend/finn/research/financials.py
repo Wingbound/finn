@@ -18,6 +18,12 @@ _LENDER_NOTE = (
 )
 
 
+def inr_cr(x: float) -> str:
+    """Rupees crore with the sign before the ₹: "−₹30 cr", never "₹-30 cr"."""
+    v = round(x)
+    return f"−₹{-v:,} cr" if v < 0 else f"₹{v:,} cr"
+
+
 def is_lender(pl: Table) -> bool:
     labels = {k for row in pl.values() for k in row}
     return "Sales" not in labels and "Revenue" in labels
@@ -108,7 +114,8 @@ def balance_sheet_health(
     res = _get(bs, as_of, "Reserves")
     debt = _get(bs, as_of, "Borrowings")
     net_worth = None if eq is None or res is None else eq + res
-    de = debt / net_worth if debt is not None and net_worth else None
+    negative_nw = net_worth is not None and net_worth <= 0
+    de = debt / net_worth if debt is not None and net_worth and not negative_nw else None
 
     cf3 = _fy_cols(cf, month)[-3:]
     cfo = _sum3(cf3, lambda c: _get(cf, c, "Cash from Operating Activity"))
@@ -126,6 +133,14 @@ def balance_sheet_health(
     roce = _get(ratios, rcols[-1], "ROCE %") if rcols else None
 
     flags: list[Flag] = []
+    if negative_nw:
+        assert net_worth is not None
+        flags.append(
+            Flag(
+                level="concern",
+                text=f"Net worth is negative ({inr_cr(net_worth)}): debt exceeds the equity base",
+            )
+        )
     if not lender:
         if de is not None and de > 1.0:
             flags.append(Flag(level="concern", text=f"Debt is {de:.1f}× equity"))
@@ -155,7 +170,7 @@ def balance_sheet_health(
             flags.append(
                 Flag(
                     level="watch",
-                    text=f"Free cash flow was negative over 3 years (₹{fcf:,.0f} cr)",
+                    text=f"Free cash flow was negative over 3 years ({inr_cr(fcf)})",
                 )
             )
     else:

@@ -16,6 +16,7 @@ from finn.models import (
     Trajectory,
 )
 from finn.research.cite import locate, tagged_text
+from finn.research.financials import inr_cr
 
 MAX_WORDS = 30
 AR_PAGES = 10
@@ -55,7 +56,7 @@ def facts_block(trajectory: Trajectory, health: BalanceSheetHealth, ledger: Ledg
     if h.cfo_to_pat_3y is not None:
         lines.append(f"CFO/PAT (3y): {h.cfo_to_pat_3y:g}")
     if h.fcf_3y_cr is not None:
-        lines.append(f"Free cash flow (3y): ₹{h.fcf_3y_cr:,.0f} cr")
+        lines.append(f"Free cash flow (3y): {inr_cr(h.fcf_3y_cr)}")
     if h.working_capital_days is not None:
         lines.append(f"Working capital days: {h.working_capital_days:g}")
     if h.roce_pct is not None:
