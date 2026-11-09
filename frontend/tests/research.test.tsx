@@ -84,3 +84,14 @@ describe("BuildProgress after a dropped stream (final review I3)", () => {
     expect(await screen.findByText(/The build stopped before finishing/)).toBeInTheDocument();
   });
 });
+
+describe("BuildProgress announcements (Plan 4 review M5)", () => {
+  it("announces progress lines, not the seconds counter", async () => {
+    build.mockImplementation(() => new Promise(() => {}));
+    const { container } = render(<BuildProgress symbol="ABC" onDone={() => {}} />);
+    const live = [...container.querySelectorAll("[aria-live]")];
+    expect(live).toHaveLength(1);
+    expect(live[0]?.tagName).toBe("OL");
+    expect(screen.getByText(/so far/).closest("[aria-live]")).toBeNull();
+  });
+});

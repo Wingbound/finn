@@ -19,6 +19,7 @@ FINN is a phone-first investing assistant for a portfolio of Indian listed compa
 - **Ranking.** Every filing for the 18 holdings is classified (rules first, an LLM for the rest) and scored. Related filings collapse into one story, and the screen says "N things matter".
 - **The rest.** The routine filings are struck through and kept in a drawer.
 - **Story cards.** Results get a Revenue, EBITDA, PBT and PAT grid with QoQ and YoY, computed from NSE's XBRL, not read by a model. Lenders get their own lines. Management changes get the person's profile, taken verbatim from the filing. Deals, fund-raises and litigation get a one-line brief with grounded facts.
+- **Results meet promises.** Under a results grid, FINN shows the company's open promises from its own calls, quoted with call and page. When the quote names the same line, a pace sentence sets this quarter beside the target, for example "This quarter: revenue +21.6% YoY, above the 15–18% target. One quarter, not the full year." It never grades a promise. The dossier, in turn, shows the latest filed quarter under its ledger.
 - **The end.** The feed closes with "You're caught up."
 
 **Alerts.** You set the rules (a volume multiple, a price move, which filing types count, per-stock overrides). They live on your phone and go to the server with each request, so the server keeps no user state.

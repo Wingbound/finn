@@ -42,5 +42,12 @@ def copy_seed_if_empty(db_path: Path, seed_path: Path) -> bool:
     db_path.parent.mkdir(parents=True, exist_ok=True)
     for sidecar in ("-wal", "-shm"):  # an old WAL would be replayed onto the copied seed
         Path(f"{db_path}{sidecar}").unlink(missing_ok=True)
-    shutil.copyfile(seed_path, db_path)
+    # Copy beside the target, then rename: a copy cut short (an instance recycled mid-copy)
+    # leaves no truncated store behind for later requests to fail on.
+    partial = db_path.with_name(f"{db_path.name}.seed-tmp")
+    try:
+        shutil.copyfile(seed_path, partial)
+        partial.replace(db_path)
+    finally:
+        partial.unlink(missing_ok=True)
     return True

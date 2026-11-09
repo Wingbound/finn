@@ -134,6 +134,16 @@ The dossier says so in one line. A FACTS citation, a figure FINN computed, is ne
 - **Research.** Search any listed company. Known ones open; new ones build live with FINN's progress lines.
 - **Dossier.** The track record from earlier calls comes first, with resolved verdicts at the top of each call, then the newest call's open promises. After that: a snapshot, three single-series trajectory charts with a table view, balance-sheet health, and cited bull and bear points. Every citation chip opens its page with the quote highlighted.
 
+**One loop (Plan 6).**
+- **Results to promises.** A results story carries up to three open promises from the company's stored dossier. This year's targets come first, then numbers before words, then the newest call.
+- **The pace sentence.** It puts one quarter's filed figure beside a target, only when every gate holds:
+  - the quote names the same line (revenue growth, PAT growth or EBITDA margin, never EBIT);
+  - the target is in %;
+  - the horizon is the card's year or quarter;
+  - no mismatch or segment cue is present.
+- **No grading.** The ledger alone grades, on later-call evidence. A target label appears only when its numbers are in the quote.
+- **Promises to results.** A dossier shows the latest filed quarter (XBRL) under its ledger.
+
 **Colour.**
 - **Status.** Kept is #1E7A4C, partly #B98310, missed #B3261E and pending grey. These were checked with the dataviz palette validator in light and dark modes. A status always carries a glyph and a word as well.
 - **Deltas.** Results deltas stay in ink: a rising credit cost is not good news.
