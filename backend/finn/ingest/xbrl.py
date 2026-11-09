@@ -29,9 +29,10 @@ class FinancialsFiling(BaseModel):
     period_end: date
     basis: Basis
     audited: bool | None
-    filed_at: datetime
+    filed_at: datetime  # first broadcast of this period+basis, not the revision time
     xbrl_url: str
     format: XbrlFormat | None
+    revised: bool = False  # the document is a revision of the first broadcast
 
 
 class QuarterFinancials(BaseModel):
@@ -69,8 +70,24 @@ def _basis(value: str | None) -> Basis | None:
     return v if v in ("consolidated", "standalone") else None  # type: ignore[return-value]
 
 
+def _timestamp(value: object) -> datetime | None:
+    """NSE list timestamps: "07-Nov-2026 17:33:17" or "31-OCT-2025 23:59:50" (%b ignores case)."""
+    if not isinstance(value, str):
+        return None
+    try:
+        return datetime.strptime(value.strip(), "%d-%b-%Y %H:%M:%S").replace(tzinfo=IST)
+    except ValueError:
+        return None
+
+
 def parse_filing_list(rows: list[dict]) -> list[FinancialsFiling]:
-    best: dict[tuple[date, str], FinancialsFiling] = {}
+    """One filing per (period_end, basis): the latest row (revisions included) supplies the
+    document; filed_at is the earliest broadcast, so a revision never moves the card's date.
+
+    Revised rows carry `broadcast_Date: null` and a `revised_Date`. A row is dropped only
+    when it has neither date (or neither parses).
+    """
+    groups: dict[tuple[date, str], list[tuple[FinancialsFiling, datetime | None]]] = {}
     for raw in rows:
         if raw.get("type") != _FINANCIALS_TYPE:
             continue
@@ -79,24 +96,33 @@ def parse_filing_list(rows: list[dict]) -> list[FinancialsFiling]:
             url = raw.get("xbrl")
             if basis is None or not url or not str(url).startswith("http"):
                 raise ValueError("bad basis or url")
+            broadcast = _timestamp(raw.get("broadcast_Date"))
+            revised_at = _timestamp(raw.get("revised_Date"))
+            stamp = broadcast or revised_at
+            if stamp is None:
+                raise ValueError("no usable broadcast_Date or revised_Date")
             filing = FinancialsFiling(
                 symbol=raw["symbol"],
                 period_end=datetime.strptime(raw["qe_Date"], "%d-%b-%Y").date(),
                 basis=basis,
                 audited=_audited(raw.get("audited")),
-                filed_at=datetime.strptime(raw["broadcast_Date"], "%d-%b-%Y %H:%M:%S").replace(
-                    tzinfo=IST
-                ),
+                filed_at=stamp,
                 xbrl_url=url,
                 format=detect_format(url),
+                revised=revised_at is not None,
             )
         except (KeyError, TypeError, ValueError) as e:
             log.warning("skipping malformed integrated-filing row: %s: %s", type(e).__name__, e)
             continue
-        key = (filing.period_end, filing.basis)
-        if key not in best or filing.filed_at > best[key].filed_at:
-            best[key] = filing
-    return sorted(best.values(), key=lambda f: (-f.period_end.toordinal(), f.basis))
+        groups.setdefault((filing.period_end, filing.basis), []).append((filing, broadcast))
+
+    out: list[FinancialsFiling] = []
+    for group in groups.values():
+        latest = max((f for f, _ in group), key=lambda f: f.filed_at)
+        broadcasts = [b for _, b in group if b is not None]
+        first = min(broadcasts) if broadcasts else min(f.filed_at for f, _ in group)
+        out.append(latest.model_copy(update={"filed_at": first}))
+    return sorted(out, key=lambda f: (-f.period_end.toordinal(), f.basis))
 
 
 def _local(tag: str) -> str:

@@ -314,6 +314,7 @@ def _ingest_symbol(
     for target in (newest, quarter_end_shift(newest, -1), quarter_end_shift(newest, -4)):
         filing = by_period.get(target)
         if filing is None:
+            errors.append(f"{target} not on file")
             continue
         if filing.xbrl_url in stored:
             res.skipped += 1
@@ -325,6 +326,11 @@ def _ingest_symbol(
             continue
         if q.basis != filing.basis:
             errors.append(f"{target} basis mismatch: list {filing.basis}, document {q.basis}")
+            continue
+        if q.period_end != filing.period_end:
+            errors.append(
+                f"{target} period mismatch: list {filing.period_end}, document {q.period_end}"
+            )
             continue
         q = q.model_copy(update={"symbol": symbol})
         db.upsert_financials(conn, q, filing.filed_at, filing.xbrl_url)

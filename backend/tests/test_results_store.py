@@ -136,3 +136,97 @@ def test_rows_stored_under_requested_symbol(conn):
     results.ingest_financials(conn, fake, ["TATASTEEL"])
     assert results.card_for(conn, "TATASTEEL") is not None
     assert len(_periods(conn)) == 3
+
+
+REVISED_URL = (
+    "https://nsearchives.nseindia.com/corporate/xbrl/"
+    "INTEGRATED_FILING_INDAS_1799999_01122026120000_WEB.xml"
+)
+_SEP_REVENUE = b'unitRef="INR">654362400000<'
+
+
+def _sep_cons(fake: FakeNSE) -> dict:
+    return next(
+        r
+        for r in fake.rows["TATASTEEL"]
+        if r["qe_Date"].upper() == "30-SEP-2026" and r["consolidated"] == "Consolidated"
+    )
+
+
+def _add_revision(fake: FakeNSE, *, drop_original: bool = False) -> bytes:
+    """List a revised Sep-2026 consolidated row (broadcast null) whose revenue is restated."""
+    orig = _sep_cons(fake)
+    xml = fake.files[orig["xbrl"]]
+    assert _SEP_REVENUE in xml
+    revised_xml = xml.replace(_SEP_REVENUE, b'unitRef="INR">654000000000<')
+    rev = {
+        **orig,
+        "broadcast_Date": None,
+        "revised_Date": "01-DEC-2026 12:00:00",
+        "revision_Remark": "Revised to correct typographical error",
+        "type_Sub": "Revised",
+        "xbrl": REVISED_URL,
+    }
+    rows = [r for r in fake.rows["TATASTEEL"] if not (drop_original and r is orig)]
+    fake.rows["TATASTEEL"] = [*rows, rev]
+    fake.files[REVISED_URL] = revised_xml
+    return revised_xml
+
+
+def test_revision_replaces_stored_original_on_next_ingest(conn):
+    fake = tatasteel_fake()
+    results.ingest_financials(conn, fake, ["TATASTEEL"])
+    orig_url = _sep_cons(fake)["xbrl"]
+    assert db.get_financials(conn, "TATASTEEL", date(2026, 9, 30), "consolidated")[2] == orig_url
+
+    _add_revision(fake)
+    fake.byte_calls.clear()
+    res = results.ingest_financials(conn, fake, ["TATASTEEL"])
+    assert (res.fetched, res.skipped, res.failed) == (1, 2, {})
+    assert fake.byte_calls == [REVISED_URL]
+    q, filed_at, url = db.get_financials(conn, "TATASTEEL", date(2026, 9, 30), "consolidated")
+    assert url == REVISED_URL
+    assert q.facts["RevenueFromOperations"] == 654000000000.0
+    # the card keeps the first broadcast's time, so it still attaches to the results story
+    assert filed_at == datetime(2026, 11, 7, 17, 33, 17, tzinfo=IST)
+    assert len(_periods(conn)) == 3
+
+
+def test_revised_only_newest_period_keeps_consolidated(conn):
+    fake = tatasteel_fake()
+    _add_revision(fake, drop_original=True)
+    res = results.ingest_financials(conn, fake, ["TATASTEEL"])
+    assert res.failed == {} and res.fetched == 3
+    assert _periods(conn)[0] == ("2026-09-30", "consolidated")
+    _, filed_at, url = db.get_financials(conn, "TATASTEEL", date(2026, 9, 30), "consolidated")
+    assert url == REVISED_URL
+    assert filed_at == datetime(2026, 12, 1, 12, 0, 0, tzinfo=IST)
+
+
+def test_period_mismatch_target_is_skipped_and_recorded(conn):
+    fake = tatasteel_fake()
+    sep_url = _sep_cons(fake)["xbrl"]
+    jun_url = next(
+        r["xbrl"]
+        for r in fake.rows["TATASTEEL"]
+        if r["qe_Date"].upper() == "30-JUN-2026" and r["consolidated"] == "Consolidated"
+    )
+    fake.files[sep_url] = fake.files[jun_url]  # a Jun-2026 document behind the Sep-2026 row
+    res = results.ingest_financials(conn, fake, ["TATASTEEL"])
+    assert res.failed["TATASTEEL"] == (
+        "2026-09-30 period mismatch: list 2026-09-30, document 2026-06-30"
+    )
+    assert res.fetched == 2
+    assert db.get_financials(conn, "TATASTEEL", date(2026, 9, 30), "consolidated") is None
+
+
+def test_missing_target_is_recorded_not_on_file(conn):
+    fake = tatasteel_fake()
+    fake.rows["TATASTEEL"] = [
+        r
+        for r in fake.rows["TATASTEEL"]
+        if not (r["qe_Date"].upper() == "30-SEP-2025" and r["consolidated"] == "Consolidated")
+    ]
+    res = results.ingest_financials(conn, fake, ["TATASTEEL"])
+    assert res.failed == {"TATASTEEL": "2025-09-30 not on file"}
+    assert res.fetched == 2
