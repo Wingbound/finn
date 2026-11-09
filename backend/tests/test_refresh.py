@@ -9,6 +9,8 @@ import respx
 
 from finn import db
 from finn.config import Settings
+from finn.enrich import EnrichResult
+from finn.enrich import results as results_mod
 from finn.ingest import nse
 from finn.models import IST, PriceBar
 from finn.portfolio import load_portfolio
@@ -23,6 +25,17 @@ GROQ_URL = "https://api.groq.com/openai/v1/chat/completions"
 @pytest.fixture(autouse=True)
 def no_sleep(monkeypatch):
     monkeypatch.setattr(nse, "_sleep", lambda s: None)
+
+
+@pytest.fixture(autouse=True)
+def no_enrichment(monkeypatch):
+    """Existing tests cover filings/prices/classify; the new stages are stubbed out here and
+    switched on (via `real_financials`) in the tests that exercise them."""
+    monkeypatch.setattr(
+        refresh_mod, "ingest_financials", lambda *a, **k: results_mod.FinancialsResult()
+    )
+    monkeypatch.setattr(refresh_mod, "enrich_people", lambda *a, **k: EnrichResult())
+    monkeypatch.setattr(refresh_mod, "enrich_briefs", lambda *a, **k: EnrichResult())
 
 
 @pytest.fixture
@@ -233,3 +246,87 @@ def test_cli_writes_out_path_without_wal_files(tmp_path, keyless, month_by_symbo
     c = db.connect(out)
     assert c.execute("SELECT COUNT(*) FROM filings").fetchone()[0] == 323
     c.close()
+
+
+@pytest.fixture
+def fin_env(monkeypatch):
+    monkeypatch.setattr(results_mod, "_sleep", lambda s: None)
+    monkeypatch.setattr(refresh_mod, "ingest_financials", results_mod.ingest_financials)
+    monkeypatch.setattr(refresh_mod, "fetch_eod", _bars)
+    monkeypatch.setattr(refresh_mod, "ingest_filings", lambda *a, **k: nse.IngestResult())
+
+
+def test_refresh_runs_financials_without_llm(conn, keyless, fin_env, monkeypatch):
+    from tests.fakes import tatasteel_fake
+
+    fake = tatasteel_fake()
+    monkeypatch.setattr(refresh_mod, "NSEClient", lambda: _Closing(fake))
+    summary = refresh(conn, use_llm=False)
+    assert summary["financials"]["fetched"] == 3
+    assert summary["enrich"] == {} and "people" not in summary["enrich"]
+    failed = summary["financials"]["failed"]
+    assert "TATASTEEL" not in failed
+    assert all(e.startswith("financials: ") for e in summary["errors"])
+    assert len(summary["errors"]) == len(failed) == 17
+
+
+def test_refresh_records_financials_failure_in_errors(conn, keyless, fin_env, monkeypatch):
+    from tests.fakes import FakeNSE
+
+    monkeypatch.setattr(refresh_mod, "NSEClient", lambda: _Closing(FakeNSE({}, {})))
+    summary = refresh(conn, use_llm=False)
+    assert summary["financials"]["fetched"] == 0
+    assert "financials: TATASTEEL: NSEUnavailable: no rows for TATASTEEL" in summary["errors"]
+
+
+def test_financials_stage_crash_is_reported_not_raised(conn, keyless, fin_env, monkeypatch):
+    def crash(*a, **k):
+        raise RuntimeError("boom")
+
+    monkeypatch.setattr(refresh_mod, "ingest_financials", crash)
+    summary = refresh(conn, use_llm=False)
+    assert "financials: RuntimeError: boom" in summary["errors"]
+    assert summary["price_bars"] == 18
+
+
+def test_llm_stages_run_with_router_and_report_failures(conn, keyless, fin_env, monkeypatch):
+    from tests.fakes import FakeNSE
+
+    monkeypatch.setattr(refresh_mod, "NSEClient", lambda: _Closing(FakeNSE({}, {})))
+    monkeypatch.setattr(refresh_mod, "_router", lambda conn, use_llm: _StubRouter())
+    monkeypatch.setattr(
+        refresh_mod,
+        "enrich_people",
+        lambda *a, **k: EnrichResult(done=1, empty=2, failed={"s1": "bad"}),
+    )
+    seen = {}
+
+    def briefs(conn, client, router, since, subscribed):
+        seen["subscribed"] = subscribed
+        return EnrichResult(done=3, failed={"s2": "worse"})
+
+    monkeypatch.setattr(refresh_mod, "enrich_briefs", briefs)
+    monkeypatch.setattr(refresh_mod, "classify_pending", lambda c, r: {})
+    summary = refresh(conn, use_llm=True)
+    assert summary["enrich"]["people"] == {"done": 1, "empty": 2, "failed": {"s1": "bad"}}
+    assert summary["enrich"]["briefs"]["done"] == 3
+    assert "people: s1: bad" in summary["errors"] and "briefs: s2: worse" in summary["errors"]
+    assert "results" in seen["subscribed"]
+
+
+class _StubRouter:
+    def stats(self):
+        return {"calls": 0}
+
+
+class _Closing:
+    """Delegates to a FakeNSE and tolerates close()."""
+
+    def __init__(self, fake):
+        self._f = fake
+
+    def __getattr__(self, name):
+        return getattr(self._f, name)
+
+    def close(self):
+        pass

@@ -17,11 +17,14 @@ from pathlib import Path
 from finn import db
 from finn.classify.pipeline import classify_pending
 from finn.config import get_settings, route_for
+from finn.enrich.brief import enrich_briefs
+from finn.enrich.people import enrich_people
+from finn.enrich.results import ingest_financials
 from finn.ingest.nse import NSEClient, ingest_filings
 from finn.ingest.prices import fetch_eod
 from finn.llm import LLMRouter
 from finn.llm.providers import PROVIDERS
-from finn.models import IST
+from finn.models import IST, Rules
 from finn.portfolio import load_portfolio
 
 
@@ -39,6 +42,17 @@ def _router(conn: sqlite3.Connection, use_llm: bool) -> LLMRouter | None:
 
 def _count(conn: sqlite3.Connection, where: str = "1") -> int:
     return conn.execute(f"SELECT COUNT(*) FROM filings WHERE {where}").fetchone()[0]
+
+
+def _enrich_stage(name: str, run, enrich: dict[str, dict], errors: list[str]) -> None:
+    try:
+        res = run()
+    except Exception as e:  # noqa: BLE001 - one stage failing must not block the next
+        errors.append(f"{name}: {type(e).__name__}: {e}")
+        print(f"{name} stage failed: {type(e).__name__}: {e}")
+        return
+    enrich[name] = {"done": res.done, "empty": res.empty, "failed": res.failed}
+    errors += [f"{name}: {seq}: {why}" for seq, why in res.failed.items()]
 
 
 def refresh(conn: sqlite3.Connection, days: int = 30, use_llm: bool = True) -> dict:
@@ -91,6 +105,31 @@ def refresh(conn: sqlite3.Connection, days: int = 30, use_llm: bool = True) -> d
             errors.append(f"prices: no bars for {', '.join(prices_missing)}")
 
     router = _router(conn, use_llm)
+    since = now - timedelta(days=days)
+    financials = {"fetched": 0, "skipped": 0, "failed": {}}
+    enrich: dict[str, dict] = {}
+    try:
+        client = NSEClient()
+        try:
+            fin = ingest_financials(conn, client, [h.symbol for h in holdings])
+            financials = {"fetched": fin.fetched, "skipped": fin.skipped, "failed": fin.failed}
+            errors += [f"financials: {sym}: {why}" for sym, why in fin.failed.items()]
+            if router is not None:
+                _enrich_stage(
+                    "people", lambda: enrich_people(conn, client, router, since), enrich, errors
+                )
+                _enrich_stage(
+                    "briefs",
+                    lambda: enrich_briefs(conn, client, router, since, Rules().categories),
+                    enrich,
+                    errors,
+                )
+        finally:
+            client.close()
+    except Exception as e:  # noqa: BLE001 - enrichment must never block the snapshot
+        errors.append(f"financials: {type(e).__name__}: {e}")
+        print(f"financials/enrichment stage failed: {type(e).__name__}: {e}")
+
     summary = {
         "filings_new": filings_new,
         "filings_skipped": filings_skipped,
@@ -100,6 +139,8 @@ def refresh(conn: sqlite3.Connection, days: int = 30, use_llm: bool = True) -> d
         "classify": classify_pending(conn, router),
         "filings_total": _count(conn),
         "unclassified_left": _count(conn, "category IS NULL"),
+        "financials": financials,
+        "enrich": enrich,
         "errors": errors,
     }
     if router is not None:

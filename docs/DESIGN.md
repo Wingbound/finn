@@ -77,7 +77,7 @@ screener.in ───────┘      │                └─ /research/{t
 |---|---|---|---|
 | Filing classification | 0 | Deterministic rules on NSE `desc` + subject keywords | Covers most volume at zero cost |
 | Ambiguous classification + one-liners | 1 | Groq `openai/gpt-oss-120b`, reasoning effort medium, batched 20 filings/call, JSON mode | Fast, free; 91.3% vs 85.6% for gpt-oss-20b on the eval, ~$0.001/batch at list price (EVALS.md) |
-| Results-PDF number extraction | 2 | Gemini Flash (native PDF; handles scanned filings) | Needs vision/PDF; structured JSON |
+| Results number extraction | 2 | XBRL (deterministic, no LLM) | NSE publishes structured XBRL for every results filing; no model needed |
 | Transcript guidance extraction (per transcript) | 2 | Gemini Flash-Lite/Flash, chunked by section | Bulk extraction |
 | Ledger judgment, narrative vs numbers, bull/bear | 3 | Gemini Pro-class (or Flash with thinking) | Only place real reasoning is needed; once per company, cached |
 | People bio | 2 | Gemini + Google Search grounding | Push-side enrichment allowed |
@@ -144,7 +144,7 @@ finn/
 
 **Day 1 — Mon 9 Nov · Push backbone**
 - SQLite schema, NSE ingest, rule classifier, Groq fallback, materiality, clustering, `/digest`.
-- Gold set: hand-label ~60 filings → `eval_classify.py`. Use superpowers:test-driven-development for rules, scoring and clustering.
+- Gold set: 104 filings (AI-labelled, see EVALS.md) → `eval_classify.py`. Use superpowers:test-driven-development for rules, scoring and clustering.
 
 **Day 2 — Tue 10 Nov · Push enrichment + alerts**
 - Results extraction (Gemini PDF → JSON → Python math → cross-check against the screener quarterly table; flag mismatches).
@@ -217,3 +217,8 @@ Execution method: after approval, superpowers:writing-plans produces the task-le
 - Deployed app: Playwright MCP at 390×844, covering Today → card → Dig in → Ledger → citation, a rules change producing a new alert, and an unknown-ticker live build. No console errors. Cold start measured.
 - Manual check on a real phone (user) + PWA install.
 - Final `security-review`: no secrets in repo or git history.
+
+
+## Hosting (2026-11-09)
+
+Docker Spaces on Hugging Face now need HF PRO, so the backend runs on Vercel Python functions instead. The deployed API is read-only over the committed SQLite snapshot. `scripts/refresh.py` runs out-of-band (locally or on a schedule), is the only code that touches NSE, Yahoo, screener or the LLMs, and its output replaces the snapshot.

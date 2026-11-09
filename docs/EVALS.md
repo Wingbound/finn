@@ -179,3 +179,51 @@ On 2026-11-09, `scripts/refresh.py --days 30` with API keys sent those 64 to the
 
 Every refresh re-runs the rules on `by=default` rows, so rule improvements reach them. A run
 with an API key also sends the rows the rules still miss to the LLM.
+
+## 2. Results numbers
+
+`backend/scripts/eval_results.py` checks the numbers we derive from NSE XBRL against the
+quarterly table on screener.in. screener is a cross-check only; it never feeds the product.
+
+**Method.** For each portfolio symbol it takes the latest stored results card, finds
+screener's column for the same month ("Sep 2026"), and compares the pairs below. A pair is
+compared only when the screener page's basis (consolidated or standalone) equals the card's
+basis. A pair matches when it is within 1% relative or INR 1 crore absolute, whichever is
+more lenient. The script reports a table, per-metric match rates and the misses, and always
+exits 0.
+
+| format | our value | screener row |
+|---|---|---|
+| indas | revenue | Sales |
+| indas | EBITDA (revenue minus expenses plus finance cost and depreciation) | Operating Profit |
+| indas | PBT plus share of associates and JVs | Profit before tax |
+| indas | PAT | Net Profit |
+| bank | interest earned | Revenue |
+| bank, nbfc | PBT | Profit before tax |
+| bank, nbfc | PAT | Net Profit |
+| nbfc | revenue | Revenue |
+
+The indas PBT comparison adds the share of associates and JVs because screener's "Profit
+before tax" includes it and XBRL's ProfitBeforeTax does not.
+
+### Offline result
+
+`uv run python scripts/eval_results.py --offline` uses the recorded screener pages (all
+consolidated) and the XBRL fixtures. IDFCFIRSTB and BAJFINANCE file standalone, so they are
+skipped rather than compared against the wrong basis. Only TATASTEEL is compared:
+
+| symbol | basis | metric | ours | screener | diff % | match |
+|---|---|---|---|---|---|---|
+| TATASTEEL | consolidated | revenue | 65,436.24 | 65,436.00 | 0.00 | yes |
+| TATASTEEL | consolidated | ebitda | 10,533.07 | 10,533.00 | 0.00 | yes |
+| TATASTEEL | consolidated | pbt+assoc | 5,455.15 | 5,455.00 | 0.00 | yes |
+| TATASTEEL | consolidated | pat | 3,699.59 | 3,700.00 | -0.01 | yes |
+| IDFCFIRSTB | standalone | - | | | | skipped: basis mismatch |
+| BAJFINANCE | standalone | - | | | | skipped: basis mismatch |
+
+Match rate: 4/4 on the compared pairs. That is one symbol, so it says the method works, not
+how accurate the extraction is across the portfolio.
+
+### Live result
+
+Live run over the 18 portfolio symbols: pending (controller)
