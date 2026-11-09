@@ -266,3 +266,16 @@ def test_passive_future_forms_are_cues(quote):
 )
 def test_passive_past_forms_are_not_cues(quote):
     assert not _forward_looking(quote)
+
+
+@pytest.mark.parametrize(
+    "quote",
+    [
+        "The plant was planned to be commissioned in FY24 but slipped.",
+        "The unit had been scheduled to be completed last year.",
+        "The line was expected to be operational in 2023.",
+        "The plant was not expected to be commissioned.",
+    ],
+)
+def test_past_passives_with_participles_are_not_cues(quote):
+    assert not _forward_looking(quote)

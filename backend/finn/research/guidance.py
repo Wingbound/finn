@@ -36,8 +36,6 @@ _CUES = re.compile(
     r"|\bby fy\s*'?\d"
     r"|\b(?:is|are|be|being|remains?|stays?)\s+(?:expected|planned|scheduled|slated|poised"
     r"|set|due|targeted|anticipated|projected|estimated)\s+(?:to|for)\b"
-    r"|\b(?:expected|planned|scheduled|slated)\s+(?:to\s+be\s+)?"
-    r"(?:commissioned|completed|operational|launched)\b"
 )
 _CONDITIONAL = re.compile(r"\b(?:if|unless|assuming|provided|subject to)\b")
 
