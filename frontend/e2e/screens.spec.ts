@@ -18,6 +18,30 @@ const SHOTS: { name: string; path: string; digest?: string; prep?: (p: import("@
   },
   { name: "today-empty", path: "/", digest: "digest-empty.json" },
   { name: "alerts", path: "/alerts" },
+  { name: "dossier", path: "/research/PERSISTENT" },
+  {
+    name: "trajectory",
+    path: "/research/PERSISTENT",
+    prep: async (p) => {
+      await p.locator("#trajectory").scrollIntoViewIfNeeded();
+      await p.evaluate(() => document.getElementById("trajectory")?.scrollIntoView({ block: "start" }));
+    },
+  },
+  {
+    name: "health",
+    path: "/research/PERSISTENT",
+    prep: async (p) => {
+      await p.evaluate(() => document.getElementById("health")?.scrollIntoView({ block: "start" }));
+    },
+  },
+  {
+    name: "source",
+    path: "/research/PERSISTENT",
+    prep: async (p) => {
+      await p.getByRole("button", { name: /call, p\. \d+$/ }).first().click();
+      await p.waitForTimeout(500);
+    },
+  },
   {
     name: "research",
     path: "/research",
