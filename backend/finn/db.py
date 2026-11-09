@@ -80,6 +80,12 @@ CREATE TABLE IF NOT EXISTS doc_text (
     chars INTEGER NOT NULL,
     text TEXT NOT NULL
 );
+CREATE TABLE IF NOT EXISTS doc_pages (
+    url TEXT NOT NULL,
+    page INTEGER NOT NULL,
+    text TEXT NOT NULL,
+    PRIMARY KEY (url, page)
+);
 CREATE TABLE IF NOT EXISTS enrichments (
     seq_id TEXT NOT NULL,
     kind TEXT NOT NULL,
@@ -347,6 +353,22 @@ def save_doc_text(conn: sqlite3.Connection, url: str, text: str) -> None:
                chars = excluded.chars, text = excluded.text""",
         (url, _ts(datetime.now(IST)), len(text), text),
     )
+    conn.commit()
+
+
+def get_doc_pages(conn: sqlite3.Connection, url: str) -> list[str] | None:
+    """Cached page texts ordered by page; None if never cached, [] for the empty sentinel."""
+    rows = conn.execute("SELECT page, text FROM doc_pages WHERE url = ? ORDER BY page", (url,))
+    rows = rows.fetchall()
+    if not rows:
+        return None
+    return [r["text"] for r in rows if r["page"] > 0]
+
+
+def save_doc_pages(conn: sqlite3.Connection, url: str, pages: list[str]) -> None:
+    """Cache pages 1..n; an empty list stores the page-0 sentinel so it is not refetched."""
+    rows = [(url, i, t) for i, t in enumerate(pages, 1)] or [(url, 0, "")]
+    conn.executemany("INSERT OR REPLACE INTO doc_pages (url, page, text) VALUES (?,?,?)", rows)
     conn.commit()
 
 

@@ -213,3 +213,12 @@ class BalanceSheetHealth(BaseModel):
     wc_days_change_3y: float | None
     roce_pct: float | None
     flags: list[Flag]
+
+
+class Source(BaseModel):
+    id: str
+    kind: Literal["transcript", "annual_report"]
+    title: str
+    quarter: str | None
+    url: str
+    pages: list[str]
