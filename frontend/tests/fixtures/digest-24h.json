@@ -1,745 +1,35 @@
 {
  "window": {
-  "start": "2026-11-06T18:58:42+05:30",
-  "end": "2026-11-07T18:58:42+05:30"
+  "start": "2026-11-08T23:43:03+05:30",
+  "end": "2026-11-09T23:43:03+05:30"
  },
- "as_of": "2026-11-09T10:44:11.182744+05:30",
- "latest_filing_at": "2026-11-07T16:58:42+05:30",
+ "as_of": "2026-11-10T02:27:28.434099+05:30",
+ "latest_filing_at": "2026-11-09T21:43:03+05:30",
  "counts": {
-  "shown": 7,
-  "routine": 4,
-  "hidden": 0,
-  "filings": 15
+  "shown": 1,
+  "routine": 3,
+  "hidden": 1,
+  "filings": 5
  },
  "stories": [
   {
-   "id": "BAJFINANCE:results:106852542",
-   "symbol": "BAJFINANCE",
-   "company": "Bajaj Finance Limited",
-   "category": "results",
-   "subtype": null,
-   "score": 100,
-   "tier": "critical",
-   "headline": {
-    "filing": {
-     "seq_id": "106852542",
-     "symbol": "BAJFINANCE",
-     "company": "Bajaj Finance Limited",
-     "nse_desc": "General Updates",
-     "subject": "Bajaj Finance Limited has informed the Exchange about General Updates",
-     "nse_summary": "Bajaj Finance Limited submitted its Half Yearly Report for FY2026-27 for the period ended 30 September 2026. Consolidated profit after tax increased by 28% to 12,447 crore. Assets under management grew 26% to 584,624 crore. Net total income rose 23% to 31,198 crore. Profit before tax increased 29% to 16,686 crore. Gross NPA stood at 1.06% and Net NPA at 0.42%. On 1 October 2026, the Board approved raising up to 11,700 crore via Qualified Institutions Placement and up to 5,800 crore through preferential issue of warrants. The report is circulated to members and debenture holders electronically and available on the company website.",
-     "pdf_url": "https://nsearchives.nseindia.com/corporate/BAJFINANCE_07112026162848_Half_yearly_communication_Signed.pdf",
-     "filed_at": "2026-11-07T16:41:29+05:30",
-     "has_xbrl": true
-    },
-    "cls": {
-     "category": "results",
-     "subtype": null,
-     "noise": false,
-     "by": "llm",
-     "confidence": 0.7
-    },
-    "score": 100,
-    "tier": "critical",
-    "reasons": [
-     "results filing (90)",
-     "you follow results +10"
-    ]
-   },
-   "members": [
-    {
-     "filing": {
-      "seq_id": "106852542",
-      "symbol": "BAJFINANCE",
-      "company": "Bajaj Finance Limited",
-      "nse_desc": "General Updates",
-      "subject": "Bajaj Finance Limited has informed the Exchange about General Updates",
-      "nse_summary": "Bajaj Finance Limited submitted its Half Yearly Report for FY2026-27 for the period ended 30 September 2026. Consolidated profit after tax increased by 28% to 12,447 crore. Assets under management grew 26% to 584,624 crore. Net total income rose 23% to 31,198 crore. Profit before tax increased 29% to 16,686 crore. Gross NPA stood at 1.06% and Net NPA at 0.42%. On 1 October 2026, the Board approved raising up to 11,700 crore via Qualified Institutions Placement and up to 5,800 crore through preferential issue of warrants. The report is circulated to members and debenture holders electronically and available on the company website.",
-      "pdf_url": "https://nsearchives.nseindia.com/corporate/BAJFINANCE_07112026162848_Half_yearly_communication_Signed.pdf",
-      "filed_at": "2026-11-07T16:41:29+05:30",
-      "has_xbrl": true
-     },
-     "cls": {
-      "category": "results",
-      "subtype": null,
-      "noise": false,
-      "by": "llm",
-      "confidence": 0.7
-     },
-     "score": 100,
-     "tier": "critical",
-     "reasons": [
-      "results filing (90)",
-      "you follow results +10"
-     ]
-    }
-   ],
-   "latest_at": "2026-11-07T16:41:29+05:30",
-   "results": {
-    "symbol": "BAJFINANCE",
-    "period_end": "2026-09-30",
-    "period_label": "Q2 FY27",
-    "basis": "consolidated",
-    "format": "nbfc",
-    "audited": false,
-    "compared_qoq": "2026-06-30",
-    "compared_yoy": "2025-09-30",
-    "metrics": [
-     {
-      "key": "revenue",
-      "label": "Revenue",
-      "value": 24546.37,
-      "qoq_pct": 6.0,
-      "yoy_pct": 21.6,
-      "computed": false
-     },
-     {
-      "key": "nii",
-      "label": "Net interest income",
-      "value": 13334.66,
-      "qoq_pct": 6.1,
-      "yoy_pct": 23.6,
-      "computed": true
-     },
-     {
-      "key": "impairment",
-      "label": "Credit cost",
-      "value": 2166.09,
-      "qoq_pct": 8.7,
-      "yoy_pct": -4.5,
-      "computed": false
-     },
-     {
-      "key": "pbt",
-      "label": "PBT",
-      "value": 8533.47,
-      "qoq_pct": 4.8,
-      "yoy_pct": 29.2,
-      "computed": false
-     },
-     {
-      "key": "pat",
-      "label": "PAT",
-      "value": 6366.57,
-      "qoq_pct": 4.7,
-      "yoy_pct": 28.7,
-      "computed": false
-     }
-    ],
-    "margins": [
-     {
-      "key": "pat_margin",
-      "label": "PAT margin",
-      "value_pct": 25.9,
-      "qoq_bps": -31,
-      "yoy_bps": 142
-     }
-    ],
-    "notes": [
-     "NBFCs are shown on net interest income and credit cost; EBITDA does not apply.",
-     "PAT includes ₹3.73 cr share of profit of associates and joint ventures."
-    ],
-    "sources": [
-     "https://nsearchives.nseindia.com/corporate/xbrl/INTEGRATED_FILING_NBFC_INDAS_1742040_19102026075918_WEB.xml",
-     "https://nsearchives.nseindia.com/corporate/xbrl/INTEGRATED_FILING_NBFC_INDAS_1705543_30072026070233_WEB.xml",
-     "https://nsearchives.nseindia.com/corporate/xbrl/INTEGRATED_FILING_NBFC_INDAS_1570585_10112025100247_WEB.xml"
-    ]
-   },
-   "people": [],
-   "brief": null
-  },
-  {
-   "id": "TATASTEEL:results:106852180",
-   "symbol": "TATASTEEL",
-   "company": "Tata Steel Limited",
-   "category": "results",
-   "subtype": "results",
-   "score": 100,
-   "tier": "critical",
-   "headline": {
-    "filing": {
-     "seq_id": "106852180",
-     "symbol": "TATASTEEL",
-     "company": "Tata Steel Limited",
-     "nse_desc": "Outcome of Board Meeting",
-     "subject": "Tata Steel Limited has submitted to the Exchange, the financial results for the quarter and half year ended September 30, 2026.",
-     "nse_summary": "Tata Steel Limited approved its audited standalone and unaudited consolidated financial results for the quarter and half year ended September 30, 2026. The statutory auditor issued a qualified opinion due to non-recognition of further fair value reduction for Tata Steel Nederland B.V., which has a carrying value of Rs. 59,078.13 crore. The auditor also highlighted an emphasis of matter regarding the Scheme of Amalgamation with Rujuvalika Investments Limited, approved by the National Company Law Tribunal on October 1, 2026. Mr. Noel Naval Tata, DIN 00024713, will retire as Non-Executive, Non-Independent Director and Vice Chairman effective November 11, 2026. The Board meeting was held on November 7, 2026.",
-     "pdf_url": "https://nsearchives.nseindia.com/corporate/NIDHIFADNAVIS_07112026130531_BOARDOUTCOME-NOV7.pdf",
-     "filed_at": "2026-11-07T13:06:33+05:30",
-     "has_xbrl": true
-    },
-    "cls": {
-     "category": "results",
-     "subtype": "results",
-     "noise": false,
-     "by": "rules",
-     "confidence": 0.8
-    },
-    "score": 100,
-    "tier": "critical",
-    "reasons": [
-     "results filing (90)",
-     "you follow results +10"
-    ]
-   },
-   "members": [
-    {
-     "filing": {
-      "seq_id": "106852180",
-      "symbol": "TATASTEEL",
-      "company": "Tata Steel Limited",
-      "nse_desc": "Outcome of Board Meeting",
-      "subject": "Tata Steel Limited has submitted to the Exchange, the financial results for the quarter and half year ended September 30, 2026.",
-      "nse_summary": "Tata Steel Limited approved its audited standalone and unaudited consolidated financial results for the quarter and half year ended September 30, 2026. The statutory auditor issued a qualified opinion due to non-recognition of further fair value reduction for Tata Steel Nederland B.V., which has a carrying value of Rs. 59,078.13 crore. The auditor also highlighted an emphasis of matter regarding the Scheme of Amalgamation with Rujuvalika Investments Limited, approved by the National Company Law Tribunal on October 1, 2026. Mr. Noel Naval Tata, DIN 00024713, will retire as Non-Executive, Non-Independent Director and Vice Chairman effective November 11, 2026. The Board meeting was held on November 7, 2026.",
-      "pdf_url": "https://nsearchives.nseindia.com/corporate/NIDHIFADNAVIS_07112026130531_BOARDOUTCOME-NOV7.pdf",
-      "filed_at": "2026-11-07T13:06:33+05:30",
-      "has_xbrl": true
-     },
-     "cls": {
-      "category": "results",
-      "subtype": "results",
-      "noise": false,
-      "by": "rules",
-      "confidence": 0.8
-     },
-     "score": 100,
-     "tier": "critical",
-     "reasons": [
-      "results filing (90)",
-      "you follow results +10"
-     ]
-    },
-    {
-     "filing": {
-      "seq_id": "106852205",
-      "symbol": "TATASTEEL",
-      "company": "Tata Steel Limited",
-      "nse_desc": "Press Release",
-      "subject": "Tata Steel Limited has informed the Exchange regarding a press release dated November 07, 2026, titled 'Tata Steel reports Consolidated EBITDA of Rs 10,665 crores for the quarter and Rs 20,035 crores for the half year ended September 30, 2026'.",
-      "nse_summary": "Tata Steel submitted a press release and investor presentation to BSE and NSE on November 7, 2026, regarding financial results for the quarter and half year ended September 30, 2026. Consolidated EBITDA was Rs 10,665 crores for the quarter and Rs 20,035 crores for the half year. Consolidated revenues were Rs 65,436 crores for the quarter and Rs 1,26,231 crores for the half year. India revenues were Rs 42,653 crores for the quarter. Netherlands revenues were €1,395 million. UK revenues were £411 million with an EBITDA loss of £56 million. Capital expenditure was Rs 3,280 crores for the quarter and Rs 6,860 crores for the half year. Net debt stood at Rs 91,423 crores with a net debt to EBITDA ratio of 2.4x. Group liquidity was Rs 40,076 crores.",
-      "pdf_url": "https://nsearchives.nseindia.com/corporate/NIDHIFADNAVIS_07112026132017_BSENSEPRANDIR.pdf",
-      "filed_at": "2026-11-07T13:21:16+05:30",
-      "has_xbrl": true
-     },
-     "cls": {
-      "category": "results",
-      "subtype": "press_release",
-      "noise": false,
-      "by": "rules",
-      "confidence": 0.8
-     },
-     "score": 100,
-     "tier": "critical",
-     "reasons": [
-      "results filing (90)",
-      "you follow results +10"
-     ]
-    },
-    {
-     "filing": {
-      "seq_id": "106852208",
-      "symbol": "TATASTEEL",
-      "company": "Tata Steel Limited",
-      "nse_desc": "Investor Presentation",
-      "subject": "Tata Steel Limited has informed the Exchange about Investor Presentation",
-      "nse_summary": "Tata Steel submitted a press release and investor presentation to BSE and NSE on November 7, 2026, regarding financial results for the quarter and half year ended September 30, 2026. Consolidated EBITDA was Rs 10,665 crores for the quarter and Rs 20,035 crores for the half year. Consolidated revenues were Rs 65,436 crores for the quarter and Rs 1,26,231 crores for the half year. India revenues were Rs 42,653 crores for the quarter. Netherlands revenues were €1,395 million. UK revenues were £411 million with an EBITDA loss of £56 million. Capital expenditure was Rs 3,280 crores for the quarter and Rs 6,860 crores for the half year. Net debt stood at Rs 91,423 crores with a net debt to EBITDA ratio of 2.4x. Group liquidity was Rs 40,076 crores.",
-      "pdf_url": "https://nsearchives.nseindia.com/corporate/NIDHIFADNAVIS_07112026132213_BSENSEPRANDIR.pdf",
-      "filed_at": "2026-11-07T13:23:05+05:30",
-      "has_xbrl": true
-     },
-     "cls": {
-      "category": "results",
-      "subtype": "presentation",
-      "noise": false,
-      "by": "rules",
-      "confidence": 0.95
-     },
-     "score": 91,
-     "tier": "critical",
-     "reasons": [
-      "results filing (90)",
-      "investor presentation ×0.9",
-      "you follow results +10"
-     ]
-    },
-    {
-     "filing": {
-      "seq_id": "106852244",
-      "symbol": "TATASTEEL",
-      "company": "Tata Steel Limited",
-      "nse_desc": "General Updates",
-      "subject": "Tata Steel Limited has informed the Exchange about Outcome of Board meeting of Tata Steel Limited for the quarter and half year ended September 30, 2026",
-      "nse_summary": "Tata Steel Limited approved its audited standalone and unaudited consolidated financial results for the quarter and half year ended September 30, 2026. The statutory auditor issued a qualified opinion due to non-recognition of further fair value reduction for Tata Steel Nederland B.V., which has a carrying value of Rs. 59,078.13 crore. The auditor also highlighted an emphasis of matter regarding the Scheme of Amalgamation with Rujuvalika Investments Limited, approved by the National Company Law Tribunal on October 1, 2026. Mr. Noel Naval Tata, DIN 00024713, will retire as Non-Executive, Non-Independent Director and Vice Chairman effective November 11, 2026. The Board meeting was held on November 7, 2026.",
-      "pdf_url": "https://nsearchives.nseindia.com/corporate/NIDHIFADNAVIS_07112026134209_Outcome_of_BM.pdf",
-      "filed_at": "2026-11-07T13:43:17+05:30",
-      "has_xbrl": true
-     },
-     "cls": {
-      "category": "results",
-      "subtype": "results",
-      "noise": false,
-      "by": "rules",
-      "confidence": 0.8
-     },
-     "score": 100,
-     "tier": "critical",
-     "reasons": [
-      "results filing (90)",
-      "you follow results +10"
-     ]
-    },
-    {
-     "filing": {
-      "seq_id": "106852254",
-      "symbol": "TATASTEEL",
-      "company": "Tata Steel Limited",
-      "nse_desc": "Outcome of Board Meeting",
-      "subject": "Tata Steel Limited has informed the Exchange regarding retirement of Mr. Noel Naval Tata as the Non-Executive, Non-Independent Director and Vice Chairman of the Board",
-      "nse_summary": "Tata Steel Limited approved its audited standalone and unaudited consolidated financial results for the quarter and half year ended September 30, 2026. The statutory auditor issued a qualified opinion due to non-recognition of further fair value reduction for Tata Steel Nederland B.V., which has a carrying value of Rs. 59,078.13 crore. The auditor also highlighted an emphasis of matter regarding the Scheme of Amalgamation with Rujuvalika Investments Limited, approved by the National Company Law Tribunal on October 1, 2026. Mr. Noel Naval Tata, DIN 00024713, will retire as Non-Executive, Non-Independent Director and Vice Chairman effective November 11, 2026. The Board meeting was held on November 7, 2026.",
-      "pdf_url": "https://nsearchives.nseindia.com/corporate/NIDHIFADNAVIS_07112026134722_Outcome_of_BM.pdf",
-      "filed_at": "2026-11-07T13:48:10+05:30",
-      "has_xbrl": true
-     },
-     "cls": {
-      "category": "results",
-      "subtype": "results",
-      "noise": false,
-      "by": "rules",
-      "confidence": 0.8
-     },
-     "score": 100,
-     "tier": "critical",
-     "reasons": [
-      "results filing (90)",
-      "you follow results +10"
-     ]
-    }
-   ],
-   "latest_at": "2026-11-07T13:48:10+05:30",
-   "results": {
-    "symbol": "TATASTEEL",
-    "period_end": "2026-09-30",
-    "period_label": "Q2 FY27",
-    "basis": "consolidated",
-    "format": "indas",
-    "audited": false,
-    "compared_qoq": "2026-06-30",
-    "compared_yoy": "2025-09-30",
-    "metrics": [
-     {
-      "key": "revenue",
-      "label": "Revenue",
-      "value": 65436.24,
-      "qoq_pct": 7.6,
-      "yoy_pct": 11.5,
-      "computed": false
-     },
-     {
-      "key": "ebitda",
-      "label": "EBITDA",
-      "value": 10533.07,
-      "qoq_pct": 13.7,
-      "yoy_pct": 18.4,
-      "computed": true
-     },
-     {
-      "key": "pbt",
-      "label": "PBT",
-      "value": 5342.88,
-      "qoq_pct": 42.8,
-      "yoy_pct": 28.1,
-      "computed": false
-     },
-     {
-      "key": "pat",
-      "label": "PAT",
-      "value": 3699.59,
-      "qoq_pct": 55.1,
-      "yoy_pct": 16.2,
-      "computed": false
-     }
-    ],
-    "margins": [
-     {
-      "key": "ebitda_margin",
-      "label": "EBITDA margin",
-      "value_pct": 16.1,
-      "qoq_bps": 86,
-      "yoy_bps": 94
-     },
-     {
-      "key": "pat_margin",
-      "label": "PAT margin",
-      "value_pct": 5.7,
-      "qoq_bps": 173,
-      "yoy_bps": 23
-     }
-    ],
-    "notes": [
-     "EBITDA is computed: revenue from operations minus operating expenses (excludes other income).",
-     "PBT includes an exceptional gain of ₹348.68 cr.",
-     "PAT includes ₹112.27 cr share of profit of associates and joint ventures."
-    ],
-    "sources": [
-     "https://nsearchives.nseindia.com/corporate/xbrl/INTEGRATED_FILING_INDAS_1755442_07112026053333_WEB.xml",
-     "https://nsearchives.nseindia.com/corporate/xbrl/INTEGRATED_FILING_INDAS_1705622_30072026075610_WEB.xml",
-     "https://nsearchives.nseindia.com/corporate/xbrl/INTEGRATED_FILING_INDAS_1572729_12112025073451_WEB.xml"
-    ]
-   },
-   "people": [],
-   "brief": null
-  },
-  {
-   "id": "TATASTEEL:management_change:106852199",
-   "symbol": "TATASTEEL",
-   "company": "Tata Steel Limited",
-   "category": "management_change",
-   "subtype": "cxo",
-   "score": 98,
-   "tier": "critical",
-   "headline": {
-    "filing": {
-     "seq_id": "106852199",
-     "symbol": "TATASTEEL",
-     "company": "Tata Steel Limited",
-     "nse_desc": "Retirement",
-     "subject": "Tata Steel Limited has informed the Exchange about Retirement of Mr. Noel Naval Tata as the Non-Executive, Non-Independent Director and Vice Chairman of the Board",
-     "nse_summary": "Tata Steel Limited approved its audited standalone and unaudited consolidated financial results for the quarter and half year ended September 30, 2026. The statutory auditor issued a qualified opinion due to non-recognition of further fair value reduction for Tata Steel Nederland B.V., which has a carrying value of Rs. 59,078.13 crore. The auditor also highlighted an emphasis of matter regarding the Scheme of Amalgamation with Rujuvalika Investments Limited, approved by the National Company Law Tribunal on October 1, 2026. Mr. Noel Naval Tata, DIN 00024713, will retire as Non-Executive, Non-Independent Director and Vice Chairman effective November 11, 2026. The Board meeting was held on November 7, 2026.",
-     "pdf_url": "https://nsearchives.nseindia.com/corporate/NIDHIFADNAVIS_07112026131701_BOARDOUTCOME-NOV7.pdf",
-     "filed_at": "2026-11-07T13:17:42+05:30",
-     "has_xbrl": true
-    },
-    "cls": {
-     "category": "management_change",
-     "subtype": "cxo",
-     "noise": false,
-     "by": "rules",
-     "confidence": 0.95
-    },
-    "score": 98,
-    "tier": "critical",
-    "reasons": [
-     "management change filing (80)",
-     "CFO/CEO/MD change ×1.1",
-     "you follow management change +10"
-    ]
-   },
-   "members": [
-    {
-     "filing": {
-      "seq_id": "106852199",
-      "symbol": "TATASTEEL",
-      "company": "Tata Steel Limited",
-      "nse_desc": "Retirement",
-      "subject": "Tata Steel Limited has informed the Exchange about Retirement of Mr. Noel Naval Tata as the Non-Executive, Non-Independent Director and Vice Chairman of the Board",
-      "nse_summary": "Tata Steel Limited approved its audited standalone and unaudited consolidated financial results for the quarter and half year ended September 30, 2026. The statutory auditor issued a qualified opinion due to non-recognition of further fair value reduction for Tata Steel Nederland B.V., which has a carrying value of Rs. 59,078.13 crore. The auditor also highlighted an emphasis of matter regarding the Scheme of Amalgamation with Rujuvalika Investments Limited, approved by the National Company Law Tribunal on October 1, 2026. Mr. Noel Naval Tata, DIN 00024713, will retire as Non-Executive, Non-Independent Director and Vice Chairman effective November 11, 2026. The Board meeting was held on November 7, 2026.",
-      "pdf_url": "https://nsearchives.nseindia.com/corporate/NIDHIFADNAVIS_07112026131701_BOARDOUTCOME-NOV7.pdf",
-      "filed_at": "2026-11-07T13:17:42+05:30",
-      "has_xbrl": true
-     },
-     "cls": {
-      "category": "management_change",
-      "subtype": "cxo",
-      "noise": false,
-      "by": "rules",
-      "confidence": 0.95
-     },
-     "score": 98,
-     "tier": "critical",
-     "reasons": [
-      "management change filing (80)",
-      "CFO/CEO/MD change ×1.1",
-      "you follow management change +10"
-     ]
-    }
-   ],
-   "latest_at": "2026-11-07T13:17:42+05:30",
-   "results": null,
-   "people": [
-    {
-     "name": "Mr. Noel Naval Tata",
-     "role": "Non-Executive, Non-Independent Director and Vice Chairman of the Board",
-     "change": "retired",
-     "effective": "effective close of business hours on November 11, 2026",
-     "profile": "Mr. Tata has been associated with the Company since March 2022 and during his tenure, he has provided valuable guidance and strategic direction to the Company. The Board places on record its deep appreciation for his invaluable contributions to the Company.",
-     "incoming": false,
-     "source_seq_id": "106852199"
-    }
-   ],
-   "brief": null
-  },
-  {
-   "id": "TATASTEEL:mna:106852468",
-   "symbol": "TATASTEEL",
-   "company": "Tata Steel Limited",
-   "category": "mna",
-   "subtype": "acquisition",
-   "score": 95,
-   "tier": "critical",
-   "headline": {
-    "filing": {
-     "seq_id": "106852468",
-     "symbol": "TATASTEEL",
-     "company": "Tata Steel Limited",
-     "nse_desc": "Acquisition",
-     "subject": "Tata Steel Limited has informed the Exchange about acquisition of 38,222 equity shares of face value &#8377;10/- each in Creative Port Development Private Limited ( CPDPL ) due to conversion of 25,10,830 Optionally Convertible Redeemable Preference Shares of CPDPL, as per terms of issue",
-     "nse_summary": "Tata Steel Limited acquired 38,222 equity shares in Creative Port Development Private Limited on November 7, 2026. This acquisition resulted from the conversion of 25,10,830 Optionally Convertible Redeemable Preference Shares. The conversion ratio was one equity share for every 65.69 preference shares. Tata Steel’s equity stake in the subsidiary increased from 51% to 57.5%. The company received a cash payment of ₹6,876.11 for fractional entitlements. Creative Port Development Private Limited remains a subsidiary of Tata Steel. The target entity operates in the transportation and storage sector. No governmental or regulatory approvals were required for this transaction.",
-     "pdf_url": "https://nsearchives.nseindia.com/corporate/NIDHIFADNAVIS_07112026154336_NSEBSE_CPDPL.pdf",
-     "filed_at": "2026-11-07T15:45:33+05:30",
-     "has_xbrl": true
-    },
-    "cls": {
-     "category": "mna",
-     "subtype": "acquisition",
-     "noise": false,
-     "by": "rules",
-     "confidence": 0.95
-    },
-    "score": 95,
-    "tier": "critical",
-    "reasons": [
-     "M&A filing (85)",
-     "you follow M&A +10"
-    ]
-   },
-   "members": [
-    {
-     "filing": {
-      "seq_id": "106852468",
-      "symbol": "TATASTEEL",
-      "company": "Tata Steel Limited",
-      "nse_desc": "Acquisition",
-      "subject": "Tata Steel Limited has informed the Exchange about acquisition of 38,222 equity shares of face value &#8377;10/- each in Creative Port Development Private Limited ( CPDPL ) due to conversion of 25,10,830 Optionally Convertible Redeemable Preference Shares of CPDPL, as per terms of issue",
-      "nse_summary": "Tata Steel Limited acquired 38,222 equity shares in Creative Port Development Private Limited on November 7, 2026. This acquisition resulted from the conversion of 25,10,830 Optionally Convertible Redeemable Preference Shares. The conversion ratio was one equity share for every 65.69 preference shares. Tata Steel’s equity stake in the subsidiary increased from 51% to 57.5%. The company received a cash payment of ₹6,876.11 for fractional entitlements. Creative Port Development Private Limited remains a subsidiary of Tata Steel. The target entity operates in the transportation and storage sector. No governmental or regulatory approvals were required for this transaction.",
-      "pdf_url": "https://nsearchives.nseindia.com/corporate/NIDHIFADNAVIS_07112026154336_NSEBSE_CPDPL.pdf",
-      "filed_at": "2026-11-07T15:45:33+05:30",
-      "has_xbrl": true
-     },
-     "cls": {
-      "category": "mna",
-      "subtype": "acquisition",
-      "noise": false,
-      "by": "rules",
-      "confidence": 0.95
-     },
-     "score": 95,
-     "tier": "critical",
-     "reasons": [
-      "M&A filing (85)",
-      "you follow M&A +10"
-     ]
-    }
-   ],
-   "latest_at": "2026-11-07T15:45:33+05:30",
-   "results": null,
-   "people": [],
-   "brief": {
-    "one_liner": "Tata Steel increased its equity stake in Creative Port Development Private Limited from 51% to 57.5% by converting preference shares.",
-    "facts": [
-     {
-      "label": "Acquisition Date",
-      "value": "November 7, 2026"
-     },
-     {
-      "label": "Equity Shares Acquired",
-      "value": "38,222"
-     },
-     {
-      "label": "New Equity Stake",
-      "value": "57.5%"
-     }
-    ],
-    "quote": "Post this conversion, the Company’s equity stake in CPDPL has increased by 6.5% from 51% to 57.5% and CPDPL continues to remain a subsidiary of the Company.",
-    "by": "llm",
-    "source_seq_id": "106852468"
-   }
-  },
-  {
-   "id": "CGPOWER:litigation:106852258",
-   "symbol": "CGPOWER",
-   "company": "CG Power and Industrial Solutions Limited",
-   "category": "litigation",
-   "subtype": null,
-   "score": 85,
-   "tier": "critical",
-   "headline": {
-    "filing": {
-     "seq_id": "106852258",
-     "symbol": "CGPOWER",
-     "company": "CG Power and Industrial Solutions Limited",
-     "nse_desc": "General Updates",
-     "subject": "CG Power and Industrial Solutions Limited has informed the Exchange about General Updates",
-     "nse_summary": "CG Power and Industrial Solutions Limited discloses that the Hon'ble High Court Aurangabad Bench stayed the Maharashtra Pollution Control Board direction dated 3rd November 2026 ordering the closure of its manufacturing unit at Plot no. D-2, D1/2, MIDC, Waluj, Chhatrapati Sambhajinagar. The stay was granted via an order dated 6th November 2026. The notice returnable date is 19th November 2026. The manufacturing unit contributes approximately 2.5% of the company's annual consolidated revenue.",
-     "pdf_url": "https://nsearchives.nseindia.com/corporate/CGPOWER_07112026134853_Disclosure-_High_Court_Stay_order_on_Closure_of_Operations.pdf",
-     "filed_at": "2026-11-07T13:49:21+05:30",
-     "has_xbrl": true
-    },
-    "cls": {
-     "category": "litigation",
-     "subtype": null,
-     "noise": false,
-     "by": "llm",
-     "confidence": 0.7
-    },
-    "score": 85,
-    "tier": "critical",
-    "reasons": [
-     "litigation filing (75)",
-     "you follow litigation +10"
-    ]
-   },
-   "members": [
-    {
-     "filing": {
-      "seq_id": "106852258",
-      "symbol": "CGPOWER",
-      "company": "CG Power and Industrial Solutions Limited",
-      "nse_desc": "General Updates",
-      "subject": "CG Power and Industrial Solutions Limited has informed the Exchange about General Updates",
-      "nse_summary": "CG Power and Industrial Solutions Limited discloses that the Hon'ble High Court Aurangabad Bench stayed the Maharashtra Pollution Control Board direction dated 3rd November 2026 ordering the closure of its manufacturing unit at Plot no. D-2, D1/2, MIDC, Waluj, Chhatrapati Sambhajinagar. The stay was granted via an order dated 6th November 2026. The notice returnable date is 19th November 2026. The manufacturing unit contributes approximately 2.5% of the company's annual consolidated revenue.",
-      "pdf_url": "https://nsearchives.nseindia.com/corporate/CGPOWER_07112026134853_Disclosure-_High_Court_Stay_order_on_Closure_of_Operations.pdf",
-      "filed_at": "2026-11-07T13:49:21+05:30",
-      "has_xbrl": true
-     },
-     "cls": {
-      "category": "litigation",
-      "subtype": null,
-      "noise": false,
-      "by": "llm",
-      "confidence": 0.7
-     },
-     "score": 85,
-     "tier": "critical",
-     "reasons": [
-      "litigation filing (75)",
-      "you follow litigation +10"
-     ]
-    }
-   ],
-   "latest_at": "2026-11-07T13:49:21+05:30",
-   "results": null,
-   "people": [],
-   "brief": {
-    "one_liner": "The Aurangabad Bench of the High Court stayed the pollution board's closure direction for CG Power's manufacturing unit, which contributes about 2.5% of annual consolidated revenue.",
-    "facts": [
-     {
-      "label": "Revenue contribution",
-      "value": "2.5%"
-     },
-     {
-      "label": "Stay order date",
-      "value": "6th November 2026"
-     },
-     {
-      "label": "Notice returnable date",
-      "value": "19th November 2026"
-     }
-    ],
-    "quote": "the Hon'ble High Court (Aurangabad Bench) vide its order dated 6th November 2026 has stayed the Direction dated 3rd November 2026 of Maharashtra Pollution Control Board",
-    "by": "llm",
-    "source_seq_id": "106852258"
-   }
-  },
-  {
-   "id": "AMBER:fund_raise:106852048",
-   "symbol": "AMBER",
-   "company": "Amber Enterprises India Limited",
-   "category": "fund_raise",
-   "subtype": null,
-   "score": 80,
-   "tier": "critical",
-   "headline": {
-    "filing": {
-     "seq_id": "106852048",
-     "symbol": "AMBER",
-     "company": "Amber Enterprises India Limited",
-     "nse_desc": "Updates",
-     "subject": "In furtherance to our earlier intimation dated 11th July 2026 and pursuant to Regulation 30 of SEBI LODR Regulations, IL JIN Electronics (India) Limited (formerly known as IL JIN Electronics (India) Private Limited), a material subsidiary of the Company, has filed the Draft Red Herring Prospectus dated 6th November 2026, on 7th November 2026 with the SEBI, BSE and NSE in connection with its proposed Initial Public Offer.",
-     "nse_summary": "Amber Enterprises India Limited intimates that its material subsidiary, IL JIN Electronics India Limited, filed the Draft Red Herring Prospectus on 7th November 2026 with the Securities and Exchange Board of India, BSE Limited, and National Stock Exchange of India Limited. This filing relates to the proposed Initial Public Offer of IL JIN Electronics India Limited. The IPO is subject to receipt of required regulatory approvals. The intimation was made pursuant to Regulation 30 read with Schedule III of the SEBI LODR Regulations. The information is available on the company website at www.ambergroupindia.com.",
-     "pdf_url": "https://nsearchives.nseindia.com/corporate/AMBER_07112026112953_StockExchangeIntimations_ILJINDRHPFiling.pdf",
-     "filed_at": "2026-11-07T11:30:38+05:30",
-     "has_xbrl": true
-    },
-    "cls": {
-     "category": "fund_raise",
-     "subtype": null,
-     "noise": false,
-     "by": "rules",
-     "confidence": 0.8
-    },
-    "score": 80,
-    "tier": "critical",
-    "reasons": [
-     "fund raise filing (70)",
-     "you follow fund raise +10"
-    ]
-   },
-   "members": [
-    {
-     "filing": {
-      "seq_id": "106852048",
-      "symbol": "AMBER",
-      "company": "Amber Enterprises India Limited",
-      "nse_desc": "Updates",
-      "subject": "In furtherance to our earlier intimation dated 11th July 2026 and pursuant to Regulation 30 of SEBI LODR Regulations, IL JIN Electronics (India) Limited (formerly known as IL JIN Electronics (India) Private Limited), a material subsidiary of the Company, has filed the Draft Red Herring Prospectus dated 6th November 2026, on 7th November 2026 with the SEBI, BSE and NSE in connection with its proposed Initial Public Offer.",
-      "nse_summary": "Amber Enterprises India Limited intimates that its material subsidiary, IL JIN Electronics India Limited, filed the Draft Red Herring Prospectus on 7th November 2026 with the Securities and Exchange Board of India, BSE Limited, and National Stock Exchange of India Limited. This filing relates to the proposed Initial Public Offer of IL JIN Electronics India Limited. The IPO is subject to receipt of required regulatory approvals. The intimation was made pursuant to Regulation 30 read with Schedule III of the SEBI LODR Regulations. The information is available on the company website at www.ambergroupindia.com.",
-      "pdf_url": "https://nsearchives.nseindia.com/corporate/AMBER_07112026112953_StockExchangeIntimations_ILJINDRHPFiling.pdf",
-      "filed_at": "2026-11-07T11:30:38+05:30",
-      "has_xbrl": true
-     },
-     "cls": {
-      "category": "fund_raise",
-      "subtype": null,
-      "noise": false,
-      "by": "rules",
-      "confidence": 0.8
-     },
-     "score": 80,
-     "tier": "critical",
-     "reasons": [
-      "fund raise filing (70)",
-      "you follow fund raise +10"
-     ]
-    }
-   ],
-   "latest_at": "2026-11-07T11:30:38+05:30",
-   "results": null,
-   "people": [],
-   "brief": {
-    "one_liner": "Amber Enterprises announced that its material subsidiary, IL JIN Electronics (India) Limited, filed a Draft Red Herring Prospectus for a proposed IPO.",
-    "facts": [
-     {
-      "label": "DRHP Filing Date",
-      "value": "7th November 2026"
-     },
-     {
-      "label": "Subsidiary",
-      "value": "IL JIN Electronics (India) Limited"
-     }
-    ],
-    "quote": null,
-    "by": "llm",
-    "source_seq_id": "106852048"
-   }
-  },
-  {
-   "id": "ZYDUSLIFE:earnings_call:106852434",
-   "symbol": "ZYDUSLIFE",
-   "company": "Zydus Lifesciences Limited",
+   "id": "MAXHEALTH:earnings_call:106853726",
+   "symbol": "MAXHEALTH",
+   "company": "Max Healthcare Institute Limited",
    "category": "earnings_call",
    "subtype": "transcript",
    "score": 45,
    "tier": "important",
    "headline": {
     "filing": {
-     "seq_id": "106852434",
-     "symbol": "ZYDUSLIFE",
-     "company": "Zydus Lifesciences Limited",
+     "seq_id": "106853726",
+     "symbol": "MAXHEALTH",
+     "company": "Max Healthcare Institute Limited",
      "nse_desc": "Analysts/Institutional Investor Meet/Con. Call Updates",
-     "subject": "Zydus Lifesciences Limited has informed the Exchange about Transcript",
-     "nse_summary": "Zydus Lifesciences Limited filed the transcript of its Q2 FY27 post results earnings call held on November 4, 2026. The company reported consolidated revenues of ₹79.1 billion, up 29% year-on-year. EBITDA stood at ₹18.9 billion with a margin of 24%. Net profit was ₹9.3 billion. The net debt to EBITDA ratio was 0.62 times as on September 30, 2026. India branded formulations grew 19% year-on-year. International markets formulations revenues were ₹10 billion, up 33% year-on-year. US revenues reached ₹33.1 billion, up 21% year-on-year. Consumer wellness revenues were ₹11.2 billion, up 76% year-on-year. Medical devices revenues were ₹2.2 billion. The company received USFDA acceptance for the BLA for a Keytruda biosimilar. Phase IIb trial results for Saroglitazar in MASH were positive. The company is investing in the US launch of Saroglitazar.",
-     "pdf_url": "https://nsearchives.nseindia.com/corporate/Cadilahc_07112026151831_IntimationofPostResultsEarningsCallTranscript04112026.pdf",
-     "filed_at": "2026-11-07T15:19:54+05:30",
+     "subject": "Max Healthcare Institute Limited has informed the Exchange about transcript of Earnings Call held on November 3, 2026",
+     "nse_summary": "Max Healthcare Institute Limited filed a transcript of its earnings call held on November 3, 2026, regarding financial results for the quarter and half year ended September 30, 2026. The company reported a 20% year-on-year revenue growth to INR 3,219 crore and an 18% increase in operating EBITDA to INR 820 crore for the second quarter. Profit after tax rose 10% to INR 448 crore. Average network occupancy remained steady at 77% despite a 14% increase in bed capacity. The Board approved an investment of INR 415 crore for adding 209 brownfield beds at Max Noida, Max Vaishali, and BLK-Max, along with a car park tower at BLK. Shareholding in Kalinga Hospital Limited increased to 66%. The transcript is available on the company website.",
+     "pdf_url": "https://nsearchives.nseindia.com/corporate/MAXHEALTH_09112026214212_SE_Intimation_Earnings_Call_Transcript.pdf",
+     "filed_at": "2026-11-09T21:43:03+05:30",
      "has_xbrl": true
     },
     "cls": {
@@ -759,14 +49,14 @@
    "members": [
     {
      "filing": {
-      "seq_id": "106852434",
-      "symbol": "ZYDUSLIFE",
-      "company": "Zydus Lifesciences Limited",
+      "seq_id": "106853726",
+      "symbol": "MAXHEALTH",
+      "company": "Max Healthcare Institute Limited",
       "nse_desc": "Analysts/Institutional Investor Meet/Con. Call Updates",
-      "subject": "Zydus Lifesciences Limited has informed the Exchange about Transcript",
-      "nse_summary": "Zydus Lifesciences Limited filed the transcript of its Q2 FY27 post results earnings call held on November 4, 2026. The company reported consolidated revenues of ₹79.1 billion, up 29% year-on-year. EBITDA stood at ₹18.9 billion with a margin of 24%. Net profit was ₹9.3 billion. The net debt to EBITDA ratio was 0.62 times as on September 30, 2026. India branded formulations grew 19% year-on-year. International markets formulations revenues were ₹10 billion, up 33% year-on-year. US revenues reached ₹33.1 billion, up 21% year-on-year. Consumer wellness revenues were ₹11.2 billion, up 76% year-on-year. Medical devices revenues were ₹2.2 billion. The company received USFDA acceptance for the BLA for a Keytruda biosimilar. Phase IIb trial results for Saroglitazar in MASH were positive. The company is investing in the US launch of Saroglitazar.",
-      "pdf_url": "https://nsearchives.nseindia.com/corporate/Cadilahc_07112026151831_IntimationofPostResultsEarningsCallTranscript04112026.pdf",
-      "filed_at": "2026-11-07T15:19:54+05:30",
+      "subject": "Max Healthcare Institute Limited has informed the Exchange about transcript of Earnings Call held on November 3, 2026",
+      "nse_summary": "Max Healthcare Institute Limited filed a transcript of its earnings call held on November 3, 2026, regarding financial results for the quarter and half year ended September 30, 2026. The company reported a 20% year-on-year revenue growth to INR 3,219 crore and an 18% increase in operating EBITDA to INR 820 crore for the second quarter. Profit after tax rose 10% to INR 448 crore. Average network occupancy remained steady at 77% despite a 14% increase in bed capacity. The Board approved an investment of INR 415 crore for adding 209 brownfield beds at Max Noida, Max Vaishali, and BLK-Max, along with a car park tower at BLK. Shareholding in Kalinga Hospital Limited increased to 66%. The transcript is available on the company website.",
+      "pdf_url": "https://nsearchives.nseindia.com/corporate/MAXHEALTH_09112026214212_SE_Intimation_Earnings_Call_Transcript.pdf",
+      "filed_at": "2026-11-09T21:43:03+05:30",
       "has_xbrl": true
      },
      "cls": {
@@ -784,104 +74,106 @@
      ]
     }
    ],
-   "latest_at": "2026-11-07T15:19:54+05:30",
+   "latest_at": "2026-11-09T21:43:03+05:30",
    "results": null,
    "people": [],
-   "brief": null
+   "brief": null,
+   "promises": []
   }
  ],
  "routine": {
-  "press_release": [
+  "dividend": [
    {
-    "id": "ZYDUSLIFE:press_release:106851457",
-    "symbol": "ZYDUSLIFE",
-    "company": "Zydus Lifesciences Limited",
-    "category": "press_release",
+    "id": "PREMIERENE:dividend:106853454",
+    "symbol": "PREMIERENE",
+    "company": "Premier Energies Limited",
+    "category": "dividend",
     "subtype": null,
-    "score": 35,
+    "score": 30,
     "tier": "routine",
     "headline": {
      "filing": {
-      "seq_id": "106851457",
-      "symbol": "ZYDUSLIFE",
-      "company": "Zydus Lifesciences Limited",
-      "nse_desc": "Press Release",
-      "subject": "Zydus Lifesciences Limited has informed the Exchange regarding a press release dated November 06, 2026, titled \"Press Release\".",
-      "nse_summary": null,
-      "pdf_url": "https://nsearchives.nseindia.com/corporate/Cadilahc_06112026190130_PressRelease06112026.pdf",
-      "filed_at": "2026-11-06T19:01:47+05:30",
+      "seq_id": "106853454",
+      "symbol": "PREMIERENE",
+      "company": "Premier Energies Limited",
+      "nse_desc": "General Updates",
+      "subject": "Communication To Shareholders - Intimation Of Tax Deduction At Source (TDS)",
+      "nse_summary": "Premier Energies Limited approved an interim dividend of Rs. 0.50 per equity share for the financial year 2026-27. The board meeting was held on November 4th, 2026. The record date for eligibility is Wednesday, November 11, 2026. Dividends will be paid electronically to shareholders with updated bank mandates in their demat accounts. The company will deduct tax at source under the Income-tax Act, 2025, as amended by the Finance Act, 2026. Tax rates vary based on shareholder category and residential status. Resident individuals receiving up to Rs. 10,000 in total dividends for the financial year 2026-27 are exempt from tax deduction. Shareholders must update their Permanent Account Number and residential status with the registrar or depository participants. Documents for lower or no tax deduction must be submitted to the registrar by November 11, 2026. Failure to provide valid documentation may result in higher tax deduction rates.",
+      "pdf_url": "https://nsearchives.nseindia.com/corporate/PEL2024_09112026161948_Shareholder_Communication.pdf",
+      "filed_at": "2026-11-09T16:20:02+05:30",
       "has_xbrl": true
      },
      "cls": {
-      "category": "press_release",
+      "category": "dividend",
       "subtype": null,
       "noise": false,
-      "by": "llm",
-      "confidence": 0.7
+      "by": "rules",
+      "confidence": 0.8
      },
-     "score": 35,
+     "score": 30,
      "tier": "routine",
      "reasons": [
-      "press release filing (35)"
+      "dividend filing (30)"
      ]
     },
     "members": [
      {
       "filing": {
-       "seq_id": "106851457",
-       "symbol": "ZYDUSLIFE",
-       "company": "Zydus Lifesciences Limited",
-       "nse_desc": "Press Release",
-       "subject": "Zydus Lifesciences Limited has informed the Exchange regarding a press release dated November 06, 2026, titled \"Press Release\".",
-       "nse_summary": null,
-       "pdf_url": "https://nsearchives.nseindia.com/corporate/Cadilahc_06112026190130_PressRelease06112026.pdf",
-       "filed_at": "2026-11-06T19:01:47+05:30",
+       "seq_id": "106853454",
+       "symbol": "PREMIERENE",
+       "company": "Premier Energies Limited",
+       "nse_desc": "General Updates",
+       "subject": "Communication To Shareholders - Intimation Of Tax Deduction At Source (TDS)",
+       "nse_summary": "Premier Energies Limited approved an interim dividend of Rs. 0.50 per equity share for the financial year 2026-27. The board meeting was held on November 4th, 2026. The record date for eligibility is Wednesday, November 11, 2026. Dividends will be paid electronically to shareholders with updated bank mandates in their demat accounts. The company will deduct tax at source under the Income-tax Act, 2025, as amended by the Finance Act, 2026. Tax rates vary based on shareholder category and residential status. Resident individuals receiving up to Rs. 10,000 in total dividends for the financial year 2026-27 are exempt from tax deduction. Shareholders must update their Permanent Account Number and residential status with the registrar or depository participants. Documents for lower or no tax deduction must be submitted to the registrar by November 11, 2026. Failure to provide valid documentation may result in higher tax deduction rates.",
+       "pdf_url": "https://nsearchives.nseindia.com/corporate/PEL2024_09112026161948_Shareholder_Communication.pdf",
+       "filed_at": "2026-11-09T16:20:02+05:30",
        "has_xbrl": true
       },
       "cls": {
-       "category": "press_release",
+       "category": "dividend",
        "subtype": null,
        "noise": false,
-       "by": "llm",
-       "confidence": 0.7
+       "by": "rules",
+       "confidence": 0.8
       },
-      "score": 35,
+      "score": 30,
       "tier": "routine",
       "reasons": [
-       "press release filing (35)"
+       "dividend filing (30)"
       ]
      }
     ],
-    "latest_at": "2026-11-06T19:01:47+05:30",
+    "latest_at": "2026-11-09T16:20:02+05:30",
     "results": null,
     "people": [],
-    "brief": null
+    "brief": null,
+    "promises": []
    }
   ],
   "earnings_call": [
    {
-    "id": "TATASTEEL:earnings_call:106852572",
-    "symbol": "TATASTEEL",
-    "company": "Tata Steel Limited",
+    "id": "AMBER:earnings_call:106853433",
+    "symbol": "AMBER",
+    "company": "Amber Enterprises India Limited",
     "category": "earnings_call",
-    "subtype": "audio",
+    "subtype": "notice",
     "score": 15,
     "tier": "routine",
     "headline": {
      "filing": {
-      "seq_id": "106852572",
-      "symbol": "TATASTEEL",
-      "company": "Tata Steel Limited",
+      "seq_id": "106853433",
+      "symbol": "AMBER",
+      "company": "Amber Enterprises India Limited",
       "nse_desc": "Analysts/Institutional Investor Meet/Con. Call Updates",
-      "subject": "Tata Steel Limited has informed the Exchange about Link of Recording",
-      "nse_summary": "Tata Steel Limited has made available the audio-video recording of its 2QFY27 Earnings Discussion. The Board of Directors approved the audited Standalone and unaudited Consolidated Financial Results for the quarter and half year ended September 30, 2026, during a meeting held on November 7, 2026. The Earnings Discussion was hosted on the same date at 2:00 p.m. IST. The recording is accessible on the Company's website at https://www.tatasteel.com/investors/financial-performance/analyst-call-recording/. This filing is submitted pursuant to Regulation 30 read with Para A of Part A of Schedule III of the SEBI Listing Regulations, 2015.",
-      "pdf_url": "https://nsearchives.nseindia.com/corporate/SAKSHIKAPUR_07112026165801_BSENSE_Signed.pdf",
-      "filed_at": "2026-11-07T16:58:42+05:30",
+      "subject": "Amber Enterprises India Limited has informed the Exchange about Schedule of meet",
+      "nse_summary": "Amber Enterprises India Limited has scheduled an earnings call for Friday, 13th November 2026, at 5:30 P.M. IST to discuss the unaudited financial results for the second quarter and half year ended 30th September 2026. The call will feature Executive Chairman and CEO Jasbir Singh, Managing Director Daljit Singh, Chief Financial Officer Sudhir Goyal, and Head of Investor Relations Ravi Kharbanda. Participants can register via the company website or use the provided local and international toll-free access numbers. The information is also available on the company's investor relations page.",
+      "pdf_url": "https://nsearchives.nseindia.com/corporate/AMBER_09112026155242_SE_Intimation_Earnings_call_Invite13112026.pdf",
+      "filed_at": "2026-11-09T15:54:06+05:30",
       "has_xbrl": true
      },
      "cls": {
       "category": "earnings_call",
-      "subtype": "audio",
+      "subtype": "notice",
       "noise": false,
       "by": "rules",
       "confidence": 0.8
@@ -890,25 +182,25 @@
      "tier": "routine",
      "reasons": [
       "earnings call filing (30)",
-      "call audio ×0.5"
+      "call notice ×0.5"
      ]
     },
     "members": [
      {
       "filing": {
-       "seq_id": "106852572",
-       "symbol": "TATASTEEL",
-       "company": "Tata Steel Limited",
+       "seq_id": "106853433",
+       "symbol": "AMBER",
+       "company": "Amber Enterprises India Limited",
        "nse_desc": "Analysts/Institutional Investor Meet/Con. Call Updates",
-       "subject": "Tata Steel Limited has informed the Exchange about Link of Recording",
-       "nse_summary": "Tata Steel Limited has made available the audio-video recording of its 2QFY27 Earnings Discussion. The Board of Directors approved the audited Standalone and unaudited Consolidated Financial Results for the quarter and half year ended September 30, 2026, during a meeting held on November 7, 2026. The Earnings Discussion was hosted on the same date at 2:00 p.m. IST. The recording is accessible on the Company's website at https://www.tatasteel.com/investors/financial-performance/analyst-call-recording/. This filing is submitted pursuant to Regulation 30 read with Para A of Part A of Schedule III of the SEBI Listing Regulations, 2015.",
-       "pdf_url": "https://nsearchives.nseindia.com/corporate/SAKSHIKAPUR_07112026165801_BSENSE_Signed.pdf",
-       "filed_at": "2026-11-07T16:58:42+05:30",
+       "subject": "Amber Enterprises India Limited has informed the Exchange about Schedule of meet",
+       "nse_summary": "Amber Enterprises India Limited has scheduled an earnings call for Friday, 13th November 2026, at 5:30 P.M. IST to discuss the unaudited financial results for the second quarter and half year ended 30th September 2026. The call will feature Executive Chairman and CEO Jasbir Singh, Managing Director Daljit Singh, Chief Financial Officer Sudhir Goyal, and Head of Investor Relations Ravi Kharbanda. Participants can register via the company website or use the provided local and international toll-free access numbers. The information is also available on the company's investor relations page.",
+       "pdf_url": "https://nsearchives.nseindia.com/corporate/AMBER_09112026155242_SE_Intimation_Earnings_call_Invite13112026.pdf",
+       "filed_at": "2026-11-09T15:54:06+05:30",
        "has_xbrl": true
       },
       "cls": {
        "category": "earnings_call",
-       "subtype": "audio",
+       "subtype": "notice",
        "noise": false,
        "by": "rules",
        "confidence": 0.8
@@ -917,102 +209,36 @@
       "tier": "routine",
       "reasons": [
        "earnings call filing (30)",
-       "call audio ×0.5"
+       "call notice ×0.5"
       ]
      }
     ],
-    "latest_at": "2026-11-07T16:58:42+05:30",
+    "latest_at": "2026-11-09T15:54:06+05:30",
     "results": null,
     "people": [],
-    "brief": null
-   },
-   {
-    "id": "VOLTAS:earnings_call:106851729",
-    "symbol": "VOLTAS",
-    "company": "Voltas Limited",
-    "category": "earnings_call",
-    "subtype": "audio",
-    "score": 15,
-    "tier": "routine",
-    "headline": {
-     "filing": {
-      "seq_id": "106851729",
-      "symbol": "VOLTAS",
-      "company": "Voltas Limited",
-      "nse_desc": "Analysts/Institutional Investor Meet/Con. Call Updates",
-      "subject": "Voltas Limited has informed the Exchange about Link of Recording",
-      "nse_summary": null,
-      "pdf_url": "https://nsearchives.nseindia.com/corporate/VOLTAS_RB_06112026211403_SEIntimationAudioRecording.pdf",
-      "filed_at": "2026-11-06T21:14:59+05:30",
-      "has_xbrl": true
-     },
-     "cls": {
-      "category": "earnings_call",
-      "subtype": "audio",
-      "noise": false,
-      "by": "rules",
-      "confidence": 0.8
-     },
-     "score": 15,
-     "tier": "routine",
-     "reasons": [
-      "earnings call filing (30)",
-      "call audio ×0.5"
-     ]
-    },
-    "members": [
-     {
-      "filing": {
-       "seq_id": "106851729",
-       "symbol": "VOLTAS",
-       "company": "Voltas Limited",
-       "nse_desc": "Analysts/Institutional Investor Meet/Con. Call Updates",
-       "subject": "Voltas Limited has informed the Exchange about Link of Recording",
-       "nse_summary": null,
-       "pdf_url": "https://nsearchives.nseindia.com/corporate/VOLTAS_RB_06112026211403_SEIntimationAudioRecording.pdf",
-       "filed_at": "2026-11-06T21:14:59+05:30",
-       "has_xbrl": true
-      },
-      "cls": {
-       "category": "earnings_call",
-       "subtype": "audio",
-       "noise": false,
-       "by": "rules",
-       "confidence": 0.8
-      },
-      "score": 15,
-      "tier": "routine",
-      "reasons": [
-       "earnings call filing (30)",
-       "call audio ×0.5"
-      ]
-     }
-    ],
-    "latest_at": "2026-11-06T21:14:59+05:30",
-    "results": null,
-    "people": [],
-    "brief": null
+    "brief": null,
+    "promises": []
    }
   ],
   "investor_meetings": [
    {
-    "id": "RELIANCE:investor_meetings:106851483",
-    "symbol": "RELIANCE",
-    "company": "Reliance Industries Limited",
+    "id": "TRENT:investor_meetings:106853294",
+    "symbol": "TRENT",
+    "company": "Trent Limited",
     "category": "investor_meetings",
     "subtype": null,
     "score": 10,
     "tier": "routine",
     "headline": {
      "filing": {
-      "seq_id": "106851483",
-      "symbol": "RELIANCE",
-      "company": "Reliance Industries Limited",
+      "seq_id": "106853294",
+      "symbol": "TRENT",
+      "company": "Trent Limited",
       "nse_desc": "Analysts/Institutional Investor Meet/Con. Call Updates",
-      "subject": "Please note that the Company executives will be participating in the Institutional Investors' Meeting - CLSA India Forum, scheduled to be held on November 16, 2026 at Mumbai. It is expected that the meeting with the investors will be on one-on-one basis.",
-      "nse_summary": null,
-      "pdf_url": "https://nsearchives.nseindia.com/corporate/kavinavora_06112026191022_Pre_CLSA_SE_06112026.pdf",
-      "filed_at": "2026-11-06T19:10:58+05:30",
+      "subject": "Trent Limited has informed the Exchange about intimation of schedule of Analyst / Institutional Investors Meetings",
+      "nse_summary": "Trent Limited has intimated the schedule of meetings with analysts and institutional investors pursuant to Regulation 30 of the SEBI Listing Obligations and Disclosure Requirements Regulations, 2015. Wasatch Global Advisors and Kotak Mahindra Asset Management Singapore are scheduled for one-to-one meetings on 17th November 2026. CEO Track JM Financial will participate in the 17th Annual Flagship Conference India Xchange 2026 on 18th November 2026. RBC Global Asset Management Asia is scheduled for a one-to-one meeting on 24th November 2026. T. Rowe Price Aayush Kumar will hold a one-to-one meeting on 25th November 2026. JP Morgan Asset Management is scheduled for a one-to-one meeting on 26th November 2026. The schedule is subject to change. No unpublished price sensitive information will be shared during these meetings.",
+      "pdf_url": "https://nsearchives.nseindia.com/corporate/TRENT_09112026125235_Investor_Analyst_Meeting_09112026.pdf",
+      "filed_at": "2026-11-09T13:00:58+05:30",
       "has_xbrl": true
      },
      "cls": {
@@ -1031,14 +257,14 @@
     "members": [
      {
       "filing": {
-       "seq_id": "106851483",
-       "symbol": "RELIANCE",
-       "company": "Reliance Industries Limited",
+       "seq_id": "106853294",
+       "symbol": "TRENT",
+       "company": "Trent Limited",
        "nse_desc": "Analysts/Institutional Investor Meet/Con. Call Updates",
-       "subject": "Please note that the Company executives will be participating in the Institutional Investors' Meeting - CLSA India Forum, scheduled to be held on November 16, 2026 at Mumbai. It is expected that the meeting with the investors will be on one-on-one basis.",
-       "nse_summary": null,
-       "pdf_url": "https://nsearchives.nseindia.com/corporate/kavinavora_06112026191022_Pre_CLSA_SE_06112026.pdf",
-       "filed_at": "2026-11-06T19:10:58+05:30",
+       "subject": "Trent Limited has informed the Exchange about intimation of schedule of Analyst / Institutional Investors Meetings",
+       "nse_summary": "Trent Limited has intimated the schedule of meetings with analysts and institutional investors pursuant to Regulation 30 of the SEBI Listing Obligations and Disclosure Requirements Regulations, 2015. Wasatch Global Advisors and Kotak Mahindra Asset Management Singapore are scheduled for one-to-one meetings on 17th November 2026. CEO Track JM Financial will participate in the 17th Annual Flagship Conference India Xchange 2026 on 18th November 2026. RBC Global Asset Management Asia is scheduled for a one-to-one meeting on 24th November 2026. T. Rowe Price Aayush Kumar will hold a one-to-one meeting on 25th November 2026. JP Morgan Asset Management is scheduled for a one-to-one meeting on 26th November 2026. The schedule is subject to change. No unpublished price sensitive information will be shared during these meetings.",
+       "pdf_url": "https://nsearchives.nseindia.com/corporate/TRENT_09112026125235_Investor_Analyst_Meeting_09112026.pdf",
+       "filed_at": "2026-11-09T13:00:58+05:30",
        "has_xbrl": true
       },
       "cls": {
@@ -1055,12 +281,19 @@
       ]
      }
     ],
-    "latest_at": "2026-11-06T19:10:58+05:30",
+    "latest_at": "2026-11-09T13:00:58+05:30",
     "results": null,
     "people": [],
-    "brief": null
+    "brief": null,
+    "promises": []
    }
   ]
  },
- "hidden": []
+ "hidden": [
+  {
+   "symbol": "TATASTEEL",
+   "subject": "Tata Steel Limited has informed the Exchange about newspaper Advertisement   Disclosure under Regulation 30 of the Securities and Exchange Board of India (Listing Obligations and Disclosure Requirements) Regulations, 2015 ( SEBI Listing Regulations )",
+   "filed_at": "2026-11-09T14:16:12+05:30"
+  }
+ ]
 }

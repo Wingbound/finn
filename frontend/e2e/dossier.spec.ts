@@ -3,7 +3,7 @@ import { json, mockApi, watchErrors } from "./mock";
 
 test("Golden path: Today, Dig in, the ledger, a citation, the quote on its page", async ({ page }) => {
   const errors = watchErrors(page);
-  await mockApi(page, { digest: () => "digest-24h.json" });
+  await mockApi(page, { digest: () => "digest-7d.json" }); // BAJFINANCE reported this week
   await page.goto("/");
   const card = page.locator('[data-story^="BAJFINANCE:"]').first();
   await card.getByRole("link", { name: "Dig in" }).click();

@@ -108,6 +108,28 @@ export interface ResultsCard {
   sources: string[];
 }
 
+/** One quarter beside a target (Plan 6): a reading, never a verdict. */
+export interface PaceNote {
+  line: string;
+  actual: number;
+  basis: string;
+  target_low: number;
+  target_high: number | null;
+  word: "above" | "within" | "below" | "at or above";
+}
+
+/** An open promise from the company's calls, shown on its results card. */
+export interface PromiseNote {
+  topic: string;
+  quote: string;
+  citation: Citation;
+  call: string;
+  made_in: string;
+  horizon: string | null;
+  target: string | null;
+  pace: PaceNote | null;
+}
+
 export interface Story {
   id: string;
   symbol: string;
@@ -122,6 +144,7 @@ export interface Story {
   results: ResultsCard | null;
   people: PersonChange[];
   brief: Brief | null;
+  promises?: PromiseNote[];
 }
 
 export interface HiddenFiling {
@@ -311,6 +334,8 @@ export interface Dossier {
   cost: { calls?: number; usd_list_price?: number; [k: string]: unknown };
   build_seconds: number;
   guard: Record<string, unknown>;
+  /** The company's latest filed quarter, when FINN tracks it (GET /research/{sym} only). */
+  latest_results?: ResultsCard | null;
 }
 
 /** {source_id: {page: text}}, sent with a live build's `done` event. */

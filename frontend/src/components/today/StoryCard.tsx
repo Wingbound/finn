@@ -7,10 +7,17 @@ import { categoryLabel, cleanSubject, plural, stamp, when } from "@/lib/format";
 import type { Story } from "@/lib/types";
 import { BriefBlock } from "./BriefBlock";
 import { PeopleList } from "./PeopleList";
+import { PromisePanel } from "./PromisePanel";
 import { ResultsGrid } from "./ResultsGrid";
 
 function Body({ story }: { story: Story }) {
-  if (story.results) return <ResultsGrid card={story.results} />;
+  if (story.results)
+    return (
+      <>
+        <ResultsGrid card={story.results} />
+        <PromisePanel symbol={story.symbol} notes={story.promises ?? []} />
+      </>
+    );
   if (story.people.length) return <PeopleList people={story.people} />;
   if (story.brief) return <BriefBlock brief={story.brief} />;
   return <p className="mt-1.5 text-ink-2">{cleanSubject(story.headline.filing.subject)}</p>;

@@ -82,6 +82,12 @@ export async function mockApi(page: Page | BrowserContext, opts: MockOptions = {
   });
 }
 
+/** The Today headline a digest fixture should produce. */
+export function headlineFor(name: string): string {
+  const n = json(name).counts.shown as number;
+  return n === 0 ? "Nothing matters yet" : n === 1 ? "1 thing matters" : `${n} things matter`;
+}
+
 /** Collects console errors and page errors for the no-console-errors check. */
 export function watchErrors(page: Page): string[] {
   const errors: string[] = [];

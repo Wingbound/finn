@@ -328,3 +328,35 @@ def test_the_digest_carries_promises_on_results_stories(tmp_path, monkeypatch):
 def test_a_target_is_shown_only_when_its_numbers_are_in_the_quote(quote, kw, shown):
     notes = promise_notes(dossier([row(quote, metric="other", **kw)]), card())
     assert notes[0].target == shown
+
+
+def test_a_dossier_carries_the_latest_filed_quarter(tmp_path):
+    """BAJFINANCE has a results card in the snapshot; a dossier-only symbol gets null."""
+    import shutil
+    from pathlib import Path
+
+    from fastapi.testclient import TestClient
+
+    from finn.api import main as api_main
+    from finn.api.deps import get_conn
+
+    path = tmp_path / "seed.sqlite"
+    shutil.copyfile(Path(__file__).resolve().parent.parent / "seed" / "finn.sqlite", path)
+
+    def conn():
+        cc = db.connect(path)
+        try:
+            yield cc
+        finally:
+            cc.close()
+
+    api_main.app.dependency_overrides[get_conn] = conn
+    try:
+        client = TestClient(api_main.app)
+        bajaj = client.get("/research/BAJFINANCE").json()
+        indigo = client.get("/research/INDIGO").json()
+    finally:
+        api_main.app.dependency_overrides.clear()
+    assert bajaj["latest_results"]["period_label"].startswith("Q")
+    assert bajaj["latest_results"]["format"] == "nbfc"
+    assert indigo["latest_results"] is None
