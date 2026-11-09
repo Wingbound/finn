@@ -217,14 +217,15 @@ def test_collect_sources_odd_rows_skipped(conn):
     }
     sources, notes = collect_sources(conn, FakeClient(), d)
     assert [s.id for s in sources] == ["T1", "T2"]
-    assert any(n.startswith("Sometime skipped: ValueError") for n in notes)
-    assert any(n.startswith("unknown skipped: KeyError") for n in notes)
-    assert any(n.startswith("annual report skipped: KeyError") for n in notes)
+    assert "Sometime transcript skipped (unusable listing)" in notes
+    assert "Undated transcript skipped (unusable listing)" in notes
+    assert "Annual report skipped (unusable listing)" in notes
+    assert not any("Error" in n for n in notes)
 
 
 def test_collect_sources_invalid_url_skipped(conn):
     c = FakeClient(exc=httpx.InvalidURL("bad"))
     sources, notes = collect_sources(conn, c, DOCS)
     assert sources == []
-    assert any("Oct 2026 skipped: InvalidURL" in n for n in notes)
-    assert any(n.startswith("annual report skipped: InvalidURL") for n in notes)
+    assert "Oct 2026 transcript skipped (unusable listing)" in notes
+    assert "Annual report skipped (unusable listing)" in notes

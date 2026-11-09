@@ -159,7 +159,7 @@ def collect_sources(
         if late():
             return sources, notes
         n += 1
-        label = "unknown"
+        label = "Undated"
         try:
             date = call["date"]
             label = date
@@ -185,7 +185,8 @@ def collect_sources(
                 )
             )
         except Exception as e:  # noqa: BLE001 - one odd row must not abort the whole collection
-            notes.append(f"{label} skipped: {type(e).__name__}: {e}")
+            log.warning("transcript row %s skipped: %s: %s", label, type(e).__name__, e)
+            notes.append(f"{label} transcript skipped (unusable listing)")
     reports = documents.get("annual_reports", [])
     if reports and not late():
         try:
@@ -211,5 +212,6 @@ def collect_sources(
                 else:
                     notes.append(f"Annual report {ar['year']} unavailable: no extractable text")
         except Exception as e:  # noqa: BLE001 - one odd row must not abort the whole collection
-            notes.append(f"annual report skipped: {type(e).__name__}: {e}")
+            log.warning("annual report row skipped: %s: %s", type(e).__name__, e)
+            notes.append("Annual report skipped (unusable listing)")
     return sources, notes
