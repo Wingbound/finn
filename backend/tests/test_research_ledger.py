@@ -829,3 +829,20 @@ def test_untruncated_evidence_has_no_flag():
 def test_no_transcripts_note():
     led = build_ledger(FakeRouter({"judgements": []}), [], [], {}, {})
     assert led.note == "Not enough concall transcripts on file (found 0)" and led.rows == []
+
+
+@pytest.mark.parametrize(
+    "quote,status",
+    [
+        ("We expect to reach this by 2030", "pending"),
+        ("Revenue of Rs 2075 crore was delivered", "kept"),
+        ("Order inflow was ₹2060 cr in the quarter", "kept"),
+        ("We shipped 2080 units in the quarter", "kept"),
+    ],
+)
+def test_bare_years_but_not_amounts_are_long(quote, status):
+    from finn.research.ledger import _not_yet_due
+
+    ev = Citation(source_id="PERSISTENT-T1", page=7, quote="x y z a b c d")
+    p = promise(1, "PERSISTENT-T2", "Q1 FY27", citation=_cit(quote))
+    assert _not_yet_due(p, ("kept", ev, "r"), "Q2 FY27")[0] == status

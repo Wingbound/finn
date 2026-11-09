@@ -195,7 +195,11 @@ _SCAN = re.compile(
     r"|current year|next financial year|next fiscal|next year|next quarter|coming quarter)\b"
 )
 _LONG_WORDS = re.compile(r"long[- ]term|medium[- ]term|aspiration|over the next few years")
-_YEARS = re.compile(r"\b(?:fy|fiscal(?: year)?)\s*'?(\d{4}|\d{2})\b|\b(20\d{2})\b")
+# FY labels, or a bare calendar year after a time word ("by 2030"; not "Rs 2075 crore").
+_YEARS = re.compile(
+    r"\b(?:fy|fiscal(?: year)?)\s*'?(\d{4}|\d{2})\b"
+    r"|\b(?:by|in|till|until|through|before|beyond|vision|cy|calendar year|end of)\s+(20\d{2})\b"
+)
 LONG_YEARS = 2  # a fiscal year this far past the newest call is a long-horizon target
 
 
