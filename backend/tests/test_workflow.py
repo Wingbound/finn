@@ -38,7 +38,7 @@ def test_workflow_keys_come_from_secrets_only():
 def test_nothing_ingested_fails_without_committing():
     steps = _wf()["jobs"]["refresh"]["steps"]
     run = next(s for s in steps if s.get("id") == "refresh")["run"]
-    assert '"$code" -eq 2' in run and "exit 1" in run
+    assert "2)" in run and "exit 1" in run.split("2)")[1].split(";;")[0]
     commit = next(s for s in steps if "git commit" in s.get("run", ""))
     assert "git diff --quiet" in commit["run"]
     # a failed step stops the job, so the commit step never runs after exit 2
@@ -73,3 +73,12 @@ def test_compact_seed_drops_document_caches_and_checks_size(tmp_path):
     assert c.execute("PRAGMA journal_mode").fetchone()[0] == "delete"
     c.close()
     assert main([str(path), "--max-mb", "0.001"]) == 1  # over the cap
+
+
+def test_only_clean_or_partial_refreshes_go_on_to_commit():
+    """Plan 5 review I2: 2 (nothing ingested), 4 (crash) and signals (137, 143) all fail the job."""
+    steps = _wf()["jobs"]["refresh"]["steps"]
+    run = next(s for s in steps if s.get("id") == "refresh")["run"]
+    assert 'case "$code" in' in run
+    assert "0|1)" in run
+    assert "*)" in run and run.count("exit 1") >= 2

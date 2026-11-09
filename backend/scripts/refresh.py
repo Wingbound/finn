@@ -4,7 +4,8 @@ Run: uv run python scripts/refresh.py --days 30 [--no-llm] [--out seed/finn.sqli
 
 An unreachable NSE or Yahoo, a symbol either one fails on, or a crash in one stage is
 reported in the summary's `errors` and the run carries on with what it has (exit code 1).
-A run that ingests no filings and no prices exits 2 and leaves the store untouched.
+A run that ingests no filings and no prices exits 2, and a crash exits 4; both leave the store
+untouched.
 """
 
 from __future__ import annotations
@@ -12,6 +13,7 @@ from __future__ import annotations
 import argparse
 import json
 import sqlite3
+import sys
 from datetime import datetime, timedelta
 from pathlib import Path
 
@@ -178,6 +180,11 @@ def main(argv: list[str] | None = None) -> int:
         summary = refresh(conn, days=args.days, use_llm=not args.no_llm)
         conn.execute("PRAGMA wal_checkpoint(TRUNCATE)")  # fold the WAL in; file stands alone
         conn.execute("PRAGMA journal_mode=DELETE")
+    except Exception as e:  # noqa: BLE001 - a crash must not read as "partial" (exit 1)
+        conn.close()
+        _discard(work)
+        print(f"refresh crashed: {type(e).__name__}: {e}", file=sys.stderr)
+        return CRASHED
     finally:
         conn.close()
     print(json.dumps(summary, indent=2))
@@ -190,6 +197,9 @@ def main(argv: list[str] | None = None) -> int:
     work.replace(target)
     _discard(work)
     return code
+
+
+CRASHED = 4  # distinct from Python's own exit 1 for an uncaught exception
 
 
 def exit_code(summary: dict) -> int:

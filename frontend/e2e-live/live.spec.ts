@@ -46,3 +46,18 @@ test("A live build through the UI ends on the dossier", async ({ page }) => {
   if (!ok) console.log(await failed.textContent());
   expect(ok).toBe(true);
 });
+
+test("The API is seeded, allows exactly this site, and says how fast it answered", async ({ request }) => {
+  const api = process.env.LIVE_API;
+  test.skip(!api, "set LIVE_API to the API's URL");
+  const t0 = Date.now();
+  const res = await request.get(`${api}/health`);
+  const ms = Date.now() - t0;
+  const body = await res.json();
+  console.log(`/health answered in ${ms} ms (a cold start if this instance was idle)`);
+  expect(res.ok()).toBe(true);
+  expect(body.seeded).toBe(true);
+  expect(body.cors).toEqual([new URL(process.env.LIVE_URL as string).origin]);
+  expect(body.cors_problems).toEqual([]);
+  expect(body.ok).toBe(true);
+});

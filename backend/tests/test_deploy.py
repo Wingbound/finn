@@ -195,3 +195,44 @@ def test_refresh_partial_failure_is_exit_1_and_writes(tmp_path, monkeypatch):
     c = db.connect(out)
     assert c.execute("SELECT COUNT(*) FROM prices WHERE date = '2026-11-10'").fetchone()[0] == 18
     c.close()
+
+
+def test_refresh_crash_is_not_partial(tmp_path, monkeypatch):
+    """Plan 5 review I2: an exception is exit 4 (not Python's 1, which means partial),
+    the snapshot is untouched and no temp file is left to be committed."""
+    out = tmp_path / "seed" / "finn.sqlite"
+    out.parent.mkdir()
+    out.write_bytes(SEED.read_bytes())
+    before = out.read_bytes()
+
+    def boom(*a, **k):
+        raise RuntimeError("classifier exploded")
+
+    monkeypatch.setattr(refresh_mod, "refresh", boom)
+    assert refresh_mod.main(["--days", "3", "--no-llm", "--out", str(out)]) == 4
+    assert out.read_bytes() == before
+    assert sorted(p.name for p in out.parent.iterdir()) == ["finn.sqlite"]
+
+
+def test_health_flags_bad_cors_settings(monkeypatch, tmp_path):
+    """Plan 5 review M2 (Review Focus 4): a misconfigured ALLOWED_ORIGINS fails loudly."""
+    _settings_env(monkeypatch, tmp_path)
+    cases = {
+        "https://finn.vercel.app": [],
+        "https://finn.vercel.app/": ["https://finn.vercel.app/: drop the trailing slash"],
+        "finn.vercel.app": ["finn.vercel.app: needs http:// or https://"],
+    }
+    try:
+        for value, problems in cases.items():
+            monkeypatch.setenv("ALLOWED_ORIGINS", value)
+            get_settings.cache_clear()
+            body = TestClient(main_mod.app).get("/health").json()
+            assert body["cors_problems"] == problems, value
+            assert body["ok"] is (not problems)
+        monkeypatch.setenv("VERCEL", "1")
+        monkeypatch.setenv("ALLOWED_ORIGINS", "*")
+        get_settings.cache_clear()
+        body = TestClient(main_mod.app).get("/health").json()
+        assert body["ok"] is False and "any site" in body["cors_problems"][0]
+    finally:
+        get_settings.cache_clear()
