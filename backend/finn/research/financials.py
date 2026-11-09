@@ -45,8 +45,9 @@ def _get(table: Table, col: str, row: str) -> float | None:
     return table.get(col, {}).get(row)
 
 
-def _cagr(series: list[float | None]) -> float | None:
-    pts = [(i, v) for i, v in enumerate(series) if v is not None]
+def _cagr(series: list[float | None], years: list[str]) -> float | None:
+    """CAGR between first and last non-None points; n comes from the year numbers in labels."""
+    pts = [(int(y[-4:]), v) for y, v in zip(years, series, strict=True) if v is not None]
     if len(pts) < 3:
         return None
     (i0, first), (i1, last) = pts[0], pts[-1]
@@ -68,7 +69,7 @@ def trajectory(pl: Table) -> Trajectory:
     ]
     ms = [m for m in margin if m is not None]
     change = round((ms[-1] - ms[0]) * 100) if len(ms) >= 2 else None
-    rev_cagr = _cagr(rev)
+    rev_cagr = _cagr(rev, years)
     if sum(v is not None for v in rev) < 3:
         read = "insufficient data"
     elif change is not None and change < -100:
@@ -84,7 +85,7 @@ def trajectory(pl: Table) -> Trajectory:
         margin_pct=margin,
         pat=pat,
         revenue_cagr_pct=rev_cagr,
-        pat_cagr_pct=_cagr(pat),
+        pat_cagr_pct=_cagr(pat, years),
         margin_change_bps=change,
         read=read,
         lender=lender,
@@ -112,7 +113,7 @@ def balance_sheet_health(
     cf3 = _fy_cols(cf, month)[-3:]
     cfo = _sum3(cf3, lambda c: _get(cf, c, "Cash from Operating Activity"))
     pat = _sum3(cf3, lambda c: _get(pl, c, "Net Profit"))
-    cfo_pat = cfo / pat if cfo is not None and pat else None
+    cfo_pat = cfo / pat if not lender and cfo is not None and pat and pat > 0 else None
     fcf = _sum3(cf3, lambda c: _get(cf, c, "Free Cash Flow"))
 
     rcols = _fy_cols(ratios, month)

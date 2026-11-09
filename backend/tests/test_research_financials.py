@@ -136,7 +136,20 @@ def test_lender_skips_leverage_flags():
     h = _h(borrow=500, fcf=-10, wc=(10, 90), lender=True)
     assert h.debt_to_equity is None and h.fcf_3y_cr is None
     assert h.working_capital_days is None and h.wc_days_change_3y is None
-    assert texts(h) == [
-        ("good", "Profits are backed by cash (CFO/PAT 1.00)"),
-        ("watch", _LENDER_NOTE),
-    ]
+    assert h.cfo_to_pat_3y is None
+    assert texts(h) == [("watch", _LENDER_NOTE)]
+
+
+def test_loss_making_no_cfo_flag():
+    h = _h(pat=-10, cfo=-5)
+    assert h.cfo_to_pat_3y is None
+    assert not any("profit" in t.lower() for _, t in texts(h))
+
+
+def test_cagr_uses_year_labels_with_missing_column():
+    pl = {
+        f"Mar {y}": {"Sales": v, "Operating Profit": 10.0, "Net Profit": v}
+        for y, v in ((2022, 100.0), (2023, 110.0), (2025, 133.1), (2026, 146.41))
+    }
+    t = trajectory(pl)
+    assert t.revenue_cagr_pct == A(10.0, abs=0.01)
