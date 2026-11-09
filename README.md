@@ -5,7 +5,7 @@ FINN is a phone-first investing assistant for a portfolio of Indian listed compa
 - **Push.** It reads every NSE filing and tells you how many things actually matter today.
 - **Pull.** It reads a company's last four earnings calls and its annual report, then checks what management promised against what happened.
 
-**Live:** _link added after deployment_ · **Build history:** [`ai-history/`](ai-history/) · **Design:** [`docs/DESIGN.md`](docs/DESIGN.md) · **Evals:** [`docs/EVALS.md`](docs/EVALS.md)
+**Live:** [finn-qx98.vercel.app](https://finn-qx98.vercel.app) (best on a phone; installable) · **API:** [finn-peach.vercel.app/health](https://finn-peach.vercel.app/health) · **Build history:** [`ai-history/`](ai-history/) · **Design:** [`docs/DESIGN.md`](docs/DESIGN.md) · **Evals:** [`docs/EVALS.md`](docs/EVALS.md)
 
 <p>
 <img src="docs/screenshots/today-light.png" width="31%" alt="Today: 27 things matter, routine filings struck through">
@@ -103,6 +103,7 @@ cd frontend
 npm install
 NEXT_PUBLIC_API_URL=http://localhost:8000 npm run dev
 npm run test && npm run e2e     # vitest, then Playwright against fixtures
+LIVE_URL=https://finn-qx98.vercel.app npx playwright test -c playwright.live.config.ts  # the deployed site
 ```
 
 To refresh the data, run `uv run python scripts/refresh.py --days 3 --out seed/finn.sqlite`. To build dossiers, run `uv run python scripts/research.py PERSISTENT DIXON --out seed/finn.sqlite`.

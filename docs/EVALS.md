@@ -380,3 +380,48 @@ The UI therefore separates "Open promises (latest call)" from "Track record (ear
 ### Limits
 
 The judge's status is an LLM judgement gated by verbatim evidence. The quote is checked, and three deterministic guards (period, restatement, figure below target) can only downgrade the verdict; beyond those, the verdict itself is not checked. Computed grades cover only revenue growth, margin and PAT growth, and only when the quote itself names the metric and the period (see DESIGN.md, Ledger grading). Reaffirmations are treated as pending, not as delivery. Citation verification proves a quote exists on its page, not that the claim built on it is right.
+
+## 5. Deployed (2026-11-10)
+
+The frontend is at https://finn-qx98.vercel.app and the API at https://finn-peach.vercel.app. Both are Vercel Hobby projects that deploy from `main`.
+
+- **Seeding.** `/health` reports `seeded: true`: the first request copied the committed snapshot into `/tmp`.
+- **CORS.** The only allowed origin is the frontend. A preflight from any other origin gets a 400.
+- **Warm API latency.** Every endpoint answered in 0.3 to 0.8 s:
+
+  | Endpoint | Time | Payload |
+  |---|---|---|
+  | `/portfolio` | 0.58 s | |
+  | `/digest`, 24 h | 0.59 s | |
+  | `/digest`, 7 days | 0.76 s | 139 KB |
+  | `/alerts` | 0.35 s | |
+  | `/research` | 0.38 s | |
+  | a dossier | 0.35 s | |
+  | `/results/M&M` | 0.34 s | |
+  | screener search | 1.05 s | |
+
+- **Live builds of companies not in the snapshot:**
+
+  | Company | Route | Time | Outcome |
+  |---|---|---|---|
+  | ASIANPAINT | API | about 75 s | Finished and saved. A curl client on HTTP/2 lost the stream before `done`, and a retry within 10 minutes got the cached dossier in 0.37 s. |
+  | TITAN | API | 75 s | Streamed live over HTTP/1.1, with keep-alive pings every 15 s and a clean close. |
+  | PIDILITIND | the UI, Chromium at 390 px | 83 s | The dossier rendered. |
+
+  Each build made about 9 model calls.
+- **Live checks.** `playwright.live.config.ts` passes against the deployed site:
+  - the tabs load with data;
+  - there are no console errors;
+  - nothing overflows at 390 px;
+  - a citation opens with its quote highlighted.
+
+- **Scheduled refresh from GitHub Actions** (run 42697807536). NSE and Yahoo both answered GitHub's runners, so the refresh needs no local fallback. The run:
+  - fetched 5 new filings and 1,134 price bars, with no errors;
+  - compacted the snapshot to 3.2 MB;
+  - committed it as `github-actions[bot]`;
+  - set off a Vercel redeploy.
+
+  The first run had failed for a different reason: `astral-sh/setup-uv` publishes full version tags only, so the workflow now pins `v10.3.0`.
+
+A live build is saved only on the instance that ran it, so another instance can answer 404 for it later. The app keeps a dossier it built in the current tab whatever the server says.
+
