@@ -22,6 +22,7 @@ _NAMES = {
     "ebitda_margin": "EBITDA margin",
 }
 
+JUDGE_EVIDENCE_CHARS = 200_000
 Horizon = tuple[Literal["quarter", "fy"], str]
 
 
@@ -163,9 +164,13 @@ def _computed_row(p: Promise, quarters: dict, annual: dict) -> LedgerRow | None:
 SYSTEM = """You grade whether company management kept promises made on an earlier earnings call, \
 using only LATER calls. Search all of the later calls; management often revisits a target \
 with new numbers or a new date. Prefer the most recent mention.
-Statuses: kept = delivered, or on track as promised. partly = some but not all delivered. \
-missed = clearly not delivered, or reversed. pending = too early or unclear. \
-dropped = management stopped mentioning it (only if no later call mentions it).
+Statuses: kept = later evidence shows the promise was achieved or delivered, by its stated \
+time if it had one. partly = later evidence shows partial delivery. missed = later evidence \
+shows it was not achieved, was cut or lowered, or slipped past its stated time. \
+dropped = management stopped mentioning it in the later calls. \
+pending = not yet due, or no later evidence of the outcome.
+Restating, reaffirming or repeating the same target is NOT evidence of delivery: use pending. \
+The evidence quote must show the outcome, not the promise being repeated.
 Rules: evidence_quote must be copied exactly, word for word, from the evidence block, at least \
 6 words, from one later source. Give that source's id as evidence_source and the page number from \
 its [[pN]] marker as evidence_page. Without a verbatim quote use pending (or dropped). \
@@ -181,7 +186,8 @@ def _user_prompt(promises: list[Promise], later: list[Source]) -> str:
             f"- id={p.id} | topic={p.topic} | horizon={p.horizon or 'unspecified'} | "
             f'quote: "{p.citation.quote}"'
         )
-    blocks = [f"=== {s.id}: {s.title} ===\n{tagged_text(s, 90_000)}" for s in later]
+    cap = min(90_000, JUDGE_EVIDENCE_CHARS // max(len(later), 1))
+    blocks = [f"=== {s.id}: {s.title} ===\n{tagged_text(s, cap)}" for s in later]
     return "\n".join(lines) + "\n\nEVIDENCE (later calls, oldest first):\n\n" + "\n\n".join(blocks)
 
 
@@ -214,6 +220,8 @@ def _judge_one(raw: object, later: list[Source]) -> tuple[Status, Citation | Non
         return "pending", None, _NO_EVIDENCE
     if status == "dropped" and (evidence is not None or len(later) < 2):
         status = "pending"
+    if status == "pending":
+        evidence = None
     return status, evidence, rationale or _NOT_ASSESSED  # type: ignore[return-value]
 
 

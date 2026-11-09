@@ -348,3 +348,46 @@ def test_judge_prompt_includes_whole_later_transcript():
     system, user = r.calls[0][1], r.calls[0][2]
     assert late in user
     assert "=== PERSISTENT-T1:" in user and "Prefer the most recent mention" in system
+
+
+def test_system_prompt_reaffirming_rules():
+    from finn.research.ledger import SYSTEM
+
+    assert (
+        "Restating, reaffirming or repeating the same target is NOT evidence of delivery: use pending."
+        in SYSTEM
+    )
+    assert "The evidence quote must show the outcome, not the promise being repeated." in SYSTEM
+
+
+@pytest.mark.parametrize(
+    "status,has_ev", [("pending", False), ("kept", True), ("partly", True), ("missed", True)]
+)
+def test_pending_rows_carry_no_evidence(status, has_ev):
+    p = promise(1, "PERSISTENT-T2", "Q1 FY27")
+    j = {
+        "status": status,
+        "evidence_quote": REAL_T1,
+        "evidence_source": "PERSISTENT-T1",
+        "rationale": "r",
+    }
+    row = build_ledger(FakeRouter(judge({p.id: j})), [p], sources(), {}, {}).rows[0]
+    assert row.status == status and (row.evidence is not None) == has_ev
+
+
+def test_judge_evidence_total_budget():
+    from finn.research.ledger import JUDGE_EVIDENCE_CHARS, _user_prompt
+
+    later = [
+        Source(
+            id=f"S{i}", kind="transcript", title="t", quarter="Q1 FY27", url="u",
+            pages=["x" * 9_000] * 30,
+        )
+        for i in range(3)
+    ]  # fmt: skip
+    p = promise(1, "PERSISTENT-T4", "Q3 FY26")
+    user = _user_prompt([p], later)
+    for s in later:
+        block = user.split(f"=== {s.id}: t ===\n")[1].split("\n\n=== ")[0]
+        assert len(block) <= JUDGE_EVIDENCE_CHARS // 3 == 66_666
+    assert len(user) <= JUDGE_EVIDENCE_CHARS + 2_000
