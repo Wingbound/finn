@@ -6,6 +6,8 @@ import logging
 import sqlite3
 from datetime import datetime
 
+from pydantic import ValidationError
+
 from finn import db
 from finn.enrich import EnrichResult
 from finn.enrich.grounding import (
@@ -152,9 +154,19 @@ def attach_people(conn: sqlite3.Connection, stories: list[Story]) -> None:
         seen: set[str] = set()
         found: list[PersonChange] = []
         for m in st.members:
-            for raw in saved.get(m.filing.seq_id, {}).get("people", []):
-                p = PersonChange.model_validate(raw)
-                key = normalize(strip_honorifics(p.name))
+            rows = saved.get(m.filing.seq_id, {}).get("people", [])
+            if not isinstance(rows, list):
+                log.warning("skipping corrupt people payload for %s", m.filing.seq_id)
+                continue
+            for raw in rows:
+                try:  # a corrupt stored row must not break the digest
+                    p = PersonChange.model_validate(raw)
+                    key = normalize(strip_honorifics(p.name))
+                except (ValidationError, ValueError, KeyError, TypeError) as e:
+                    log.warning(
+                        "skipping corrupt people row for %s: %s", m.filing.seq_id, type(e).__name__
+                    )
+                    continue
                 if key not in seen:
                     seen.add(key)
                     found.append(p)

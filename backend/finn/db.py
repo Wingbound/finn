@@ -3,12 +3,15 @@
 from __future__ import annotations
 
 import json
+import logging
 import sqlite3
 from datetime import date, datetime
 from pathlib import Path
 
 from finn.ingest.xbrl import QuarterFinancials
 from finn.models import IST, Classification, Filing, PriceBar
+
+log = logging.getLogger(__name__)
 
 _SCHEMA = """
 CREATE TABLE IF NOT EXISTS filings (
@@ -361,7 +364,11 @@ def save_enrichment(
 
 
 def get_enrichments(conn: sqlite3.Connection, seq_ids: list[str], kind: str) -> dict[str, dict]:
-    """Stored payloads of the given kind, keyed by seq_id (missing ids are absent)."""
+    """Stored payloads of the given kind, keyed by seq_id.
+
+    Missing ids are absent, and so are rows whose payload is not a JSON object: the digest
+    reads these at request time and must not fail on one corrupt row.
+    """
     if not seq_ids:
         return {}
     marks = ",".join("?" * len(seq_ids))
@@ -369,7 +376,17 @@ def get_enrichments(conn: sqlite3.Connection, seq_ids: list[str], kind: str) -> 
         f"SELECT seq_id, payload_json FROM enrichments WHERE kind = ? AND seq_id IN ({marks})",
         [kind, *seq_ids],
     ).fetchall()
-    return {r["seq_id"]: json.loads(r["payload_json"]) for r in rows}
+    out: dict[str, dict] = {}
+    for r in rows:
+        try:
+            payload = json.loads(r["payload_json"])
+        except (TypeError, ValueError):
+            payload = None
+        if not isinstance(payload, dict):
+            log.warning("skipping unreadable %s enrichment for %s", kind, r["seq_id"])
+            continue
+        out[r["seq_id"]] = payload
+    return out
 
 
 def filings_missing_enrichment(

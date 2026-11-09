@@ -88,3 +88,25 @@ def test_non_results_story_untouched(conn):
     )
     (story,) = _stories(_digest(conn, datetime(2026, 11, 7)))
     assert story.category != "results" and story.results is None
+
+
+@pytest.mark.parametrize(
+    ("column", "value"),
+    [
+        ("facts_json", "{not json"),
+        ("facts_json", "[1, 2]"),
+        ("facts_json", '{"RevenueFromOperations": "lots"}'),
+        ("format", "crypto"),
+        ("period_start", "soon"),
+        ("filed_at", "2026-11-07T17:33:17"),  # naive: cannot be compared to the story
+    ],
+)
+def test_corrupt_financials_row_leaves_digest_building(conn, column, value):
+    conn.execute(
+        f"UPDATE financials SET {column} = ? WHERE period_end = '2026-09-30'",
+        (value,),
+    )
+    conn.commit()
+    _seed(conn, datetime(2026, 11, 7, 13, 6, 33, tzinfo=IST))
+    (story,) = _stories(_digest(conn, datetime(2026, 11, 7)))
+    assert story.category == "results" and story.results is None

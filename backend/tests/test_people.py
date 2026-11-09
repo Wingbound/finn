@@ -247,3 +247,43 @@ def test_digest_attaches_people_incoming_first(conn):
     assert len(stories) == 1
     assert [p.name for p in stories[0].people] == ["Jayant Balan", "Noel N. Tata"]
     assert stories[0].people[0].incoming
+
+
+def _voltas_digest(conn):
+    return build_digest(
+        conn,
+        ["VOLTAS"],
+        datetime(2026, 11, 5, 0, 0, tzinfo=IST),
+        datetime(2026, 11, 5, 23, 59, tzinfo=IST),
+        "everything",
+        {"management_change"},
+    )
+
+
+def test_corrupt_people_row_is_skipped_not_fatal(conn):
+    _seed(conn, _filing("V1"))
+    good = {
+        "name": "Jayant Balan",
+        "change": "appointed",
+        "incoming": True,
+        "source_seq_id": "V1",
+    }
+    bad = [
+        {"name": "Noel N. Tata", "change": "fired", "incoming": False, "source_seq_id": "V1"},
+        {"name": None, "change": "retired"},
+        "Noel N. Tata",
+        None,
+    ]
+    db.save_enrichment(conn, "V1", "people", {"people": [*bad, good]}, "m")
+    (story,) = [s for s in _voltas_digest(conn)["stories"] if s.category == "management_change"]
+    assert [p.name for p in story.people] == ["Jayant Balan"]
+
+
+@pytest.mark.parametrize("payload", ["{not json", '{"people": 5}', '"people"', "[1, 2]"])
+def test_unreadable_people_payload_leaves_digest_building(conn, payload):
+    _seed(conn, _filing("V1"))
+    db.save_enrichment(conn, "V1", "people", {"people": []}, "m")
+    conn.execute("UPDATE enrichments SET payload_json = ? WHERE seq_id = 'V1'", (payload,))
+    conn.commit()
+    (story,) = [s for s in _voltas_digest(conn)["stories"] if s.category == "management_change"]
+    assert story.people == []
