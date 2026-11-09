@@ -392,7 +392,7 @@ def _judge_one(
 
 
 def _judge_group(
-    router, promises: list[Promise], later: list[Source]
+    router, promises: list[Promise], later: list[Source], stats: dict | None = None
 ) -> tuple[dict[str, tuple[Status, Citation | None, str]], bool]:
     """Verdicts by promise id, and whether the model call itself failed."""
     try:
@@ -409,8 +409,108 @@ def _judge_group(
     for raw in items:
         if isinstance(raw, dict) and (p := by_id.get(raw.get("id"))) is not None:  # type: ignore[arg-type]
             verdict = _judge_one(raw, later, p, truncated)
+            verdict = _guard_verdict(p, verdict, stats)
             out[p.id] = _not_yet_due(p, verdict, later[-1].quarter)
     return out, False
+
+
+_G_QTR = re.compile(r"q([1-4])\s*fy\s*'?(\d{4}|\d{2})")
+_G_FY = re.compile(r"(?:fy|fiscal(?: year)?)\s*'?(\d{4}|\d{2})")
+_G_QMENTION = re.compile(
+    r"q(?P<q>[1-4])(?:\s*fy\s*'?(?P<y>\d{4}|\d{2}))?\b"
+    r"|\b(?P<ord>first|second|third|fourth) quarter\b"
+    r"|\b(?P<mon>june|september|december|march) quarter\b"
+)
+_ORD = {"first": 1, "second": 2, "third": 3, "fourth": 4}
+_MON = {"june": 1, "september": 2, "december": 3, "march": 4}
+_PERIOD_MSG = "The later quote is about a different period"
+_RESTATED_MSG = "The later call restated the target; delivery is not shown yet"
+_FUTURE = re.compile(
+    r"\b(?:expect|expects|expecting|will|shall|plan to|plans to|planning to|aim to|aims to"
+    r"|intend|intends|anticipate|anticipates|on track|going forward|is expected to"
+    r"|are expected to|remain committed|should be)\b"
+)
+_DELIVERED = re.compile(
+    r"\b(?:came in|stood at|delivered|achieved|reached|crossed|completed|commissioned"
+    r"|commenced|started|launched|received|reported|grew|declined|met|was|were|has been"
+    r"|have been|had|did)\b"
+)
+_LOWER_BETTER = re.compile(
+    r"\b(?:below|under|less than|lower than|at most|not exceed|no more than|cap|reduce"
+    r"|bring down|within|maximum)\b"
+)
+_PERIOD_LABEL = re.compile(
+    r"\b(?:FY\s*'?\d{2,4}|Q[1-4]|H[12]|9M|[1-4]Q)\b|\b(?:19|20)\d{2}\b", re.IGNORECASE
+)
+_G_NUM = re.compile(r"\d[\d,]*(?:\.\d+)?")
+_G_PCT = re.compile(r"(\d[\d,]*(?:\.\d+)?)\s*(?:%|percent)")
+BELOW_TARGET_RATIO = 0.98
+
+
+def _other_period(p: Promise, ev: str) -> bool:
+    h = normalize(p.horizon or "")
+    hq, hf = _G_QTR.search(h), _G_FY.search(h)
+    if hq:
+        want: tuple[int, int | None] = (int(hq.group(1)), _yy(hq.group(2)))
+    elif hf:
+        want = (0, _yy(hf.group(1)))
+    else:
+        return False
+    text = normalize(ev)
+    mentions: list[tuple[int, int | None]] = []
+    for m in _G_QMENTION.finditer(text):
+        q = int(m["q"]) if m["q"] else _ORD[m["ord"]] if m["ord"] else _MON[m["mon"]]
+        mentions.append((q, _yy(m["y"]) if m["y"] else None))
+    if hq:
+        return bool(mentions) and not any(
+            q == want[0] and y in (None, want[1]) for q, y in mentions
+        )
+    fys = [_yy(m.group(1)) for m in _G_FY.finditer(_G_QMENTION.sub(" ", text))]
+    return bool(fys) and want[1] not in fys
+
+
+def _restated(ev: str) -> bool:
+    text = normalize(ev)
+    return bool(_FUTURE.search(text)) and not _DELIVERED.search(text)
+
+
+def _below_target(p: Promise, ev: str) -> str | None:
+    """The rationale when every comparable number in the evidence is below the target."""
+    lo = p.target_low
+    if p.kind != "quantitative" or lo is None or _LOWER_BETTER.search(normalize(p.citation.quote)):
+        return None
+    text = _PERIOD_LABEL.sub(" ", normalize(ev))
+    if p.unit == "%":
+        nums = [float(m.replace(",", "")) for m in _G_PCT.findall(text)]
+    else:
+        hi = max(lo, p.target_high or lo)
+        nums = [float(m.replace(",", "")) for m in _G_NUM.findall(text)]
+        nums = [n for n in nums if 0.1 * lo <= n <= 10 * hi]
+    if not nums or not all(n < BELOW_TARGET_RATIO * lo for n in nums):
+        return None
+    hi = p.target_high
+    target = f"{_fmt(lo)}–{_fmt(hi)}" if hi is not None and hi > lo else f"at least {_fmt(lo)}"
+    return f"The later figure ({_fmt(max(nums))}) is below the {target} target"
+
+
+def _guard_verdict(p: Promise, verdict: tuple, stats: dict | None) -> tuple:
+    """Downgrade a judged verdict to pending when its evidence is about another period
+    (kept/partly/missed), restates the target (kept/partly) or is below it (kept)."""
+    status, ev = verdict[0], verdict[1]
+    if status not in ("kept", "partly", "missed") or ev is None:
+        return verdict
+    why = reason = None
+    if _other_period(p, ev.quote):
+        why, reason = _PERIOD_MSG, "other_period"
+    elif status != "missed" and _restated(ev.quote):
+        why, reason = _RESTATED_MSG, "restated"
+    elif status == "kept" and (msg := _below_target(p, ev.quote)):
+        why, reason = msg, "below_target"
+    if reason is None:
+        return verdict
+    if stats is not None:
+        stats["verdicts_downgraded"][reason] += 1
+    return "pending", None, why
 
 
 def _not_yet_due(p: Promise, verdict: tuple, newest: str | None) -> tuple:
@@ -436,10 +536,15 @@ def build_ledger(
     *,
     notes: list[str] | None = None,
     should_stop: Callable[[], bool] | None = None,
+    stats: dict | None = None,
 ) -> Ledger:
     """Grade every promise. Model failures leave rows pending ("Not assessed") and add one
     plain-English line to `notes`. `should_stop` is checked before each judge call; once it
     returns True the remaining groups are left pending."""
+    if stats is not None:
+        stats.setdefault(
+            "verdicts_downgraded", {"other_period": 0, "restated": 0, "below_target": 0}
+        )
     judge_failed = stopped = False
     transcripts = [s for s in sources if s.kind == "transcript"]
     by_id = {s.id: s for s in sources}
@@ -474,7 +579,7 @@ def build_ledger(
         if stopped:
             verdicts, failed = {}, False
         else:
-            verdicts, failed = _judge_group(router, group, later)
+            verdicts, failed = _judge_group(router, group, later, stats)
         judge_failed |= failed
         for p in group:
             status, ev, why = verdicts.get(p.id, ("pending", None, _NOT_ASSESSED))

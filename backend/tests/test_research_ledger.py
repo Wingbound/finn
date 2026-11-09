@@ -199,7 +199,7 @@ def test_judged_kept_with_page_corrected():
         judge(
             {
                 p.id: {
-                    "status": "kept",
+                    "status": "missed",
                     "evidence_quote": REAL_T1_B,
                     "evidence_source": "PERSISTENT-T1",
                     "evidence_page": 20,
@@ -209,7 +209,7 @@ def test_judged_kept_with_page_corrected():
         )
     )
     row = build_ledger(r, [p], sources(), {}, {}).rows[0]
-    assert row.status == "kept" and row.method == "judged"
+    assert row.status == "missed" and row.method == "judged"
     assert row.evidence.source_id == "PERSISTENT-T1" and row.evidence.page == 7
     t = r.calls[0][2]
     assert "=== PERSISTENT-T1: Q2 FY27 call ===" in t and "PERSISTENT-T3" not in t
@@ -459,7 +459,7 @@ def test_long_horizon_missed_stays_missed():
 
 def test_future_horizon_pending_past_horizon_kept():
     assert _kept(horizon="Q3 FY27").status == "pending"
-    assert _kept(horizon="Q1 FY27").status == "kept"
+    assert _kept(horizon="Q2 FY27").status == "kept"
 
 
 def test_same_metric_period_sentence():
@@ -846,3 +846,121 @@ def test_bare_years_but_not_amounts_are_long(quote, status):
     ev = Citation(source_id="PERSISTENT-T1", page=7, quote="x y z a b c d")
     p = promise(1, "PERSISTENT-T2", "Q1 FY27", citation=_cit(quote))
     assert _not_yet_due(p, ("kept", ev, "r"), "Q2 FY27")[0] == status
+
+
+# ---- deterministic verdict guards (period / restated / below target) ----
+_PERIOD_MSG = "The later quote is about a different period"
+_RESTATED_MSG = "The later call restated the target; delivery is not shown yet"
+
+
+def _guarded(ev, status="kept", quote="x y z a b c d", stats=None, **kw):
+    src = [
+        Source(id="G-T1", kind="transcript", title="a", quarter="Q3 FY26", url="u", pages=["p"]),
+        Source(
+            id="G-T2",
+            kind="transcript",
+            title="b",
+            quarter="Q2 FY27",
+            url="u",
+            pages=[f"Opening remarks. {ev} Thank you."],
+        ),
+    ]
+    p = promise(1, "G-T1", "Q3 FY26", **kw)
+    p = p.model_copy(update={"citation": Citation(source_id="G-T1", page=1, quote=quote)})
+    j = {"status": status, "evidence_quote": ev, "evidence_source": "G-T2", "rationale": "r"}
+    return build_ledger(FakeRouter(judge({p.id: j})), [p], src, {}, {}, stats=stats).rows[0]
+
+
+def test_guard_dixon_restated_target_is_pending():
+    ev = "The plant is nearing completion, and we expect the operation to commence by Q2 this fiscal."
+    stats: dict = {}
+    row = _guarded(ev, horizon="Q2 FY27", stats=stats)
+    assert row.status == "pending" and row.evidence is None and row.rationale == _RESTATED_MSG
+    assert stats["verdicts_downgraded"]["restated"] == 1
+
+
+def test_guard_idea_below_target_is_pending():
+    ev = "For the quarter was Rs. 17.5 billion and for H1FY26 at Rs. 42 billion."
+    stats: dict = {}
+    row = _guarded(
+        ev,
+        quote="That range of INR 50 billion to INR 60 billion, which we had indicated for H1",
+        kind="quantitative",
+        target_low=50,
+        target_high=60,
+        unit="usd_bn",
+        stats=stats,
+    )
+    assert row.status == "pending" and row.evidence is None
+    assert row.rationale == "The later figure (42) is below the 50–60 target"
+    assert stats["verdicts_downgraded"]["below_target"] == 1
+
+
+def test_guard_indigo_other_period_is_pending():
+    ev = "June quarter's capacity growth came in at 3% on a year-over-year basis."
+    stats: dict = {}
+    row = _guarded(ev, status="missed", horizon="Q4 FY26", stats=stats)
+    assert row.status == "pending" and row.evidence is None and row.rationale == _PERIOD_MSG
+    assert stats["verdicts_downgraded"]["other_period"] == 1
+
+
+@pytest.mark.parametrize(
+    "ev,status,horizon,kw",
+    [
+        (
+            (
+                "June quarter's capacity growth came in at 3% on a year-over-year basis, "
+                "broadly in line with our guidance."
+            ),
+            "kept",
+            "Q1FY27",
+            {},
+        ),
+        (
+            "Effective tax rate for FY26 stood at 22.6%.",
+            "kept",
+            "FY26",
+            {"kind": "quantitative", "target_low": 20, "target_high": 24, "unit": "%"},
+        ),
+        ("This marks our 26th sequential quarter of revenue growth.", "kept", None, {}),
+        ("Capacity growth in Q1 FY27 came in at 3% year over year.", "missed", "Q1 FY27", {}),
+        (
+            "We commissioned the plant in Q2 and will ramp up in Q3 of this year.",
+            "kept",
+            "Q2 FY27",
+            {},
+        ),
+    ],
+)
+def test_guard_leaves_valid_verdicts(ev, status, horizon, kw):
+    stats: dict = {}
+    row = _guarded(ev, status=status, horizon=horizon, stats=stats, **kw)
+    assert row.status == status and row.evidence is not None
+    assert not any(stats["verdicts_downgraded"].values())
+
+
+def test_guard_lower_is_better_skips_below_target():
+    row = _guarded(
+        "Net debt stood at 1,850 crore at the end of the period.",
+        quote="We will bring net debt below 2,000 crore",
+        kind="quantitative",
+        target_low=2000,
+        unit="cr",
+    )
+    assert row.status == "kept"
+
+
+def test_guard_fy_horizon_other_fy_downgrades_and_quarter_only_passes():
+    assert _guarded("Margin for FY25 stood at 22 percent overall.", horizon="FY26").status == (
+        "pending"
+    )
+    assert _guarded("Margin in Q2 stood at 22 percent overall.", horizon="FY26").status == "kept"
+    # FY inside a quarter mention is not an FY mention
+    assert _guarded("Margin for Q2 FY25 stood at 22 percent.", horizon="FY26").status == "kept"
+
+
+def test_guard_stats_count_each_reason():
+    stats: dict = {}
+    _guarded("We expect the plant to commence by Q2 this fiscal.", horizon="Q2 FY27", stats=stats)
+    _guarded("We expect the plant to commence by Q2 this fiscal.", horizon="Q2 FY27", stats=stats)
+    assert stats["verdicts_downgraded"] == {"other_period": 0, "restated": 2, "below_target": 0}

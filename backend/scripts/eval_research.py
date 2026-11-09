@@ -39,6 +39,7 @@ class DossierEval:
     calls: int = 0
     usd: float = 0.0
     seconds: float = 0.0
+    downgraded: dict = field(default_factory=dict)
 
 
 def _facts_lines(d: Dossier) -> set[str]:
@@ -72,6 +73,7 @@ def evaluate_dossier(d: Dossier) -> DossierEval:
         r.statuses = {k: sum(1 for x in d.ledger.rows if x.status == k) for k in STATUSES}
         r.computed = sum(1 for x in d.ledger.rows if x.method == "computed")
         r.judged = sum(1 for x in d.ledger.rows if x.method == "judged")
+    r.downgraded = dict(d.guard.get("verdicts_downgraded") or {})
     r.calls = int(d.cost.get("calls", 0))
     r.usd = float(d.cost.get("usd_list_price", 0.0))
     r.seconds = d.build_seconds
@@ -95,9 +97,10 @@ def render(results: list[DossierEval]) -> str:
         "| Symbol | Citations verified | FACTS citations "
         "| Ledger (kept/partly/missed/pending/dropped) "
         "| Computed/judged | Promises kept/proposed | Promise drop | Points kept/proposed "
-        "| Point drop | Calls | USD (list) | Seconds |"
+        "| Point drop | Calls | USD (list) | Seconds "
+        "| Verdicts downgraded (period/restated/below) |"
     )
-    lines = [head, "|" + "---|" * 12]
+    lines = [head, "|" + "---|" * 13]
     tot = DossierEval("total")
     for r in results:
         g = r.guard
@@ -112,6 +115,8 @@ def render(results: list[DossierEval]) -> str:
         tot.calls += r.calls
         tot.usd += r.usd
         tot.seconds += r.seconds
+        for k, v in r.downgraded.items():
+            tot.downgraded[k] = tot.downgraded.get(k, 0) + v
         for k, v in r.statuses.items():
             tot.statuses[k] = tot.statuses.get(k, 0) + v
         tot.guard = {
@@ -141,10 +146,11 @@ def render(results: list[DossierEval]) -> str:
 
 def _row(label: str, r: DossierEval, pk: int, pp: int, tk: int, tp: int) -> str:
     st = "/".join(str(r.statuses.get(k, 0)) for k in STATUSES)
+    dg = "/".join(str(r.downgraded.get(k, 0)) for k in ("other_period", "restated", "below_target"))
     return (
         f"| {label} | {r.verified}/{r.total} ({_pct(r.verified, r.total)}) | {r.facts} | {st} "
         f"| {r.computed}/{r.judged} | {pk}/{pp} | {_drop(pk, pp)} | {tk}/{tp} | {_drop(tk, tp)} "
-        f"| {r.calls} | {r.usd:.4f} | {r.seconds:.1f} |"
+        f"| {r.calls} | {r.usd:.4f} | {r.seconds:.1f} | {dg} |"
     )
 
 

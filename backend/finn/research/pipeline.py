@@ -141,6 +141,7 @@ def build_dossier(
                 pl or {},
                 notes=notes,
                 should_stop=out_of_time,
+                stats=guard,
             )
         except Exception as e:  # noqa: BLE001
             failed("Ledger", e)
