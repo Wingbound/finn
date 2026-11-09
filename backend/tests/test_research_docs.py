@@ -118,6 +118,25 @@ def test_collect_sources_missing_transcripts(conn):
     assert any("Apr 2026 transcript unavailable" in n for n in notes)
 
 
+def test_collect_sources_stops_past_deadline(conn):
+    _seed(conn, TRANSCRIPTS)
+    ticks = iter([0.0, 5.0, 11.0, 12.0, 13.0])  # one reading per source considered
+    sources, notes = collect_sources(
+        conn, FakeClient(), DOCS, deadline=10.0, now=lambda: next(ticks)
+    )
+    assert [s.id for s in sources] == ["T1", "T2"]
+    assert notes == ["Remaining sources skipped: build deadline reached"]
+
+
+def test_collect_sources_deadline_skips_annual_report(conn):
+    _seed(conn, TRANSCRIPTS)
+    ticks = iter([0.0, 1.0, 2.0, 3.0, 99.0])
+    c = FakeClient()
+    sources, notes = collect_sources(conn, c, DOCS, deadline=10.0, now=lambda: next(ticks))
+    assert [s.id for s in sources] == ["T1", "T2", "T3", "T4"] and c.calls == []
+    assert notes == ["Remaining sources skipped: build deadline reached"]
+
+
 def test_collect_sources_skips_unposted(conn):
     d = {
         "annual_reports": [],

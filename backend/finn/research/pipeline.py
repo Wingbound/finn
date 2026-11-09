@@ -19,6 +19,7 @@ from finn.research.synthesis import bull_bear, snapshot
 log = logging.getLogger(__name__)
 
 COST_KEYS = ("calls", "cached", "input_tokens", "output_tokens", "usd_list_price")
+DEADLINE_MARGIN_S = 60  # no new stage or LLM call starts with less than this left
 # A note containing any of these means part of the dossier is missing for a transient reason
 # (model down, a bug, the deadline): such a build never replaces a complete stored one.
 DEGRADED_MARKERS = (
@@ -45,7 +46,8 @@ def build_dossier(
     now: Callable[[], float] = time.monotonic,
 ) -> Dossier:
     """Build a dossier. ScreenerError (unknown symbol) propagates; every other failure inside
-    a stage becomes a note and the build carries on."""
+    a stage becomes a note and the build carries on. No source read, stage or LLM call starts
+    with less than DEADLINE_MARGIN_S of `deadline_s` left; each skip is noted."""
     symbol = symbol.upper()
     t0 = now()
     before = router.stats() if hasattr(router, "stats") else {}
@@ -56,8 +58,11 @@ def build_dossier(
     html, basis = screener.fetch_company(symbol, screener_client)
     name = screener.parse_name(html)
 
+    def out_of_time() -> bool:
+        return deadline_s - (now() - t0) < DEADLINE_MARGIN_S
+
     def late(stage: str) -> bool:
-        if now() - t0 > deadline_s:
+        if out_of_time():
             notes.append(f"{stage} skipped: build deadline reached")
             return True
         return False
@@ -93,7 +98,14 @@ def build_dossier(
         own = doc_client is None
         client = doc_client or DocClient()
         try:
-            sources, src_notes = collect_sources(conn, client, documents, progress=progress)
+            sources, src_notes = collect_sources(
+                conn,
+                client,
+                documents,
+                progress=progress,
+                deadline=t0 + deadline_s - DEADLINE_MARGIN_S,
+                now=now,
+            )
         finally:
             if own:
                 client.close()
@@ -103,7 +115,7 @@ def build_dossier(
 
     promises: list[Promise] = []
     transcripts = [s for s in sources if s.kind == "transcript"]
-    unread = 0  # transcripts whose guidance the model did not return
+    unread = 0  # transcripts whose guidance could not be read (model down or a crash)
     for src in transcripts:
         if late(f"Guidance from {src.title}"):
             continue
@@ -113,6 +125,7 @@ def build_dossier(
             promises.extend(extract_promises(router, src, guard, got))
         except Exception as e:  # noqa: BLE001
             failed(f"Guidance from {src.title}", e, "read")
+            unread += 1
         unread += bool(got)
         notes.extend(got)
 
@@ -120,13 +133,21 @@ def build_dossier(
     if sources and not late("Ledger"):
         progress(f"Checking delivery on {len(promises)} promises")
         try:
-            ledger = build_ledger(router, promises, sources, quarters or {}, pl or {}, notes=notes)
+            ledger = build_ledger(
+                router,
+                promises,
+                sources,
+                quarters or {},
+                pl or {},
+                notes=notes,
+                should_stop=out_of_time,
+            )
         except Exception as e:  # noqa: BLE001
             failed("Ledger", e)
     if ledger is not None and not ledger.rows and len(transcripts) >= 2:
         n = len(transcripts)
         ledger.note = (
-            f"Guidance could not be read from {unread} of {n} calls (model unavailable)"
+            f"Guidance could not be read from {unread} of {n} calls"
             if unread
             else f"No verifiable forward-looking guidance found in {n} calls"
         )

@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import logging
 import re
+from collections.abc import Callable
 from typing import Literal
 
 from finn.enrich.grounding import normalize, numbers_grounded
@@ -369,10 +370,12 @@ def build_ledger(
     annual: dict,
     *,
     notes: list[str] | None = None,
+    should_stop: Callable[[], bool] | None = None,
 ) -> Ledger:
     """Grade every promise. Model failures leave rows pending ("Not assessed") and add one
-    plain-English line to `notes`."""
-    judge_failed = False
+    plain-English line to `notes`. `should_stop` is checked before each judge call; once it
+    returns True the remaining groups are left pending."""
+    judge_failed = stopped = False
     transcripts = [s for s in sources if s.kind == "transcript"]
     by_id = {s.id: s for s in sources}
     rows: list[LedgerRow] = []
@@ -402,7 +405,11 @@ def build_ledger(
                 for p in group
             ]
             continue
-        verdicts, failed = _judge_group(router, group, later)
+        stopped = stopped or (should_stop is not None and should_stop())
+        if stopped:
+            verdicts, failed = {}, False
+        else:
+            verdicts, failed = _judge_group(router, group, later)
         judge_failed |= failed
         for p in group:
             status, ev, why = verdicts.get(p.id, ("pending", None, _NOT_ASSESSED))
@@ -421,8 +428,11 @@ def build_ledger(
         )
 
     rows.sort(key=order)
-    if judge_failed and notes is not None:
-        notes.append(_JUDGE_FAILED)
+    if notes is not None:
+        if judge_failed:
+            notes.append(_JUDGE_FAILED)
+        if stopped:
+            notes.append("Remaining promise checks skipped: build deadline reached")
     counts = {s: 0 for s in STATUSES}
     for r in rows:
         counts[r.status] += 1

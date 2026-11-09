@@ -184,3 +184,37 @@ def test_degraded_first_build_is_saved(env, monkeypatch):
     c = db.connect(path)
     assert db.get_dossier(c, "ABC").notes == bad.notes
     c.close()
+
+
+class ScriptedQueue:
+    """queue.Queue stand-in: EMPTY entries time out (advancing the fake clock)."""
+
+    EMPTY = object()
+
+    def __init__(self, script, clock):
+        self.script, self.clock, self.timeouts = list(script), clock, []
+
+    def get(self, timeout=None):
+        self.timeouts.append(timeout)
+        item = self.script.pop(0) if self.script else self.EMPTY
+        if item is self.EMPTY:
+            self.clock["t"] += timeout
+            raise api_main.queue.Empty
+        return item
+
+
+def test_stream_pings_while_waiting():
+    clock = {"t": 0.0}
+    q = ScriptedQueue([ScriptedQueue.EMPTY, ("progress", {"msg": "x"}), api_main._DONE], clock)
+    out = list(api_main._stream(q, clock=lambda: clock["t"]))
+    assert out == [": ping\n\n", 'event: progress\ndata: {"msg": "x"}\n\n']
+    assert q.timeouts[0] == 15
+
+
+def test_stream_times_out_at_285s():
+    clock = {"t": 0.0}
+    q = ScriptedQueue([], clock)
+    out = list(api_main._stream(q, clock=lambda: clock["t"]))
+    assert out[-1] == 'event: error\ndata: {"detail": "build timed out"}\n\n'
+    assert set(out[:-1]) == {": ping\n\n"} and len(out) == 19
+    assert clock["t"] == 285 and max(q.timeouts) <= 15

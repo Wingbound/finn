@@ -12,6 +12,7 @@ import threading
 from contextlib import asynccontextmanager
 from datetime import datetime, time, timedelta
 from pathlib import Path
+from time import monotonic
 from typing import Annotated
 
 from fastapi import Depends, FastAPI, HTTPException, Query
@@ -313,6 +314,8 @@ def research_source_page(symbol: str, source_id: str, page: int, conn: Conn) -> 
 
 
 _DONE = object()
+PING_S = 15  # keep-alive comment while a build stage is quiet
+STREAM_LIMIT_S = 285  # Vercel cuts functions at 300 s
 
 
 def _sse(event: str, data: object) -> str:
@@ -346,6 +349,23 @@ def _build_worker(symbol: str, q: queue.Queue) -> None:
         q.put(_DONE)
 
 
+def _stream(q, clock=monotonic):
+    """SSE frames from the worker queue: a ": ping" comment every PING_S of silence, and an
+    error event once STREAM_LIMIT_S has passed (the worker may still finish and save)."""
+    start = clock()
+    while (left := STREAM_LIMIT_S - (clock() - start)) > 0:
+        try:
+            item = q.get(timeout=min(PING_S, left))
+        except queue.Empty:
+            if STREAM_LIMIT_S - (clock() - start) > 0:
+                yield ": ping\n\n"
+            continue
+        if item is _DONE:
+            return
+        yield _sse(*item)
+    yield _sse("error", {"detail": "build timed out"})
+
+
 @app.get("/research/{symbol}/build")
 def research_build(symbol: str, conn: Conn) -> StreamingResponse:
     sym = symbol.upper()
@@ -362,12 +382,8 @@ def research_build(symbol: str, conn: Conn) -> StreamingResponse:
     else:
         threading.Thread(target=_build_worker, args=(sym, q), daemon=True).start()
 
-    def gen():
-        while (item := q.get()) is not _DONE:
-            yield _sse(*item)
-
     return StreamingResponse(
-        gen(),
+        _stream(q),
         media_type="text/event-stream",
         headers={"Cache-Control": "no-cache", "X-Accel-Buffering": "no"},
     )

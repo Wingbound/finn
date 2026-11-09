@@ -135,9 +135,20 @@ def collect_sources(
     max_transcripts: int = MAX_TRANSCRIPTS,
     ar_pages: int = 40,
     progress: Callable[[str], None] = lambda m: None,
+    deadline: float | None = None,
+    now: Callable[[], float] = time.monotonic,
 ) -> tuple[list[Source], list[str]]:
+    """Read the latest transcripts and annual report. Past `deadline` (on the `now` clock) no
+    further source is read and one note says so."""
     sources: list[Source] = []
     notes: list[str] = []
+
+    def late() -> bool:
+        if deadline is not None and now() > deadline:
+            notes.append("Remaining sources skipped: build deadline reached")
+            return True
+        return False
+
     n = 0
     for call in documents.get("concalls", []):
         if n >= max_transcripts:
@@ -145,6 +156,8 @@ def collect_sources(
         url = call.get("transcript_url")
         if not url:
             continue  # not posted yet
+        if late():
+            return sources, notes
         n += 1
         label = "unknown"
         try:
@@ -174,7 +187,7 @@ def collect_sources(
         except Exception as e:  # noqa: BLE001 - one odd row must not abort the whole collection
             notes.append(f"{label} skipped: {type(e).__name__}: {e}")
     reports = documents.get("annual_reports", [])
-    if reports:
+    if reports and not late():
         try:
             ar = reports[0]
             title = f"Annual Report {ar['year']}"

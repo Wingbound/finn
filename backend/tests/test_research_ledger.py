@@ -692,3 +692,23 @@ def test_judge_success_adds_no_note():
     notes: list[str] = []
     build_ledger(FakeRouter({"judgements": []}), [promise(1, "PERSISTENT-T2", "Q1 FY27")], sources(), {}, {}, notes=notes)  # fmt: skip
     assert notes == []
+
+
+# ---- I3: should_stop ----
+def test_should_stop_is_checked_before_each_judge_group():
+    a = promise(1, "PERSISTENT-T4", "Q3 FY26")
+    b = promise(1, "PERSISTENT-T3", "Q4 FY26")
+    c = promise(1, "PERSISTENT-T2", "Q1 FY27")
+    r = FakeRouter({"judgements": []})
+    checks = iter([False, True, True])
+    notes: list[str] = []
+    led = build_ledger(r, [a, b, c], sources(), {}, {}, notes=notes, should_stop=lambda: next(checks))  # fmt: skip
+    assert len(r.calls) == 1
+    assert all(x.status == "pending" and x.rationale == "Not assessed" for x in led.rows)
+    assert notes == ["Remaining promise checks skipped: build deadline reached"]
+
+
+def test_should_stop_never_blocks_rows_without_later_calls():
+    r = FakeRouter({"judgements": []})
+    led = build_ledger(r, [promise(1, "PERSISTENT-T1", "Q2 FY27")], sources(), {}, {}, should_stop=lambda: True)  # fmt: skip
+    assert led.rows[0].rationale == "Too recent to judge" and r.calls == []
