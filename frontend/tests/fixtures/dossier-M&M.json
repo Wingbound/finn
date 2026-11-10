@@ -2,7 +2,7 @@
  "symbol": "M&M",
  "name": "Mahindra & Mahindra Ltd",
  "basis": "consolidated",
- "built_at": "2026-11-10T05:34:38.158856+05:30",
+ "built_at": "2026-11-10T06:10:23.177691+05:30",
  "sources": [
   {
    "id": "T1",
@@ -481,7 +481,7 @@
   "output_tokens": 0,
   "usd_list_price": 0.0
  },
- "build_seconds": 0.5,
+ "build_seconds": 0.6,
  "guard": {
   "promises_proposed": 24,
   "promises_kept": 13,

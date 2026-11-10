@@ -20,7 +20,9 @@ const note = (over: Partial<PromiseNote> = {}): PromiseNote => ({
   call: "Q1 FY27 call, p. 4",
   made_in: "Q1 FY27",
   horizon: "FY27",
+  horizon_label: "FY27",
   target: "15–18%",
+  target_kind: "target",
   pace: null,
   ...over,
 });
@@ -31,13 +33,13 @@ describe("PromisePanel", () => {
     const panel = screen.getByRole("region", { name: "What management said" });
     const quote = within(panel).getByText(/We expect revenue to grow/);
     expect(quote.closest(".quote")).not.toBeNull();
-    expect(within(panel).getByText("Q1 FY27 call, p. 4. Target 15–18%, FY27.")).toBeInTheDocument();
+    expect(within(panel).getByText("Q1 FY27 call, p. 4. Target 15–18% for FY27.")).toBeInTheDocument();
     expect(within(panel).getByRole("link", { name: "See the ledger" })).toHaveAttribute("href", "/research/ABC#ledger");
   });
 
   it("states pace as one quarter beside the target, never as a verdict", () => {
     const n = note({
-      pace: { line: "Revenue", actual: 21.6, basis: "YoY growth in Q2 FY27", target_low: 15, target_high: 18, word: "above" },
+      pace: { line: "Revenue", actual: 21.6, basis: "YoY growth in Q2 FY27", target_low: 15, target_high: 18, word: "above", scope: "year" },
     });
     expect(paceSentence(n.pace!)).toBe("This quarter: revenue +21.6% YoY, above the 15–18% target. One quarter, not the full year.");
     render(<PromisePanel symbol="ABC" notes={[n]} />);
@@ -47,16 +49,38 @@ describe("PromisePanel", () => {
 
   it("words margins and open-ended targets plainly", () => {
     expect(
-      paceSentence({ line: "EBITDA margin", actual: 16.1, basis: "margin in Q2 FY27", target_low: 15, target_high: 17, word: "within" }),
+      paceSentence({ line: "EBITDA margin", actual: 16.1, basis: "margin in Q2 FY27", target_low: 15, target_high: 17, word: "within", scope: "year" }),
     ).toBe("This quarter: EBITDA margin 16.1%, within the 15–17% target. One quarter, not the full year.");
     expect(
-      paceSentence({ line: "PAT", actual: 9.5, basis: "YoY growth in Q2 FY27", target_low: 12, target_high: null, word: "below" }),
+      paceSentence({ line: "PAT", actual: 9.5, basis: "YoY growth in Q2 FY27", target_low: 12, target_high: null, word: "below", scope: "year" }),
     ).toBe("This quarter: PAT +9.5% YoY, below the 12% target. One quarter, not the full year.");
   });
 
   it("renders nothing without notes", () => {
     const { container } = render(<PromisePanel symbol="ABC" notes={[]} />);
     expect(container).toBeEmptyDOMElement();
+  });
+});
+
+describe("the note's period (Plan 6 review I4, I5, M4)", () => {
+  it.each([
+    [{ horizon_label: "FY27", target: "15–18%", target_kind: "target" }, "Q1 FY27 call, p. 4. Target 15–18% for FY27."],
+    [{ horizon_label: "was due Q1 FY27", target: null }, "Q1 FY27 call, p. 4. Was due Q1 FY27."],
+    [{ horizon_label: "Q2 FY27", target: null }, "Q1 FY27 call, p. 4. For Q2 FY27."],
+    [
+      { horizon: "next year", horizon_label: '"next year", said on the Q4 FY26 call', target: "₹3,500 cr", target_kind: "guided" },
+      'Q1 FY27 call, p. 4. Guided ₹3,500 cr. Timing: "next year", said on the Q4 FY26 call.',
+    ],
+    [{ horizon_label: null, horizon: null, target: "$25–30 mn", target_kind: "figure" }, "Q1 FY27 call, p. 4. Figure quoted: $25–30 mn."],
+  ] as [Partial<PromiseNote>, string][])("%o reads %s", (over, text) => {
+    render(<PromisePanel symbol="ABC" notes={[note(over)]} />);
+    expect(screen.getByText(text)).toBeInTheDocument();
+  });
+
+  it("only adds 'not the full year' when the target is for the year", () => {
+    const pace = { line: "Revenue", actual: 21.6, basis: "YoY growth in Q2 FY27", target_low: 15, target_high: 18, word: "above" as const };
+    expect(paceSentence({ ...pace, scope: "year" })).toMatch(/One quarter, not the full year\.$/);
+    expect(paceSentence({ ...pace, scope: "quarter" })).toBe("This quarter: revenue +21.6% YoY, above the 15–18% target set for it.");
   });
 });
 
@@ -77,6 +101,12 @@ describe("a dossier", () => {
     render(wrap(<DossierView dossier={load<Dossier>("dossier-BAJFINANCE.json")} />));
     const section = screen.getByRole("region", { name: "Latest filed quarter" });
     expect(within(section).getAllByRole("rowheader").map((r) => r.textContent)).toContain("Credit cost");
+  });
+  it("doesn't point at promises a dossier doesn't have (M8)", () => {
+    const d = load<Dossier>("dossier-BAJFINANCE.json");
+    render(wrap(<DossierView dossier={{ ...d, ledger: { ...d.ledger!, rows: [] } }} />));
+    const section = screen.getByRole("region", { name: "Latest filed quarter" });
+    expect(section.textContent).not.toMatch(/promises above/);
   });
   it("leaves the section out when there is no card", () => {
     render(wrap(<DossierView dossier={load<Dossier>("dossier-INDIGO.json")} />));

@@ -192,7 +192,8 @@ _SCAN = re.compile(
     r"|\b(?:fy|fiscal(?: year)?)\s*'?(?P<fy>\d{4}|\d{2})\b"
     r"|\b(?:march|mar)\s+(?P<mar>20\d{2})\b"
     r"|\b(?P<rel>this financial year|this fiscal|this year|current financial year|current fiscal"
-    r"|current year|next financial year|next fiscal|next year|next quarter|coming quarter)\b"
+    r"|current year|next financial year|next fiscal|next year|next quarter|coming quarter"
+    r"|full[- ]year|annual|for the year)\b"
 )
 _LONG_WORDS = re.compile(r"long[- ]term|medium[- ]term|aspiration|over the next few years")
 # FY labels, or a bare calendar year after a time word ("by 2030"; not "Rs 2075 crore").
@@ -428,23 +429,33 @@ _RESTATED_MSG = "The later call restated the target; delivery is not shown yet"
 _FUTURE = re.compile(
     r"\b(?:expect|expects|expecting|will|shall|should|would|plan to|plans to|planning to|aim to"
     r"|aims to|intend|intends|anticipate|anticipates|on track|going forward|going to"
-    r"|is expected to|are expected to|remain committed|scheduled|slated"
-    r"|(?:is|are) set (?:for|to)|due (?:for|to|in))\b"
+    r"|is expected to|are expected to|remain committed|slated"
+    r"|(?:is|are) (?:set|scheduled) (?:for|to)|due (?:for|in|by))\b"
 )
 # Delivery words. A bare "was"/"were"/"had"/"did" is not one ("our original plan was 2027");
 # a past figure with a unit is (_PAST_NUMBER).
 _DELIVERED = re.compile(
     r"\b(?:came in|stood at|delivered|achieved|reached|crossed|completed|commissioned"
-    r"|commenced|started|launched|received|reported|grew|declined|met|has been|have been)\b"
+    r"|commenced|started|launched|received|reported|grew|declined|met|has been|have been"
+    r"|rose|increased|improved|expanded|added|opened|closed|went live|came on stream"
+    r"|operationali[sz]ed|exceeded|surpassed|touched|doubled|recorded|posted|registered"
+    r"|clocked|signed|won|acquired|(?:was|were|has been|have been) able to)\b"
 )
 _PAST_NUMBER = re.compile(
     r"\b(?:was|were)\s+(?:up|down|at|about|around|roughly|nearly|approximately)?\s*"
     r"(?:rs\.?\s*|inr\s*|₹\s*)?\d[\d,.]*\s*(?:%|percent|crores?|cr|lakhs?|million|mn|billion|bn"
     r"|tons?|tonnes?|mt|gw|mw|mva|units|beds|stores)"
 )
-# "will be commissioned", "to be launched": a delivery word after a modal is still the future.
+# "will be commissioned", "will also be commissioned", "expected to be fully commissioned":
+# a delivery word after a modal (and any adverbs) is still the future.
+_ADVERBS = r"(?:(?:\w+ly|also|now|soon|then|still|further|fully)\s+)*"
 _MODAL_VERB = re.compile(
-    r"\b(?:will|would|should|shall|may|might|could|can|to)\s+(?:be\s+|get\s+|have\s+been\s+)?\w+"
+    r"\b(?:will|would|should|shall|may|might|could|can"
+    r"|(?:expected|planned|scheduled|set|due|going|likely) to)\s+"
+    + _ADVERBS
+    + r"(?:be\s+|get\s+|have\s+been\s+)?"
+    + _ADVERBS
+    + r"\w+"
 )
 _PRESENT_NUMBER = re.compile(r"\b(?:is|are|stands|now)\s+(?:at\s+)?(?:rs\.?\s*|inr\s*|₹\s*)?\d")
 # "had planned", "was expected": a weak delivery word followed by an intention is not delivery.

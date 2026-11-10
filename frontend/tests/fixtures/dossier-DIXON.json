@@ -2,7 +2,7 @@
  "symbol": "DIXON",
  "name": "Dixon Technologies (India) Ltd",
  "basis": "consolidated",
- "built_at": "2026-11-10T05:35:42.488496+05:30",
+ "built_at": "2026-11-10T06:10:29.099104+05:30",
  "sources": [
   {
    "id": "T1",
@@ -550,7 +550,7 @@
   "output_tokens": 0,
   "usd_list_price": 0.0
  },
- "build_seconds": 0.6,
+ "build_seconds": 0.5,
  "guard": {
   "promises_proposed": 32,
   "promises_kept": 16,

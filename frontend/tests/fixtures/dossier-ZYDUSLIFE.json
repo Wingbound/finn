@@ -2,7 +2,7 @@
  "symbol": "ZYDUSLIFE",
  "name": "Zydus Lifesciences Ltd",
  "basis": "consolidated",
- "built_at": "2026-11-10T05:34:36.961071+05:30",
+ "built_at": "2026-11-10T06:10:21.837976+05:30",
  "sources": [
   {
    "id": "T1",
@@ -483,12 +483,12 @@
  "notes": [],
  "cost": {
   "calls": 9,
-  "cached": 8,
-  "input_tokens": 16176,
-  "output_tokens": 4770,
+  "cached": 9,
+  "input_tokens": 0,
+  "output_tokens": 0,
   "usd_list_price": 0.0
  },
- "build_seconds": 22.4,
+ "build_seconds": 0.5,
  "guard": {
   "promises_proposed": 28,
   "promises_kept": 13,

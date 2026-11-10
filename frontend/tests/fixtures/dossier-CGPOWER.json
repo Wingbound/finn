@@ -2,7 +2,7 @@
  "symbol": "CGPOWER",
  "name": "CG Power & Industrial Solutions Ltd",
  "basis": "consolidated",
- "built_at": "2026-11-10T05:35:29.621988+05:30",
+ "built_at": "2026-11-10T06:10:26.332381+05:30",
  "sources": [
   {
    "id": "T1",
@@ -542,12 +542,12 @@
  "notes": [],
  "cost": {
   "calls": 9,
-  "cached": 8,
-  "input_tokens": 16612,
-  "output_tokens": 523,
-  "usd_list_price": 0.006291
+  "cached": 9,
+  "input_tokens": 0,
+  "output_tokens": 0,
+  "usd_list_price": 0.0
  },
- "build_seconds": 12.4,
+ "build_seconds": 0.4,
  "guard": {
   "promises_proposed": 22,
   "promises_kept": 15,

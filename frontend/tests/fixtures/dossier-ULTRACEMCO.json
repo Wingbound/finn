@@ -2,7 +2,7 @@
  "symbol": "ULTRACEMCO",
  "name": "UltraTech Cement Ltd",
  "basis": "consolidated",
- "built_at": "2026-11-10T05:35:03.320634+05:30",
+ "built_at": "2026-11-10T06:10:24.005266+05:30",
  "sources": [
   {
    "id": "T1",
@@ -599,12 +599,12 @@
  "notes": [],
  "cost": {
   "calls": 9,
-  "cached": 8,
-  "input_tokens": 18993,
-  "output_tokens": 4369,
+  "cached": 9,
+  "input_tokens": 0,
+  "output_tokens": 0,
   "usd_list_price": 0.0
  },
- "build_seconds": 24.7,
+ "build_seconds": 0.3,
  "guard": {
   "promises_proposed": 27,
   "promises_kept": 18,

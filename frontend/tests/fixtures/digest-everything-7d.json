@@ -159,7 +159,9 @@
      "call": "Q2 FY27 call, p. 4",
      "made_in": "Q2 FY27",
      "horizon": "FY27",
+     "horizon_label": "FY27",
      "target": null,
+     "target_kind": "figure",
      "pace": null
     },
     {
@@ -173,7 +175,9 @@
      "call": "Q2 FY27 call, p. 5",
      "made_in": "Q2 FY27",
      "horizon": "FY27",
+     "horizon_label": "FY27",
      "target": null,
+     "target_kind": "figure",
      "pace": null
     },
     {
@@ -187,7 +191,9 @@
      "call": "Q2 FY27 call, p. 12",
      "made_in": "Q2 FY27",
      "horizon": "FY27",
+     "horizon_label": "FY27",
      "target": "26–27%",
+     "target_kind": "target",
      "pace": null
     }
    ]
@@ -444,7 +450,9 @@
      "call": "Q4 FY26 call, p. 4",
      "made_in": "Q4 FY26",
      "horizon": "FY2027",
+     "horizon_label": "FY27",
      "target": "₹7,100 cr",
+     "target_kind": "figure",
      "pace": null
     },
     {
@@ -458,7 +466,9 @@
      "call": "Q4 FY26 call, p. 5",
      "made_in": "Q4 FY26",
      "horizon": "FY2027",
+     "horizon_label": "FY27",
      "target": "₹20,000 cr",
+     "target_kind": "guided",
      "pace": null
     },
     {
@@ -472,7 +482,9 @@
      "call": "Q3 FY26 call, p. 11",
      "made_in": "Q3 FY26",
      "horizon": "FY2027",
+     "horizon_label": "FY27",
      "target": null,
+     "target_kind": "figure",
      "pace": null
     }
    ]
@@ -676,7 +688,9 @@
      "call": "Q4 FY26 call, p. 11",
      "made_in": "Q4 FY26",
      "horizon": "FY27",
+     "horizon_label": "FY27",
      "target": null,
+     "target_kind": "figure",
      "pace": null
     },
     {
@@ -690,7 +704,9 @@
      "call": "Q1 FY27 call, p. 10",
      "made_in": "Q1 FY27",
      "horizon": "18 months",
+     "horizon_label": "\"18 months\", said on the Q1 FY27 call",
      "target": null,
+     "target_kind": "figure",
      "pace": null
     },
     {
@@ -704,7 +720,9 @@
      "call": "Q3 FY26 call, p. 17",
      "made_in": "Q3 FY26",
      "horizon": "summer season",
+     "horizon_label": "\"summer season\", said on the Q3 FY26 call",
      "target": "85–90%",
+     "target_kind": "target",
      "pace": null
     }
    ]
@@ -908,21 +926,9 @@
      "call": "Q1 FY27 call, p. 4",
      "made_in": "Q1 FY27",
      "horizon": "FY27",
+     "horizon_label": "FY27",
      "target": "15%",
-     "pace": null
-    },
-    {
-     "topic": "sales target",
-     "quote": "And that's why when we codified our strategy three years ago, it was to say what does relevance mean in the market? And how should we actually achieve that? And we codified that we want to be a 10,000 crores company pre-sales by FY30.",
-     "citation": {
-      "source_id": "T1",
-      "page": 16,
-      "quote": "And that's why when we codified our strategy three years ago, it was to say what does relevance mean in the market? And how should we actually achieve that? And we codified that we want to be a 10,000 crores company pre-sales by FY30."
-     },
-     "call": "Q1 FY27 call, p. 16",
-     "made_in": "Q1 FY27",
-     "horizon": "FY30",
-     "target": "₹10,000 cr",
+     "target_kind": "target",
      "pace": null
     },
     {
@@ -936,7 +942,25 @@
      "call": "Q4 FY26 call, p. 11",
      "made_in": "Q4 FY26",
      "horizon": "F31",
+     "horizon_label": "\"F31\", said on the Q4 FY26 call",
      "target": null,
+     "target_kind": "figure",
+     "pace": null
+    },
+    {
+     "topic": "new launches",
+     "quote": "So, by F31, we can expect 10 new ICE and 6 new BEVs.",
+     "citation": {
+      "source_id": "T2",
+      "page": 11,
+      "quote": "So, by F31, we can expect 10 new ICE and 6 new BEVs."
+     },
+     "call": "Q4 FY26 call, p. 11",
+     "made_in": "Q4 FY26",
+     "horizon": "F31",
+     "horizon_label": "\"F31\", said on the Q4 FY26 call",
+     "target": null,
+     "target_kind": "figure",
      "pace": null
     }
    ]
@@ -1140,7 +1164,9 @@
      "call": "Q1 FY27 call, p. 5",
      "made_in": "Q1 FY27",
      "horizon": "next nine months",
+     "horizon_label": "\"next nine months\", said on the Q1 FY27 call",
      "target": null,
+     "target_kind": "target",
      "pace": null
     },
     {
@@ -1154,7 +1180,9 @@
      "call": "Q1 FY27 call, p. 9",
      "made_in": "Q1 FY27",
      "horizon": "March quarter",
+     "horizon_label": "\"March quarter\", said on the Q1 FY27 call",
      "target": null,
+     "target_kind": "target",
      "pace": null
     },
     {
@@ -1168,7 +1196,9 @@
      "call": "Q1 FY27 call, p. 11",
      "made_in": "Q1 FY27",
      "horizon": "Q3 and Q4",
+     "horizon_label": "\"Q3 and Q4\", said on the Q1 FY27 call",
      "target": "₹240–250 cr",
+     "target_kind": "figure",
      "pace": null
     }
    ]
@@ -1347,14 +1377,17 @@
      "call": "Q2 FY27 call, p. 5",
      "made_in": "Q2 FY27",
      "horizon": "FY27",
+     "horizon_label": "FY27",
      "target": "at least 24%",
+     "target_kind": "target",
      "pace": {
       "line": "EBITDA margin",
       "actual": 24.0,
       "basis": "margin in Q2 FY27",
       "target_low": 24.0,
       "target_high": null,
-      "word": "at or above"
+      "word": "at or above",
+      "scope": "year"
      }
     },
     {
@@ -1368,7 +1401,9 @@
      "call": "Q1 FY27 call, p. 9",
      "made_in": "Q1 FY27",
      "horizon": "FY27",
+     "horizon_label": "FY27",
      "target": "₹1,500–1,600 cr",
+     "target_kind": "guided",
      "pace": null
     },
     {
@@ -1382,7 +1417,9 @@
      "call": "Q4 FY26 call, p. 9",
      "made_in": "Q4 FY26",
      "horizon": "FY27",
+     "horizon_label": "FY27",
      "target": null,
+     "target_kind": "figure",
      "pace": null
     }
    ]

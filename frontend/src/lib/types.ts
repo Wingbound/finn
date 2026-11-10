@@ -115,7 +115,8 @@ export interface PaceNote {
   basis: string;
   target_low: number;
   target_high: number | null;
-  word: "above" | "within" | "below" | "at or above";
+  word: "above" | "within" | "below" | "at" | "at or above";
+  scope: "year" | "quarter";
 }
 
 /** An open promise from the company's calls, shown on its results card. */
@@ -126,7 +127,10 @@ export interface PromiseNote {
   call: string;
   made_in: string;
   horizon: string | null;
+  /** "FY27", "was due Q1 FY27", or the call's own phrase tied to its call */
+  horizon_label: string | null;
   target: string | null;
+  target_kind: "target" | "guided" | "figure";
   pace: PaceNote | null;
 }
 

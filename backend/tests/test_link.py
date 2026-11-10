@@ -173,7 +173,8 @@ def test_open_ended_target_says_at_or_above():
     quote = "We expect PAT to grow at least 12% in FY27."
     p = pace_note(row(quote, metric="pat_growth", lo=12.0, hi=None).promise, card())
     assert p is not None and p.word == "at or above"
-    p = pace_note(row(quote, metric="pat_growth", lo=20.0, hi=None).promise, card())
+    higher = "We expect PAT to grow at least 20% in FY27."  # the target must be in the quote (I1)
+    p = pace_note(row(higher, metric="pat_growth", lo=20.0, hi=None).promise, card())
     assert p is not None and p.word == "below"
 
 
@@ -417,3 +418,157 @@ def test_at_least_only_when_the_words_are_beside_the_number():  # TATASTEEL
         ].target
         == "at least ₹1,500 cr"
     )
+
+
+# ---- Plan 6 final review ----
+
+
+@pytest.mark.parametrize(
+    ("quote", "kw"),
+    [
+        (
+            "We expect double-digit revenue growth in FY27.",
+            {"lo": 10.0, "hi": None},
+        ),  # I1: 10 not in quote
+        ("We expect mid-teens revenue growth in FY27.", {"lo": 15.0, "hi": None}),
+        (
+            "We expect PAT margin of 12% in FY27.",
+            {"metric": "pat_growth", "lo": 12.0, "hi": None},
+        ),  # I2
+        (
+            "We expect net profit margin of 12% for FY27.",
+            {"metric": "pat_growth", "lo": 12.0, "hi": None},
+        ),
+        ("We expect sales volume growth of 15 to 18% in FY27.", {}),
+        ("Same-store sales growth of 15 to 18% in FY27.", {}),
+        ("We expect export sales to grow 15 to 18% in FY27.", {}),
+        ("Domestic formulation sales should grow 15 to 18% in FY27.", {}),
+        ("Organic revenue growth, excluding the acquisition, should be 15 to 18% in FY27.", {}),
+        ("Passenger revenue per available seat kilometre to grow 15 to 18% in FY27.", {}),
+        ("Unit revenue should grow 15 to 18% in FY27.", {}),
+        ("We expect AUM growth of 15 to 18% in FY27, and revenue growth should track it.", {}),
+        ("We expect operating margin of 15 to 18% in FY27.", {"metric": "ebitda_margin"}),
+        (
+            "Presales of 200 billion with an embedded EBITDA margin of approximately 15% in FY27.",
+            {"metric": "ebitda_margin", "lo": 15.0, "hi": None},
+        ),
+        ("We expect H2 revenue growth of 15 to 18%.", {}),  # period not in the quote
+        ("We expect revenue to grow 15 to 18% for FY28.", {}),  # horizon mislabelled FY27
+    ],
+)
+def test_no_pace_for_neighbouring_measures(quote, kw):
+    assert pace_note(row(quote, **kw).promise, card()) is None, quote
+
+
+def test_a_q4_calls_this_year_is_not_this_card(tmp_path):  # I3
+    q = "This year we expect revenue to grow 15 to 18%."
+    c4 = card().model_copy(update={"period_label": "Q4 FY26"})
+    p = row(q, horizon="this year", made_in="Q4 FY26").promise
+    assert pace_note(p, c4) is None
+
+
+def test_point_targets_are_not_floors():  # I1: "at or above" only for open targets
+    q = "We expect EBITDA margin of 16% for FY27."
+    p = pace_note(row(q, metric="ebitda_margin", lo=16.0, hi=None).promise, card())
+    assert p is not None and p.word == "above" and p.scope == "year"
+
+
+@pytest.mark.parametrize(
+    ("horizon", "made_in", "label"),
+    [
+        ("FY27", "Q1 FY27", "FY27"),
+        ("next quarter", "Q1 FY27", "Q2 FY27"),
+        ("this quarter", "Q1 FY27", "was due Q1 FY27"),
+        ("Q4 FY26", "Q3 FY26", "was due Q4 FY26"),
+        ("next year", "Q4 FY26", '"next year", said on the Q4 FY26 call'),
+        ("next nine months", "Q1 FY27", '"next nine months", said on the Q1 FY27 call'),
+        (None, "Q1 FY27", None),
+    ],
+)
+def test_horizons_read_correctly_on_a_later_card(horizon, made_in, label):  # I4
+    q = "We will add capacity in this period."
+    notes = promise_notes(
+        dossier(
+            [row(q, metric="other", lo=None, hi=None, unit=None, horizon=horizon, made_in=made_in)]
+        ),
+        card(),
+    )
+    assert notes[0].horizon_label == label
+
+
+def test_a_cut_is_not_a_target():  # I5, TVSMOTOR
+    q = "Next year, the investments will be much lower. It will be maybe another INR500 crores, INR600 crores lower than this INR 2,400 crores."
+    notes = promise_notes(
+        dossier(
+            [
+                row(
+                    q,
+                    metric="capex",
+                    lo=500.0,
+                    hi=600.0,
+                    unit="cr",
+                    horizon="next year",
+                    made_in="Q4 FY26",
+                )
+            ]
+        ),
+        card(),
+    )
+    assert notes[0].target is None
+
+
+@pytest.mark.parametrize(
+    ("metric", "kind"),
+    [("revenue_growth", "target"), ("capex", "guided"), ("other", "figure"), (None, "figure")],
+)
+def test_only_results_lines_are_called_targets(metric, kind):  # I5
+    q = "We expect revenue to grow 15% to 18% in FY27."
+    notes = promise_notes(dossier([row(q, metric=metric)]), card())
+    assert notes[0].target_kind == kind
+
+
+def test_far_targets_rank_after_near_ones():  # M2
+    far = row(
+        "Revenue of 15% to 18% growth by FY30 is our aspiration.",
+        horizon="FY30",
+        n=1,
+        made_in="Q2 FY27",
+    )
+    near = row(
+        "We will open two plants this year.",
+        lo=None,
+        hi=None,
+        unit=None,
+        metric=None,
+        horizon="this year",
+        n=2,
+    )
+    notes = promise_notes(dossier([far, near]), card())
+    assert notes[0].quote.startswith("We will open")
+
+
+def test_dedupe_keeps_the_copy_with_a_pace_note():  # M3
+    a = row(
+        "We are confident of 15% to 18% revenue growth.", n=1, made_in="Q2 FY27"
+    )  # no period in the quote
+    b = row("We expect revenue to grow 15% to 18% in FY27.", n=2, made_in="Q1 FY27")
+    notes = promise_notes(dossier([a, b]), card())
+    assert len(notes) == 1 and notes[0].pace is not None
+
+
+def test_a_quarter_target_says_so():  # M4
+    q = "We expect revenue to grow 15% to 18% in Q2 FY27."
+    p = pace_note(row(q, horizon="Q2 FY27").promise, card())
+    assert p is not None and p.scope == "quarter"
+
+
+def test_a_corrupt_dossier_gives_no_notes(tmp_path):  # M5
+    conn = db.connect(tmp_path / "x.sqlite")
+    db.init_db(conn)
+    conn.execute(
+        "INSERT INTO dossiers (symbol, built_at, payload_json) VALUES ('ABC', '2026-11-09', '{not json')"
+    )
+    conn.commit()
+    st = _story("ABC")
+    attach_promises(conn, [st])
+    assert st.promises == []

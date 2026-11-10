@@ -401,28 +401,37 @@ Plan 6 built dossiers for the 16 holdings that had none, so every company in the
   - Evidence that measures something else: tons against megawatts, or beds against MVA.
   - A "missed" whose evidence figures all meet the target.
 
-On all 23 dossiers the checks fired 19 times: 1 period, 13 restated, 3 below target, 1 other measure, 1 meets target.
+On all 23 dossiers the checks fired 18 times: 1 period, 12 restated, 3 below target, 1 other measure, 1 meets target. The final review then found three ways the checks themselves could go wrong, which are now fixed:
+- the widened future wording had begun to demote real deliveries, such as "improved to 24.5% due to…" and "came on stream as scheduled";
+- an adverb could hide a restatement, as in "will also be commissioned";
+- "annual" and "full year" weren't read as the call's own fiscal year, so a mid-year "we expect to easily beat" stood as kept (LODHA). It now reads "Target not yet due".
 
 **Result across all 23 dossiers:** 23 resolved verdicts (21 kept, 2 missed, plus 3 not mentioned again). By my audit, 14 are correct, 9 debatable and 0 wrong. The debatable ones are mostly a "kept" that rests on weak but on-topic evidence, for example:
 - TATASTEEL's NINL ramp-up, graded on company-wide production;
 - AMBER's plant, graded on a Sidwal facility the promise doesn't name;
 - PREMIERENE's "full ramp-up", graded on "operational".
 
-The checks prevent mechanical errors; they can't make the judge's reading of weak evidence stricter. Of 330 ledger rows, 306 are pending, and 2 were graded in code.
+The checks prevent mechanical errors; they can't make the judge's reading of weak evidence stricter. Of 332 ledger rows, 306 are pending, and 2 were graded in code.
 
 **Promise notes on results cards.** All 6 results stories in the 7-day window carry 3 notes each. The pace sentence fires once: ZYDUSLIFE, an EBITDA margin of 24.0% beside guidance of "24% plus" for FY27. The other numeric guidance fails a gate, for three kinds of reason:
 - a full-year capex amount;
 - a quote naming EBIT;
 - a metric the results card doesn't carry, such as AUM or capacity.
 
-Target labels are shown only when their numbers and unit are in the quote. Checking that rule against real notes removed:
+Target labels are shown only when their numbers and unit are in the quote, and not when the quote describes a change ("₹500–600 crore lower"). Only results-line targets are labelled "Target": capex reads "Guided" and other figures "Figure quoted". A pace sentence needs, in addition:
+- the target stated in the quote;
+- no neighbouring measure (PAT margin, same-store sales, PRASK, AUM, exports, organic, embedded or H1/H2 figures);
+- the target number within 8 words of the line;
+- the period stated in the quote.
+
+Periods are resolved against the card ("FY27", "was due Q1 FY27"). A Q4 call's "this year" or "next year" is shown as said, tied to its call. Checking that rule against real notes removed:
 - "18×" from "18 months from now";
 - "70%" from "at least about 70";
 - an "at least" that belonged to a different number.
 
 ### Limits
 
-The judge's status is an LLM judgement gated by verbatim evidence. The quote is checked, and three deterministic guards (period, restatement, figure below target) can only downgrade the verdict; beyond those, the verdict itself is not checked. Computed grades cover only revenue growth, margin and PAT growth, and only when the quote itself names the metric and the period (see DESIGN.md, Ledger grading). Reaffirmations are treated as pending, not as delivery. Citation verification proves a quote exists on its page, not that the claim built on it is right.
+The judge's status is an LLM judgement gated by verbatim evidence. The quote is checked, and five deterministic guards (period, restatement, figure below target, a different measure, a missed figure that meets the target), plus the not-yet-due rule, can only downgrade the verdict. Beyond those, the verdict itself is not checked. Computed grades cover only revenue growth, margin and PAT growth, and only when the quote itself names the metric and the period (see DESIGN.md, Ledger grading). Reaffirmations are treated as pending, not as delivery. Citation verification proves a quote exists on its page, not that the claim built on it is right.
 
 ## 5. Deployed (2026-11-10)
 

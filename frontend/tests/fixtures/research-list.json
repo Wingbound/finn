@@ -2,7 +2,7 @@
  {
   "symbol": "AMBER",
   "name": "Amber Enterprises India Ltd",
-  "built_at": "2026-11-10T05:35:29.998329+05:30",
+  "built_at": "2026-11-10T06:10:26.757498+05:30",
   "counts": {
    "sources": 5,
    "ledger_rows": 22,
@@ -21,7 +21,7 @@
  {
   "symbol": "BAJFINANCE",
   "name": "Bajaj Finance Ltd",
-  "built_at": "2026-11-10T05:35:44.159889+05:30",
+  "built_at": "2026-11-10T06:10:30.883412+05:30",
   "counts": {
    "sources": 5,
    "ledger_rows": 19,
@@ -40,7 +40,7 @@
  {
   "symbol": "CGPOWER",
   "name": "CG Power & Industrial Solutions Ltd",
-  "built_at": "2026-11-10T05:35:29.621988+05:30",
+  "built_at": "2026-11-10T06:10:26.332381+05:30",
   "counts": {
    "sources": 5,
    "ledger_rows": 15,
@@ -59,7 +59,7 @@
  {
   "symbol": "DIXON",
   "name": "Dixon Technologies (India) Ltd",
-  "built_at": "2026-11-10T05:35:42.488496+05:30",
+  "built_at": "2026-11-10T06:10:29.099104+05:30",
   "counts": {
    "sources": 5,
    "ledger_rows": 16,
@@ -78,7 +78,7 @@
  {
   "symbol": "HDFCBANK",
   "name": "HDFC Bank Ltd",
-  "built_at": "2026-11-10T05:35:43.751582+05:30",
+  "built_at": "2026-11-10T06:10:30.363833+05:30",
   "counts": {
    "sources": 5,
    "ledger_rows": 7,
@@ -97,7 +97,7 @@
  {
   "symbol": "IDEA",
   "name": "Vodafone Idea Ltd",
-  "built_at": "2026-11-10T05:35:44.542949+05:30",
+  "built_at": "2026-11-10T06:10:31.307040+05:30",
   "counts": {
    "sources": 5,
    "ledger_rows": 11,
@@ -116,7 +116,7 @@
  {
   "symbol": "IDFCFIRSTB",
   "name": "IDFC First Bank Ltd",
-  "built_at": "2026-11-10T05:35:17.210912+05:30",
+  "built_at": "2026-11-10T06:10:25.955528+05:30",
   "counts": {
    "sources": 5,
    "ledger_rows": 12,
@@ -135,7 +135,7 @@
  {
   "symbol": "INDIGO",
   "name": "Interglobe Aviation Ltd",
-  "built_at": "2026-11-10T05:35:43.366322+05:30",
+  "built_at": "2026-11-10T06:10:29.932534+05:30",
   "counts": {
    "sources": 4,
    "ledger_rows": 12,
@@ -154,7 +154,7 @@
  {
   "symbol": "LODHA",
   "name": "Lodha Developers Ltd",
-  "built_at": "2026-11-10T05:35:30.383394+05:30",
+  "built_at": "2026-11-10T06:10:27.167659+05:30",
   "counts": {
    "sources": 5,
    "ledger_rows": 23,
@@ -173,7 +173,7 @@
  {
   "symbol": "M&M",
   "name": "Mahindra & Mahindra Ltd",
-  "built_at": "2026-11-10T05:34:38.158856+05:30",
+  "built_at": "2026-11-10T06:10:23.177691+05:30",
   "counts": {
    "sources": 5,
    "ledger_rows": 13,
@@ -192,7 +192,7 @@
  {
   "symbol": "MAXHEALTH",
   "name": "Max Healthcare Institute Ltd",
-  "built_at": "2026-11-10T05:35:16.754026+05:30",
+  "built_at": "2026-11-10T06:10:25.437601+05:30",
   "counts": {
    "sources": 5,
    "ledger_rows": 20,
@@ -211,7 +211,7 @@
  {
   "symbol": "PERSISTENT",
   "name": "Persistent Systems Ltd",
-  "built_at": "2026-11-10T05:35:41.875314+05:30",
+  "built_at": "2026-11-10T06:10:28.551497+05:30",
   "counts": {
    "sources": 5,
    "ledger_rows": 12,
@@ -230,7 +230,7 @@
  {
   "symbol": "POLYCAB",
   "name": "Polycab India Ltd",
-  "built_at": "2026-11-10T05:35:42.970833+05:30",
+  "built_at": "2026-11-10T06:10:29.505566+05:30",
   "counts": {
    "sources": 5,
    "ledger_rows": 17,
@@ -249,7 +249,7 @@
  {
   "symbol": "PREMIERENE",
   "name": "Premier Energies Ltd",
-  "built_at": "2026-11-10T05:35:40.969021+05:30",
+  "built_at": "2026-11-10T06:10:27.622863+05:30",
   "counts": {
    "sources": 5,
    "ledger_rows": 17,
@@ -268,7 +268,7 @@
  {
   "symbol": "RELIANCE",
   "name": "Reliance Industries Ltd",
-  "built_at": "2026-11-10T05:34:14.077559+05:30",
+  "built_at": "2026-11-10T06:10:20.716449+05:30",
   "counts": {
    "sources": 5,
    "ledger_rows": 16,
@@ -287,7 +287,7 @@
  {
   "symbol": "SUNPHARMA",
   "name": "Sun Pharmaceutical Industries Ltd",
-  "built_at": "2026-11-10T05:34:37.309748+05:30",
+  "built_at": "2026-11-10T06:10:22.235395+05:30",
   "counts": {
    "sources": 5,
    "ledger_rows": 20,
@@ -306,7 +306,7 @@
  {
   "symbol": "TATASTEEL",
   "name": "Tata Steel Ltd",
-  "built_at": "2026-11-10T05:35:04.253732+05:30",
+  "built_at": "2026-11-10T06:10:24.944613+05:30",
   "counts": {
    "sources": 5,
    "ledger_rows": 16,
@@ -325,7 +325,7 @@
  {
   "symbol": "TECHM",
   "name": "Tech Mahindra Ltd",
-  "built_at": "2026-11-10T05:34:14.591485+05:30",
+  "built_at": "2026-11-10T06:10:21.282790+05:30",
   "counts": {
    "sources": 5,
    "ledger_rows": 9,
@@ -344,7 +344,7 @@
  {
   "symbol": "TRENT",
   "name": "Trent Ltd",
-  "built_at": "2026-11-10T05:35:03.543429+05:30",
+  "built_at": "2026-11-10T06:10:24.237332+05:30",
   "counts": {
    "sources": 1,
    "ledger_rows": 0,
@@ -363,7 +363,7 @@
  {
   "symbol": "TVSMOTOR",
   "name": "TVS Motor Company Ltd",
-  "built_at": "2026-11-10T05:34:38.613564+05:30",
+  "built_at": "2026-11-10T06:10:23.643627+05:30",
   "counts": {
    "sources": 5,
    "ledger_rows": 17,
@@ -382,7 +382,7 @@
  {
   "symbol": "ULTRACEMCO",
   "name": "UltraTech Cement Ltd",
-  "built_at": "2026-11-10T05:35:03.320634+05:30",
+  "built_at": "2026-11-10T06:10:24.005266+05:30",
   "counts": {
    "sources": 5,
    "ledger_rows": 18,
@@ -401,7 +401,7 @@
  {
   "symbol": "VOLTAS",
   "name": "Voltas Ltd",
-  "built_at": "2026-11-10T05:34:37.600933+05:30",
+  "built_at": "2026-11-10T06:10:22.555615+05:30",
   "counts": {
    "sources": 5,
    "ledger_rows": 7,
@@ -420,7 +420,7 @@
  {
   "symbol": "ZYDUSLIFE",
   "name": "Zydus Lifesciences Ltd",
-  "built_at": "2026-11-10T05:34:36.961071+05:30",
+  "built_at": "2026-11-10T06:10:21.837976+05:30",
   "counts": {
    "sources": 5,
    "ledger_rows": 13,

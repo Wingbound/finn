@@ -2,7 +2,7 @@
  "symbol": "TECHM",
  "name": "Tech Mahindra Ltd",
  "basis": "consolidated",
- "built_at": "2026-11-10T05:34:14.591485+05:30",
+ "built_at": "2026-11-10T06:10:21.282790+05:30",
  "sources": [
   {
    "id": "T1",
@@ -389,7 +389,7 @@
   "output_tokens": 0,
   "usd_list_price": 0.0
  },
- "build_seconds": 0.5,
+ "build_seconds": 0.6,
  "guard": {
   "promises_proposed": 21,
   "promises_kept": 9,

@@ -2,7 +2,7 @@
  "symbol": "SUNPHARMA",
  "name": "Sun Pharmaceutical Industries Ltd",
  "basis": "consolidated",
- "built_at": "2026-11-10T05:34:37.309748+05:30",
+ "built_at": "2026-11-10T06:10:22.235395+05:30",
  "sources": [
   {
    "id": "T1",
@@ -654,7 +654,7 @@
   "output_tokens": 0,
   "usd_list_price": 0.0
  },
- "build_seconds": 0.3,
+ "build_seconds": 0.4,
  "guard": {
   "promises_proposed": 27,
   "promises_kept": 20,

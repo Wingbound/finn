@@ -2,7 +2,7 @@
  "symbol": "TVSMOTOR",
  "name": "TVS Motor Company Ltd",
  "basis": "consolidated",
- "built_at": "2026-11-10T05:34:38.613564+05:30",
+ "built_at": "2026-11-10T06:10:23.643627+05:30",
  "sources": [
   {
    "id": "T1",
@@ -557,7 +557,7 @@
   "output_tokens": 0,
   "usd_list_price": 0.0
  },
- "build_seconds": 0.4,
+ "build_seconds": 0.5,
  "guard": {
   "promises_proposed": 25,
   "promises_kept": 17,

@@ -4,7 +4,7 @@ import pytest
 
 from finn.llm.providers import LLMError
 from finn.models import Citation, Promise, Source
-from finn.research.ledger import build_ledger, compute_status, parse_horizon
+from finn.research.ledger import _NOT_DUE, build_ledger, compute_status, parse_horizon
 from tests.fakes import FIXTURES, FakeRouter
 
 QUARTERS = ["Q2 FY27", "Q1 FY27", "Q4 FY26", "Q3 FY26"]
@@ -1076,3 +1076,51 @@ def test_guard_missed_below_target_stays_missed():
         ).status
         == "missed"
     )
+
+
+# ---- Plan 6 final review I6/I7: the restated check, both ways ----
+
+
+@pytest.mark.parametrize(
+    "ev",
+    [
+        "EBITDA margin improved to 24.5% in Q2 due to better product mix.",
+        "Revenue increased 18% due to strong volume growth.",
+        "The new capacity came on stream as scheduled.",
+        "We added 300 beds this year and should add 200 more next year.",
+        "Revenue rose 21% year-on-year, and we should do better in the second half.",
+        "We were able to complete the 5 GW line, and production will ramp up next quarter.",
+    ],
+)
+def test_guard_delivered_sentences_stay_kept(ev):
+    assert _guarded(ev, horizon=None).status == "kept", ev
+
+
+@pytest.mark.parametrize(
+    "ev",
+    [
+        "The balance 140 beds will also be commissioned post Diwali.",
+        "The second line will now be completed in Q4.",
+        "The plant should hopefully be commissioned by March.",
+        "The new block is expected to be fully commissioned in Q3.",
+    ],
+)
+def test_guard_an_adverb_after_the_modal_is_still_a_restatement(ev):
+    assert _guarded(ev, horizon=None).rationale == _RESTATED_MSG, ev
+
+
+def test_an_annual_target_judged_mid_year_is_not_yet_due():  # LODHA, Plan 6 review fix pass
+    q = "Our commitment of 20% PAT growth is an annual guidance, not a quarterly one."
+    ev = (
+        "We expect to easily beat our profit guidance of 20% growth. In the first half, having already "
+        "touched INR 2,400 crores, we feel very confident of being able to beat this guidance."
+    )
+    src = [
+        Source(id="G-T1", kind="transcript", title="a", quarter="Q1 FY27", url="u", pages=["p"]),
+        Source(id="G-T2", kind="transcript", title="b", quarter="Q2 FY27", url="u", pages=[f"Opening. {ev} Thanks."]),
+    ]
+    p = promise(1, "G-T1", "Q1 FY27", horizon="annual")
+    p = p.model_copy(update={"citation": Citation(source_id="G-T1", page=1, quote=q)})
+    j = {"status": "kept", "evidence_quote": ev, "evidence_source": "G-T2", "rationale": "r"}
+    row = build_ledger(FakeRouter(judge({p.id: j})), [p], src, {}, {}).rows[0]
+    assert row.status == "pending" and row.rationale == _NOT_DUE

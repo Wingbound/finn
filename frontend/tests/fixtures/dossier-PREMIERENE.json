@@ -2,7 +2,7 @@
  "symbol": "PREMIERENE",
  "name": "Premier Energies Ltd",
  "basis": "consolidated",
- "built_at": "2026-11-10T05:35:40.969021+05:30",
+ "built_at": "2026-11-10T06:10:27.622863+05:30",
  "sources": [
   {
    "id": "T1",
@@ -592,12 +592,12 @@
  "notes": [],
  "cost": {
   "calls": 9,
-  "cached": 8,
-  "input_tokens": 12377,
-  "output_tokens": 397,
-  "usd_list_price": 0.004706
+  "cached": 9,
+  "input_tokens": 0,
+  "output_tokens": 0,
+  "usd_list_price": 0.0
  },
- "build_seconds": 10.6,
+ "build_seconds": 0.4,
  "guard": {
   "promises_proposed": 29,
   "promises_kept": 17,

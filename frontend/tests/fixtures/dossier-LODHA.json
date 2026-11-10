@@ -2,7 +2,7 @@
  "symbol": "LODHA",
  "name": "Lodha Developers Ltd",
  "basis": "consolidated",
- "built_at": "2026-11-10T05:35:30.383394+05:30",
+ "built_at": "2026-11-10T06:10:27.167659+05:30",
  "sources": [
   {
    "id": "T1",
@@ -270,7 +270,7 @@
     "method": "judged",
     "actual": null,
     "evidence": null,
-    "rationale": "The later call restated the target; delivery is not shown yet"
+    "rationale": "Target not yet due — tracking is not delivery"
    },
    {
     "promise": {
@@ -723,7 +723,7 @@
   "points_kept": 7,
   "verdicts_downgraded": {
    "other_period": 0,
-   "restated": 1,
+   "restated": 0,
    "below_target": 0,
    "other_measure": 0,
    "meets_target": 0

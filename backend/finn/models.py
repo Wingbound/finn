@@ -275,7 +275,8 @@ class PaceNote(BaseModel):
     basis: str  # "YoY growth in Q2 FY27" | "margin in Q2 FY27"
     target_low: float
     target_high: float | None
-    word: Literal["above", "within", "below", "at or above"]
+    word: Literal["above", "within", "below", "at", "at or above"]
+    scope: Literal["year", "quarter"] = "year"  # the target's period: the card's year or quarter
 
 
 class PromiseNote(BaseModel):
@@ -286,8 +287,10 @@ class PromiseNote(BaseModel):
     citation: Citation
     call: str  # "Q1 FY27 call, p. 4"
     made_in: str
-    horizon: str | None
+    horizon: str | None  # as said on the call
+    horizon_label: str | None = None  # "FY27", "was due Q1 FY27", or the phrase tied to its call
     target: str | None  # "15–18%"
+    target_kind: Literal["target", "guided", "figure"] = "figure"
     pace: PaceNote | None = None
 
 

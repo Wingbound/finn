@@ -36,7 +36,10 @@ export function DossierView({ dossier }: { dossier: Dossier }) {
           <h2 id="latest" className="text-section font-semibold">
             Latest filed quarter
           </h2>
-          <p className="mt-1 text-ink-2">From the company&rsquo;s XBRL results filing to NSE, set beside the promises above.</p>
+          <p className="mt-1 text-ink-2">
+            From the company&rsquo;s XBRL results filing to NSE.
+            {d.ledger?.rows.length ? " Read it beside the promises above." : ""}
+          </p>
           <ResultsGrid card={d.latest_results} />
         </section>
       ) : null}
