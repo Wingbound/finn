@@ -13,7 +13,8 @@ from __future__ import annotations
 
 import json
 import logging
-from datetime import date
+from dataclasses import dataclass, field
+from datetime import date, datetime, timedelta
 
 import httpx
 
@@ -26,6 +27,19 @@ MCP_URL = "https://mcp.nseindia.in/bhavcopy/cm/mcp"
 PROTOCOL = "2025-06-18"
 TIMEOUT_S = 20.0
 MAX_MONTHS = 3  # the tool's own cap per call; 3 months covers the 20-session volume baseline
+MIN_SESSIONS = 40  # fewer than this and the alert baseline is thin: let the fallback try
+STALE_DAYS = 7  # a last session older than this is not today's end-of-day data
+BREAKER_FAILURES = 3  # consecutive transport failures before NSE is skipped for this run
+
+
+@dataclass
+class NseResult:
+    """What NSE gave: usable bars, why other symbols failed, and thin or stale bars kept in
+    case the fallback has nothing better."""
+
+    bars: list[PriceBar]
+    failed: dict[str, str]
+    partial: dict[str, list[PriceBar]] = field(default_factory=dict)
 
 
 class NseMcpError(Exception):
@@ -98,19 +112,27 @@ class NseMcp:
                 }
             )
         )
-        if not msg:
-            raise NseMcpError(f"{tool}: empty answer")
-        if "error" in msg:
-            raise NseMcpError(f"{tool}: {msg['error'].get('message', msg['error'])}")
-        result = msg.get("result") or {}
-        texts = [c.get("text", "") for c in result.get("content", []) if c.get("type") == "text"]
+        if not isinstance(msg, dict):
+            raise NseMcpError(f"{tool}: empty or unexpected answer")
+        if msg.get("error"):
+            err = msg["error"]
+            raise NseMcpError(
+                f"{tool}: {err.get('message', err) if isinstance(err, dict) else err}"
+            )
+        result = msg.get("result") if isinstance(msg.get("result"), dict) else {}
+        content = result.get("content") if isinstance(result.get("content"), list) else []
+        texts = [
+            c.get("text", "") for c in content if isinstance(c, dict) and c.get("type") == "text"
+        ]
         if result.get("isError") or not texts:
             raise NseMcpError(f"{tool}: {' '.join(texts) or 'no content'}")
         try:
             out = json.loads(texts[0])
         except json.JSONDecodeError as e:
             raise NseMcpError(f"{tool}: not JSON: {texts[0][:120]}") from e
-        if isinstance(out, dict) and out.get("error"):
+        if not isinstance(out, dict):
+            raise NseMcpError(f"{tool}: unexpected result shape")
+        if out.get("error"):
             raise NseMcpError(str(out["error"]))
         return out
 
@@ -138,35 +160,56 @@ def _bars(symbol: str, payload: dict) -> list[PriceBar]:
 
 
 def fetch_nse_eod(
-    holdings: list[Holding], months: int = MAX_MONTHS, client: httpx.Client | None = None
-) -> tuple[list[PriceBar], dict[str, str]]:
-    """Daily bars for each holding from NSE, and why each symbol that got none failed."""
+    holdings: list[Holding],
+    months: int = MAX_MONTHS,
+    client: httpx.Client | None = None,
+    today: date | None = None,
+) -> NseResult:
+    """Daily bars per holding from NSE. A symbol whose history is thin (under MIN_SESSIONS) or
+    stale (last session over STALE_DAYS old) counts as failed, with its bars kept in
+    `partial`, so the caller can try another source first. After BREAKER_FAILURES transport
+    failures in a row the rest are failed at once: a hung server must not stall the refresh."""
+    today = today or datetime.now().date()
     own = client is None
     http = client or httpx.Client(timeout=TIMEOUT_S)
-    bars: list[PriceBar] = []
-    failed: dict[str, str] = {}
+    out = NseResult(bars=[], failed={}, partial={})
     try:
         mcp = NseMcp(http)
         try:
             mcp.open()
         except (NseMcpError, httpx.HTTPError, ValueError) as e:
-            return [], {h.symbol: f"NSE MCP unavailable: {e}" for h in holdings}
+            out.failed = {h.symbol: f"NSE MCP unavailable: {e}" for h in holdings}
+            return out
+        streak = 0
         for h in holdings:
-            try:
-                got = _bars(
-                    h.symbol,
-                    mcp.call(
-                        "get_stock_history", {"symbol": h.symbol, "months": min(months, MAX_MONTHS)}
-                    ),
-                )
-            except (NseMcpError, httpx.HTTPError, ValueError) as e:
-                failed[h.symbol] = str(e)
+            if streak >= BREAKER_FAILURES:
+                out.failed[h.symbol] = "skipped: NSE MCP stopped answering"
                 continue
-            if got:
-                bars.extend(got)
+            args = {"symbol": h.symbol, "months": min(months, MAX_MONTHS)}
+            try:
+                got = _bars(h.symbol, mcp.call("get_stock_history", args))
+            except httpx.HTTPError as e:
+                streak += 1
+                out.failed[h.symbol] = f"{type(e).__name__}: {e}"
+                continue
+            except (NseMcpError, ValueError) as e:
+                streak = 0  # the server answered; this symbol is the problem
+                out.failed[h.symbol] = str(e)
+                continue
+            streak = 0
+            if not got:
+                out.failed[h.symbol] = "no bars returned"
+                continue
+            last = max(b.date for b in got)
+            if len(got) < min(MIN_SESSIONS, 20 * min(months, MAX_MONTHS)):
+                out.failed[h.symbol] = f"only {len(got)} sessions"
+                out.partial[h.symbol] = got
+            elif (today - last) > timedelta(days=STALE_DAYS):
+                out.failed[h.symbol] = f"last session {last.isoformat()}"
+                out.partial[h.symbol] = got
             else:
-                failed[h.symbol] = "no bars returned"
+                out.bars.extend(got)
     finally:
         if own:
             http.close()
-    return bars, failed
+    return out

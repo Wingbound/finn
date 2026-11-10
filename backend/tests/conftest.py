@@ -29,6 +29,8 @@ def _no_live_nse_prices(monkeypatch):
     path (patched per test) behaves as it always has. tests/test_nse_prices.py tests the
     client itself against recorded responses."""
     import scripts.refresh as refresh_mod
+    from finn.ingest.nse_mcp import NseResult
 
-    if hasattr(refresh_mod, "fetch_nse_eod"):
-        monkeypatch.setattr(refresh_mod, "fetch_nse_eod", lambda holdings, **k: ([], {}))
+    # No hasattr guard: if the import is renamed, this fails loudly instead of letting tests
+    # reach the network.
+    monkeypatch.setattr(refresh_mod, "fetch_nse_eod", lambda holdings, **k: NseResult([], {}, {}))

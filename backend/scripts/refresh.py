@@ -93,27 +93,35 @@ def refresh(conn: sqlite3.Connection, days: int = 30, use_llm: bool = True) -> d
 
     # Prices always span ~3 months: the alert engine needs a 20-session volume baseline.
     # NSE's own end-of-day data first; Yahoo only for the symbols NSE couldn't give.
-    bars = []
+    bars: list = []
+    partial: dict = {}
     try:
-        bars, nse_failed = fetch_nse_eod(holdings)
+        nse = fetch_nse_eod(holdings)
+        bars, nse_failed, partial = list(nse.bars), nse.failed, nse.partial
     except Exception as e:  # noqa: BLE001 - a broken NSE client must not stop the refresh
-        bars, nse_failed = [], {h.symbol: f"{type(e).__name__}: {e}" for h in holdings}
+        nse_failed = {h.symbol: f"{type(e).__name__}: {e}" for h in holdings}
     if nse_failed:
-        print(f"NSE end-of-day unavailable for {len(nse_failed)} symbol(s); trying Yahoo")
+        print(f"NSE end-of-day not usable for {len(nse_failed)} symbol(s); trying Yahoo")
     from_nse = {b.symbol for b in bars}
     rest = [h for h in holdings if h.symbol not in from_nse]
-    fetched_at = datetime.now(IST)
     if rest:
         try:
-            bars += fetch_eod(rest)
-            fetched_at = datetime.now(IST)
+            yahoo = fetch_eod(rest)
         except Exception as e:  # noqa: BLE001 - yfinance raises assorted network/parse types
+            yahoo = []
             errors.append(f"prices: {type(e).__name__}: {e}")
-            print(f"price fetch failed, keeping existing prices: {type(e).__name__}: {e}")
-        else:
-            if not bars:
-                errors.append("prices: no bars returned")
-                print("price fetch returned no bars, keeping existing prices")
+            print(f"Yahoo fallback failed for {len(rest)} symbol(s): {type(e).__name__}: {e}")
+        bars += yahoo
+        from_yahoo = {b.symbol for b in yahoo}
+        # Thin or stale NSE history still beats nothing when Yahoo has no answer either.
+        for sym, got in partial.items():
+            if sym not in from_yahoo and got:
+                bars += got
+                from_nse.add(sym)
+        if not bars:
+            errors.append("prices: no bars returned")
+            print("price fetch returned no bars, keeping existing prices")
+    fetched_at = datetime.now(IST)  # after the last fetch: "as of" never precedes the data
     priced = {b.symbol for b in bars}
     from_yahoo = priced - from_nse
     price_sources = {"nse": len(from_nse), "yahoo": len(from_yahoo)}
@@ -127,6 +135,8 @@ def refresh(conn: sqlite3.Connection, days: int = 30, use_llm: bool = True) -> d
             source = "Yahoo end-of-day"
         else:
             source = f"NSE end-of-day (Yahoo for {len(from_yahoo)})"
+        if prices_missing:  # say so: the caption must not imply every price is fresh
+            source += f"; {len(prices_missing)} not updated"
         db.set_meta(conn, "prices_source", source)
         if prices_missing:
             errors.append(f"prices: no bars for {', '.join(prices_missing)}")
