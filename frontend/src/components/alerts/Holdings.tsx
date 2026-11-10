@@ -1,8 +1,15 @@
 import Link from "next/link";
 import { symbolPath } from "@/lib/api";
-import { pct, rupees, times } from "@/lib/format";
+import { pct, rupees, stamp, times } from "@/lib/format";
 import type { PortfolioRow, Rules } from "@/lib/types";
 import { Sparkline } from "./Sparkline";
+
+/** Where the prices came from, and when: NSE's own end-of-day data, or Yahoo as the fallback. */
+export function priceCaption(asOf: string | null, source: string | null, now: Date = new Date()): string | null {
+  if (!asOf) return null;
+  const lead = source ? `${source} prices, as of` : "Prices as of";
+  return `${lead} ${stamp(asOf, now)}. Day change and volume use the last full session.`;
+}
 
 export function Holdings({ rows, rules, flagged }: { rows: PortfolioRow[]; rules: Rules; flagged: Set<string> }) {
   return (

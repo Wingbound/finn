@@ -225,6 +225,8 @@ export interface PortfolioRow {
 
 export interface Portfolio {
   as_of: string | null;
+  /** "NSE end-of-day", "Yahoo end-of-day", or "NSE end-of-day (Yahoo for 3)" */
+  source?: string | null;
   holdings: PortfolioRow[];
 }
 

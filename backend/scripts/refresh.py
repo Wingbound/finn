@@ -24,6 +24,7 @@ from finn.enrich.brief import enrich_briefs
 from finn.enrich.people import enrich_people
 from finn.enrich.results import ingest_financials
 from finn.ingest.nse import NSEClient, ingest_filings
+from finn.ingest.nse_mcp import fetch_nse_eod
 from finn.ingest.prices import fetch_eod
 from finn.llm import LLMRouter
 from finn.llm.providers import PROVIDERS
@@ -91,22 +92,42 @@ def refresh(conn: sqlite3.Connection, days: int = 30, use_llm: bool = True) -> d
             print(f"NSE unavailable for {', '.join(ingest.failed)}; keeping their stored filings")
 
     # Prices always span ~3 months: the alert engine needs a 20-session volume baseline.
+    # NSE's own end-of-day data first; Yahoo only for the symbols NSE couldn't give.
     bars = []
     try:
-        bars = fetch_eod(holdings)
-        fetched_at = datetime.now(IST)
-    except Exception as e:  # noqa: BLE001 - yfinance raises assorted network/parse types
-        errors.append(f"prices: {type(e).__name__}: {e}")
-        print(f"price fetch failed, keeping existing prices: {type(e).__name__}: {e}")
-    else:
-        if not bars:
-            errors.append("prices: no bars returned")
-            print("price fetch returned no bars, keeping existing prices")
+        bars, nse_failed = fetch_nse_eod(holdings)
+    except Exception as e:  # noqa: BLE001 - a broken NSE client must not stop the refresh
+        bars, nse_failed = [], {h.symbol: f"{type(e).__name__}: {e}" for h in holdings}
+    if nse_failed:
+        print(f"NSE end-of-day unavailable for {len(nse_failed)} symbol(s); trying Yahoo")
+    from_nse = {b.symbol for b in bars}
+    rest = [h for h in holdings if h.symbol not in from_nse]
+    fetched_at = datetime.now(IST)
+    if rest:
+        try:
+            bars += fetch_eod(rest)
+            fetched_at = datetime.now(IST)
+        except Exception as e:  # noqa: BLE001 - yfinance raises assorted network/parse types
+            errors.append(f"prices: {type(e).__name__}: {e}")
+            print(f"price fetch failed, keeping existing prices: {type(e).__name__}: {e}")
+        else:
+            if not bars:
+                errors.append("prices: no bars returned")
+                print("price fetch returned no bars, keeping existing prices")
     priced = {b.symbol for b in bars}
+    from_yahoo = priced - from_nse
+    price_sources = {"nse": len(from_nse), "yahoo": len(from_yahoo)}
     prices_missing = [h.symbol for h in holdings if h.symbol not in priced]
     if bars:
         db.upsert_prices(conn, bars)
         db.set_meta(conn, "prices_as_of", fetched_at.isoformat())
+        if not from_yahoo:
+            source = "NSE end-of-day"
+        elif not from_nse:
+            source = "Yahoo end-of-day"
+        else:
+            source = f"NSE end-of-day (Yahoo for {len(from_yahoo)})"
+        db.set_meta(conn, "prices_source", source)
         if prices_missing:
             errors.append(f"prices: no bars for {', '.join(prices_missing)}")
 
@@ -143,6 +164,7 @@ def refresh(conn: sqlite3.Connection, days: int = 30, use_llm: bool = True) -> d
         "filings_skipped": filings_skipped,
         "price_bars": len(bars),
         "price_symbols": len(priced),
+        "price_sources": price_sources,
         "prices_missing": prices_missing,
         "classify": classify,
         "filings_total": _count(conn),

@@ -87,3 +87,17 @@ describe("alert links (final review I5)", () => {
     });
   });
 });
+
+describe("price provenance (Plan 7)", () => {
+  it("names where the prices came from", async () => {
+    const { priceCaption } = await import("@/components/alerts/Holdings");
+    const now = new Date("2026-11-10T09:00:00+05:30");
+    expect(priceCaption("2026-11-10T06:02:00+05:30", "NSE end-of-day", now)).toBe(
+      "NSE end-of-day prices, as of 10 Nov, 06:02. Day change and volume use the last full session.",
+    );
+    expect(priceCaption("2026-11-10T06:02:00+05:30", null, now)).toBe(
+      "Prices as of 10 Nov, 06:02. Day change and volume use the last full session.",
+    );
+    expect(priceCaption(null, null, now)).toBeNull();
+  });
+});
