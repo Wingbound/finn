@@ -475,5 +475,10 @@ The frontend is at https://finn-qx98.vercel.app and the API at https://finn-peac
 
   The first run had failed for a different reason: `astral-sh/setup-uv` publishes full version tags only, so the workflow now pins `v10.3.0`.
 
+- **Prices from NSE (Plan 7, run 42735655975).** The refresh now asks NSE's own end-of-day service (its bhavcopy MCP server) first, and Yahoo only for symbols NSE can't serve.
+  - On GitHub's runners, all 18 holdings came from NSE and none from Yahoo, with no errors.
+  - `/portfolio` returns `source: "NSE end-of-day"`, and the Alerts screen reads "Prices: NSE end-of-day. As of 10 Nov, 06:55."
+  - A symbol whose NSE history is under 40 sessions, or more than a week old, goes to Yahoo. After three transport failures in a row, NSE is skipped for the rest of the run, so a hung server can't stall the refresh.
+
 A live build is saved only on the instance that ran it, so another instance can answer 404 for it later. The app keeps a dossier it built in the current tab whatever the server says.
 
