@@ -69,11 +69,12 @@ screener.in ──┘   classify · enrich      (committed)  ├─ GET /researc
 
 - **Classification:** 91.3% overall and 87.0% on material categories, on a hand-labelled set of 104 filings. Rules alone score 85.6%.
 - **Results numbers:** 68 of 70 metric pairs match screener for all 18 holdings. The 2 misses are EBITDA definitions, explained in EVALS.
-- **Research citations:** 143 of 143 re-verified verbatim on their pages across 7 dossiers. The dossiers cover:
+- **Research citations:** all re-verified verbatim on their pages, 510 of 510 across 23 dossiers, one for each of the 18 holdings plus 5 others. They include:
   - a bank (HDFCBANK);
   - an NBFC (BAJFINANCE);
-  - a company with negative net worth (IDEA).
-- **Ledger, hand audit:** before the verdict checks, 3 of 11 resolved verdicts were wrong. All three mistakes were mechanical, so code checks now catch them: after the checks, 0 of 8 are wrong and 3 are debatable. Most rows stay pending, for two reasons: a promise from the newest call has no later call to grade it, and many targets aren't due yet. EVALS breaks down why each one is pending.
+  - a company with negative net worth (IDEA);
+  - a company that holds no earnings calls (TRENT).
+- **Ledger, hand audit:** 23 resolved verdicts, 14 correct, 9 debatable and 0 wrong. Before the code checks, 8 of 31 were wrong, all in mechanical ways: a restated target, evidence from another period or measure, or a figure on the wrong side of the target. The checks now catch those, and they can only downgrade a verdict. Most rows stay pending, for two reasons: a promise from the newest call has no later call to grade it, and many targets aren't due yet. EVALS breaks down why each one is pending.
 
 ## Deliberately left out
 
@@ -96,7 +97,7 @@ screener.in ──┘   classify · enrich      (committed)  ├─ GET /researc
 cd backend
 cp .env.example .env            # add GEMINI_API_KEY and GROQ_API_KEY
 uv sync
-uv run pytest -q                # 778 tests, no network
+uv run pytest -q                # 837 tests, no network
 uv run uvicorn finn.api.main:app --reload --port 8000
 
 # frontend (Node 22)
