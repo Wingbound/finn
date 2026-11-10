@@ -1117,7 +1117,14 @@ def test_an_annual_target_judged_mid_year_is_not_yet_due():  # LODHA, Plan 6 rev
     )
     src = [
         Source(id="G-T1", kind="transcript", title="a", quarter="Q1 FY27", url="u", pages=["p"]),
-        Source(id="G-T2", kind="transcript", title="b", quarter="Q2 FY27", url="u", pages=[f"Opening. {ev} Thanks."]),
+        Source(
+            id="G-T2",
+            kind="transcript",
+            title="b",
+            quarter="Q2 FY27",
+            url="u",
+            pages=[f"Opening. {ev} Thanks."],
+        ),
     ]
     p = promise(1, "G-T1", "Q1 FY27", horizon="annual")
     p = p.model_copy(update={"citation": Citation(source_id="G-T1", page=1, quote=q)})
