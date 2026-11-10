@@ -8,9 +8,10 @@ FINN is a phone-first investing assistant for a portfolio of Indian listed compa
 **Live:** [finn-qx98.vercel.app](https://finn-qx98.vercel.app) (best on a phone; installable) · **API:** [finn-peach.vercel.app/health](https://finn-peach.vercel.app/health) · **Build history:** [`ai-history/`](ai-history/) · **Design:** [`docs/DESIGN.md`](docs/DESIGN.md) · **Evals:** [`docs/EVALS.md`](docs/EVALS.md)
 
 <p>
-<img src="docs/screenshots/today-light.png" width="31%" alt="Today: 27 things matter, routine filings struck through">
-<img src="docs/screenshots/dossier-light.png" width="31%" alt="Dossier: the Promise Ledger with credibility and a missed promise">
-<img src="docs/screenshots/source-light.png" width="31%" alt="Citation sheet: the transcript page with the quote highlighted">
+<img src="docs/screenshots/today-light.png" width="23%" alt="Today: 27 things matter, routine filings struck through">
+<img src="docs/screenshots/dossier-light.png" width="23%" alt="Dossier: the Promise Ledger with credibility and a missed promise">
+<img src="docs/screenshots/loop-light.png" width="23%" alt="A results card with what management said and a pace sentence">
+<img src="docs/screenshots/source-light.png" width="23%" alt="Citation sheet: the transcript page with the quote highlighted">
 </p>
 
 ## What it does
