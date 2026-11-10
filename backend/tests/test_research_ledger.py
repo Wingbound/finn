@@ -967,7 +967,13 @@ def test_guard_stats_count_each_reason():
     stats: dict = {}
     _guarded("We expect the plant to commence by Q2 this fiscal.", horizon="Q2 FY27", stats=stats)
     _guarded("We expect the plant to commence by Q2 this fiscal.", horizon="Q2 FY27", stats=stats)
-    assert stats["verdicts_downgraded"] == {"other_period": 0, "restated": 2, "below_target": 0}
+    assert stats["verdicts_downgraded"] == {
+        "other_period": 0,
+        "restated": 2,
+        "below_target": 0,
+        "other_measure": 0,
+        "meets_target": 0,
+    }
 
 
 def test_guard_fused_period_label_is_not_a_number():
@@ -1005,3 +1011,68 @@ def test_guard_weak_delivery_cue_before_intention_is_restated():
     ev = "We had planned to commission by Q3 and will now do so in Q4."
     row = _guarded(ev, horizon="Q3 FY26")
     assert row.status == "pending" and row.rationale == _RESTATED_MSG
+
+
+# ---- Plan 6 audit of 16 new dossiers: five more mechanical verdict errors ----
+
+
+def test_guard_passive_future_is_not_delivery():  # MAXHEALTH
+    ev = "100 beds at Max Lucknow : in the existing 468-bed facility will be commissioned over the next 2 quarters."
+    assert _guarded(ev, horizon="next two quarters").rationale == _RESTATED_MSG
+
+
+def test_guard_should_and_a_bare_was_do_not_make_delivery():  # CGPOWER
+    ev = "although our original plan was 2027 financial -- '27, '28 financial year, but I think we should do it at least 1 year before."
+    assert _guarded(ev, horizon="2028").rationale == _RESTATED_MSG
+
+
+def test_guard_is_set_for_is_future():  # PREMIERENE
+    ev = "Our 5.6 gigawatt module line is set for completion in March 2026, 4.8 gigawatt cell line in June 2026."
+    assert _guarded(ev, horizon="September 2026").rationale == _RESTATED_MSG
+
+
+def test_guard_a_past_figure_is_still_delivery():
+    ev = "Revenue was up 18% for the year and we will keep investing in brands."
+    assert _guarded(ev, horizon="FY26").status == "kept"
+
+
+def test_guard_evidence_measuring_something_else_is_pending():  # ULTRACEMCO
+    q = "So, we should have approximately 8 to 9 million tons more coming in this quarter."
+    ev = "During the quarter, we also added 116 megawatts of renewable power, 10 megawatt of waste heat recovery."
+    row = _guarded(ev, quote=q, horizon="this quarter")
+    assert row.status == "pending" and row.rationale == "The later quote measures something else"
+
+
+def test_guard_same_measure_stays_resolved():  # CGPOWER 65,000 MVA
+    q = "And in the next 1 quarter or so, we'll be 65,000 MVA."
+    ev = "the power transformer is already about 75,000 MVA and distribution is about close to 10,000 MVA."
+    assert _guarded(ev, quote=q, horizon="next 1 quarter").status == "kept"
+
+
+def test_guard_missed_with_a_figure_that_meets_the_target_is_pending():  # ZYDUSLIFE
+    q = "We will still track at 23% plus margin in the Quarter 4."
+    ev = "our operating profitability remained robust with an EBITDA margin of 24% despite continued investments."
+    row = _guarded(
+        ev, status="missed", quote=q, horizon="Q4", kind="quantitative", target_low=23.0, unit="%"
+    )
+    assert (
+        row.status == "pending"
+        and row.rationale == "The later figure (24%) meets the target (at least 23%)"
+    )
+
+
+def test_guard_missed_below_target_stays_missed():
+    q = "We will still track at 23% plus margin in the Quarter 4."
+    ev = "our operating profitability came in with an EBITDA margin of 21% this quarter."
+    assert (
+        _guarded(
+            ev,
+            status="missed",
+            quote=q,
+            horizon="Q4",
+            kind="quantitative",
+            target_low=23.0,
+            unit="%",
+        ).status
+        == "missed"
+    )

@@ -39,7 +39,13 @@ def test_guard_recorded_on_dossier(stored):
         "promises_proposed", "promises_kept", "points_proposed", "points_kept",
         "verdicts_downgraded",
     }  # fmt: skip
-    assert set(d.guard["verdicts_downgraded"]) == {"other_period", "restated", "below_target"}
+    assert set(d.guard["verdicts_downgraded"]) == {
+        "other_period",
+        "restated",
+        "below_target",
+        "other_measure",
+        "meets_target",
+    }
     assert d.guard["promises_proposed"] >= d.guard["promises_kept"] > 0
     assert d.guard["points_proposed"] >= d.guard["points_kept"] > 0
 
@@ -102,11 +108,17 @@ def test_corrupt_ledger_quote_is_listed(stored, capsys):
 
 def test_eval_downgrade_column_renders_and_sums(stored):
     d = db.get_dossier(stored, "PERSISTENT")
-    d.guard["verdicts_downgraded"] = {"other_period": 1, "restated": 2, "below_target": 3}
+    d.guard["verdicts_downgraded"] = {
+        "other_period": 1,
+        "restated": 2,
+        "below_target": 3,
+        "other_measure": 4,
+        "meets_target": 5,
+    }
     r = eval_research.evaluate_dossier(d)
     out = eval_research.render([r, r])
     head = [c.strip() for c in out.splitlines()[0].strip("|").split("|")]
-    col = head.index("Verdicts downgraded (period/restated/below)")
+    col = head.index("Verdicts downgraded (period/restated/below/measure/meets)")
     rows = [ln for ln in out.splitlines() if ln.startswith("| ")]
     cells = [[c.strip() for c in ln.strip("|").split("|")] for ln in rows]
-    assert cells[1][col] == "1/2/3" and cells[3][col] == "2/4/6"
+    assert cells[1][col] == "1/2/3/4/5" and cells[3][col] == "2/4/6/8/10"

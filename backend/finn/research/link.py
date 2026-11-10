@@ -51,31 +51,71 @@ def _covers(p: Promise, card: ResultsCard) -> bool:
     return label == card.period_label if kind == "quarter" else label == _fy(card.period_label)
 
 
+# The unit a target is labelled with must be written in the quote too ("18 months" is not
+# "18x"), and an open target reads "at least" only when the quote says so.
+_UNIT_IN_QUOTE = {
+    "%": re.compile(r"%|\bper ?cent\b"),
+    "cr": re.compile(r"\bcr(?:ore)?s?\b"),
+    "x": re.compile(r"\d\s*(?:x|×)(?![a-z])|\btimes\b"),
+    "usd_mn": re.compile(r"\$|\busd\b|\bdollars?\b"),
+    "usd_bn": re.compile(r"\$|\busd\b|\bdollars?\b"),
+}
+_OPEN_BEFORE = (
+    r"(?:at least|more than|over|above|in excess of|upwards of)\s+(?:about\s+|around\s+)?"
+    r"(?:rs\.?\s*|inr\s*|₹\s*|usd\s*|\$\s*)?"
+)
+_OPEN_AFTER = r"\s*(?:%|per ?cent|crores?|cr|x|×)?\s*(?:plus\b|\+)"
+
+
+def _open_ended(lo: float, quote: str) -> bool:
+    """'at least' / 'more than' / 'plus' attached to the target's own number."""
+    text = re.sub(r"(?<=\d),(?=\d)", "", quote)  # 20,000 -> 20000
+    num = re.escape(f"{lo:g}")
+    return bool(
+        re.search(_OPEN_BEFORE + num + r"(?![\d.])", text) or re.search(num + _OPEN_AFTER, text)
+    )
+
+
+def _inr(v: float) -> str:
+    """Indian digit grouping for crore figures: 20000 -> 20,000; 123456 -> 1,23,456."""
+    whole, _, frac = f"{v:g}".partition(".")
+    head, tail = whole[:-3], whole[-3:]
+    while len(head) > 2:
+        tail = f"{head[-2:]},{tail}"
+        head = head[:-2]
+    out = f"{head},{tail}" if head else tail
+    return f"{out}.{frac}" if frac else out
+
+
 def _target(p: Promise) -> str | None:
-    """The target as a short label, only when it has a unit and its numbers are in the quote:
-    the extractor sometimes merges two figures ("180-odd apps and 600-odd agents") or carries a
-    number from elsewhere, and a label beside a quote must not contradict it."""
-    if p.target_low is None or p.unit not in ("%", "cr", "x", "usd_mn", "usd_bn"):
+    """The target as a short label, only when its unit and numbers are in the quote: the
+    extractor sometimes merges two figures ("180-odd apps and 600-odd agents"), carries a
+    number from elsewhere, or reads "18 months" as 18x, and a label beside a quote must not
+    contradict it."""
+    if p.target_low is None or p.unit not in _UNIT_IN_QUOTE:
         return None
+    quote = normalize(p.citation.quote)
     nums = [p.target_low] + ([p.target_high] if p.target_high is not None else [])
     if not numbers_grounded(" ".join(f"{v:g}" for v in nums), p.citation.quote):
+        return None
+    if not _UNIT_IN_QUOTE[p.unit].search(quote):
         return None
 
     def n(v: float) -> str:
         return str(int(v)) if float(v).is_integer() else f"{v:g}"
 
     lo = n(p.target_low)
-    rng = (
-        f"{lo}–{n(p.target_high)}"
-        if p.target_high is not None and p.target_high != p.target_low
-        else lo
-    )
-    unit = {"%": "%", "x": "×"}.get(p.unit or "", "")
+    ranged = p.target_high is not None and p.target_high != p.target_low
+    rng = f"{lo}–{n(p.target_high)}" if ranged else lo
     if p.unit == "cr":
-        return f"₹{rng} cr"
-    if p.unit in ("usd_mn", "usd_bn"):
-        return f"${rng} {'mn' if p.unit == 'usd_mn' else 'bn'}"
-    return f"{rng}{unit}" if p.target_high is not None or unit else f"at least {lo}{unit}"
+        hi_txt = f"–{_inr(p.target_high)}" if ranged and p.target_high is not None else ""
+        label = f"₹{_inr(p.target_low)}{hi_txt} cr"
+    elif p.unit in ("usd_mn", "usd_bn"):
+        label = f"${rng} {'mn' if p.unit == 'usd_mn' else 'bn'}"
+    else:
+        label = f"{rng}{'%' if p.unit == '%' else '×'}"
+    open_ended = p.target_high is None and _open_ended(p.target_low, quote)
+    return f"at least {label}" if open_ended else label
 
 
 def pace_note(p: Promise, card: ResultsCard) -> PaceNote | None:
@@ -142,6 +182,17 @@ def promise_notes(d: Dossier, card: ResultsCard, limit: int = MAX_NOTES) -> list
         return []
     open_rows = [r for r in d.ledger.rows if r.status == "pending"]
     open_rows.sort(key=lambda r: _rank(r, card))
+    # The same guidance repeated on one call, or on two, is one note.
+    seen: set[tuple] = set()
+    unique: list[LedgerRow] = []
+    for r in open_rows:
+        p = r.promise
+        key = (p.metric, p.target_low, p.target_high, p.unit, (p.horizon or "").lower())
+        if p.target_low is not None and key in seen:
+            continue
+        seen.add(key)
+        unique.append(r)
+    open_rows = unique
     return [
         PromiseNote(
             topic=r.promise.topic,

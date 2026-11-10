@@ -206,7 +206,10 @@ def test_notes_are_open_promises_ranked_this_year_first():
 
 
 def test_notes_are_capped():
-    rows = [row(f"Promise number {i} about growth.", n=i, metric="other") for i in range(6)]
+    rows = [
+        row(f"Promise number {i} about growth.", n=i, metric="other", lo=float(10 + i))
+        for i in range(6)
+    ]
     assert len(promise_notes(dossier(rows), card())) == 3
 
 
@@ -360,3 +363,57 @@ def test_a_dossier_carries_the_latest_filed_quarter(tmp_path):
     assert bajaj["latest_results"]["period_label"].startswith("Q")
     assert bajaj["latest_results"]["format"] == "nbfc"
     assert indigo["latest_results"] is None
+
+
+def test_a_target_needs_its_unit_in_the_quote():  # VOLTAS: "18 months" is not "18x"
+    q = "So 18 months from now is when we are expecting full-fledged commercial production of the compressors."
+    notes = promise_notes(
+        dossier([row(q, metric="other", lo=18.0, hi=None, unit="x", horizon="18 months")]), card()
+    )
+    assert notes[0].target is None
+
+
+def test_an_open_ended_target_reads_at_least():  # ZYDUSLIFE: "24% plus"
+    q = "We are on track to deliver a 24% plus EBITDA margin in line with our FY27 expectations."
+    notes = promise_notes(dossier([row(q, metric="ebitda_margin", lo=24.0, hi=None)]), card())
+    assert notes[0].target == "at least 24%"
+
+
+def test_the_same_guidance_twice_is_shown_once():  # ZYDUSLIFE pages 5 and 11
+    a = row(
+        "We are on track to deliver a 24% plus EBITDA margin in FY27.",
+        metric="ebitda_margin",
+        lo=24.0,
+        hi=None,
+        n=1,
+    )
+    b = row(
+        "Yes, we maintain that guidance of 24% EBITDA margin for the full year.",
+        metric="ebitda_margin",
+        lo=24.0,
+        hi=None,
+        n=2,
+    )
+    c = row(
+        "Capex of 1,500 to 1,600 crores this year.",
+        metric="capex",
+        lo=1500.0,
+        hi=1600.0,
+        unit="cr",
+        n=3,
+    )
+    notes = promise_notes(dossier([a, b, c]), card())
+    assert [n.quote[:10] for n in notes] == ["We are on ", "Capex of 1"]
+
+
+def test_at_least_only_when_the_words_are_beside_the_number():  # TATASTEEL
+    q = "We intend to increase the same in FY2027 to around Rs 20,000 crores of which more than 60% will be spent in India."
+    notes = promise_notes(dossier([row(q, metric="capex", lo=20000.0, hi=None, unit="cr")]), card())
+    assert notes[0].target == "₹20,000 cr"
+    q2 = "Capex will be more than Rs 1,500 crores this year."
+    assert (
+        promise_notes(dossier([row(q2, metric="capex", lo=1500.0, hi=None, unit="cr")]), card())[
+            0
+        ].target
+        == "at least ₹1,500 cr"
+    )

@@ -2,7 +2,7 @@
  "symbol": "IDEA",
  "name": "Vodafone Idea Ltd",
  "basis": "consolidated",
- "built_at": "2026-11-09T21:17:25.652379+05:30",
+ "built_at": "2026-11-10T05:35:44.542949+05:30",
  "sources": [
   {
    "id": "T1",
@@ -423,12 +423,12 @@
  "notes": [],
  "cost": {
   "calls": 9,
-  "cached": 8,
-  "input_tokens": 16551,
-  "output_tokens": 563,
-  "usd_list_price": 0.006373
+  "cached": 9,
+  "input_tokens": 0,
+  "output_tokens": 0,
+  "usd_list_price": 0.0
  },
- "build_seconds": 13.4,
+ "build_seconds": 0.4,
  "guard": {
   "promises_proposed": 14,
   "promises_kept": 11,
@@ -437,7 +437,9 @@
   "verdicts_downgraded": {
    "other_period": 0,
    "restated": 0,
-   "below_target": 1
+   "below_target": 1,
+   "other_measure": 0,
+   "meets_target": 0
   }
  },
  "latest_results": null

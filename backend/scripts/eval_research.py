@@ -92,13 +92,16 @@ def _drop(kept: int, proposed: int) -> str:
     return f"{100 * (1 - kept / proposed):.0f}%" if proposed else "n/a"
 
 
+REASONS = ("other_period", "restated", "below_target", "other_measure", "meets_target")
+
+
 def render(results: list[DossierEval]) -> str:
     head = (
         "| Symbol | Citations verified | FACTS citations "
         "| Ledger (kept/partly/missed/pending/dropped) "
         "| Computed/judged | Promises kept/proposed | Promise drop | Points kept/proposed "
         "| Point drop | Calls | USD (list) | Seconds "
-        "| Verdicts downgraded (period/restated/below) |"
+        "| Verdicts downgraded (period/restated/below/measure/meets) |"
     )
     lines = [head, "|" + "---|" * 13]
     tot = DossierEval("total")
@@ -146,7 +149,7 @@ def render(results: list[DossierEval]) -> str:
 
 def _row(label: str, r: DossierEval, pk: int, pp: int, tk: int, tp: int) -> str:
     st = "/".join(str(r.statuses.get(k, 0)) for k in STATUSES)
-    dg = "/".join(str(r.downgraded.get(k, 0)) for k in ("other_period", "restated", "below_target"))
+    dg = "/".join(str(r.downgraded.get(k, 0)) for k in REASONS)
     return (
         f"| {label} | {r.verified}/{r.total} ({_pct(r.verified, r.total)}) | {r.facts} | {st} "
         f"| {r.computed}/{r.judged} | {pk}/{pp} | {_drop(pk, pp)} | {tk}/{tp} | {_drop(tk, tp)} "

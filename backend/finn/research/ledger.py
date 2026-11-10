@@ -426,14 +426,25 @@ _MON = {"june": 1, "september": 2, "december": 3, "march": 4}
 _PERIOD_MSG = "The later quote is about a different period"
 _RESTATED_MSG = "The later call restated the target; delivery is not shown yet"
 _FUTURE = re.compile(
-    r"\b(?:expect|expects|expecting|will|shall|plan to|plans to|planning to|aim to|aims to"
-    r"|intend|intends|anticipate|anticipates|on track|going forward|is expected to"
-    r"|are expected to|remain committed|should be)\b"
+    r"\b(?:expect|expects|expecting|will|shall|should|would|plan to|plans to|planning to|aim to"
+    r"|aims to|intend|intends|anticipate|anticipates|on track|going forward|going to"
+    r"|is expected to|are expected to|remain committed|scheduled|slated"
+    r"|(?:is|are) set (?:for|to)|due (?:for|to|in))\b"
 )
+# Delivery words. A bare "was"/"were"/"had"/"did" is not one ("our original plan was 2027");
+# a past figure with a unit is (_PAST_NUMBER).
 _DELIVERED = re.compile(
     r"\b(?:came in|stood at|delivered|achieved|reached|crossed|completed|commissioned"
-    r"|commenced|started|launched|received|reported|grew|declined|met|was|were|has been"
-    r"|have been|had|did)\b"
+    r"|commenced|started|launched|received|reported|grew|declined|met|has been|have been)\b"
+)
+_PAST_NUMBER = re.compile(
+    r"\b(?:was|were)\s+(?:up|down|at|about|around|roughly|nearly|approximately)?\s*"
+    r"(?:rs\.?\s*|inr\s*|₹\s*)?\d[\d,.]*\s*(?:%|percent|crores?|cr|lakhs?|million|mn|billion|bn"
+    r"|tons?|tonnes?|mt|gw|mw|mva|units|beds|stores)"
+)
+# "will be commissioned", "to be launched": a delivery word after a modal is still the future.
+_MODAL_VERB = re.compile(
+    r"\b(?:will|would|should|shall|may|might|could|can|to)\s+(?:be\s+|get\s+|have\s+been\s+)?\w+"
 )
 _PRESENT_NUMBER = re.compile(r"\b(?:is|are|stands|now)\s+(?:at\s+)?(?:rs\.?\s*|inr\s*|₹\s*)?\d")
 # "had planned", "was expected": a weak delivery word followed by an intention is not delivery.
@@ -478,9 +489,43 @@ def _other_period(p: Promise, ev: str) -> bool:
 
 def _restated(ev: str) -> bool:
     text = normalize(ev)
-    if not _FUTURE.search(text) or _PRESENT_NUMBER.search(text):
+    if not _FUTURE.search(text) or _PRESENT_NUMBER.search(text) or _PAST_NUMBER.search(text):
         return False
-    return not _DELIVERED.search(_WEAK_INTENT.sub(" ", text))
+    return not _DELIVERED.search(_MODAL_VERB.sub(" ", _WEAK_INTENT.sub(" ", text)))
+
+
+# Physical measures a capacity promise is stated in. Evidence that measures only other things
+# ("116 megawatts of renewable power" for "8 to 9 million tons" of cement) cannot show delivery.
+_MEASURES = {
+    "tons": re.compile(r"\b(?:tons?|tonnes?|mt|mtpa)\b"),
+    "power": re.compile(r"\b(?:gw|gigawatts?|mw|megawatts?)\b"),
+    "mva": re.compile(r"\bmva\b"),
+    "beds": re.compile(r"\bbeds?\b"),
+    "stores": re.compile(r"\bstores?\b"),
+}
+
+
+def _other_measure(p: Promise, ev: str) -> bool:
+    want = {k for k, rx in _MEASURES.items() if rx.search(normalize(p.citation.quote))}
+    got = {k for k, rx in _MEASURES.items() if rx.search(normalize(ev))}
+    return bool(want) and bool(got) and not (want & got)
+
+
+def _meets_target(p: Promise, ev: str) -> str | None:
+    """For a missed % target: the rationale when every % figure in the evidence meets it."""
+    lo = p.target_low
+    if p.kind != "quantitative" or lo is None or p.unit != "%":
+        return None
+    if _LOWER_BETTER.search(normalize(p.citation.quote)):
+        return None
+    nums = [
+        float(m.replace(",", "")) for m in _G_PCT.findall(_PERIOD_LABEL.sub(" ", normalize(ev)))
+    ]
+    if not nums or not all(n >= BELOW_TARGET_RATIO * lo for n in nums):
+        return None
+    hi = p.target_high
+    target = f"{_fmt(lo)}–{_fmt(hi)}%" if hi is not None and hi > lo else f"at least {_fmt(lo)}%"
+    return f"The later figure ({_fmt(min(nums))}%) meets the target ({target})"
 
 
 def _below_target(p: Promise, ev: str) -> str | None:
@@ -502,6 +547,9 @@ def _below_target(p: Promise, ev: str) -> str | None:
     return f"The later figure ({_fmt(max(nums))}) is below the target ({target})"
 
 
+_MEASURE_MSG = "The later quote measures something else"
+
+
 def _guard_verdict(p: Promise, verdict: tuple, stats: dict | None) -> tuple:
     """Downgrade a judged verdict to pending when its evidence is about another period
     (kept/partly/missed), restates the target (kept/partly) or is below it (kept)."""
@@ -513,8 +561,12 @@ def _guard_verdict(p: Promise, verdict: tuple, stats: dict | None) -> tuple:
         why, reason = _PERIOD_MSG, "other_period"
     elif status != "missed" and _restated(ev.quote):
         why, reason = _RESTATED_MSG, "restated"
+    elif _other_measure(p, ev.quote):
+        why, reason = _MEASURE_MSG, "other_measure"
     elif status == "kept" and (msg := _below_target(p, ev.quote)):
         why, reason = msg, "below_target"
+    elif status == "missed" and (msg := _meets_target(p, ev.quote)):
+        why, reason = msg, "meets_target"
     if reason is None:
         return verdict
     if stats is not None:
@@ -552,7 +604,14 @@ def build_ledger(
     returns True the remaining groups are left pending."""
     if stats is not None:
         stats.setdefault(
-            "verdicts_downgraded", {"other_period": 0, "restated": 0, "below_target": 0}
+            "verdicts_downgraded",
+            {
+                "other_period": 0,
+                "restated": 0,
+                "below_target": 0,
+                "other_measure": 0,
+                "meets_target": 0,
+            },
         )
     judge_failed = stopped = False
     transcripts = [s for s in sources if s.kind == "transcript"]

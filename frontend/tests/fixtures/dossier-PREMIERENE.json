@@ -1,0 +1,683 @@
+{
+ "symbol": "PREMIERENE",
+ "name": "Premier Energies Ltd",
+ "basis": "consolidated",
+ "built_at": "2026-11-10T05:35:40.969021+05:30",
+ "sources": [
+  {
+   "id": "T1",
+   "kind": "transcript",
+   "title": "Q1 FY27 earnings call (Aug 2026)",
+   "quarter": "Q1 FY27",
+   "url": "https://www.bseindia.com/stockinfo/AnnPdfOpen.aspx?Pname=bc24eef5-4beb-4df6-bab4-9147155d8067.pdf"
+  },
+  {
+   "id": "T2",
+   "kind": "transcript",
+   "title": "Q4 FY26 earnings call (May 2026)",
+   "quarter": "Q4 FY26",
+   "url": "https://www.bseindia.com/stockinfo/AnnPdfOpen.aspx?Pname=15e4b0a9-dfac-4928-83dc-c6744dc37699.pdf"
+  },
+  {
+   "id": "T3",
+   "kind": "transcript",
+   "title": "Q3 FY26 earnings call (Jan 2026)",
+   "quarter": "Q3 FY26",
+   "url": "https://www.bseindia.com/stockinfo/AnnPdfOpen.aspx?Pname=3c75cc20-8dd8-416e-91f4-688f59134d09.pdf"
+  },
+  {
+   "id": "T4",
+   "kind": "transcript",
+   "title": "Q2 FY26 earnings call (Nov 2025)",
+   "quarter": "Q2 FY26",
+   "url": "https://www.bseindia.com/stockinfo/AnnPdfOpen.aspx?Pname=98bf38bd-e1c7-48ad-ad7f-0962d6093683.pdf"
+  },
+  {
+   "id": "AR",
+   "kind": "annual_report",
+   "title": "Annual Report 2026",
+   "quarter": null,
+   "url": "https://www.bseindia.com/xml-data/corpfiling/AttachHis/579090b8-12b1-463c-9517-9f5a7f6ba7fc.pdf"
+  }
+ ],
+ "ledger": {
+  "rows": [
+   {
+    "promise": {
+     "id": "T4-1",
+     "citation": {
+      "source_id": "T4",
+      "page": 3,
+      "quote": "The total capacity of our cell lines would be 10.6 gigawatt by September 2026, aligning closely with our module capacity and our mission 2028 target."
+     },
+     "topic": "cell capacity",
+     "kind": "quantitative",
+     "metric": "other",
+     "target_low": 10.6,
+     "target_high": null,
+     "unit": null,
+     "horizon": "September 2026",
+     "made_in": "Q2 FY26"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "The later call restated the target; delivery is not shown yet"
+   },
+   {
+    "promise": {
+     "id": "T4-2",
+     "citation": {
+      "source_id": "T4",
+      "page": 5,
+      "quote": "Eventually, our expectation is that the company should be able to easily, I would say, treble the current top line and the overall financial performance over the next 2 to 3 years."
+     },
+     "topic": "KSolare revenue growth",
+     "kind": "quantitative",
+     "metric": "revenue_growth",
+     "target_low": 3.0,
+     "target_high": 3.0,
+     "unit": "x",
+     "horizon": "next 2 to 3 years",
+     "made_in": "Q2 FY26"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "No later evidence of the outcome yet"
+   },
+   {
+    "promise": {
+     "id": "T4-3",
+     "citation": {
+      "source_id": "T4",
+      "page": 8,
+      "quote": "In addition to that, the next priority thereafter is basically the input wafer project, which is about 5 gigawatts in the first phase and 5 gigawatts in the second phase."
+     },
+     "topic": "wafer project capacity",
+     "kind": "quantitative",
+     "metric": "other",
+     "target_low": 5.0,
+     "target_high": 5.0,
+     "unit": null,
+     "horizon": null,
+     "made_in": "Q2 FY26"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "No verifiable later evidence"
+   },
+   {
+    "promise": {
+     "id": "T4-4",
+     "citation": {
+      "source_id": "T4",
+      "page": 8,
+      "quote": "Bulk of that capex will basically come after the next 12 months, and that will be a capex of somewhere around INR6,000 crores."
+     },
+     "topic": "wafer capex",
+     "kind": "quantitative",
+     "metric": "capex",
+     "target_low": 6000.0,
+     "target_high": 6000.0,
+     "unit": "cr",
+     "horizon": "after next 12 months",
+     "made_in": "Q2 FY26"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "No later evidence of the outcome yet"
+   },
+   {
+    "promise": {
+     "id": "T4-5",
+     "citation": {
+      "source_id": "T4",
+      "page": 8,
+      "quote": "One is till June next year, which is about INR300 crores, and then another nine months after that, another INR300 crores."
+     },
+     "topic": "BESS capex",
+     "kind": "quantitative",
+     "metric": "capex",
+     "target_low": 300.0,
+     "target_high": 300.0,
+     "unit": "cr",
+     "horizon": "June next year",
+     "made_in": "Q2 FY26"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "No verifiable later evidence"
+   },
+   {
+    "promise": {
+     "id": "T3-1",
+     "citation": {
+      "source_id": "T3",
+      "page": 3,
+      "quote": "Our 5.6 gigawatt module line is set for completion in March 2026, 4.8 gigawatt cell line in June 2026, followed by 2.2 gigawatt of cell line in September 2026."
+     },
+     "topic": "capacity completion",
+     "kind": "qualitative",
+     "metric": "other",
+     "target_low": null,
+     "target_high": null,
+     "unit": null,
+     "horizon": "September 2026",
+     "made_in": "Q3 FY26"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "No later evidence of the outcome yet"
+   },
+   {
+    "promise": {
+     "id": "T3-2",
+     "citation": {
+      "source_id": "T3",
+      "page": 4,
+      "quote": "Our KSolare acquisition is also planned to be closed in the next one month."
+     },
+     "topic": "acquisition",
+     "kind": "qualitative",
+     "metric": null,
+     "target_low": null,
+     "target_high": null,
+     "unit": null,
+     "horizon": "next one month",
+     "made_in": "Q3 FY26"
+    },
+    "status": "missed",
+    "method": "judged",
+    "actual": null,
+    "evidence": {
+     "source_id": "T2",
+     "page": 7,
+     "quote": "So in terms of K-Solar, look this was a non-binding term sheet at that time and the final documentation still had to be completed."
+    },
+    "rationale": "Management reported that the KSolare acquisition could not be completed and they would not be acquiring it."
+   },
+   {
+    "promise": {
+     "id": "T3-3",
+     "citation": {
+      "source_id": "T3",
+      "page": 5,
+      "quote": "The total capex on aluminum is going to be INR260 crores, and we expect commissioning by December 2026."
+     },
+     "topic": "capex",
+     "kind": "quantitative",
+     "metric": "capex",
+     "target_low": 260.0,
+     "target_high": 260.0,
+     "unit": "cr",
+     "horizon": "December 2026",
+     "made_in": "Q3 FY26"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "No later evidence of the outcome yet"
+   },
+   {
+    "promise": {
+     "id": "T3-4",
+     "citation": {
+      "source_id": "T3",
+      "page": 6,
+      "quote": "And we are hoping that the company will touch a top line of over INR1000 crores in the next two to two and a half years."
+     },
+     "topic": "revenue growth",
+     "kind": "quantitative",
+     "metric": "revenue_growth",
+     "target_low": 1000.0,
+     "target_high": null,
+     "unit": "cr",
+     "horizon": "next two to two and a half years",
+     "made_in": "Q3 FY26"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "No later evidence of the outcome yet"
+   },
+   {
+    "promise": {
+     "id": "T3-5",
+     "citation": {
+      "source_id": "T3",
+      "page": 6,
+      "quote": "For the second 5-gigawatt phase, we would expect that to be completed in December 28."
+     },
+     "topic": "capacity completion",
+     "kind": "quantitative",
+     "metric": "other",
+     "target_low": 5.0,
+     "target_high": 5.0,
+     "unit": "x",
+     "horizon": "December 28",
+     "made_in": "Q3 FY26"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "No later evidence of the outcome yet"
+   },
+   {
+    "promise": {
+     "id": "T2-1",
+     "citation": {
+      "source_id": "T2",
+      "page": 3,
+      "quote": "This is one of the largest and most automated module plants in India and is expected to achieve full ramp-up in the next 2 months."
+     },
+     "topic": "module plant ramp-up",
+     "kind": "qualitative",
+     "metric": null,
+     "target_low": null,
+     "target_high": null,
+     "unit": null,
+     "horizon": "next 2 months",
+     "made_in": "Q4 FY26"
+    },
+    "status": "kept",
+    "method": "judged",
+    "actual": null,
+    "evidence": {
+     "source_id": "T1",
+     "page": 3,
+     "quote": "Amongst key business updates, our 5.6 gigawatt fully automated solar module plant at Seetharampur is operational."
+    },
+    "rationale": "Management confirmed that the 5.6 GW fully automated module plant at Seetharampur is operational."
+   },
+   {
+    "promise": {
+     "id": "T1-1",
+     "citation": {
+      "source_id": "T1",
+      "page": 4,
+      "quote": "As we speak, I can confirm that there is no concrete plan to raise any primary capital in the near future."
+     },
+     "topic": "capital raise",
+     "kind": "qualitative",
+     "metric": null,
+     "target_low": null,
+     "target_high": null,
+     "unit": null,
+     "horizon": "near future",
+     "made_in": "Q1 FY27"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "Too recent to judge"
+   },
+   {
+    "promise": {
+     "id": "T1-2",
+     "citation": {
+      "source_id": "T1",
+      "page": 5,
+      "quote": "And I would expect the installation over the next nine months to be something between 6 to 8, possibly higher than 8 gigawatts."
+     },
+     "topic": "installation volume",
+     "kind": "quantitative",
+     "metric": "volume_growth",
+     "target_low": 6.0,
+     "target_high": 8.0,
+     "unit": null,
+     "horizon": "next nine months",
+     "made_in": "Q1 FY27"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "Too recent to judge"
+   },
+   {
+    "promise": {
+     "id": "T1-3",
+     "citation": {
+      "source_id": "T1",
+      "page": 8,
+      "quote": "And we expect that our margins should be slightly ahead of this, given the low-cost base of the company and all the levers that they've got in place for growth as well as cross synergies with Premier."
+     },
+     "topic": "transformer margins",
+     "kind": "qualitative",
+     "metric": null,
+     "target_low": null,
+     "target_high": null,
+     "unit": null,
+     "horizon": null,
+     "made_in": "Q1 FY27"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "Too recent to judge"
+   },
+   {
+    "promise": {
+     "id": "T1-4",
+     "citation": {
+      "source_id": "T1",
+      "page": 8,
+      "quote": "Over the next three years, we expect this to be more than triple of that level."
+     },
+     "topic": "transformer revenue growth",
+     "kind": "qualitative",
+     "metric": "revenue_growth",
+     "target_low": null,
+     "target_high": null,
+     "unit": null,
+     "horizon": "next three years",
+     "made_in": "Q1 FY27"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "Too recent to judge"
+   },
+   {
+    "promise": {
+     "id": "T1-5",
+     "citation": {
+      "source_id": "T1",
+      "page": 9,
+      "quote": "We are targeting at least about 70."
+     },
+     "topic": "capacity utilization",
+     "kind": "quantitative",
+     "metric": "volume_growth",
+     "target_low": 70.0,
+     "target_high": null,
+     "unit": "%",
+     "horizon": "March quarter",
+     "made_in": "Q1 FY27"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "Too recent to judge"
+   },
+   {
+    "promise": {
+     "id": "T1-6",
+     "citation": {
+      "source_id": "T1",
+      "page": 11,
+      "quote": "So, I would expect a small increase in depreciation in the next quarter, and then full effect coming in through Q3 and Q4, where we will see roughly about INR240 crores to INR250 crores of depreciation quarterly."
+     },
+     "topic": "depreciation",
+     "kind": "quantitative",
+     "metric": "other",
+     "target_low": 240.0,
+     "target_high": 250.0,
+     "unit": "cr",
+     "horizon": "Q3 and Q4",
+     "made_in": "Q1 FY27"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "Too recent to judge"
+   }
+  ],
+  "counts": {
+   "kept": 1,
+   "partly": 0,
+   "missed": 1,
+   "pending": 15,
+   "dropped": 0
+  },
+  "credibility_pct": null,
+  "note": null
+ },
+ "snapshot": {
+  "summary": [
+   {
+    "text": "Premier Energies is a leading integrated solar manufacturing company with capabilities spanning solar cells and modules.",
+    "citation": {
+     "source_id": "AR",
+     "page": 4,
+     "quote": "Established in 1995, we are one of India’s leading integrated solar manufacturing companies, with three decades of experience in photovoltaic technology."
+    }
+   },
+   {
+    "text": "The company manufactures high-efficiency solar cells and modules, supported by backward integration into ingots and wafers.",
+    "citation": {
+     "source_id": "AR",
+     "page": 4,
+     "quote": "We manufacture high-efficiency solar cells and modules, supported by an increasingly integrated manufacturing base that extends upstream into ingots and wafers."
+    }
+   },
+   {
+    "text": "Its product offerings also include battery energy storage systems, transformers, and aluminium frames.",
+    "citation": {
+     "source_id": "AR",
+     "page": 4,
+     "quote": "Alongside these core operations, we are developing capabilities in battery energy storage systems, transformers and aluminium frames to create a broader clean technology portfolio capable of supporting the evolving requirements of our customers."
+    }
+   }
+  ]
+ },
+ "trajectory": {
+  "years": [
+   "Mar 2022",
+   "Mar 2023",
+   "Mar 2024",
+   "Mar 2025",
+   "Mar 2026"
+  ],
+  "revenue": [
+   743.0,
+   1429.0,
+   3144.0,
+   6519.0,
+   7824.0
+  ],
+  "operating_profit": [
+   30.0,
+   78.0,
+   478.0,
+   1781.0,
+   2378.0
+  ],
+  "margin_pct": [
+   4.037685060565275,
+   5.458362491252624,
+   15.203562340966922,
+   27.32014112593956,
+   30.393660531697343
+  ],
+  "pat": [
+   -14.0,
+   -13.0,
+   231.0,
+   937.0,
+   1510.0
+  ],
+  "revenue_cagr_pct": 80.13993719991366,
+  "pat_cagr_pct": null,
+  "margin_change_bps": 2636,
+  "read": "growing",
+  "lender": false
+ },
+ "health": {
+  "as_of": "Mar 2026",
+  "debt_to_equity": 0.8606918969120038,
+  "cfo_to_pat_3y": 1.0078416728902166,
+  "fcf_3y_cr": -1367.0,
+  "working_capital_days": 8.0,
+  "wc_days_change_3y": 66.0,
+  "roce_pct": 33.0,
+  "flags": [
+   {
+    "level": "good",
+    "text": "Profits are backed by cash (CFO/PAT 1.01)"
+   },
+   {
+    "level": "watch",
+    "text": "Working capital days rose from -58 to 8"
+   },
+   {
+    "level": "watch",
+    "text": "Free cash flow was negative over 3 years (−₹1,367 cr)"
+   }
+  ]
+ },
+ "bull": [
+  {
+   "text": "The company reported another record quarter of revenue and profit growth with total revenue increasing 34 percent year-on-year to INR2,508 crores.",
+   "citation": {
+    "source_id": "T1",
+    "page": 3,
+    "quote": "Our total revenue has increased 34% year-on-year to INR2,508 crores."
+   }
+  },
+  {
+   "text": "Operating in a capital-intensive sector, the company achieved a strong return on capital employed of 33.0 percent.",
+   "citation": {
+    "source_id": "FACTS",
+    "page": 0,
+    "quote": "ROCE: 33.0%"
+   }
+  },
+  {
+   "text": "The 5.6 gigawatt fully automated solar module plant at Seetharampur is operational and ready to support volume expansion.",
+   "citation": {
+    "source_id": "T1",
+    "page": 3,
+    "quote": "Our 5.6 gigawatt fully automated solar module plant at Seetharampur is operational."
+   }
+  }
+ ],
+ "bear": [
+  {
+   "text": "Free cash flow was negative over the three-year period, totaling minus INR1,367 crores.",
+   "citation": {
+    "source_id": "FACTS",
+    "page": 0,
+    "quote": "Free cash flow (3y): −₹1,367 cr"
+   }
+  },
+  {
+   "text": "Working capital days rose significantly from minus 58 days to 8 days.",
+   "citation": {
+    "source_id": "FACTS",
+    "page": 0,
+    "quote": "Working capital days rose from -58 to 8"
+   }
+  }
+ ],
+ "notes": [],
+ "cost": {
+  "calls": 9,
+  "cached": 8,
+  "input_tokens": 12377,
+  "output_tokens": 397,
+  "usd_list_price": 0.004706
+ },
+ "build_seconds": 10.6,
+ "guard": {
+  "promises_proposed": 29,
+  "promises_kept": 17,
+  "points_proposed": 9,
+  "points_kept": 8,
+  "verdicts_downgraded": {
+   "other_period": 0,
+   "restated": 1,
+   "below_target": 0,
+   "other_measure": 0,
+   "meets_target": 0
+  }
+ },
+ "latest_results": {
+  "symbol": "PREMIERENE",
+  "period_end": "2026-09-30",
+  "period_label": "Q2 FY27",
+  "basis": "consolidated",
+  "format": "indas",
+  "audited": false,
+  "compared_qoq": "2026-06-30",
+  "compared_yoy": "2025-09-30",
+  "metrics": [
+   {
+    "key": "revenue",
+    "label": "Revenue",
+    "value": 2631.85,
+    "qoq_pct": 6.9,
+    "yoy_pct": 43.3,
+    "computed": false
+   },
+   {
+    "key": "ebitda",
+    "label": "EBITDA",
+    "value": 735.76,
+    "qoq_pct": 3.0,
+    "yoy_pct": 31.2,
+    "computed": true
+   },
+   {
+    "key": "pbt",
+    "label": "PBT",
+    "value": 601.12,
+    "qoq_pct": -3.0,
+    "yoy_pct": 28.7,
+    "computed": false
+   },
+   {
+    "key": "pat",
+    "label": "PAT",
+    "value": 462.39,
+    "qoq_pct": -2.0,
+    "yoy_pct": 30.8,
+    "computed": false
+   }
+  ],
+  "margins": [
+   {
+    "key": "ebitda_margin",
+    "label": "EBITDA margin",
+    "value_pct": 28.0,
+    "qoq_bps": -105,
+    "yoy_bps": -258
+   },
+   {
+    "key": "pat_margin",
+    "label": "PAT margin",
+    "value_pct": 17.6,
+    "qoq_bps": -159,
+    "yoy_bps": -167
+   }
+  ],
+  "notes": [
+   "EBITDA is computed: revenue from operations minus operating expenses (excludes other income).",
+   "PAT includes ₹0.15 cr share of profit of associates and joint ventures."
+  ],
+  "sources": [
+   "https://nsearchives.nseindia.com/corporate/xbrl/INTEGRATED_FILING_INDAS_1753167_04112026083633_WEB.xml",
+   "https://nsearchives.nseindia.com/corporate/xbrl/INTEGRATED_FILING_INDAS_1709422_06082026084047_WEB.xml",
+   "https://nsearchives.nseindia.com/corporate/xbrl/INTEGRATED_FILING_INDAS_1559297_28102025100034_WEB.xml"
+  ]
+ }
+}

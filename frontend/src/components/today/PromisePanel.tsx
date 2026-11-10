@@ -10,7 +10,7 @@ export function paceSentence(p: PaceNote): string {
   const figure = p.line === "EBITDA margin" ? `EBITDA margin ${level(p.actual)}` : `${p.line === "PAT" ? "PAT" : p.line.toLowerCase()} ${pct(p.actual)} YoY`;
   const target =
     p.target_high === null || p.target_high === p.target_low
-      ? `the target of ${p.target_high === null ? "at least " : ""}${num(p.target_low)}%`
+      ? `the ${num(p.target_low)}% target`
       : `the ${num(p.target_low)}–${num(p.target_high)}% target`;
   return `This quarter: ${figure}, ${p.word} ${target}. One quarter, not the full year.`;
 }
@@ -33,7 +33,7 @@ export function PromisePanel({ symbol, notes }: { symbol: string; notes: Promise
           <li key={`${n.citation.source_id}-${n.citation.page}-${n.quote.slice(0, 24)}`}>
             <blockquote className="quote line-clamp-3">&ldquo;{n.quote}&rdquo;</blockquote>
             <p className="text-caption text-ink-2">{meta(n)}</p>
-            {n.pace ? <p className="text-caption">{paceSentence(n.pace)}</p> : null}
+            {n.pace ? <p className="text-caption font-medium">{paceSentence(n.pace)}</p> : null}
           </li>
         ))}
       </ul>

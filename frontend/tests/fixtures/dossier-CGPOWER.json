@@ -1,0 +1,632 @@
+{
+ "symbol": "CGPOWER",
+ "name": "CG Power & Industrial Solutions Ltd",
+ "basis": "consolidated",
+ "built_at": "2026-11-10T05:35:29.621988+05:30",
+ "sources": [
+  {
+   "id": "T1",
+   "kind": "transcript",
+   "title": "Q1 FY27 earnings call (Jul 2026)",
+   "quarter": "Q1 FY27",
+   "url": "https://www.cgglobal.com/CGGLOBAL_BACKEND/admin/uploads/IIFL-CGPower-Jul24-2026.pdf"
+  },
+  {
+   "id": "T2",
+   "kind": "transcript",
+   "title": "Q4 FY26 earnings call (May 2026)",
+   "quarter": "Q4 FY26",
+   "url": "https://www.cgglobal.com/CGGLOBAL_BACKEND/admin/uploads/IIFL-CGPower-May06-2026_v2.pdf"
+  },
+  {
+   "id": "T3",
+   "kind": "transcript",
+   "title": "Q3 FY26 earnings call (Jan 2026)",
+   "quarter": "Q3 FY26",
+   "url": "https://www.cgglobal.com/CGGLOBAL_BACKEND/admin/uploads/IIFL-CGPowerIndus-Jan27-2026.pdf"
+  },
+  {
+   "id": "T4",
+   "kind": "transcript",
+   "title": "Q2 FY26 earnings call (Oct 2025)",
+   "quarter": "Q2 FY26",
+   "url": "https://www.cgglobal.com/CGGLOBAL_BACKEND/admin/uploads/1762240506_f8c95747e4eb_iiflcap-cgpower-oct29-2025_v3.pdf"
+  },
+  {
+   "id": "AR",
+   "kind": "annual_report",
+   "title": "Annual Report 2026",
+   "quarter": null,
+   "url": "https://www.bseindia.com/xml-data/corpfiling/AttachHis/4cdafd20-7174-41ed-b761-3178f60a1fec.pdf"
+  }
+ ],
+ "ledger": {
+  "rows": [
+   {
+    "promise": {
+     "id": "T4-1",
+     "citation": {
+      "source_id": "T4",
+      "page": 15,
+      "quote": "So, for the increased added capacity, what we are planning in our new plant, we are planning to have around 35% to 40% of the revenues coming from exports."
+     },
+     "topic": "export revenue share",
+     "kind": "quantitative",
+     "metric": "other",
+     "target_low": 35.0,
+     "target_high": 40.0,
+     "unit": "%",
+     "horizon": null,
+     "made_in": "Q2 FY26"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "No later evidence of the outcome yet"
+   },
+   {
+    "promise": {
+     "id": "T3-1",
+     "citation": {
+      "source_id": "T3",
+      "page": 7,
+      "quote": "The new plant, which is the bigger plant, M2, as we call it, that should be ready by end of December 2026."
+     },
+     "topic": "semiconductor plant readiness",
+     "kind": "qualitative",
+     "metric": null,
+     "target_low": null,
+     "target_high": null,
+     "unit": null,
+     "horizon": "December 2026",
+     "made_in": "Q3 FY26"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "No later evidence of the outcome yet"
+   },
+   {
+    "promise": {
+     "id": "T3-2",
+     "citation": {
+      "source_id": "T3",
+      "page": 7,
+      "quote": "And so I would say Q4 of next financial year is when we start some activity."
+     },
+     "topic": "semiconductor plant activity",
+     "kind": "qualitative",
+     "metric": null,
+     "target_low": null,
+     "target_high": null,
+     "unit": null,
+     "horizon": "Q4 of next financial year",
+     "made_in": "Q3 FY26"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "No later evidence of the outcome yet"
+   },
+   {
+    "promise": {
+     "id": "T3-3",
+     "citation": {
+      "source_id": "T3",
+      "page": 11,
+      "quote": "And in the next 1 quarter or so, we'll be 65,000 MVA."
+     },
+     "topic": "transformer capacity",
+     "kind": "quantitative",
+     "metric": "other",
+     "target_low": null,
+     "target_high": 65000.0,
+     "unit": null,
+     "horizon": "next 1 quarter",
+     "made_in": "Q3 FY26"
+    },
+    "status": "kept",
+    "method": "judged",
+    "actual": null,
+    "evidence": {
+     "source_id": "T1",
+     "page": 5,
+     "quote": "the power transformer is already about 75,000 MVA and distribution is about close to 10,000 MVA."
+    },
+    "rationale": "Management successfully reached and exceeded the targeted 65,000 MVA transformer capacity as promised."
+   },
+   {
+    "promise": {
+     "id": "T3-4",
+     "citation": {
+      "source_id": "T3",
+      "page": 13,
+      "quote": "What we planned for, what the Board had approved for up to 2028, I'm sure that our team should be able to do it at least 1 year before."
+     },
+     "topic": "capex timeline",
+     "kind": "qualitative",
+     "metric": null,
+     "target_low": null,
+     "target_high": null,
+     "unit": null,
+     "horizon": "2028",
+     "made_in": "Q3 FY26"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "The later call restated the target; delivery is not shown yet"
+   },
+   {
+    "promise": {
+     "id": "T3-5",
+     "citation": {
+      "source_id": "T3",
+      "page": 14,
+      "quote": "So I think in the next couple of months, we'll be ready with our brownfield, which is close to our existing facility."
+     },
+     "topic": "brownfield facility readiness",
+     "kind": "qualitative",
+     "metric": null,
+     "target_low": null,
+     "target_high": null,
+     "unit": null,
+     "horizon": "next couple of months",
+     "made_in": "Q3 FY26"
+    },
+    "status": "kept",
+    "method": "judged",
+    "actual": null,
+    "evidence": {
+     "source_id": "T1",
+     "page": 3,
+     "quote": "CG, on 4th of June '26 announced the commissioning of its EHV switchgear manufacturing facility. S3 as we call it, it's a Unit -II of that in Nasik, Maharashtra."
+    },
+    "rationale": "Management successfully prepared and commissioned the brownfield facility readiness as promised."
+   },
+   {
+    "promise": {
+     "id": "T3-6",
+     "citation": {
+      "source_id": "T3",
+      "page": 14,
+      "quote": "That will come up, and I think that itself should give us close to INR 400 crores incremental revenue or sales."
+     },
+     "topic": "incremental revenue",
+     "kind": "quantitative",
+     "metric": "revenue_growth",
+     "target_low": null,
+     "target_high": 400.0,
+     "unit": "cr",
+     "horizon": null,
+     "made_in": "Q3 FY26"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "No later evidence of the outcome yet"
+   },
+   {
+    "promise": {
+     "id": "T2-1",
+     "citation": {
+      "source_id": "T2",
+      "page": 5,
+      "quote": "Once operational, G2 will scale up to the capacity of approximately 14.5 million chips per day."
+     },
+     "topic": "semiconductor capacity",
+     "kind": "quantitative",
+     "metric": "volume_growth",
+     "target_low": 14.5,
+     "target_high": 14.5,
+     "unit": "usd_mn",
+     "horizon": "end of the calendar year 2026",
+     "made_in": "Q4 FY26"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "No later evidence of the outcome yet"
+   },
+   {
+    "promise": {
+     "id": "T2-2",
+     "citation": {
+      "source_id": "T2",
+      "page": 5,
+      "quote": "Together, the two facilities are projected to generate about 5,000 direct and indirect jobs in the coming years."
+     },
+     "topic": "employment",
+     "kind": "quantitative",
+     "metric": "other",
+     "target_low": 5000.0,
+     "target_high": 5000.0,
+     "unit": null,
+     "horizon": "coming years",
+     "made_in": "Q4 FY26"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "No later evidence of the outcome yet"
+   },
+   {
+    "promise": {
+     "id": "T2-3",
+     "citation": {
+      "source_id": "T2",
+      "page": 9,
+      "quote": "Yes, so 2027 financial should see the commercialization happening for 400kV GIS."
+     },
+     "topic": "GIS commercialization",
+     "kind": "qualitative",
+     "metric": null,
+     "target_low": null,
+     "target_high": null,
+     "unit": null,
+     "horizon": "FY27",
+     "made_in": "Q4 FY26"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "No later evidence of the outcome yet"
+   },
+   {
+    "promise": {
+     "id": "T2-4",
+     "citation": {
+      "source_id": "T2",
+      "page": 10,
+      "quote": "And initially we will be starting with the capacity of around 25,000 to 30,000 MVA and by the end of this calendar year we will be touching the peak of 45,000 MVA there."
+     },
+     "topic": "transformer capacity",
+     "kind": "quantitative",
+     "metric": "volume_growth",
+     "target_low": 25000.0,
+     "target_high": 45000.0,
+     "unit": null,
+     "horizon": "end of this calendar year",
+     "made_in": "Q4 FY26"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "No later evidence of the outcome yet"
+   },
+   {
+    "promise": {
+     "id": "T2-5",
+     "citation": {
+      "source_id": "T2",
+      "page": 10,
+      "quote": "So this will be around 1,10,000 MVAs by the end of this calendar year."
+     },
+     "topic": "transformer capacity",
+     "kind": "quantitative",
+     "metric": "volume_growth",
+     "target_low": 110000.0,
+     "target_high": 110000.0,
+     "unit": null,
+     "horizon": "end of this calendar year",
+     "made_in": "Q4 FY26"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "No later evidence of the outcome yet"
+   },
+   {
+    "promise": {
+     "id": "T1-1",
+     "citation": {
+      "source_id": "T1",
+      "page": 3,
+      "quote": "So incrementally 7,200 units will be there versus existing 9,000 units annually, which was already there."
+     },
+     "topic": "manufacturing capacity",
+     "kind": "quantitative",
+     "metric": "volume_growth",
+     "target_low": 7200.0,
+     "target_high": 7200.0,
+     "unit": null,
+     "horizon": null,
+     "made_in": "Q1 FY27"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "Too recent to judge"
+   },
+   {
+    "promise": {
+     "id": "T1-2",
+     "citation": {
+      "source_id": "T1",
+      "page": 5,
+      "quote": "And with the new plant starting up in the next few months, I think we will add about 45,000 MVA more into that."
+     },
+     "topic": "capacity expansion",
+     "kind": "quantitative",
+     "metric": "other",
+     "target_low": 45000.0,
+     "target_high": 45000.0,
+     "unit": null,
+     "horizon": null,
+     "made_in": "Q1 FY27"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "Too recent to judge"
+   },
+   {
+    "promise": {
+     "id": "T1-3",
+     "citation": {
+      "source_id": "T1",
+      "page": 11,
+      "quote": "In fact, the first range across IE3, IE4 and IE5, all this full range will be complete in the next 12 months."
+     },
+     "topic": "product launch",
+     "kind": "quantitative",
+     "metric": "other",
+     "target_low": 12.0,
+     "target_high": 12.0,
+     "unit": null,
+     "horizon": "next 12 months",
+     "made_in": "Q1 FY27"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "Too recent to judge"
+   }
+  ],
+  "counts": {
+   "kept": 2,
+   "partly": 0,
+   "missed": 0,
+   "pending": 13,
+   "dropped": 0
+  },
+  "credibility_pct": null,
+  "note": null
+ },
+ "snapshot": {
+  "summary": [
+   {
+    "text": "The industrial segment aggregate sales reached 1,671 crores, marking a 6% increase year-over-year accompanied by strong double-digit growth in motors.",
+    "citation": {
+     "source_id": "T1",
+     "page": 2,
+     "quote": "The aggregate sales was INR1,671 crores, which is 6% higher year -over-year with a strong double-digit growth in motors."
+    }
+   },
+   {
+    "text": "Power systems sales reached 1,402 crores, showing a 31% year-over-year increase that reflects strong execution discipline.",
+    "citation": {
+     "source_id": "T1",
+     "page": 3,
+     "quote": "the sales for the quarter was at INR1,402 crores, year-over-year increase of 31%, reflecting strong execution discipline."
+    }
+   },
+   {
+    "text": "Consolidated results include operating subsidiaries in Sweden, Germany, and Netherlands, which are known as Drives and Automation Europe.",
+    "citation": {
+     "source_id": "T1",
+     "page": 3,
+     "quote": "consolidated results include the performance of the operating subsidiaries in Sweden, Germany and Netherlands, which  we call Drives & Automation Europe."
+    }
+   }
+  ]
+ },
+ "trajectory": {
+  "years": [
+   "Mar 2022",
+   "Mar 2023",
+   "Mar 2024",
+   "Mar 2025",
+   "Mar 2026"
+  ],
+  "revenue": [
+   5484.0,
+   6973.0,
+   8046.0,
+   9909.0,
+   12418.0
+  ],
+  "operating_profit": [
+   647.0,
+   1005.0,
+   1142.0,
+   1319.0,
+   1641.0
+  ],
+  "margin_pct": [
+   11.797957695113057,
+   14.412734834361107,
+   14.193388018891376,
+   13.311131294782522,
+   13.21468835561282
+  ],
+  "pat": [
+   913.0,
+   963.0,
+   1428.0,
+   973.0,
+   1199.0
+  ],
+  "revenue_cagr_pct": 22.670052840615472,
+  "pat_cagr_pct": 7.050105932507789,
+  "margin_change_bps": 142,
+  "read": "growing",
+  "lender": false
+ },
+ "health": {
+  "as_of": "Mar 2026",
+  "debt_to_equity": 0.014805520702634882,
+  "cfo_to_pat_3y": 0.735,
+  "fcf_3y_cr": 1224.0,
+  "working_capital_days": 70.0,
+  "wc_days_change_3y": 66.0,
+  "roce_pct": 27.0,
+  "flags": [
+   {
+    "level": "good",
+    "text": "Virtually debt-free (D/E 0.01)"
+   },
+   {
+    "level": "watch",
+    "text": "Working capital days rose from 4 to 70"
+   }
+  ]
+ },
+ "bull": [
+  {
+   "text": "The company generated substantial free cash flow of 1,224 crore over the 3-year period.",
+   "citation": {
+    "source_id": "FACTS",
+    "page": 0,
+    "quote": "Free cash flow (3y): ₹1,224 cr"
+   }
+  },
+  {
+   "text": "Power Systems sales for the quarter grew by 31% year-over-year, reflecting strong execution discipline.",
+   "citation": {
+    "source_id": "T1",
+    "page": 3,
+    "quote": "The sales for the quarter was at INR1,402 crores, year-over-year increase of 31%, reflecting strong execution discipline."
+   }
+  }
+ ],
+ "bear": [
+  {
+   "text": "Working capital days rose significantly from 4 to 70.",
+   "citation": {
+    "source_id": "FACTS",
+    "page": 0,
+    "quote": "Working capital days rose from 4 to 70"
+   }
+  },
+  {
+   "text": "Out of 15 total promises, 13 remain pending with only 2 resolved.",
+   "citation": {
+    "source_id": "FACTS",
+    "page": 0,
+    "quote": "Promise ledger: 2 kept, 0 partly, 0 missed, 13 pending, 0 dropped (2 of 15 promises resolved)"
+   }
+  },
+  {
+   "text": "Consolidated performance was impacted by continued investment in talent for the semiconductor business, resulting in a segment impact of about 43 crores.",
+   "citation": {
+    "source_id": "T1",
+    "page": 3,
+    "quote": "Margin gains driven by strong stand -alone performance was partially offset by the continued investment in our talent pool for semiconductor business, total semiconductor segment impact of about INR43 crores, which is 132 bps."
+   }
+  }
+ ],
+ "notes": [],
+ "cost": {
+  "calls": 9,
+  "cached": 8,
+  "input_tokens": 16612,
+  "output_tokens": 523,
+  "usd_list_price": 0.006291
+ },
+ "build_seconds": 12.4,
+ "guard": {
+  "promises_proposed": 22,
+  "promises_kept": 15,
+  "points_proposed": 9,
+  "points_kept": 8,
+  "verdicts_downgraded": {
+   "other_period": 0,
+   "restated": 1,
+   "below_target": 0,
+   "other_measure": 0,
+   "meets_target": 0
+  }
+ },
+ "latest_results": {
+  "symbol": "CGPOWER",
+  "period_end": "2026-09-30",
+  "period_label": "Q2 FY27",
+  "basis": "consolidated",
+  "format": "indas",
+  "audited": false,
+  "compared_qoq": "2026-06-30",
+  "compared_yoy": "2025-09-30",
+  "metrics": [
+   {
+    "key": "revenue",
+    "label": "Revenue",
+    "value": 3801.54,
+    "qoq_pct": 15.9,
+    "yoy_pct": 30.1,
+    "computed": false
+   },
+   {
+    "key": "ebitda",
+    "label": "EBITDA",
+    "value": 539.58,
+    "qoq_pct": 35.8,
+    "yoy_pct": 43.2,
+    "computed": true
+   },
+   {
+    "key": "pbt",
+    "label": "PBT",
+    "value": 559.22,
+    "qoq_pct": 32.2,
+    "yoy_pct": 44.1,
+    "computed": false
+   },
+   {
+    "key": "pat",
+    "label": "PAT",
+    "value": 409.09,
+    "qoq_pct": 32.7,
+    "yoy_pct": 43.8,
+    "computed": false
+   }
+  ],
+  "margins": [
+   {
+    "key": "ebitda_margin",
+    "label": "EBITDA margin",
+    "value_pct": 14.2,
+    "qoq_bps": 208,
+    "yoy_bps": 131
+   },
+   {
+    "key": "pat_margin",
+    "label": "PAT margin",
+    "value_pct": 10.8,
+    "qoq_bps": 136,
+    "yoy_bps": 103
+   }
+  ],
+  "notes": [
+   "EBITDA is computed: revenue from operations minus operating expenses (excludes other income)."
+  ],
+  "sources": [
+   "https://nsearchives.nseindia.com/corporate/xbrl/INTEGRATED_FILING_INDAS_1744976_23102026071034_WEB.xml",
+   "https://nsearchives.nseindia.com/corporate/xbrl/INTEGRATED_FILING_INDAS_1701362_25072026090516_WEB.xml",
+   "https://nsearchives.nseindia.com/corporate/xbrl/INTEGRATED_FILING_INDAS_1563049_31102025115950_WEB.xml"
+  ]
+ }
+}

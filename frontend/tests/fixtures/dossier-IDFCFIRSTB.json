@@ -1,0 +1,560 @@
+{
+ "symbol": "IDFCFIRSTB",
+ "name": "IDFC First Bank Ltd",
+ "basis": "consolidated",
+ "built_at": "2026-11-10T05:35:17.210912+05:30",
+ "sources": [
+  {
+   "id": "T1",
+   "kind": "transcript",
+   "title": "Q2 FY27 earnings call (Oct 2026)",
+   "quarter": "Q2 FY27",
+   "url": "https://www.bseindia.com/stockinfo/AnnPdfOpen.aspx?Pname=fbc6f5e2-78dd-4fa4-96bf-665bcc7826fb.pdf"
+  },
+  {
+   "id": "T2",
+   "kind": "transcript",
+   "title": "Q1 FY27 earnings call (Jul 2026)",
+   "quarter": "Q1 FY27",
+   "url": "https://www.bseindia.com/stockinfo/AnnPdfOpen.aspx?Pname=e9efc349-d9bd-4084-848a-e0bcb9e48730.pdf"
+  },
+  {
+   "id": "T3",
+   "kind": "transcript",
+   "title": "Q1 FY27 earnings call (Jul 2026)",
+   "quarter": "Q1 FY27",
+   "url": "https://www.bseindia.com/stockinfo/AnnPdfOpen.aspx?Pname=8d40cb3d-d021-4bc6-897e-03e69a71241c.pdf"
+  },
+  {
+   "id": "T4",
+   "kind": "transcript",
+   "title": "Q4 FY26 earnings call (Apr 2026)",
+   "quarter": "Q4 FY26",
+   "url": "https://www.bseindia.com/stockinfo/AnnPdfOpen.aspx?Pname=e9650b84-face-4a77-ab98-7c5bffbc20b7.pdf"
+  },
+  {
+   "id": "AR",
+   "kind": "annual_report",
+   "title": "Annual Report 2026",
+   "quarter": null,
+   "url": "https://www.bseindia.com/xml-data/corpfiling/AttachHis/345b121c-5c1b-485a-bdcc-de3e4d475baf.pdf"
+  }
+ ],
+ "ledger": {
+  "rows": [
+   {
+    "promise": {
+     "id": "T4-1",
+     "citation": {
+      "source_id": "T4",
+      "page": 12,
+      "quote": "And into the next year, we feel we will be broadly able to hold around those levels."
+     },
+     "topic": "net interest margin",
+     "kind": "qualitative",
+     "metric": null,
+     "target_low": null,
+     "target_high": null,
+     "unit": null,
+     "horizon": "next year",
+     "made_in": "Q4 FY26"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "No verifiable later evidence"
+   },
+   {
+    "promise": {
+     "id": "T4-2",
+     "citation": {
+      "source_id": "T4",
+      "page": 12,
+      "quote": "Yes, that stays in terms of guidance."
+     },
+     "topic": "opex growth",
+     "kind": "qualitative",
+     "metric": "other",
+     "target_low": null,
+     "target_high": null,
+     "unit": null,
+     "horizon": "next year",
+     "made_in": "Q4 FY26"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "No verifiable later evidence"
+   },
+   {
+    "promise": {
+     "id": "T4-3",
+     "citation": {
+      "source_id": "T4",
+      "page": 17,
+      "quote": "So we would certainly, of course, is coming from a lower base, we would certainly want to grow this by 15% to 20% into the next year."
+     },
+     "topic": "MFI book growth",
+     "kind": "quantitative",
+     "metric": "volume_growth",
+     "target_low": 15.0,
+     "target_high": 20.0,
+     "unit": "%",
+     "horizon": "next year",
+     "made_in": "Q4 FY26"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "No verifiable later evidence"
+   },
+   {
+    "promise": {
+     "id": "T2-1",
+     "citation": {
+      "source_id": "T2",
+      "page": 11,
+      "quote": "So, that is how we are looking at it. You would have noted that on FCNR deposits, we have announced a rate of 6.75%, which is quite competitive and we feel that is a very good opportunity which we want to capitalize."
+     },
+     "topic": "FCNR deposits",
+     "kind": "qualitative",
+     "metric": "other",
+     "target_low": null,
+     "target_high": null,
+     "unit": null,
+     "horizon": null,
+     "made_in": "Q1 FY27"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "No later evidence of the outcome yet"
+   },
+   {
+    "promise": {
+     "id": "T2-2",
+     "citation": {
+      "source_id": "T2",
+      "page": 9,
+      "quote": "And at least by this year, in fact, not just by the year ending, but hopefully for the year itself, we should be able to post 1% is our belief as far as our eyes can see."
+     },
+     "topic": "return on assets",
+     "kind": "quantitative",
+     "metric": "other",
+     "target_low": 1.0,
+     "target_high": 1.0,
+     "unit": "%",
+     "horizon": "FY27",
+     "made_in": "Q1 FY27"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "No later evidence of the outcome yet"
+   },
+   {
+    "promise": {
+     "id": "T2-3",
+     "citation": {
+      "source_id": "T2",
+      "page": 14,
+      "quote": "But through the course of the year, we feel that now since disbursements are picking up and we're hopeful of a quarter-on-quarter increase here, we feel that we could end up or target a book increase of 15% on a Y-o-Y basis."
+     },
+     "topic": "microfinance book growth",
+     "kind": "quantitative",
+     "metric": "other",
+     "target_low": 15.0,
+     "target_high": 15.0,
+     "unit": "%",
+     "horizon": "FY27",
+     "made_in": "Q1 FY27"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "No later evidence of the outcome yet"
+   },
+   {
+    "promise": {
+     "id": "T3-1",
+     "citation": {
+      "source_id": "T3",
+      "page": 11,
+      "quote": "So, that is how we are looking at it. You would have noted that on FCNR deposits, we have announced a rate of 6.75%, which is quite competitive and we feel that is a very good opportunity which we want to capitalize."
+     },
+     "topic": "FCNR deposits",
+     "kind": "qualitative",
+     "metric": "other",
+     "target_low": null,
+     "target_high": null,
+     "unit": null,
+     "horizon": null,
+     "made_in": "Q1 FY27"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "No later evidence of the outcome yet"
+   },
+   {
+    "promise": {
+     "id": "T3-2",
+     "citation": {
+      "source_id": "T3",
+      "page": 9,
+      "quote": "And at least by this year, in fact, not just by the year ending, but hopefully for the year itself, we should be able to post 1% is our belief as far as our eyes can see."
+     },
+     "topic": "return on assets",
+     "kind": "quantitative",
+     "metric": "other",
+     "target_low": 1.0,
+     "target_high": 1.0,
+     "unit": "%",
+     "horizon": "FY27",
+     "made_in": "Q1 FY27"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "No later evidence of the outcome yet"
+   },
+   {
+    "promise": {
+     "id": "T3-3",
+     "citation": {
+      "source_id": "T3",
+      "page": 14,
+      "quote": "But through the course of the year, we feel that now since disbursements are picking up and we're hopeful of a quarter-on-quarter increase here, we feel that we could end up or target a book increase of 15% on a Y-o-Y basis."
+     },
+     "topic": "microfinance book growth",
+     "kind": "quantitative",
+     "metric": "other",
+     "target_low": 15.0,
+     "target_high": 15.0,
+     "unit": "%",
+     "horizon": "FY27",
+     "made_in": "Q1 FY27"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "No later evidence of the outcome yet"
+   },
+   {
+    "promise": {
+     "id": "T1-1",
+     "citation": {
+      "source_id": "T1",
+      "page": 5,
+      "quote": "Just in terms of how do we see NIMs going forward, we see this recovering to approximately 5.8% by Q4 as some of these excess liquidity would have been definitely put to use by them and also the expected repo rate increase, which we also are factoring for the course of the year."
+     },
+     "topic": "margin",
+     "kind": "quantitative",
+     "metric": "other",
+     "target_low": 5.8,
+     "target_high": null,
+     "unit": "%",
+     "horizon": "Q4",
+     "made_in": "Q2 FY27"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "Too recent to judge"
+   },
+   {
+    "promise": {
+     "id": "T1-2",
+     "citation": {
+      "source_id": "T1",
+      "page": 16,
+      "quote": "We expect at least next year, as far as I can see to day to be like around 5.8% into '28 also."
+     },
+     "topic": "margin",
+     "kind": "quantitative",
+     "metric": "other",
+     "target_low": 5.8,
+     "target_high": null,
+     "unit": "%",
+     "horizon": "FY28",
+     "made_in": "Q2 FY27"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "Too recent to judge"
+   },
+   {
+    "promise": {
+     "id": "T1-3",
+     "citation": {
+      "source_id": "T1",
+      "page": 17,
+      "quote": "Okay. So we are very comfortable with our 1.5% to 1.6% credit cost guidance?"
+     },
+     "topic": "credit cost",
+     "kind": "quantitative",
+     "metric": "other",
+     "target_low": 1.5,
+     "target_high": 1.6,
+     "unit": "%",
+     "horizon": null,
+     "made_in": "Q2 FY27"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "Too recent to judge"
+   }
+  ],
+  "counts": {
+   "kept": 0,
+   "partly": 0,
+   "missed": 0,
+   "pending": 12,
+   "dropped": 0
+  },
+  "credibility_pct": null,
+  "note": null
+ },
+ "snapshot": {
+  "summary": [
+   {
+    "text": "The company operates as a universal bank in India, offering a wide range of services including retail and SME lending, deposits, NRI banking, wealth management, and credit cards.",
+    "citation": {
+     "source_id": "AR",
+     "page": 8,
+     "quote": "Retail Lending SME Lending Deposits & Accounts NRI Banking Wealth Management Credit Cards Transaction Banking & CMS Treasury & Forex Solutions Supply Chain Financing Corporate Lending FASTag Trade Finance Solutions Universal Bank"
+    }
+   },
+   {
+    "text": "The bank also provides diverse financial products and services such as transaction banking, treasury and forex solutions, supply chain financing, corporate lending, FASTag, and trade finance solutions.",
+    "citation": {
+     "source_id": "AR",
+     "page": 8,
+     "quote": "Retail Lending SME Lending Deposits & Accounts NRI Banking Wealth Management Credit Cards Transaction Banking & CMS Treasury & Forex Solutions Supply Chain Financing Corporate Lending FASTag Trade Finance Solutions Universal Bank"
+    }
+   }
+  ]
+ },
+ "trajectory": {
+  "years": [
+   "Mar 2022",
+   "Mar 2023",
+   "Mar 2024",
+   "Mar 2025",
+   "Mar 2026"
+  ],
+  "revenue": [
+   17173.0,
+   22728.0,
+   30325.0,
+   36502.0,
+   40549.0
+  ],
+  "operating_profit": [
+   -2615.0,
+   -701.0,
+   -1444.0,
+   -4277.0,
+   -5206.0
+  ],
+  "margin_pct": [
+   -15.227391836021662,
+   -3.0843013023583246,
+   -4.761747732893652,
+   -11.717166182674923,
+   -12.83878763964586
+  ],
+  "pat": [
+   132.0,
+   2485.0,
+   2942.0,
+   1490.0,
+   1611.0
+  ],
+  "revenue_cagr_pct": 23.960550030871453,
+  "pat_cagr_pct": 86.90908107002038,
+  "margin_change_bps": 239,
+  "read": "growing",
+  "lender": true
+ },
+ "health": {
+  "as_of": "Mar 2026",
+  "debt_to_equity": null,
+  "cfo_to_pat_3y": null,
+  "fcf_3y_cr": null,
+  "working_capital_days": null,
+  "wc_days_change_3y": null,
+  "roce_pct": null,
+  "flags": [
+   {
+    "level": "watch",
+    "text": "Lender: leverage and working capital are judged on capital adequacy and asset quality, which this view does not cover"
+   }
+  ]
+ },
+ "bull": [
+  {
+   "text": "Business momentum continues to be quite strong, with loans registering a strong growth of 30.1% on a Y-o-Y basis.",
+   "citation": {
+    "source_id": "T1",
+    "page": 3,
+    "quote": "Moving on to loans. That registered a strong growth of 30.1% on a Y-o-Y basis and 13.6% on a Q-on-Q basis"
+   }
+  },
+  {
+   "text": "Total deposits grew by 25.9% on a year-on-year basis, reaching INR3.48 lakh crores.",
+   "citation": {
+    "source_id": "T1",
+    "page": 4,
+    "quote": "Total deposits, which is customer deposits plus certificate of deposits that reached at INR3.48 lakh crores. The growth was about 25.9% on a Y-o-Y basis and 11.8% on a Q-on-Q basis."
+   }
+  },
+  {
+   "text": "Operating profit saw a healthy increase of 38.5% on a year-on-year basis.",
+   "citation": {
+    "source_id": "T1",
+    "page": 6,
+    "quote": "If I talk of operating profit of the quarter, that saw a healthy increase of 38.5% on a Y-o-Y basis and 6.6% on a sequential basis."
+   }
+  }
+ ],
+ "bear": [
+  {
+   "text": "The net interest margin moderated to 5.58% during the quarter compared to 5.90% in the previous quarter.",
+   "citation": {
+    "source_id": "T1",
+    "page": 5,
+    "quote": "The net interest margin for the quarter was 5.58% as compared to 5.90% in the previous quar ter, excluding the income tax refund, which we have reported."
+   }
+  },
+  {
+   "text": "Treasury gains were modest at about INR11 crores during the quarter compared to INR181 crores reported for Q1.",
+   "citation": {
+    "source_id": "T1",
+    "page": 5,
+    "quote": "During the quarter, the treasury gains were modest at about INR11 crores as compared to INR181 crores reported for Q1, which was largely due to the hardening of the G -SEC yields during the quarter."
+   }
+  }
+ ],
+ "notes": [],
+ "cost": {
+  "calls": 9,
+  "cached": 9,
+  "input_tokens": 0,
+  "output_tokens": 0,
+  "usd_list_price": 0.0
+ },
+ "build_seconds": 0.4,
+ "guard": {
+  "promises_proposed": 32,
+  "promises_kept": 12,
+  "points_proposed": 7,
+  "points_kept": 7,
+  "verdicts_downgraded": {
+   "other_period": 0,
+   "restated": 0,
+   "below_target": 0,
+   "other_measure": 0,
+   "meets_target": 0
+  }
+ },
+ "latest_results": {
+  "symbol": "IDFCFIRSTB",
+  "period_end": "2026-09-30",
+  "period_label": "Q2 FY27",
+  "basis": "consolidated",
+  "format": "bank",
+  "audited": false,
+  "compared_qoq": "2026-06-30",
+  "compared_yoy": "2025-09-30",
+  "metrics": [
+   {
+    "key": "interest_earned",
+    "label": "Interest earned",
+    "value": 11923.29,
+    "qoq_pct": 7.9,
+    "yoy_pct": 20.0,
+    "computed": false
+   },
+   {
+    "key": "nii",
+    "label": "Net interest income",
+    "value": 6188.78,
+    "qoq_pct": 3.6,
+    "yoy_pct": 21.0,
+    "computed": true
+   },
+   {
+    "key": "ppop",
+    "label": "Operating profit (pre-provision)",
+    "value": 2551.69,
+    "qoq_pct": -2.8,
+    "yoy_pct": 36.0,
+    "computed": false
+   },
+   {
+    "key": "provisions",
+    "label": "Provisions",
+    "value": 1139.2,
+    "qoq_pct": -0.4,
+    "yoy_pct": -21.5,
+    "computed": false
+   },
+   {
+    "key": "pbt",
+    "label": "PBT",
+    "value": 1412.49,
+    "qoq_pct": -4.7,
+    "yoy_pct": 233.4,
+    "computed": false
+   },
+   {
+    "key": "pat",
+    "label": "PAT",
+    "value": 1049.17,
+    "qoq_pct": -8.6,
+    "yoy_pct": 201.7,
+    "computed": false
+   },
+   {
+    "key": "gnpa",
+    "label": "Gross NPA",
+    "value": 0.0,
+    "qoq_pct": null,
+    "yoy_pct": null,
+    "computed": false
+   },
+   {
+    "key": "nnpa",
+    "label": "Net NPA",
+    "value": 0.0,
+    "qoq_pct": null,
+    "yoy_pct": null,
+    "computed": false
+   }
+  ],
+  "margins": [],
+  "notes": [
+   "Banks are shown on net interest income and pre-provision profit; EBITDA does not apply."
+  ],
+  "sources": [
+   "https://nsearchives.nseindia.com/corporate/xbrl/INTEGRATED_FILING_BANKING_1745416_24102026054832_WEB.xml",
+   "https://nsearchives.nseindia.com/corporate/xbrl/INTEGRATED_FILING_BANKING_1701564_25072026043416_WEB.xml",
+   "https://nsearchives.nseindia.com/corporate/xbrl/INTEGRATED_FILING_BANKING_1553802_18102025061950_WEB.xml"
+  ]
+ }
+}

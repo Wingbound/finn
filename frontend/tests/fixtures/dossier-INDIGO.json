@@ -2,7 +2,7 @@
  "symbol": "INDIGO",
  "name": "Interglobe Aviation Ltd",
  "basis": "consolidated",
- "built_at": "2026-11-09T21:17:11.591191+05:30",
+ "built_at": "2026-11-10T05:35:43.366322+05:30",
  "sources": [
   {
    "id": "T1",
@@ -464,12 +464,12 @@
  ],
  "cost": {
   "calls": 9,
-  "cached": 8,
-  "input_tokens": 8243,
-  "output_tokens": 584,
-  "usd_list_price": 0.003933
+  "cached": 9,
+  "input_tokens": 0,
+  "output_tokens": 0,
+  "usd_list_price": 0.0
  },
- "build_seconds": 11.8,
+ "build_seconds": 0.4,
  "guard": {
   "promises_proposed": 18,
   "promises_kept": 12,
@@ -478,7 +478,9 @@
   "verdicts_downgraded": {
    "other_period": 1,
    "restated": 0,
-   "below_target": 0
+   "below_target": 0,
+   "other_measure": 0,
+   "meets_target": 0
   }
  },
  "latest_results": null

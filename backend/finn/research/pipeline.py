@@ -145,7 +145,9 @@ def build_dossier(
             )
         except Exception as e:  # noqa: BLE001
             failed("Ledger", e)
-    if ledger is not None and not ledger.rows and len(transcripts) >= 2:
+    if ledger is not None and not transcripts:
+        ledger.note = "No earnings-call transcripts were found, so there are no promises to track"
+    elif ledger is not None and not ledger.rows and len(transcripts) >= 2:
         n = len(transcripts)
         ledger.note = (
             f"Guidance could not be read from {unread} of {n} calls"

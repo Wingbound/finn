@@ -1,0 +1,445 @@
+{
+ "symbol": "VOLTAS",
+ "name": "Voltas Ltd",
+ "basis": "consolidated",
+ "built_at": "2026-11-10T05:34:37.600933+05:30",
+ "sources": [
+  {
+   "id": "T1",
+   "kind": "transcript",
+   "title": "Q1 FY27 earnings call (Aug 2026)",
+   "quarter": "Q1 FY27",
+   "url": "https://www.bseindia.com/stockinfo/AnnPdfOpen.aspx?Pname=30da11c8-ae05-4de7-80ab-7ed74d34602c.pdf"
+  },
+  {
+   "id": "T2",
+   "kind": "transcript",
+   "title": "Q4 FY26 earnings call (May 2026)",
+   "quarter": "Q4 FY26",
+   "url": "https://www.bseindia.com/stockinfo/AnnPdfOpen.aspx?Pname=19d44280-c25d-4c0e-ad72-caa93025dbaa.pdf"
+  },
+  {
+   "id": "T3",
+   "kind": "transcript",
+   "title": "Q3 FY26 earnings call (Feb 2026)",
+   "quarter": "Q3 FY26",
+   "url": "https://www.bseindia.com/stockinfo/AnnPdfOpen.aspx?Pname=3767d8f8-89fd-4098-91fc-e1a8a56ec383.pdf"
+  },
+  {
+   "id": "T4",
+   "kind": "transcript",
+   "title": "Q2 FY26 earnings call (Nov 2025)",
+   "quarter": "Q2 FY26",
+   "url": "https://www.bseindia.com/stockinfo/AnnPdfOpen.aspx?Pname=d45d9019-55ea-4275-9461-9e7031adfa7a.pdf"
+  },
+  {
+   "id": "AR",
+   "kind": "annual_report",
+   "title": "Annual Report 2026",
+   "quarter": null,
+   "url": "https://www.bseindia.com/xml-data/corpfiling/AttachHis/40b16328-fb45-49a5-b8ae-e7b1849cd2ba.pdf"
+  }
+ ],
+ "ledger": {
+  "rows": [
+   {
+    "promise": {
+     "id": "T3-1",
+     "citation": {
+      "source_id": "T3",
+      "page": 17,
+      "quote": "Our sense is that this summer season, we would have maximized the capacity utilization to almost between 85% to 90% or so, Mr. Jain."
+     },
+     "topic": "capacity utilization",
+     "kind": "quantitative",
+     "metric": "volume_growth",
+     "target_low": 85.0,
+     "target_high": 90.0,
+     "unit": "%",
+     "horizon": "summer season",
+     "made_in": "Q3 FY26"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "No later evidence of the outcome yet"
+   },
+   {
+    "promise": {
+     "id": "T2-1",
+     "citation": {
+      "source_id": "T2",
+      "page": 5,
+      "quote": "Together, these initiatives are expected to deliver improved margin realization and reinforce Voltas' leadership across Indian cooling space."
+     },
+     "topic": "margin realization",
+     "kind": "qualitative",
+     "metric": null,
+     "target_low": null,
+     "target_high": null,
+     "unit": null,
+     "horizon": null,
+     "made_in": "Q4 FY26"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "No later evidence of the outcome yet"
+   },
+   {
+    "promise": {
+     "id": "T2-2",
+     "citation": {
+      "source_id": "T2",
+      "page": 6,
+      "quote": "Supported by design innovations, calibrated pricing actions, improved sales mix and ongoing cost optimization initiatives, these efforts are expected to support sustainable margin expansion while building a strong foundation for long-term growth."
+     },
+     "topic": "margin expansion",
+     "kind": "qualitative",
+     "metric": null,
+     "target_low": null,
+     "target_high": null,
+     "unit": null,
+     "horizon": null,
+     "made_in": "Q4 FY26"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "No later evidence of the outcome yet"
+   },
+   {
+    "promise": {
+     "id": "T2-3",
+     "citation": {
+      "source_id": "T2",
+      "page": 6,
+      "quote": "Going forward, Voltbek remains focused on expanding its energy -efficient and innovation-led product portfolio while steadily scaling its distribution network and strengthening its position as an integral part of Voltas' broader home solutions ecosystem."
+     },
+     "topic": "portfolio expansion",
+     "kind": "qualitative",
+     "metric": null,
+     "target_low": null,
+     "target_high": null,
+     "unit": null,
+     "horizon": null,
+     "made_in": "Q4 FY26"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "No later evidence of the outcome yet"
+   },
+   {
+    "promise": {
+     "id": "T2-4",
+     "citation": {
+      "source_id": "T2",
+      "page": 8,
+      "quote": "Across the cooling business, Voltas' refreshed RAC portfolio differentiated product positioning, intelligent cooling technologies and expanded distribution reach are expected to further strengthen market leadership while driving a more favourable product mix and improved profitability."
+     },
+     "topic": "market leadership",
+     "kind": "qualitative",
+     "metric": null,
+     "target_low": null,
+     "target_high": null,
+     "unit": null,
+     "horizon": null,
+     "made_in": "Q4 FY26"
+    },
+    "status": "kept",
+    "method": "judged",
+    "actual": null,
+    "evidence": {
+     "source_id": "T1",
+     "page": 3,
+     "quote": "Voltas delivered a strong performance in Q1 FY27, significantly outperforming competition and further strengthening its leadership in the cooling segment."
+    },
+    "rationale": "Management achieved its goal of strengthening market leadership and widening the lead over competitors in Q1 FY27."
+   },
+   {
+    "promise": {
+     "id": "T2-5",
+     "citation": {
+      "source_id": "T2",
+      "page": 11,
+      "quote": "Should it get better from the number that we sort of highlighted in FY26? It should get better."
+     },
+     "topic": "margins",
+     "kind": "qualitative",
+     "metric": null,
+     "target_low": null,
+     "target_high": null,
+     "unit": null,
+     "horizon": "FY27",
+     "made_in": "Q4 FY26"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "No later evidence of the outcome yet"
+   },
+   {
+    "promise": {
+     "id": "T1-1",
+     "citation": {
+      "source_id": "T1",
+      "page": 10,
+      "quote": "So 18 months from now is when we are expecting full -fledged commercial production of the compressors."
+     },
+     "topic": "production timeline",
+     "kind": "quantitative",
+     "metric": "other",
+     "target_low": 18.0,
+     "target_high": null,
+     "unit": "x",
+     "horizon": "18 months",
+     "made_in": "Q1 FY27"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "Too recent to judge"
+   }
+  ],
+  "counts": {
+   "kept": 1,
+   "partly": 0,
+   "missed": 0,
+   "pending": 6,
+   "dropped": 0
+  },
+  "credibility_pct": null,
+  "note": null
+ },
+ "snapshot": {
+  "summary": [
+   {
+    "text": "Voltas operates a Unitary Cooling Products segment offering room air conditioners and commercial cooling solutions.",
+    "citation": {
+     "source_id": "AR",
+     "page": 7,
+     "quote": "The Unitary Cooling Products business continued to remain at the heart of Voltas’ identity and market leadership."
+    }
+   },
+   {
+    "text": "The company engages in the Electro-Mechanical Projects and Services segment providing domestic and international project execution.",
+    "citation": {
+     "source_id": "AR",
+     "page": 7,
+     "quote": "The Electro-Mechanical Projects and Services business continued to provide resilience and diversification to the Voltas portfolio."
+    }
+   },
+   {
+    "text": "Voltas manages an Engineering Products and Services segment which includes mining and construction equipment alongside textile machinery.",
+    "citation": {
+     "source_id": "AR",
+     "page": 7,
+     "quote": "The Engineering Products and Services segment continued to provide stable and relatively non-seasonal revenue streams."
+    }
+   }
+  ]
+ },
+ "trajectory": {
+  "years": [
+   "Mar 2022",
+   "Mar 2023",
+   "Mar 2024",
+   "Mar 2025",
+   "Mar 2026"
+  ],
+  "revenue": [
+   7934.0,
+   9499.0,
+   12481.0,
+   15413.0,
+   14244.0
+  ],
+  "operating_profit": [
+   572.0,
+   454.0,
+   336.0,
+   990.0,
+   516.0
+  ],
+  "margin_pct": [
+   7.2094781951096545,
+   4.779450468470365,
+   2.69209197980931,
+   6.423149289560761,
+   3.6225779275484413
+  ],
+  "pat": [
+   506.0,
+   136.0,
+   248.0,
+   834.0,
+   370.0
+  ],
+  "revenue_cagr_pct": 15.753716080587932,
+  "pat_cagr_pct": -7.527456810125043,
+  "margin_change_bps": -359,
+  "read": "compressing",
+  "lender": false
+ },
+ "health": {
+  "as_of": "Mar 2026",
+  "debt_to_equity": 0.15558343789209536,
+  "cfo_to_pat_3y": 0.418732782369146,
+  "fcf_3y_cr": -1.0,
+  "working_capital_days": 44.0,
+  "wc_days_change_3y": 13.0,
+  "roce_pct": 9.0,
+  "flags": [
+   {
+    "level": "concern",
+    "text": "Only 42% of profit turned into operating cash over 3 years"
+   },
+   {
+    "level": "watch",
+    "text": "Free cash flow was negative over 3 years (−₹1 cr)"
+   }
+  ]
+ },
+ "bull": [
+  {
+   "text": "Voltas demonstrated strong market leadership by achieving a secondary market share of 17.3% in room air conditioning for the first quarter of FY27.",
+   "citation": {
+    "source_id": "T1",
+    "page": 3,
+    "quote": "The company achieved a 17.3% secondary market share in room air conditioning for FY27 for the first quarter and widened its lead over the nearest competitor to 4 percentage points, reinforcing its position as the undisputed market leader."
+   }
+  },
+  {
+   "text": "The company achieved significant sales momentum by selling 1 million room air conditioners in just 81 days during the quarter.",
+   "citation": {
+    "source_id": "T1",
+    "page": 3,
+    "quote": "The company achieved a significant milestone by selling 1 million RACs in just 81 days, demonstrating the strength of its brand, product portfolio, distribution reach and execution capabilities."
+   }
+  },
+  {
+   "text": "Voltbek emerged as a key growth driver, recording its highest ever quarterly sales in both value and volume.",
+   "citation": {
+    "source_id": "T1",
+    "page": 4,
+    "quote": "Voltbek also emerged as an important growth lever substantially outgrowing the industry and recording its highest ever quarterly sales in both value and volume."
+   }
+  }
+ ],
+ "bear": [
+  {
+   "text": "The company recorded negative free cash flow totaling minus one crore rupees over the three-year period.",
+   "citation": {
+    "source_id": "FACTS",
+    "page": 0,
+    "quote": "Free cash flow (3y): −₹1 cr"
+   }
+  },
+  {
+   "text": "Only 42% of profit turned into operating cash over the three-year period.",
+   "citation": {
+    "source_id": "FACTS",
+    "page": 0,
+    "quote": "Only 42% of profit turned into operating cash over 3 years"
+   }
+  }
+ ],
+ "notes": [],
+ "cost": {
+  "calls": 8,
+  "cached": 8,
+  "input_tokens": 0,
+  "output_tokens": 0,
+  "usd_list_price": 0.0
+ },
+ "build_seconds": 0.3,
+ "guard": {
+  "promises_proposed": 13,
+  "promises_kept": 7,
+  "points_proposed": 9,
+  "points_kept": 8,
+  "verdicts_downgraded": {
+   "other_period": 0,
+   "restated": 0,
+   "below_target": 0,
+   "other_measure": 0,
+   "meets_target": 0
+  }
+ },
+ "latest_results": {
+  "symbol": "VOLTAS",
+  "period_end": "2026-09-30",
+  "period_label": "Q2 FY27",
+  "basis": "consolidated",
+  "format": "indas",
+  "audited": false,
+  "compared_qoq": "2026-06-30",
+  "compared_yoy": "2025-09-30",
+  "metrics": [
+   {
+    "key": "revenue",
+    "label": "Revenue",
+    "value": 2706.57,
+    "qoq_pct": -42.1,
+    "yoy_pct": 15.3,
+    "computed": false
+   },
+   {
+    "key": "ebitda",
+    "label": "EBITDA",
+    "value": 127.86,
+    "qoq_pct": -51.8,
+    "yoy_pct": 81.6,
+    "computed": true
+   },
+   {
+    "key": "pbt",
+    "label": "PBT",
+    "value": 124.03,
+    "qoq_pct": -61.6,
+    "yoy_pct": 36.8,
+    "computed": false
+   },
+   {
+    "key": "pat",
+    "label": "PAT",
+    "value": 47.71,
+    "qoq_pct": -77.6,
+    "yoy_pct": 51.5,
+    "computed": false
+   }
+  ],
+  "margins": [
+   {
+    "key": "ebitda_margin",
+    "label": "EBITDA margin",
+    "value_pct": 4.7,
+    "qoq_bps": -96,
+    "yoy_bps": 172
+   },
+   {
+    "key": "pat_margin",
+    "label": "PAT margin",
+    "value_pct": 1.8,
+    "qoq_bps": -279,
+    "yoy_bps": 42
+   }
+  ],
+  "notes": [
+   "EBITDA is computed: revenue from operations minus operating expenses (excludes other income).",
+   "PAT includes a ₹41.10 cr share of loss of associates and joint ventures."
+  ],
+  "sources": [
+   "https://nsearchives.nseindia.com/corporate/xbrl/INTEGRATED_FILING_INDAS_1755186_06112026085901_WEB.xml",
+   "https://nsearchives.nseindia.com/corporate/xbrl/INTEGRATED_FILING_INDAS_1715051_14082026080841_WEB.xml",
+   "https://nsearchives.nseindia.com/corporate/xbrl/INTEGRATED_FILING_INDAS_1574474_13112025095958_WEB.xml"
+  ]
+ }
+}

@@ -1,0 +1,727 @@
+{
+ "symbol": "MAXHEALTH",
+ "name": "Max Healthcare Institute Ltd",
+ "basis": "consolidated",
+ "built_at": "2026-11-10T05:35:16.754026+05:30",
+ "sources": [
+  {
+   "id": "T1",
+   "kind": "transcript",
+   "title": "Q2 FY27 earnings call (Nov 2026)",
+   "quarter": "Q2 FY27",
+   "url": "https://www.bseindia.com/stockinfo/AnnPdfOpen.aspx?Pname=c3d91cec-5dca-4232-af07-1a00daf644f2.pdf"
+  },
+  {
+   "id": "T2",
+   "kind": "transcript",
+   "title": "Q1 FY27 earnings call (Aug 2026)",
+   "quarter": "Q1 FY27",
+   "url": "https://www.bseindia.com/stockinfo/AnnPdfOpen.aspx?Pname=922086cc-1e96-40b8-966b-547204ed8364.pdf"
+  },
+  {
+   "id": "T3",
+   "kind": "transcript",
+   "title": "Q4 FY26 earnings call (May 2026)",
+   "quarter": "Q4 FY26",
+   "url": "https://www.bseindia.com/stockinfo/AnnPdfOpen.aspx?Pname=32d9c73a-07ea-42f8-bffa-14ed214222b7.pdf"
+  },
+  {
+   "id": "T4",
+   "kind": "transcript",
+   "title": "Q3 FY26 earnings call (Feb 2026)",
+   "quarter": "Q3 FY26",
+   "url": "https://www.bseindia.com/stockinfo/AnnPdfOpen.aspx?Pname=b765c0b2-67cc-4aea-91e7-7bffcbeff79b.pdf"
+  },
+  {
+   "id": "AR",
+   "kind": "annual_report",
+   "title": "Annual Report 2026",
+   "quarter": null,
+   "url": "https://www.bseindia.com/xml-data/corpfiling/AttachHis/ff687278-4b63-403b-ab82-e9ae0259eead.pdf"
+  }
+ ],
+ "ledger": {
+  "rows": [
+   {
+    "promise": {
+     "id": "T4-1",
+     "citation": {
+      "source_id": "T4",
+      "page": 5,
+      "quote": "We expect  this to increase to around 500 beds by the end of this financial year."
+     },
+     "topic": "bed capacity",
+     "kind": "quantitative",
+     "metric": "other",
+     "target_low": 500.0,
+     "target_high": 500.0,
+     "unit": null,
+     "horizon": "end of this financial year",
+     "made_in": "Q3 FY26"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "No later evidence of the outcome yet"
+   },
+   {
+    "promise": {
+     "id": "T4-2",
+     "citation": {
+      "source_id": "T4",
+      "page": 5,
+      "quote": "We now expect to commission the first phase by end of H1 FY '27."
+     },
+     "topic": "bed commissioning",
+     "kind": "qualitative",
+     "metric": null,
+     "target_low": null,
+     "target_high": null,
+     "unit": null,
+     "horizon": "H1 FY27",
+     "made_in": "Q3 FY26"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "No verifiable later evidence"
+   },
+   {
+    "promise": {
+     "id": "T4-3",
+     "citation": {
+      "source_id": "T4",
+      "page": 5,
+      "quote": "We expect to complete this project within 24 months , as communicated earlier."
+     },
+     "topic": "project completion",
+     "kind": "quantitative",
+     "metric": "other",
+     "target_low": 24.0,
+     "target_high": 24.0,
+     "unit": null,
+     "horizon": "24 months",
+     "made_in": "Q3 FY26"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "No later evidence of the outcome yet"
+   },
+   {
+    "promise": {
+     "id": "T4-4",
+     "citation": {
+      "source_id": "T4",
+      "page": 23,
+      "quote": "And by FY '28, we should be hitting 8,000."
+     },
+     "topic": "bed capacity",
+     "kind": "quantitative",
+     "metric": "other",
+     "target_low": 8000.0,
+     "target_high": 8000.0,
+     "unit": null,
+     "horizon": "FY28",
+     "made_in": "Q3 FY26"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "No verifiable later evidence"
+   },
+   {
+    "promise": {
+     "id": "T3-1",
+     "citation": {
+      "source_id": "T3",
+      "page": 4,
+      "quote": "The current capacity of the hospital stands at 426 beds, and we expect this to increase to 570 beds over the next 2 quarters."
+     },
+     "topic": "capacity expansion",
+     "kind": "quantitative",
+     "metric": "volume_growth",
+     "target_low": 570.0,
+     "target_high": null,
+     "unit": null,
+     "horizon": "next 2 quarters",
+     "made_in": "Q4 FY26"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "No later evidence of the outcome yet"
+   },
+   {
+    "promise": {
+     "id": "T3-2",
+     "citation": {
+      "source_id": "T3",
+      "page": 4,
+      "quote": "We are targeting to commission this facility by the end of this year."
+     },
+     "topic": "facility commissioning",
+     "kind": "qualitative",
+     "metric": null,
+     "target_low": null,
+     "target_high": null,
+     "unit": null,
+     "horizon": "end of this year",
+     "made_in": "Q4 FY26"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "No later evidence of the outcome yet"
+   },
+   {
+    "promise": {
+     "id": "T3-3",
+     "citation": {
+      "source_id": "T3",
+      "page": 5,
+      "quote": "Building plan submission is underway and the project is expected to take 24 months to complete."
+     },
+     "topic": "facility commissioning",
+     "kind": "quantitative",
+     "metric": null,
+     "target_low": 24.0,
+     "target_high": null,
+     "unit": null,
+     "horizon": "24 months",
+     "made_in": "Q4 FY26"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "No later evidence of the outcome yet"
+   },
+   {
+    "promise": {
+     "id": "T3-4",
+     "citation": {
+      "source_id": "T3",
+      "page": 5,
+      "quote": "P roject is expected to take 24 months post receipt of approvals."
+     },
+     "topic": "facility commissioning",
+     "kind": "quantitative",
+     "metric": null,
+     "target_low": 24.0,
+     "target_high": null,
+     "unit": null,
+     "horizon": "24 months post approvals",
+     "made_in": "Q4 FY26"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "No later evidence of the outcome yet"
+   },
+   {
+    "promise": {
+     "id": "T3-5",
+     "citation": {
+      "source_id": "T3",
+      "page": 5,
+      "quote": "D-wall construction has started, and we expect commissioning by FY29."
+     },
+     "topic": "facility commissioning",
+     "kind": "qualitative",
+     "metric": null,
+     "target_low": null,
+     "target_high": null,
+     "unit": null,
+     "horizon": "FY29",
+     "made_in": "Q4 FY26"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "No verifiable later evidence"
+   },
+   {
+    "promise": {
+     "id": "T2-1",
+     "citation": {
+      "source_id": "T2",
+      "page": 2,
+      "quote": "The remaining 50% beds are expected to be handed over to operations during the course of the current quarter."
+     },
+     "topic": "capacity expansion",
+     "kind": "qualitative",
+     "metric": null,
+     "target_low": null,
+     "target_high": null,
+     "unit": null,
+     "horizon": "current quarter",
+     "made_in": "Q1 FY27"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "The later call restated the target; delivery is not shown yet"
+   },
+   {
+    "promise": {
+     "id": "T2-2",
+     "citation": {
+      "source_id": "T2",
+      "page": 2,
+      "quote": "At Nanavati Max, remaining 50 beds will also be operationalized in this quarter and work on the Phase 2 expansion has commenced."
+     },
+     "topic": "capacity expansion",
+     "kind": "quantitative",
+     "metric": "volume_growth",
+     "target_low": 50.0,
+     "target_high": null,
+     "unit": null,
+     "horizon": "this quarter",
+     "made_in": "Q1 FY27"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "The later call restated the target; delivery is not shown yet"
+   },
+   {
+    "promise": {
+     "id": "T2-3",
+     "citation": {
+      "source_id": "T2",
+      "page": 3,
+      "quote": "This will add 202 beds to the hospital's existing capacity of 387 beds."
+     },
+     "topic": "capacity expansion",
+     "kind": "quantitative",
+     "metric": "volume_growth",
+     "target_low": 202.0,
+     "target_high": null,
+     "unit": null,
+     "horizon": null,
+     "made_in": "Q1 FY27"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "No later evidence of the outcome yet"
+   },
+   {
+    "promise": {
+     "id": "T2-4",
+     "citation": {
+      "source_id": "T2",
+      "page": 3,
+      "quote": "The project is expected to be commissioned before FY30."
+     },
+     "topic": "capacity expansion",
+     "kind": "qualitative",
+     "metric": null,
+     "target_low": null,
+     "target_high": null,
+     "unit": null,
+     "horizon": "FY30",
+     "made_in": "Q1 FY27"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "No later evidence of the outcome yet"
+   },
+   {
+    "promise": {
+     "id": "T2-5",
+     "citation": {
+      "source_id": "T2",
+      "page": 5,
+      "quote": "Additional 100 beds in the existing 468-bed facility will be commissioned over the next two quarters."
+     },
+     "topic": "capacity expansion",
+     "kind": "quantitative",
+     "metric": "volume_growth",
+     "target_low": 100.0,
+     "target_high": null,
+     "unit": null,
+     "horizon": "next two quarters",
+     "made_in": "Q1 FY27"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "The later call restated the target; delivery is not shown yet"
+   },
+   {
+    "promise": {
+     "id": "T2-6",
+     "citation": {
+      "source_id": "T2",
+      "page": 5,
+      "quote": "We expect to start phased commissioning of this facility by end of this year."
+     },
+     "topic": "capacity expansion",
+     "kind": "qualitative",
+     "metric": null,
+     "target_low": null,
+     "target_high": null,
+     "unit": null,
+     "horizon": "end of this year",
+     "made_in": "Q1 FY27"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "The later call restated the target; delivery is not shown yet"
+   },
+   {
+    "promise": {
+     "id": "T1-1",
+     "citation": {
+      "source_id": "T1",
+      "page": 3,
+      "quote": "We expect to commission the remaining 140 beds after Diwali puja."
+     },
+     "topic": "capacity expansion",
+     "kind": "quantitative",
+     "metric": "other",
+     "target_low": 140.0,
+     "target_high": 140.0,
+     "unit": null,
+     "horizon": "post Diwali puja",
+     "made_in": "Q2 FY27"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "Too recent to judge"
+   },
+   {
+    "promise": {
+     "id": "T1-2",
+     "citation": {
+      "source_id": "T1",
+      "page": 5,
+      "quote": "We expect to start phase commissioning of this facility by the end of this financial year."
+     },
+     "topic": "capacity expansion",
+     "kind": "qualitative",
+     "metric": null,
+     "target_low": null,
+     "target_high": null,
+     "unit": null,
+     "horizon": "end of FY27",
+     "made_in": "Q2 FY27"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "Too recent to judge"
+   },
+   {
+    "promise": {
+     "id": "T1-3",
+     "citation": {
+      "source_id": "T1",
+      "page": 5,
+      "quote": "We expect commissioning by end of FY29."
+     },
+     "topic": "capacity expansion",
+     "kind": "qualitative",
+     "metric": null,
+     "target_low": null,
+     "target_high": null,
+     "unit": null,
+     "horizon": "end of FY29",
+     "made_in": "Q2 FY27"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "Too recent to judge"
+   },
+   {
+    "promise": {
+     "id": "T1-4",
+     "citation": {
+      "source_id": "T1",
+      "page": 5,
+      "quote": "The new tower will be commissioned by FY30."
+     },
+     "topic": "capacity expansion",
+     "kind": "qualitative",
+     "metric": null,
+     "target_low": null,
+     "target_high": null,
+     "unit": null,
+     "horizon": "FY30",
+     "made_in": "Q2 FY27"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "Too recent to judge"
+   },
+   {
+    "promise": {
+     "id": "T1-5",
+     "citation": {
+      "source_id": "T1",
+      "page": 6,
+      "quote": "Project is expected to be commissioned by FY30."
+     },
+     "topic": "capacity expansion",
+     "kind": "qualitative",
+     "metric": null,
+     "target_low": null,
+     "target_high": null,
+     "unit": null,
+     "horizon": "FY30",
+     "made_in": "Q2 FY27"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "Too recent to judge"
+   }
+  ],
+  "counts": {
+   "kept": 0,
+   "partly": 0,
+   "missed": 0,
+   "pending": 20,
+   "dropped": 0
+  },
+  "credibility_pct": null,
+  "note": null
+ },
+ "snapshot": {
+  "summary": [
+   {
+    "text": "Max Healthcare Institute Limited operates a network of hospitals providing quality healthcare services, with strong demand reflected in steady occupancy across its facilities.",
+    "citation": {
+     "source_id": "T1",
+     "page": 2,
+     "quote": "Demand for quality healthcare remains strong across the hospital Network, with occupancy holding steady at 77%"
+    }
+   },
+   {
+    "text": "The company engages in brownfield expansions to add bed capacity at existing hospitals, such as Max Noida, Max Vaishali, and BLK-Max.",
+    "citation": {
+     "source_id": "T1",
+     "page": 3,
+     "quote": "In this regard, the Board has approved an investment of INR 415 crore towards addition of 209 brownfield beds at Max Noida, Max Vaishali and BLK-Max, along with a multi-level car park (MLCP) tower at BLK at the cost of approximately INR 85 crore."
+    }
+   },
+   {
+    "text": "Max Healthcare provides specialized medical services, including oncology, with new facilities like the oncology block at Max Dwarka enabling further service additions.",
+    "citation": {
+     "source_id": "T1",
+     "page": 3,
+     "quote": "Services have also commenced at the new oncology block at Max Dwarka, wh ich will enable addition of around 20 beds to the hospital in Q3 FY27."
+    }
+   }
+  ]
+ },
+ "trajectory": {
+  "years": [
+   "Mar 2022",
+   "Mar 2023",
+   "Mar 2024",
+   "Mar 2025",
+   "Mar 2026"
+  ],
+  "revenue": [
+   3937.0,
+   4563.0,
+   5406.0,
+   7028.0,
+   8373.0
+  ],
+  "operating_profit": [
+   951.0,
+   1241.0,
+   1493.0,
+   1849.0,
+   2243.0
+  ],
+  "margin_pct": [
+   24.15544831089662,
+   27.19701950471181,
+   27.61746207917129,
+   26.309049516220828,
+   26.788486802818586
+  ],
+  "pat": [
+   605.0,
+   1104.0,
+   1058.0,
+   1076.0,
+   1442.0
+  ],
+  "revenue_cagr_pct": 20.761616862192376,
+  "pat_cagr_pct": 24.25173776828682,
+  "margin_change_bps": 263,
+  "read": "growing",
+  "lender": false
+ },
+ "health": {
+  "as_of": "Mar 2026",
+  "debt_to_equity": 0.32362519772959897,
+  "cfo_to_pat_3y": 1.1725391498881432,
+  "fcf_3y_cr": 1007.0,
+  "working_capital_days": -41.0,
+  "wc_days_change_3y": 5.0,
+  "roce_pct": 15.0,
+  "flags": [
+   {
+    "level": "good",
+    "text": "Profits are backed by cash (CFO/PAT 1.17)"
+   }
+  ]
+ },
+ "bull": [
+  {
+   "text": "The company reported strong revenue compound annual growth rate of 20.8% from March 2022 to March 2026.",
+   "citation": {
+    "source_id": "FACTS",
+    "page": 0,
+    "quote": "Revenue CAGR (Mar 2022–Mar 2026): 20.8%"
+   }
+  },
+  {
+   "text": "Free cash flow for the 3-year period stood at 1007 crore rupees.",
+   "citation": {
+    "source_id": "FACTS",
+    "page": 0,
+    "quote": "Free cash flow (3y): ₹1,007 cr"
+   }
+  }
+ ],
+ "bear": [
+  {
+   "text": "The promise ledger currently shows zero out of twenty promises resolved.",
+   "citation": {
+    "source_id": "FACTS",
+    "page": 0,
+    "quote": "Promise ledger: 0 kept, 0 partly, 0 missed, 20 pending, 0 dropped (0 of 20 promises resolved)"
+   }
+  },
+  {
+   "text": "There are 20 pending items listed in the promise ledger without any resolved commitments.",
+   "citation": {
+    "source_id": "FACTS",
+    "page": 0,
+    "quote": "Promise ledger: 0 kept, 0 partly, 0 missed, 20 pending, 0 dropped (0 of 20 promises resolved)"
+   }
+  }
+ ],
+ "notes": [],
+ "cost": {
+  "calls": 9,
+  "cached": 8,
+  "input_tokens": 27892,
+  "output_tokens": 341,
+  "usd_list_price": 0.00922
+ },
+ "build_seconds": 12.5,
+ "guard": {
+  "promises_proposed": 32,
+  "promises_kept": 20,
+  "points_proposed": 8,
+  "points_kept": 7,
+  "verdicts_downgraded": {
+   "other_period": 0,
+   "restated": 4,
+   "below_target": 0,
+   "other_measure": 0,
+   "meets_target": 0
+  }
+ },
+ "latest_results": {
+  "symbol": "MAXHEALTH",
+  "period_end": "2026-09-30",
+  "period_label": "Q2 FY27",
+  "basis": "consolidated",
+  "format": "indas",
+  "audited": false,
+  "compared_qoq": "2026-06-30",
+  "compared_yoy": "2025-09-30",
+  "metrics": [
+   {
+    "key": "revenue",
+    "label": "Revenue",
+    "value": 2569.21,
+    "qoq_pct": 8.6,
+    "yoy_pct": 20.3,
+    "computed": false
+   },
+   {
+    "key": "ebitda",
+    "label": "EBITDA",
+    "value": 711.49,
+    "qoq_pct": 18.9,
+    "yoy_pct": 23.7,
+    "computed": true
+   },
+   {
+    "key": "pbt",
+    "label": "PBT",
+    "value": 540.92,
+    "qoq_pct": 24.0,
+    "yoy_pct": 21.3,
+    "computed": false
+   },
+   {
+    "key": "pat",
+    "label": "PAT",
+    "value": 414.45,
+    "qoq_pct": 28.3,
+    "yoy_pct": -15.6,
+    "computed": false
+   }
+  ],
+  "margins": [
+   {
+    "key": "ebitda_margin",
+    "label": "EBITDA margin",
+    "value_pct": 27.7,
+    "qoq_bps": 240,
+    "yoy_bps": 76
+   },
+   {
+    "key": "pat_margin",
+    "label": "PAT margin",
+    "value_pct": 16.1,
+    "qoq_bps": 248,
+    "yoy_bps": -688
+   }
+  ],
+  "notes": [
+   "EBITDA is computed: revenue from operations minus operating expenses (excludes other income)."
+  ],
+  "sources": [
+   "https://nsearchives.nseindia.com/corporate/xbrl/INTEGRATED_FILING_INDAS_1750035_30102026051452_WEB.xml",
+   "https://nsearchives.nseindia.com/corporate/xbrl/INTEGRATED_FILING_INDAS_1713411_13082026034155_WEB.xml",
+   "https://nsearchives.nseindia.com/corporate/xbrl/INTEGRATED_FILING_INDAS_1575998_14112025090755_WEB.xml"
+  ]
+ }
+}

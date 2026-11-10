@@ -1,0 +1,645 @@
+{
+ "symbol": "TATASTEEL",
+ "name": "Tata Steel Ltd",
+ "basis": "consolidated",
+ "built_at": "2026-11-10T05:35:04.253732+05:30",
+ "sources": [
+  {
+   "id": "T1",
+   "kind": "transcript",
+   "title": "Q4 FY26 earnings call (May 2026)",
+   "quarter": "Q4 FY26",
+   "url": "https://www.bseindia.com/stockinfo/AnnPdfOpen.aspx?Pname=6d6e2d40-e300-4aae-94bc-b1dc1136656c.pdf"
+  },
+  {
+   "id": "T2",
+   "kind": "transcript",
+   "title": "Q3 FY26 earnings call (Feb 2026)",
+   "quarter": "Q3 FY26",
+   "url": "https://www.bseindia.com/stockinfo/AnnPdfOpen.aspx?Pname=7e178a2e-ea18-4b55-8e55-56e03dc5bea5.pdf"
+  },
+  {
+   "id": "T3",
+   "kind": "transcript",
+   "title": "Q2 FY26 earnings call (Nov 2025)",
+   "quarter": "Q2 FY26",
+   "url": "https://www.bseindia.com/stockinfo/AnnPdfOpen.aspx?Pname=816939c9-f6c8-404b-afce-29aee1c980ed.pdf"
+  },
+  {
+   "id": "T4",
+   "kind": "transcript",
+   "title": "Q1 FY26 earnings call (Aug 2025)",
+   "quarter": "Q1 FY26",
+   "url": "https://www.bseindia.com/stockinfo/AnnPdfOpen.aspx?Pname=536435e3-b37b-4fca-98bf-d611bc8a4416.pdf"
+  },
+  {
+   "id": "AR",
+   "kind": "annual_report",
+   "title": "Annual Report 2026",
+   "quarter": null,
+   "url": "https://www.bseindia.com/xml-data/corpfiling/AttachHis/eb836c3a-cf5f-427d-bc71-e368d5861e02.pdf"
+  }
+ ],
+ "ledger": {
+  "rows": [
+   {
+    "promise": {
+     "id": "T4-1",
+     "citation": {
+      "source_id": "T4",
+      "page": 5,
+      "quote": "Looking ahead, the blast furnace operations have resumed in NINL , as you heard from Naren, and we expect the production to pick up in the subsequent quarters."
+     },
+     "topic": "production growth",
+     "kind": "qualitative",
+     "metric": null,
+     "target_low": null,
+     "target_high": null,
+     "unit": null,
+     "horizon": null,
+     "made_in": "Q1 FY26"
+    },
+    "status": "kept",
+    "method": "judged",
+    "actual": null,
+    "evidence": {
+     "source_id": "T2",
+     "page": 3,
+     "quote": "our crude steel production rose about 12% QoQ and YoY to about 6.34 million tons . The sales ramped up in line with the production and outpaced the domestic demand"
+    },
+    "rationale": "Later calls confirm production and sales picked up significantly in subsequent quarters."
+   },
+   {
+    "promise": {
+     "id": "T4-2",
+     "citation": {
+      "source_id": "T4",
+      "page": 6,
+      "quote": "While net debt has witnessed a marginal increase v s. end March, we are committed to deleveraging and with a slightly stable trade environment, increased volumes on account of completion of Kalinganagar project and the benefits of cost transformation in the second half of the current financial year, we will endeavour to continue the deleveraging process."
+     },
+     "topic": "deleveraging",
+     "kind": "qualitative",
+     "metric": null,
+     "target_low": null,
+     "target_high": null,
+     "unit": null,
+     "horizon": "H2 FY26",
+     "made_in": "Q1 FY26"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "No verifiable later evidence"
+   },
+   {
+    "promise": {
+     "id": "T4-3",
+     "citation": {
+      "source_id": "T4",
+      "page": 8,
+      "quote": "What you will see over the next 12 months is, of course, the Ludhiana plant coming into action that will add another 0.75  million tons and the Combi mill in Jamshedpur, which is 0.5 million tons, which converts some of the extra billets we have  in the Gamharia plant into steel."
+     },
+     "topic": "capacity additions",
+     "kind": "quantitative",
+     "metric": "other",
+     "target_low": 0.5,
+     "target_high": 0.75,
+     "unit": "cr",
+     "horizon": "next 12 months",
+     "made_in": "Q1 FY26"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "No verifiable later evidence"
+   },
+   {
+    "promise": {
+     "id": "T3-1",
+     "citation": {
+      "source_id": "T3",
+      "page": 7,
+      "quote": "The FID will be taken once we have the environment approvals, which we expect in the next few months."
+     },
+     "topic": "environmental clearances",
+     "kind": "qualitative",
+     "metric": null,
+     "target_low": null,
+     "target_high": null,
+     "unit": null,
+     "horizon": "next few months",
+     "made_in": "Q2 FY26"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "No later evidence of the outcome yet"
+   },
+   {
+    "promise": {
+     "id": "T3-2",
+     "citation": {
+      "source_id": "T3",
+      "page": 7,
+      "quote": "In terms of coking coal prices, we are saying India consumption cost will be about $6 per ton higher in 3Q than it was in 2Q, because it's starting to turn the other way ."
+     },
+     "topic": "coking coal cost",
+     "kind": "quantitative",
+     "metric": "other",
+     "target_low": 6.0,
+     "target_high": 6.0,
+     "unit": "usd_mn",
+     "horizon": "3Q",
+     "made_in": "Q2 FY26"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "No later evidence of the outcome yet"
+   },
+   {
+    "promise": {
+     "id": "T3-3",
+     "citation": {
+      "source_id": "T3",
+      "page": 7,
+      "quote": "As far as the Netherlands  is concerned, 3Q guidance just now is about €30 per ton lower in 3Q compared to 2Q but we expect 4Q to be much better because of what I said earlier."
+     },
+     "topic": "realisation",
+     "kind": "quantitative",
+     "metric": "other",
+     "target_low": 30.0,
+     "target_high": 30.0,
+     "unit": null,
+     "horizon": "3Q",
+     "made_in": "Q2 FY26"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "No later evidence of the outcome yet"
+   },
+   {
+    "promise": {
+     "id": "T3-4",
+     "citation": {
+      "source_id": "T3",
+      "page": 13,
+      "quote": "Engineering will be known on capex somewhere around, say, May or June."
+     },
+     "topic": "capex engineering",
+     "kind": "qualitative",
+     "metric": null,
+     "target_low": null,
+     "target_high": null,
+     "unit": null,
+     "horizon": "May or June",
+     "made_in": "Q2 FY26"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "No later evidence of the outcome yet"
+   },
+   {
+    "promise": {
+     "id": "T2-1",
+     "citation": {
+      "source_id": "T2",
+      "page": 5,
+      "quote": "We will not bust that range because we have a strong pipeline of capex which are productive."
+     },
+     "topic": "leverage",
+     "kind": "qualitative",
+     "metric": null,
+     "target_low": null,
+     "target_high": null,
+     "unit": null,
+     "horizon": null,
+     "made_in": "Q3 FY26"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "No later evidence of the outcome yet"
+   },
+   {
+    "promise": {
+     "id": "T2-2",
+     "citation": {
+      "source_id": "T2",
+      "page": 7,
+      "quote": "So, I think we are expecting that some actions will be taken in the next few weeks by the UK government and once it happens, hopefully we are on track to make sure that UK is on positive EBITDA territory."
+     },
+     "topic": "profitability",
+     "kind": "qualitative",
+     "metric": null,
+     "target_low": null,
+     "target_high": null,
+     "unit": null,
+     "horizon": null,
+     "made_in": "Q3 FY26"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "No later evidence of the outcome yet"
+   },
+   {
+    "promise": {
+     "id": "T2-3",
+     "citation": {
+      "source_id": "T2",
+      "page": 10,
+      "quote": "So, I think the full impact of that will come gradually and not in one jump."
+     },
+     "topic": "pricing",
+     "kind": "qualitative",
+     "metric": null,
+     "target_low": null,
+     "target_high": null,
+     "unit": null,
+     "horizon": null,
+     "made_in": "Q3 FY26"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "No later evidence of the outcome yet"
+   },
+   {
+    "promise": {
+     "id": "T2-4",
+     "citation": {
+      "source_id": "T2",
+      "page": 11,
+      "quote": "So overall we expect EBITDA to be better in 4Q compared to 3Q, and volumes to be almost half a million tons better in 4Q compared to 3Q."
+     },
+     "topic": "ebitda",
+     "kind": "qualitative",
+     "metric": null,
+     "target_low": null,
+     "target_high": null,
+     "unit": null,
+     "horizon": "4Q",
+     "made_in": "Q3 FY26"
+    },
+    "status": "kept",
+    "method": "judged",
+    "actual": null,
+    "evidence": {
+     "source_id": "T1",
+     "page": 4,
+     "quote": "Consolidated revenues stood at Rs 63,270 crores and EBITDA was Rs 9,953 crores, translating to a margin of 16%. Higher realisations and improved volumes in India, were complemented by savings on account of cost transformation."
+    },
+    "rationale": "Management delivered improved EBITDA in 4Q compared to 3Q."
+   },
+   {
+    "promise": {
+     "id": "T2-5",
+     "citation": {
+      "source_id": "T2",
+      "page": 11,
+      "quote": "Because we are in the process of finalising a plan, we'll give you that guidance in the next analyst call."
+     },
+     "topic": "volume guidance",
+     "kind": "qualitative",
+     "metric": null,
+     "target_low": null,
+     "target_high": null,
+     "unit": null,
+     "horizon": "FY2027",
+     "made_in": "Q3 FY26"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "The later call restated the target; delivery is not shown yet"
+   },
+   {
+    "promise": {
+     "id": "T2-6",
+     "citation": {
+      "source_id": "T2",
+      "page": 17,
+      "quote": "So, there are multiple options. We also have an opportunity or an optionality in Jamshedpur where we have a 250,000 ton s line to convert the metal coating into color coating. So, there are many options that we have, and our aim is to actually double the profitability of the business in the next year or two."
+     },
+     "topic": "profitability",
+     "kind": "qualitative",
+     "metric": null,
+     "target_low": null,
+     "target_high": null,
+     "unit": null,
+     "horizon": "next year or two",
+     "made_in": "Q3 FY26"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "No later evidence of the outcome yet"
+   },
+   {
+    "promise": {
+     "id": "T1-1",
+     "citation": {
+      "source_id": "T1",
+      "page": 4,
+      "quote": "In FY2027 we are aiming to achieve cost transformation related savings of ~Rs 7,100 crores vs. FY2026 levels."
+     },
+     "topic": "cost savings",
+     "kind": "quantitative",
+     "metric": "other",
+     "target_low": 7100.0,
+     "target_high": null,
+     "unit": "cr",
+     "horizon": "FY2027",
+     "made_in": "Q4 FY26"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "Too recent to judge"
+   },
+   {
+    "promise": {
+     "id": "T1-2",
+     "citation": {
+      "source_id": "T1",
+      "page": 5,
+      "quote": "During FY2026, our total spend on capex was about Rs 14,000 crores on a consolidated basis and we intend to increase the same in FY2027 to around Rs 20,000 crores of which more than 60% will be spend in India."
+     },
+     "topic": "capex",
+     "kind": "quantitative",
+     "metric": "capex",
+     "target_low": 20000.0,
+     "target_high": null,
+     "unit": "cr",
+     "horizon": "FY2027",
+     "made_in": "Q4 FY26"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "Too recent to judge"
+   },
+   {
+    "promise": {
+     "id": "T1-3",
+     "citation": {
+      "source_id": "T1",
+      "page": 10,
+      "quote": "So, we expect it to be 2 million tons plus for this financial year compared to the previous financial year."
+     },
+     "topic": "volume growth",
+     "kind": "quantitative",
+     "metric": "volume_growth",
+     "target_low": 2.0,
+     "target_high": null,
+     "unit": null,
+     "horizon": "this financial year",
+     "made_in": "Q4 FY26"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "Too recent to judge"
+   }
+  ],
+  "counts": {
+   "kept": 2,
+   "partly": 0,
+   "missed": 0,
+   "pending": 14,
+   "dropped": 0
+  },
+  "credibility_pct": null,
+  "note": null
+ },
+ "snapshot": {
+  "summary": [
+   {
+    "text": "Tata Steel operates across India, Europe, Southeast Asia, and North America, making it a geographically diversified global metals and mining company.",
+    "citation": {
+     "source_id": "AR",
+     "page": 5,
+     "quote": "Tata Steel operates across India, Europe, Southeast Asia, and North America, making us one of the most geographically diversified steel companies in the world."
+    }
+   },
+   {
+    "text": "India remains the key anchor of the company's growth strategy, contributing approximately 74% of its total crude steel production.",
+    "citation": {
+     "source_id": "T1",
+     "page": 4,
+     "quote": "India now contributes ~74% of Tata Steel’s total crude steel production."
+    }
+   }
+  ]
+ },
+ "trajectory": {
+  "years": [
+   "Mar 2022",
+   "Mar 2023",
+   "Mar 2024",
+   "Mar 2025",
+   "Mar 2026"
+  ],
+  "revenue": [
+   243959.0,
+   243353.0,
+   229171.0,
+   218543.0,
+   232140.0
+  ],
+  "operating_profit": [
+   63490.0,
+   32300.0,
+   22248.0,
+   25298.0,
+   34352.0
+  ],
+  "margin_pct": [
+   26.02486483384503,
+   13.272899861518042,
+   9.70803461170916,
+   11.575753970614478,
+   14.797966744206082
+  ],
+  "pat": [
+   41749.0,
+   8075.0,
+   -4910.0,
+   3174.0,
+   10886.0
+  ],
+  "revenue_cagr_pct": -1.2338138354552552,
+  "pat_cagr_pct": -28.54122562372562,
+  "margin_change_bps": -1123,
+  "read": "compressing",
+  "lender": false
+ },
+ "health": {
+  "as_of": "Mar 2026",
+  "debt_to_equity": 0.9042254348272926,
+  "cfo_to_pat_3y": 8.579562841530054,
+  "fcf_3y_cr": 33206.0,
+  "working_capital_days": -56.0,
+  "wc_days_change_3y": -14.0,
+  "roce_pct": 13.0,
+  "flags": [
+   {
+    "level": "good",
+    "text": "Profits are backed by cash (CFO/PAT 8.58)"
+   }
+  ]
+ },
+ "bull": [
+  {
+   "text": "Operating cash flows before capex and dividend increased significantly to around Rs 29,254 crores in FY2026.",
+   "citation": {
+    "source_id": "T1",
+    "page": 4,
+    "quote": "Operating cashflows before capex and dividend increased from ~Rs 17,700 crores in the previous year to ~Rs 29,254 crores in FY2026 and free cash flows were Rs 10,738 crores, which were significantly higher than previous year."
+   }
+  },
+  {
+   "text": "Tata Steel India crude steel production and deliveries increased by 8% year-over-year to around 23 million tons.",
+   "citation": {
+    "source_id": "T1",
+    "page": 2,
+    "quote": "India is the key anchor of our growth strategy, with annual crude steel production and deliveries increasing by 8% YoY to around 23 million tons."
+   }
+  }
+ ],
+ "bear": [
+  {
+   "text": "Net profit compound annual growth rate stood at negative 28.5% over the specified period.",
+   "citation": {
+    "source_id": "FACTS",
+    "page": 0,
+    "quote": "Net profit CAGR: -28.5%"
+   }
+  },
+  {
+   "text": "Operating margin change registered a decline of 1123 basis points.",
+   "citation": {
+    "source_id": "FACTS",
+    "page": 0,
+    "quote": "Operating margin change: -1123 bps"
+   }
+  },
+  {
+   "text": "Revenue compound annual growth rate was negative 1.2% from March 2022 to March 2026.",
+   "citation": {
+    "source_id": "FACTS",
+    "page": 0,
+    "quote": "Revenue CAGR (Mar 2022–Mar 2026): -1.2%"
+   }
+  }
+ ],
+ "notes": [],
+ "cost": {
+  "calls": 9,
+  "cached": 9,
+  "input_tokens": 0,
+  "output_tokens": 0,
+  "usd_list_price": 0.0
+ },
+ "build_seconds": 0.7,
+ "guard": {
+  "promises_proposed": 26,
+  "promises_kept": 16,
+  "points_proposed": 9,
+  "points_kept": 7,
+  "verdicts_downgraded": {
+   "other_period": 0,
+   "restated": 1,
+   "below_target": 0,
+   "other_measure": 0,
+   "meets_target": 0
+  }
+ },
+ "latest_results": {
+  "symbol": "TATASTEEL",
+  "period_end": "2026-09-30",
+  "period_label": "Q2 FY27",
+  "basis": "consolidated",
+  "format": "indas",
+  "audited": false,
+  "compared_qoq": "2026-06-30",
+  "compared_yoy": "2025-09-30",
+  "metrics": [
+   {
+    "key": "revenue",
+    "label": "Revenue",
+    "value": 65436.24,
+    "qoq_pct": 7.6,
+    "yoy_pct": 11.5,
+    "computed": false
+   },
+   {
+    "key": "ebitda",
+    "label": "EBITDA",
+    "value": 10533.07,
+    "qoq_pct": 13.7,
+    "yoy_pct": 18.4,
+    "computed": true
+   },
+   {
+    "key": "pbt",
+    "label": "PBT",
+    "value": 5342.88,
+    "qoq_pct": 42.8,
+    "yoy_pct": 28.1,
+    "computed": false
+   },
+   {
+    "key": "pat",
+    "label": "PAT",
+    "value": 3699.59,
+    "qoq_pct": 55.1,
+    "yoy_pct": 16.2,
+    "computed": false
+   }
+  ],
+  "margins": [
+   {
+    "key": "ebitda_margin",
+    "label": "EBITDA margin",
+    "value_pct": 16.1,
+    "qoq_bps": 86,
+    "yoy_bps": 94
+   },
+   {
+    "key": "pat_margin",
+    "label": "PAT margin",
+    "value_pct": 5.7,
+    "qoq_bps": 173,
+    "yoy_bps": 23
+   }
+  ],
+  "notes": [
+   "EBITDA is computed: revenue from operations minus operating expenses (excludes other income).",
+   "PBT includes an exceptional gain of ₹348.68 cr.",
+   "PAT includes ₹112.27 cr share of profit of associates and joint ventures."
+  ],
+  "sources": [
+   "https://nsearchives.nseindia.com/corporate/xbrl/INTEGRATED_FILING_INDAS_1755442_07112026053333_WEB.xml",
+   "https://nsearchives.nseindia.com/corporate/xbrl/INTEGRATED_FILING_INDAS_1705622_30072026075610_WEB.xml",
+   "https://nsearchives.nseindia.com/corporate/xbrl/INTEGRATED_FILING_INDAS_1572729_12112025073451_WEB.xml"
+  ]
+ }
+}

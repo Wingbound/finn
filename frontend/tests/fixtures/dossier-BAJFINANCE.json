@@ -2,7 +2,7 @@
  "symbol": "BAJFINANCE",
  "name": "Bajaj Finance Ltd",
  "basis": "consolidated",
- "built_at": "2026-11-09T21:17:12.283739+05:30",
+ "built_at": "2026-11-10T05:35:44.159889+05:30",
  "sources": [
   {
    "id": "T1",
@@ -611,7 +611,7 @@
   "output_tokens": 0,
   "usd_list_price": 0.0
  },
- "build_seconds": 0.3,
+ "build_seconds": 0.4,
  "guard": {
   "promises_proposed": 26,
   "promises_kept": 19,
@@ -620,7 +620,9 @@
   "verdicts_downgraded": {
    "other_period": 0,
    "restated": 0,
-   "below_target": 0
+   "below_target": 0,
+   "other_measure": 0,
+   "meets_target": 0
   }
  },
  "latest_results": {

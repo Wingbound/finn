@@ -432,7 +432,50 @@
    },
    "people": [],
    "brief": null,
-   "promises": []
+   "promises": [
+    {
+     "topic": "cost savings",
+     "quote": "In FY2027 we are aiming to achieve cost transformation related savings of ~Rs 7,100 crores vs. FY2026 levels.",
+     "citation": {
+      "source_id": "T1",
+      "page": 4,
+      "quote": "In FY2027 we are aiming to achieve cost transformation related savings of ~Rs 7,100 crores vs. FY2026 levels."
+     },
+     "call": "Q4 FY26 call, p. 4",
+     "made_in": "Q4 FY26",
+     "horizon": "FY2027",
+     "target": "₹7,100 cr",
+     "pace": null
+    },
+    {
+     "topic": "capex",
+     "quote": "During FY2026, our total spend on capex was about Rs 14,000 crores on a consolidated basis and we intend to increase the same in FY2027 to around Rs 20,000 crores of which more than 60% will be spend in India.",
+     "citation": {
+      "source_id": "T1",
+      "page": 5,
+      "quote": "During FY2026, our total spend on capex was about Rs 14,000 crores on a consolidated basis and we intend to increase the same in FY2027 to around Rs 20,000 crores of which more than 60% will be spend in India."
+     },
+     "call": "Q4 FY26 call, p. 5",
+     "made_in": "Q4 FY26",
+     "horizon": "FY2027",
+     "target": "₹20,000 cr",
+     "pace": null
+    },
+    {
+     "topic": "volume guidance",
+     "quote": "Because we are in the process of finalising a plan, we'll give you that guidance in the next analyst call.",
+     "citation": {
+      "source_id": "T2",
+      "page": 11,
+      "quote": "Because we are in the process of finalising a plan, we'll give you that guidance in the next analyst call."
+     },
+     "call": "Q3 FY26 call, p. 11",
+     "made_in": "Q3 FY26",
+     "horizon": "FY2027",
+     "target": null,
+     "pace": null
+    }
+   ]
   },
   {
    "id": "VOLTAS:results:106850826",
@@ -621,7 +664,50 @@
    },
    "people": [],
    "brief": null,
-   "promises": []
+   "promises": [
+    {
+     "topic": "margins",
+     "quote": "Should it get better from the number that we sort of highlighted in FY26? It should get better.",
+     "citation": {
+      "source_id": "T2",
+      "page": 11,
+      "quote": "Should it get better from the number that we sort of highlighted in FY26? It should get better."
+     },
+     "call": "Q4 FY26 call, p. 11",
+     "made_in": "Q4 FY26",
+     "horizon": "FY27",
+     "target": null,
+     "pace": null
+    },
+    {
+     "topic": "production timeline",
+     "quote": "So 18 months from now is when we are expecting full -fledged commercial production of the compressors.",
+     "citation": {
+      "source_id": "T1",
+      "page": 10,
+      "quote": "So 18 months from now is when we are expecting full -fledged commercial production of the compressors."
+     },
+     "call": "Q1 FY27 call, p. 10",
+     "made_in": "Q1 FY27",
+     "horizon": "18 months",
+     "target": null,
+     "pace": null
+    },
+    {
+     "topic": "capacity utilization",
+     "quote": "Our sense is that this summer season, we would have maximized the capacity utilization to almost between 85% to 90% or so, Mr. Jain.",
+     "citation": {
+      "source_id": "T3",
+      "page": 17,
+      "quote": "Our sense is that this summer season, we would have maximized the capacity utilization to almost between 85% to 90% or so, Mr. Jain."
+     },
+     "call": "Q3 FY26 call, p. 17",
+     "made_in": "Q3 FY26",
+     "horizon": "summer season",
+     "target": "85–90%",
+     "pace": null
+    }
+   ]
   },
   {
    "id": "M&M:results:106846728",
@@ -810,7 +896,50 @@
    },
    "people": [],
    "brief": null,
-   "promises": []
+   "promises": [
+    {
+     "topic": "ebit margin",
+     "quote": "We will come out with the next phase for Tech Mahindra as we close this phase that we talked about, which is by end of FY27 we get to 15% EBIT margin and then we talk about the next phase as we go from there.",
+     "citation": {
+      "source_id": "T1",
+      "page": 4,
+      "quote": "We will come out with the next phase for Tech Mahindra as we close this phase that we talked about, which is by end of FY27 we get to 15% EBIT margin and then we talk about the next phase as we go from there."
+     },
+     "call": "Q1 FY27 call, p. 4",
+     "made_in": "Q1 FY27",
+     "horizon": "FY27",
+     "target": "15%",
+     "pace": null
+    },
+    {
+     "topic": "sales target",
+     "quote": "And that's why when we codified our strategy three years ago, it was to say what does relevance mean in the market? And how should we actually achieve that? And we codified that we want to be a 10,000 crores company pre-sales by FY30.",
+     "citation": {
+      "source_id": "T1",
+      "page": 16,
+      "quote": "And that's why when we codified our strategy three years ago, it was to say what does relevance mean in the market? And how should we actually achieve that? And we codified that we want to be a 10,000 crores company pre-sales by FY30."
+     },
+     "call": "Q1 FY27 call, p. 16",
+     "made_in": "Q1 FY27",
+     "horizon": "FY30",
+     "target": "₹10,000 cr",
+     "pace": null
+    },
+    {
+     "topic": "new launches",
+     "quote": "So, basically, by F31, we are expecting 7 plus 3, 10 launches in LCVs.",
+     "citation": {
+      "source_id": "T2",
+      "page": 11,
+      "quote": "So, basically, by F31, we are expecting 7 plus 3, 10 launches in LCVs."
+     },
+     "call": "Q4 FY26 call, p. 11",
+     "made_in": "Q4 FY26",
+     "horizon": "F31",
+     "target": null,
+     "pace": null
+    }
+   ]
   },
   {
    "id": "PREMIERENE:results:106845218",
@@ -999,7 +1128,50 @@
    },
    "people": [],
    "brief": null,
-   "promises": []
+   "promises": [
+    {
+     "topic": "installation volume",
+     "quote": "And I would expect the installation over the next nine months to be something between 6 to 8, possibly higher than 8 gigawatts.",
+     "citation": {
+      "source_id": "T1",
+      "page": 5,
+      "quote": "And I would expect the installation over the next nine months to be something between 6 to 8, possibly higher than 8 gigawatts."
+     },
+     "call": "Q1 FY27 call, p. 5",
+     "made_in": "Q1 FY27",
+     "horizon": "next nine months",
+     "target": null,
+     "pace": null
+    },
+    {
+     "topic": "capacity utilization",
+     "quote": "We are targeting at least about 70.",
+     "citation": {
+      "source_id": "T1",
+      "page": 9,
+      "quote": "We are targeting at least about 70."
+     },
+     "call": "Q1 FY27 call, p. 9",
+     "made_in": "Q1 FY27",
+     "horizon": "March quarter",
+     "target": null,
+     "pace": null
+    },
+    {
+     "topic": "depreciation",
+     "quote": "So, I would expect a small increase in depreciation in the next quarter, and then full effect coming in through Q3 and Q4, where we will see roughly about INR240 crores to INR250 crores of depreciation quarterly.",
+     "citation": {
+      "source_id": "T1",
+      "page": 11,
+      "quote": "So, I would expect a small increase in depreciation in the next quarter, and then full effect coming in through Q3 and Q4, where we will see roughly about INR240 crores to INR250 crores of depreciation quarterly."
+     },
+     "call": "Q1 FY27 call, p. 11",
+     "made_in": "Q1 FY27",
+     "horizon": "Q3 and Q4",
+     "target": "₹240–250 cr",
+     "pace": null
+    }
+   ]
   },
   {
    "id": "ZYDUSLIFE:results:106843746",
@@ -1163,7 +1335,57 @@
    },
    "people": [],
    "brief": null,
-   "promises": []
+   "promises": [
+    {
+     "topic": "ebitda margin",
+     "quote": "Despite these investments, our operating profitability remained robust and we are on track to deliver a 24% plus EBITDA margin in line with our FY27 expectations.",
+     "citation": {
+      "source_id": "T1",
+      "page": 5,
+      "quote": "Despite these investments, our operating profitability remained robust and we are on track to deliver a 24% plus EBITDA margin in line with our FY27 expectations."
+     },
+     "call": "Q2 FY27 call, p. 5",
+     "made_in": "Q2 FY27",
+     "horizon": "FY27",
+     "target": "at least 24%",
+     "pace": {
+      "line": "EBITDA margin",
+      "actual": 24.0,
+      "basis": "margin in Q2 FY27",
+      "target_low": 24.0,
+      "target_high": null,
+      "word": "at or above"
+     }
+    },
+    {
+     "topic": "capex",
+     "quote": "So, right now, we are guiding for around ₹1,500-₹1,600 crores capex.",
+     "citation": {
+      "source_id": "T2",
+      "page": 9,
+      "quote": "So, right now, we are guiding for around ₹1,500-₹1,600 crores capex."
+     },
+     "call": "Q1 FY27 call, p. 9",
+     "made_in": "Q1 FY27",
+     "horizon": "FY27",
+     "target": "₹1,500–1,600 cr",
+     "pace": null
+    },
+    {
+     "topic": "India market outperformance",
+     "quote": "In India, we have now consistently demonstrated better than market growth and we are thinking , we will outperform the market by 200 -400 basis points versus the current IPM.",
+     "citation": {
+      "source_id": "T3",
+      "page": 9,
+      "quote": "In India, we have now consistently demonstrated better than market growth and we are thinking , we will outperform the market by 200 -400 basis points versus the current IPM."
+     },
+     "call": "Q4 FY26 call, p. 9",
+     "made_in": "Q4 FY26",
+     "horizon": "FY27",
+     "target": null,
+     "pace": null
+    }
+   ]
   },
   {
    "id": "TATASTEEL:management_change:106852199",

@@ -51,7 +51,7 @@ describe("PromisePanel", () => {
     ).toBe("This quarter: EBITDA margin 16.1%, within the 15–17% target. One quarter, not the full year.");
     expect(
       paceSentence({ line: "PAT", actual: 9.5, basis: "YoY growth in Q2 FY27", target_low: 12, target_high: null, word: "below" }),
-    ).toBe("This quarter: PAT +9.5% YoY, below the target of at least 12%. One quarter, not the full year.");
+    ).toBe("This quarter: PAT +9.5% YoY, below the 12% target. One quarter, not the full year.");
   });
 
   it("renders nothing without notes", () => {

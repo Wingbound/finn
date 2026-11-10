@@ -2,7 +2,7 @@
  "symbol": "HDFCBANK",
  "name": "HDFC Bank Ltd",
  "basis": "consolidated",
- "built_at": "2026-11-09T21:17:11.935047+05:30",
+ "built_at": "2026-11-10T05:35:43.751582+05:30",
  "sources": [
   {
    "id": "T1",
@@ -326,7 +326,7 @@
   "output_tokens": 0,
   "usd_list_price": 0.0
  },
- "build_seconds": 0.3,
+ "build_seconds": 0.4,
  "guard": {
   "promises_proposed": 16,
   "promises_kept": 7,
@@ -335,7 +335,9 @@
   "verdicts_downgraded": {
    "other_period": 0,
    "restated": 0,
-   "below_target": 0
+   "below_target": 0,
+   "other_measure": 0,
+   "meets_target": 0
   }
  },
  "latest_results": null
