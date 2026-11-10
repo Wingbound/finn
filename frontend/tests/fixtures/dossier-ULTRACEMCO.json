@@ -1,0 +1,691 @@
+{
+ "symbol": "ULTRACEMCO",
+ "name": "UltraTech Cement Ltd",
+ "basis": "consolidated",
+ "built_at": "2026-11-10T06:10:24.005266+05:30",
+ "sources": [
+  {
+   "id": "T1",
+   "kind": "transcript",
+   "title": "Q2 FY27 earnings call (Oct 2026)",
+   "quarter": "Q2 FY27",
+   "url": "https://www.bseindia.com/stockinfo/AnnPdfOpen.aspx?Pname=3892cb51-dbcd-43ad-955f-fe9fafe54003.pdf"
+  },
+  {
+   "id": "T2",
+   "kind": "transcript",
+   "title": "Q1 FY27 earnings call (Jul 2026)",
+   "quarter": "Q1 FY27",
+   "url": "https://www.bseindia.com/stockinfo/AnnPdfOpen.aspx?Pname=4fd54e8a-8de9-4547-8a4c-908568d1cd0e.pdf"
+  },
+  {
+   "id": "T3",
+   "kind": "transcript",
+   "title": "Q4 FY26 earnings call (May 2026)",
+   "quarter": "Q4 FY26",
+   "url": "https://www.bseindia.com/stockinfo/AnnPdfOpen.aspx?Pname=b4e6bf58-5985-4eda-b714-7489b4b926b0.pdf"
+  },
+  {
+   "id": "T4",
+   "kind": "transcript",
+   "title": "Q3 FY26 earnings call (Jan 2026)",
+   "quarter": "Q3 FY26",
+   "url": "https://www.bseindia.com/stockinfo/AnnPdfOpen.aspx?Pname=2974562d-4ddc-4eab-bb39-5c69215eecc3.pdf"
+  },
+  {
+   "id": "AR",
+   "kind": "annual_report",
+   "title": "Annual Report 2026",
+   "quarter": null,
+   "url": "https://www.bseindia.com/xml-data/corpfiling/AttachHis/1551898a-ebd8-40be-960b-1b16f0a1af60.pdf"
+  }
+ ],
+ "ledger": {
+  "rows": [
+   {
+    "promise": {
+     "id": "T4-1",
+     "citation": {
+      "source_id": "T4",
+      "page": 5,
+      "quote": "I believe and I'm very confident that we'll reach the mark of 1x and be in 0.8, 0.9x net debt EBITDA by the end of this fiscal year."
+     },
+     "topic": "net debt to ebitda",
+     "kind": "quantitative",
+     "metric": "other",
+     "target_low": 0.8,
+     "target_high": 0.9,
+     "unit": "x",
+     "horizon": "end of this fiscal year",
+     "made_in": "Q3 FY26"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "No later evidence of the outcome yet"
+   },
+   {
+    "promise": {
+     "id": "T4-2",
+     "citation": {
+      "source_id": "T4",
+      "page": 6,
+      "quote": "So, we should have approximately 8 to 9 million tons more coming in this quarter."
+     },
+     "topic": "capacity addition",
+     "kind": "quantitative",
+     "metric": "other",
+     "target_low": 8.0,
+     "target_high": 9.0,
+     "unit": "cr",
+     "horizon": "this quarter",
+     "made_in": "Q3 FY26"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "The later quote measures something else"
+   },
+   {
+    "promise": {
+     "id": "T4-3",
+     "citation": {
+      "source_id": "T4",
+      "page": 6,
+      "quote": "And the balance,12 million tons in fiscal '27 and then balance remaining will be in '28."
+     },
+     "topic": "capacity addition",
+     "kind": "quantitative",
+     "metric": "other",
+     "target_low": 12.0,
+     "target_high": 12.0,
+     "unit": "cr",
+     "horizon": "fiscal '27",
+     "made_in": "Q3 FY26"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "No later evidence of the outcome yet"
+   },
+   {
+    "promise": {
+     "id": "T4-4",
+     "citation": {
+      "source_id": "T4",
+      "page": 9,
+      "quote": "I would expect further generation of up to INR500 crores minimum, which we should be able to get."
+     },
+     "topic": "asset sale proceeds",
+     "kind": "quantitative",
+     "metric": "other",
+     "target_low": 500.0,
+     "target_high": 500.0,
+     "unit": "cr",
+     "horizon": null,
+     "made_in": "Q3 FY26"
+    },
+    "status": "dropped",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "Not mentioned in the later calls"
+   },
+   {
+    "promise": {
+     "id": "T3-1",
+     "citation": {
+      "source_id": "T3",
+      "page": 3,
+      "quote": "We have committed to add a further 37 million tons, which will take us over 242.5 million tons in a phased manner by fiscal '28."
+     },
+     "topic": "capacity expansion",
+     "kind": "quantitative",
+     "metric": "other",
+     "target_low": 242.5,
+     "target_high": 242.5,
+     "unit": "cr",
+     "horizon": "fiscal '28",
+     "made_in": "Q4 FY26"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "No later evidence of the outcome yet"
+   },
+   {
+    "promise": {
+     "id": "T3-2",
+     "citation": {
+      "source_id": "T3",
+      "page": 4,
+      "quote": "We have committed to reach about 85% of our power requirements from green energy by the end of fiscal 2030, and we are very confident of reaching that position."
+     },
+     "topic": "green energy",
+     "kind": "quantitative",
+     "metric": "other",
+     "target_low": 85.0,
+     "target_high": 85.0,
+     "unit": "%",
+     "horizon": "fiscal 2030",
+     "made_in": "Q4 FY26"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "No later evidence of the outcome yet"
+   },
+   {
+    "promise": {
+     "id": "T3-3",
+     "citation": {
+      "source_id": "T3",
+      "page": 5,
+      "quote": "We expect a sustainable volume growth of 7% to 8% per annum."
+     },
+     "topic": "volume growth",
+     "kind": "quantitative",
+     "metric": "volume_growth",
+     "target_low": 7.0,
+     "target_high": 8.0,
+     "unit": "%",
+     "horizon": null,
+     "made_in": "Q4 FY26"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "No later evidence of the outcome yet"
+   },
+   {
+    "promise": {
+     "id": "T2-1",
+     "citation": {
+      "source_id": "T2",
+      "page": 6,
+      "quote": "We'll take our consolidated capacity beyond 242 million tons with grey cement capacity to reach 212.7 million tons by the end of fiscal '27 and further balance to be completed in the next year."
+     },
+     "topic": "capacity expansion",
+     "kind": "quantitative",
+     "metric": "other",
+     "target_low": 212.7,
+     "target_high": 242.0,
+     "unit": "usd_mn",
+     "horizon": "FY27",
+     "made_in": "Q1 FY27"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "No later evidence of the outcome yet"
+   },
+   {
+    "promise": {
+     "id": "T2-2",
+     "citation": {
+      "source_id": "T2",
+      "page": 6,
+      "quote": "We believe we will reach anywhere between 2.5 to 3 gigawatts very shortly."
+     },
+     "topic": "green power",
+     "kind": "quantitative",
+     "metric": "other",
+     "target_low": 2.5,
+     "target_high": 3.0,
+     "unit": "x",
+     "horizon": null,
+     "made_in": "Q1 FY27"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "No later evidence of the outcome yet"
+   },
+   {
+    "promise": {
+     "id": "T2-3",
+     "citation": {
+      "source_id": "T2",
+      "page": 6,
+      "quote": "Our belief is, and we are confident that this year also, we'll end the net debt to EBITDA below 1x."
+     },
+     "topic": "net debt to EBITDA",
+     "kind": "quantitative",
+     "metric": "ebitda_margin",
+     "target_low": null,
+     "target_high": 1.0,
+     "unit": "x",
+     "horizon": "this year",
+     "made_in": "Q1 FY27"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "No later evidence of the outcome yet"
+   },
+   {
+    "promise": {
+     "id": "T2-4",
+     "citation": {
+      "source_id": "T2",
+      "page": 7,
+      "quote": "We reaffirm commissioning and product launch in Q3 fiscal '27, October - December '26 quarter, precisely as committed to you when we announced this investment."
+     },
+     "topic": "cables and wires launch",
+     "kind": "qualitative",
+     "metric": null,
+     "target_low": null,
+     "target_high": null,
+     "unit": null,
+     "horizon": "Q3 fiscal '27",
+     "made_in": "Q1 FY27"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "Target not yet due — tracking is not delivery"
+   },
+   {
+    "promise": {
+     "id": "T2-5",
+     "citation": {
+      "source_id": "T2",
+      "page": 16,
+      "quote": "Yes, we are targeting double-digit volume growth this year."
+     },
+     "topic": "volume growth",
+     "kind": "qualitative",
+     "metric": "volume_growth",
+     "target_low": null,
+     "target_high": null,
+     "unit": null,
+     "horizon": "this year",
+     "made_in": "Q1 FY27"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "No later evidence of the outcome yet"
+   },
+   {
+    "promise": {
+     "id": "T2-6",
+     "citation": {
+      "source_id": "T2",
+      "page": 17,
+      "quote": "We will end 212 million tons March '27, so that's a balance coming up to a 22-25 million tons the next year."
+     },
+     "topic": "capacity addition",
+     "kind": "quantitative",
+     "metric": "other",
+     "target_low": 22.0,
+     "target_high": 25.0,
+     "unit": "usd_mn",
+     "horizon": "next year",
+     "made_in": "Q1 FY27"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "No later evidence of the outcome yet"
+   },
+   {
+    "promise": {
+     "id": "T2-7",
+     "citation": {
+      "source_id": "T2",
+      "page": 17,
+      "quote": "March '28 we should exit with 235 million tons in India."
+     },
+     "topic": "capacity target",
+     "kind": "quantitative",
+     "metric": "other",
+     "target_low": null,
+     "target_high": 235.0,
+     "unit": "usd_mn",
+     "horizon": "March '28",
+     "made_in": "Q1 FY27"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "No later evidence of the outcome yet"
+   },
+   {
+    "promise": {
+     "id": "T2-8",
+     "citation": {
+      "source_id": "T2",
+      "page": 17,
+      "quote": "We will reach at 235 million tons to end of March '28 from 200. something today."
+     },
+     "topic": "capacity target",
+     "kind": "quantitative",
+     "metric": "other",
+     "target_low": null,
+     "target_high": 235.0,
+     "unit": "usd_mn",
+     "horizon": "March '28",
+     "made_in": "Q1 FY27"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "No later evidence of the outcome yet"
+   },
+   {
+    "promise": {
+     "id": "T1-1",
+     "citation": {
+      "source_id": "T1",
+      "page": 9,
+      "quote": "By the end of March, I will be below 1x net debt to EBITDA."
+     },
+     "topic": "net debt",
+     "kind": "quantitative",
+     "metric": "other",
+     "target_low": null,
+     "target_high": 1.0,
+     "unit": "x",
+     "horizon": "March",
+     "made_in": "Q2 FY27"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "Too recent to judge"
+   },
+   {
+    "promise": {
+     "id": "T1-2",
+     "citation": {
+      "source_id": "T1",
+      "page": 11,
+      "quote": "We will come with our detailed plans before the end of this financial year."
+     },
+     "topic": "expansion plans",
+     "kind": "qualitative",
+     "metric": null,
+     "target_low": null,
+     "target_high": null,
+     "unit": null,
+     "horizon": "end of this financial year",
+     "made_in": "Q2 FY27"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "Too recent to judge"
+   },
+   {
+    "promise": {
+     "id": "T1-3",
+     "citation": {
+      "source_id": "T1",
+      "page": 16,
+      "quote": "We will not stop before 10,000 stores, which should happen in the next 3 years which is 28-29, we should be reaching about 10,000 stores."
+     },
+     "topic": "retail network",
+     "kind": "quantitative",
+     "metric": "other",
+     "target_low": 10000.0,
+     "target_high": null,
+     "unit": null,
+     "horizon": "28-29",
+     "made_in": "Q2 FY27"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "Too recent to judge"
+   }
+  ],
+  "counts": {
+   "kept": 0,
+   "partly": 0,
+   "missed": 0,
+   "pending": 17,
+   "dropped": 1
+  },
+  "credibility_pct": null,
+  "note": null
+ },
+ "snapshot": {
+  "summary": [
+   {
+    "text": "UltraTech Cement Limited operates in the cement industry, generating revenue through cement sales across various regional markets in India such as North, South, West, East, and Central.",
+    "citation": {
+     "source_id": "T1",
+     "page": 3,
+     "quote": "If you were to split the realizations by zone for the quarter, West, the prices were steady through July and August, stepped up in September with Mumbai being the biggest market moving strongly up by 3% to 4% per bag for both bag and bulk."
+    }
+   },
+   {
+    "text": "The company engages in expanding its production capabilities, exemplified by commissioning a greenfield cement capacity in the Southern markets during the quarter.",
+    "citation": {
+     "source_id": "T1",
+     "page": 4,
+     "quote": "This quarter, we have commissioned a greenfield cement capacity in the Southern markets."
+    }
+   }
+  ]
+ },
+ "trajectory": {
+  "years": [
+   "Mar 2022",
+   "Mar 2023",
+   "Mar 2024",
+   "Mar 2025",
+   "Mar 2026"
+  ],
+  "revenue": [
+   52599.0,
+   63240.0,
+   70908.0,
+   75955.0,
+   88512.0
+  ],
+  "operating_profit": [
+   11514.0,
+   10620.0,
+   12979.0,
+   12547.0,
+   17004.0
+  ],
+  "margin_pct": [
+   21.890150002851765,
+   16.793168880455408,
+   18.303999548711005,
+   16.51899150812981,
+   19.210954446854664
+  ],
+  "pat": [
+   7334.0,
+   5073.0,
+   7004.0,
+   6040.0,
+   8188.0
+  ],
+  "revenue_cagr_pct": 13.895395401567502,
+  "pat_cagr_pct": 2.7919801143127643,
+  "margin_change_bps": -268,
+  "read": "compressing",
+  "lender": false
+ },
+ "health": {
+  "as_of": "Mar 2026",
+  "debt_to_equity": 0.3100203591564001,
+  "cfo_to_pat_3y": 1.7373304446119067,
+  "fcf_3y_cr": 9541.0,
+  "working_capital_days": -57.0,
+  "wc_days_change_3y": -1.0,
+  "roce_pct": 13.0,
+  "flags": [
+   {
+    "level": "good",
+    "text": "Profits are backed by cash (CFO/PAT 1.74)"
+   }
+  ]
+ },
+ "bull": [
+  {
+   "text": "Profits are backed by cash with a CFO to PAT ratio of 1.74.",
+   "citation": {
+    "source_id": "FACTS",
+    "page": 0,
+    "quote": "Profits are backed by cash (CFO/PAT 1.74)"
+   }
+  },
+  {
+   "text": "UltraTech achieved growth of 13.8% this quarter, expanding its presence in the market.",
+   "citation": {
+    "source_id": "T1",
+    "page": 4,
+    "quote": "Our growth of 13.8% this quarter is comfortably ahead, which means that our presence in the market is continuously increasing."
+   }
+  },
+  {
+   "text": "Capacity utilization reached 71%, compared to 66% last year on a higher base.",
+   "citation": {
+    "source_id": "T1",
+    "page": 4,
+    "quote": "Our capacity utilization was 71%, better than 66% last year on a higher base."
+   }
+  }
+ ],
+ "bear": [
+  {
+   "text": "Fuel costs expanded from INR 45 a bag to INR 51.5 per bag.",
+   "citation": {
+    "source_id": "T1",
+    "page": 4,
+    "quote": "Fuel costs have risen from INR 45 a bag to INR 51.5 per bag."
+   }
+  },
+  {
+   "text": "Fuel costs and raw material costs increased by 13% and 3% quarter-on-quarter.",
+   "citation": {
+    "source_id": "T1",
+    "page": 4,
+    "quote": "Fuel costs and raw material costs rose about 13% and 3% quarter-on-quarter."
+   }
+  },
+  {
+   "text": "UltraTech reported net debt to EBITDA of 1.26 x at the end of September '26.",
+   "citation": {
+    "source_id": "T1",
+    "page": 9,
+    "quote": "We are at 1.26 x net debt EBITDA at the end of September '26."
+   }
+  }
+ ],
+ "notes": [],
+ "cost": {
+  "calls": 9,
+  "cached": 9,
+  "input_tokens": 0,
+  "output_tokens": 0,
+  "usd_list_price": 0.0
+ },
+ "build_seconds": 0.3,
+ "guard": {
+  "promises_proposed": 27,
+  "promises_kept": 18,
+  "points_proposed": 8,
+  "points_kept": 8,
+  "verdicts_downgraded": {
+   "other_period": 0,
+   "restated": 0,
+   "below_target": 0,
+   "other_measure": 1,
+   "meets_target": 0
+  }
+ },
+ "latest_results": {
+  "symbol": "ULTRACEMCO",
+  "period_end": "2026-09-30",
+  "period_label": "Q2 FY27",
+  "basis": "consolidated",
+  "format": "indas",
+  "audited": false,
+  "compared_qoq": "2026-06-30",
+  "compared_yoy": "2025-09-30",
+  "metrics": [
+   {
+    "key": "revenue",
+    "label": "Revenue",
+    "value": 23295.07,
+    "qoq_pct": -5.5,
+    "yoy_pct": 18.8,
+    "computed": false
+   },
+   {
+    "key": "ebitda",
+    "label": "EBITDA",
+    "value": 3721.29,
+    "qoq_pct": -25.8,
+    "yoy_pct": 20.3,
+    "computed": true
+   },
+   {
+    "key": "pbt",
+    "label": "PBT",
+    "value": 2060.79,
+    "qoq_pct": -40.8,
+    "yoy_pct": 24.0,
+    "computed": false
+   },
+   {
+    "key": "pat",
+    "label": "PAT",
+    "value": 1501.38,
+    "qoq_pct": -42.3,
+    "yoy_pct": 21.3,
+    "computed": false
+   }
+  ],
+  "margins": [
+   {
+    "key": "ebitda_margin",
+    "label": "EBITDA margin",
+    "value_pct": 16.0,
+    "qoq_bps": -437,
+    "yoy_bps": 19
+   },
+   {
+    "key": "pat_margin",
+    "label": "PAT margin",
+    "value_pct": 6.4,
+    "qoq_bps": -412,
+    "yoy_bps": 13
+   }
+  ],
+  "notes": [
+   "EBITDA is computed: revenue from operations minus operating expenses (excludes other income).",
+   "PBT includes an exceptional loss of ₹6.29 cr.",
+   "PAT includes a ₹2.21 cr share of loss of associates and joint ventures."
+  ],
+  "sources": [
+   "https://nsearchives.nseindia.com/corporate/xbrl/INTEGRATED_FILING_INDAS_1741832_19102026060745_WEB.xml",
+   "https://nsearchives.nseindia.com/corporate/xbrl/INTEGRATED_FILING_INDAS_1697527_20072026075845_WEB.xml",
+   "https://nsearchives.nseindia.com/corporate/xbrl/INTEGRATED_FILING_INDAS_1553696_18102025051907_WEB.xml"
+  ]
+ }
+}

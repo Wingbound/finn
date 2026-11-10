@@ -21,6 +21,22 @@ const SHOTS: { name: string; path: string; digest?: string; prep?: (p: import("@
   { name: "alerts", path: "/alerts" },
   { name: "dossier", path: "/research/PERSISTENT" },
   {
+    name: "loop",
+    path: "/",
+    digest: "digest-7d.json",
+    prep: async (p) => {
+      await p.locator('[data-story^="ZYDUSLIFE:results"]').scrollIntoViewIfNeeded();
+      await p.evaluate(() => document.querySelector('[data-story^="ZYDUSLIFE:results"] [aria-label="What management said"]')?.scrollIntoView({ block: "center" }));
+    },
+  },
+  {
+    name: "latest",
+    path: "/research/ZYDUSLIFE",
+    prep: async (p) => {
+      await p.evaluate(() => document.getElementById("latest")?.scrollIntoView({ block: "start" }));
+    },
+  },
+  {
     name: "trajectory",
     path: "/research/PERSISTENT",
     prep: async (p) => {

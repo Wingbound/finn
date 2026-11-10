@@ -1,0 +1,474 @@
+{
+ "symbol": "TECHM",
+ "name": "Tech Mahindra Ltd",
+ "basis": "consolidated",
+ "built_at": "2026-11-10T06:10:21.282790+05:30",
+ "sources": [
+  {
+   "id": "T1",
+   "kind": "transcript",
+   "title": "Q2 FY27 earnings call (Oct 2026)",
+   "quarter": "Q2 FY27",
+   "url": "https://www.bseindia.com/stockinfo/AnnPdfOpen.aspx?Pname=73a1ce37-8a16-4011-b2d6-cc4f3165de5f.pdf"
+  },
+  {
+   "id": "T2",
+   "kind": "transcript",
+   "title": "Q1 FY27 earnings call (Jul 2026)",
+   "quarter": "Q1 FY27",
+   "url": "https://www.bseindia.com/stockinfo/AnnPdfOpen.aspx?Pname=32f1b314-0ff0-4d2b-88f3-73df00061855.pdf"
+  },
+  {
+   "id": "T3",
+   "kind": "transcript",
+   "title": "Q4 FY26 earnings call (Apr 2026)",
+   "quarter": "Q4 FY26",
+   "url": "https://www.bseindia.com/stockinfo/AnnPdfOpen.aspx?Pname=1da5d491-416d-4037-be83-e0cdf7b1f438.pdf"
+  },
+  {
+   "id": "T4",
+   "kind": "transcript",
+   "title": "Q3 FY26 earnings call (Jan 2026)",
+   "quarter": "Q3 FY26",
+   "url": "https://www.bseindia.com/stockinfo/AnnPdfOpen.aspx?Pname=80aa906e-d58c-4c12-8389-1bfada3bb5c1.pdf"
+  },
+  {
+   "id": "AR",
+   "kind": "annual_report",
+   "title": "Annual Report 2026",
+   "quarter": null,
+   "url": "https://www.bseindia.com/xml-data/corpfiling/AttachHis/758bed2c-792d-434f-a326-118a8b4e7989.pdf"
+  }
+ ],
+ "ledger": {
+  "rows": [
+   {
+    "promise": {
+     "id": "T4-1",
+     "citation": {
+      "source_id": "T4",
+      "page": 10,
+      "quote": "This large deal, again, has been signed, but we expect the actual delivery of this to start in the first half of the next financial year."
+     },
+     "topic": "telecom deal delivery",
+     "kind": "qualitative",
+     "metric": null,
+     "target_low": null,
+     "target_high": null,
+     "unit": null,
+     "horizon": "first half of the next financial year",
+     "made_in": "Q3 FY26"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "No verifiable later evidence"
+   },
+   {
+    "promise": {
+     "id": "T3-1",
+     "citation": {
+      "source_id": "T3",
+      "page": 7,
+      "quote": "For FY27, our normalized effective tax rate should be in a similar range as we had articulated earlier."
+     },
+     "topic": "effective tax rate",
+     "kind": "qualitative",
+     "metric": "other",
+     "target_low": null,
+     "target_high": null,
+     "unit": null,
+     "horizon": "FY27",
+     "made_in": "Q4 FY26"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "No later evidence of the outcome yet"
+   },
+   {
+    "promise": {
+     "id": "T3-2",
+     "citation": {
+      "source_id": "T3",
+      "page": 20,
+      "quote": "And our commitment to all of you is get to 30% for next year."
+     },
+     "topic": "return on capital employed",
+     "kind": "quantitative",
+     "metric": "other",
+     "target_low": 30.0,
+     "target_high": null,
+     "unit": "%",
+     "horizon": "next year",
+     "made_in": "Q4 FY26"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "No verifiable later evidence"
+   },
+   {
+    "promise": {
+     "id": "T3-3",
+     "citation": {
+      "source_id": "T3",
+      "page": 20,
+      "quote": "So, we are on track for all of these metrics."
+     },
+     "topic": "metrics",
+     "kind": "qualitative",
+     "metric": null,
+     "target_low": null,
+     "target_high": null,
+     "unit": null,
+     "horizon": null,
+     "made_in": "Q4 FY26"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "No later evidence of the outcome yet"
+   },
+   {
+    "promise": {
+     "id": "T3-4",
+     "citation": {
+      "source_id": "T3",
+      "page": 21,
+      "quote": "So, the next 12 months we are committed on the same 4 metrics we gave you two years back."
+     },
+     "topic": "metrics",
+     "kind": "qualitative",
+     "metric": null,
+     "target_low": null,
+     "target_high": null,
+     "unit": null,
+     "horizon": "next 12 months",
+     "made_in": "Q4 FY26"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "No later evidence of the outcome yet"
+   },
+   {
+    "promise": {
+     "id": "T2-1",
+     "citation": {
+      "source_id": "T2",
+      "page": 10,
+      "quote": "As we look ahead, we'll continue to invest in the areas that we believe will shape the next phase of growth for the industry."
+     },
+     "topic": "investments",
+     "kind": "qualitative",
+     "metric": null,
+     "target_low": null,
+     "target_high": null,
+     "unit": null,
+     "horizon": null,
+     "made_in": "Q1 FY27"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "The later call restated the target; delivery is not shown yet"
+   },
+   {
+    "promise": {
+     "id": "T2-2",
+     "citation": {
+      "source_id": "T2",
+      "page": 13,
+      "quote": "As we have the large deal ramp -up which we'd mentioned, Mohit mentioned has not started yet, that will offset that and above and over and above that, the rest of the business needs to continuou sly perform to offset that and grow further for us for the next quarter."
+     },
+     "topic": "revenue growth",
+     "kind": "qualitative",
+     "metric": null,
+     "target_low": null,
+     "target_high": null,
+     "unit": null,
+     "horizon": "next quarter",
+     "made_in": "Q1 FY27"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "No later evidence of the outcome yet"
+   },
+   {
+    "promise": {
+     "id": "T2-3",
+     "citation": {
+      "source_id": "T2",
+      "page": 17,
+      "quote": "As far as the wage piece is concerned, we expect to be able to announce it effective Q2, obviously in a phased fashion which we will be announcing, to our employees in the days to come, so that will be effective, it'll start becoming effective Q2 in a phased fashion."
+     },
+     "topic": "wage increase",
+     "kind": "qualitative",
+     "metric": null,
+     "target_low": null,
+     "target_high": null,
+     "unit": null,
+     "horizon": "Q2",
+     "made_in": "Q1 FY27"
+    },
+    "status": "kept",
+    "method": "judged",
+    "actual": null,
+    "evidence": {
+     "source_id": "T1",
+     "page": 10,
+     "quote": "The margin improvement was driven by strong volume growth and Project Fortius savings, partially offset by the wage hikes."
+    },
+    "rationale": "Wage hikes became effective in Q2 as promised, impacting margins."
+   },
+   {
+    "promise": {
+     "id": "T1-1",
+     "citation": {
+      "source_id": "T1",
+      "page": 10,
+      "quote": "We expect to introduce AI revenue reporting as part of our H2 FY27 disclosures and continue it on an ongoing basis, refining the methodology as our portfolio and the markets mature."
+     },
+     "topic": "AI revenue reporting",
+     "kind": "qualitative",
+     "metric": null,
+     "target_low": null,
+     "target_high": null,
+     "unit": null,
+     "horizon": "H2 FY27",
+     "made_in": "Q2 FY27"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "Too recent to judge"
+   }
+  ],
+  "counts": {
+   "kept": 1,
+   "partly": 0,
+   "missed": 0,
+   "pending": 8,
+   "dropped": 0
+  },
+  "credibility_pct": null,
+  "note": null
+ },
+ "snapshot": {
+  "summary": [
+   {
+    "text": "Tech Mahindra is a global technology company offering AI-powered technology consulting and digital solutions to global enterprises across industries.",
+    "citation": {
+     "source_id": "T1",
+     "page": 3,
+     "quote": "From our roots in telecommunications, we have grown into a global technology company offering AI -powered technology consulting and digital solutions to global enterprises across industries."
+    }
+   }
+  ]
+ },
+ "trajectory": {
+  "years": [
+   "Mar 2022",
+   "Mar 2023",
+   "Mar 2024",
+   "Mar 2025",
+   "Mar 2026"
+  ],
+  "revenue": [
+   44646.0,
+   53290.0,
+   51996.0,
+   52988.0,
+   56815.0
+  ],
+  "operating_profit": [
+   8020.0,
+   7763.0,
+   4506.0,
+   6964.0,
+   9033.0
+  ],
+  "margin_pct": [
+   17.963535367110158,
+   14.567461062112965,
+   8.666051234710363,
+   13.142598324148864,
+   15.898970342339172
+  ],
+  "pat": [
+   5630.0,
+   4857.0,
+   2397.0,
+   4253.0,
+   4806.0
+  ],
+  "revenue_cagr_pct": 6.211150694543677,
+  "pat_cagr_pct": -3.878875494145706,
+  "margin_change_bps": -206,
+  "read": "compressing",
+  "lender": false
+ },
+ "health": {
+  "as_of": "Mar 2026",
+  "debt_to_equity": 0.07381145326850351,
+  "cfo_to_pat_3y": 1.6003840782122905,
+  "fcf_3y_cr": 16568.0,
+  "working_capital_days": 30.0,
+  "wc_days_change_3y": 2.0,
+  "roce_pct": 23.0,
+  "flags": [
+   {
+    "level": "good",
+    "text": "Virtually debt-free (D/E 0.07)"
+   },
+   {
+    "level": "good",
+    "text": "Profits are backed by cash (CFO/PAT 1.60)"
+   }
+  ]
+ },
+ "bull": [
+  {
+   "text": "The company is virtually debt-free with a low debt to equity ratio of 0.07.",
+   "citation": {
+    "source_id": "FACTS",
+    "page": 0,
+    "quote": "Virtually debt-free (D/E 0.07)"
+   }
+  },
+  {
+   "text": "Profits are well-backed by cash, as shown by a three-year CFO to PAT ratio of 1.60.",
+   "citation": {
+    "source_id": "FACTS",
+    "page": 0,
+    "quote": "Profits are backed by cash (CFO/PAT 1.60)"
+   }
+  },
+  {
+   "text": "The business has generated substantial free cash flow totaling 16,568 crores over three years.",
+   "citation": {
+    "source_id": "FACTS",
+    "page": 0,
+    "quote": "Free cash flow (3y): ₹16,568 cr"
+   }
+  }
+ ],
+ "bear": [
+  {
+   "text": "The operating margin has declined by 206 basis points.",
+   "citation": {
+    "source_id": "FACTS",
+    "page": 0,
+    "quote": "Operating margin change: -206 bps"
+   }
+  },
+  {
+   "text": "Out of nine tracked promises, eight remain pending and only one has been resolved.",
+   "citation": {
+    "source_id": "FACTS",
+    "page": 0,
+    "quote": "Promise ledger: 1 kept, 0 partly, 0 missed, 8 pending, 0 dropped (1 of 9 promises resolved)"
+   }
+  }
+ ],
+ "notes": [],
+ "cost": {
+  "calls": 9,
+  "cached": 9,
+  "input_tokens": 0,
+  "output_tokens": 0,
+  "usd_list_price": 0.0
+ },
+ "build_seconds": 0.6,
+ "guard": {
+  "promises_proposed": 21,
+  "promises_kept": 9,
+  "points_proposed": 7,
+  "points_kept": 6,
+  "verdicts_downgraded": {
+   "other_period": 0,
+   "restated": 1,
+   "below_target": 0,
+   "other_measure": 0,
+   "meets_target": 0
+  }
+ },
+ "latest_results": {
+  "symbol": "TECHM",
+  "period_end": "2026-09-30",
+  "period_label": "Q2 FY27",
+  "basis": "consolidated",
+  "format": "indas",
+  "audited": true,
+  "compared_qoq": "2026-06-30",
+  "compared_yoy": "2025-09-30",
+  "metrics": [
+   {
+    "key": "revenue",
+    "label": "Revenue",
+    "value": 16180.2,
+    "qoq_pct": 3.0,
+    "yoy_pct": 15.6,
+    "computed": false
+   },
+   {
+    "key": "ebitda",
+    "label": "EBITDA",
+    "value": 2878.5,
+    "qoq_pct": 5.0,
+    "yoy_pct": 32.8,
+    "computed": true
+   },
+   {
+    "key": "pbt",
+    "label": "PBT",
+    "value": 2296.1,
+    "qoq_pct": 12.2,
+    "yoy_pct": 38.4,
+    "computed": false
+   },
+   {
+    "key": "pat",
+    "label": "PAT",
+    "value": 1609.7,
+    "qoq_pct": 8.3,
+    "yoy_pct": 34.0,
+    "computed": false
+   }
+  ],
+  "margins": [
+   {
+    "key": "ebitda_margin",
+    "label": "EBITDA margin",
+    "value_pct": 17.8,
+    "qoq_bps": 34,
+    "yoy_bps": 230
+   },
+   {
+    "key": "pat_margin",
+    "label": "PAT margin",
+    "value_pct": 9.9,
+    "qoq_bps": 49,
+    "yoy_bps": 136
+   }
+  ],
+  "notes": [
+   "EBITDA is computed: revenue from operations minus operating expenses (excludes other income)."
+  ],
+  "sources": [
+   "https://nsearchives.nseindia.com/corporate/xbrl/INTEGRATED_FILING_INDAS_1739120_15102026053428_WEB.xml",
+   "https://nsearchives.nseindia.com/corporate/xbrl/INTEGRATED_FILING_INDAS_1694424_16072026054913_WEB.xml",
+   "https://nsearchives.nseindia.com/corporate/xbrl/INTEGRATED_FILING_INDAS_1548249_14102025093717_WEB.xml"
+  ]
+ }
+}

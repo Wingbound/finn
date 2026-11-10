@@ -8,9 +8,10 @@ FINN is a phone-first investing assistant for a portfolio of Indian listed compa
 **Live:** [finn-qx98.vercel.app](https://finn-qx98.vercel.app) (best on a phone; installable) · **API:** [finn-peach.vercel.app/health](https://finn-peach.vercel.app/health) · **Build history:** [`ai-history/`](ai-history/) · **Design:** [`docs/DESIGN.md`](docs/DESIGN.md) · **Evals:** [`docs/EVALS.md`](docs/EVALS.md)
 
 <p>
-<img src="docs/screenshots/today-light.png" width="31%" alt="Today: 27 things matter, routine filings struck through">
-<img src="docs/screenshots/dossier-light.png" width="31%" alt="Dossier: the Promise Ledger with credibility and a missed promise">
-<img src="docs/screenshots/source-light.png" width="31%" alt="Citation sheet: the transcript page with the quote highlighted">
+<img src="docs/screenshots/today-light.png" width="23%" alt="Today: 27 things matter, routine filings struck through">
+<img src="docs/screenshots/dossier-light.png" width="23%" alt="Dossier: the Promise Ledger with credibility and a missed promise">
+<img src="docs/screenshots/loop-light.png" width="23%" alt="A results card with what management said and a pace sentence">
+<img src="docs/screenshots/source-light.png" width="23%" alt="Citation sheet: the transcript page with the quote highlighted">
 </p>
 
 ## What it does
@@ -19,6 +20,7 @@ FINN is a phone-first investing assistant for a portfolio of Indian listed compa
 - **Ranking.** Every filing for the 18 holdings is classified (rules first, an LLM for the rest) and scored. Related filings collapse into one story, and the screen says "N things matter".
 - **The rest.** The routine filings are struck through and kept in a drawer.
 - **Story cards.** Results get a Revenue, EBITDA, PBT and PAT grid with QoQ and YoY, computed from NSE's XBRL, not read by a model. Lenders get their own lines. Management changes get the person's profile, taken verbatim from the filing. Deals, fund-raises and litigation get a one-line brief with grounded facts.
+- **Results meet promises.** Under a results grid, FINN shows the company's open promises from its own calls, quoted with call and page. When the quote names the same line, a pace sentence sets this quarter beside the target, for example "This quarter: revenue +21.6% YoY, above the 15–18% target. One quarter, not the full year." It never grades a promise. The dossier, in turn, shows the latest filed quarter under its ledger.
 - **The end.** The feed closes with "You're caught up."
 
 **Alerts.** You set the rules (a volume multiple, a price move, which filing types count, per-stock overrides). They live on your phone and go to the server with each request, so the server keeps no user state.
@@ -68,11 +70,12 @@ screener.in ──┘   classify · enrich      (committed)  ├─ GET /researc
 
 - **Classification:** 91.3% overall and 87.0% on material categories, on a hand-labelled set of 104 filings. Rules alone score 85.6%.
 - **Results numbers:** 68 of 70 metric pairs match screener for all 18 holdings. The 2 misses are EBITDA definitions, explained in EVALS.
-- **Research citations:** 143 of 143 re-verified verbatim on their pages across 7 dossiers. The dossiers cover:
+- **Research citations:** all re-verified verbatim on their pages, 510 of 510 across 23 dossiers, one for each of the 18 holdings plus 5 others. They include:
   - a bank (HDFCBANK);
   - an NBFC (BAJFINANCE);
-  - a company with negative net worth (IDEA).
-- **Ledger, hand audit:** before the verdict checks, 3 of 11 resolved verdicts were wrong. All three mistakes were mechanical, so code checks now catch them: after the checks, 0 of 8 are wrong and 3 are debatable. Most rows stay pending, for two reasons: a promise from the newest call has no later call to grade it, and many targets aren't due yet. EVALS breaks down why each one is pending.
+  - a company with negative net worth (IDEA);
+  - a company that holds no earnings calls (TRENT).
+- **Ledger, hand audit:** 23 resolved verdicts, 14 correct, 9 debatable and 0 wrong. Before the code checks, 8 of 31 were wrong, all in mechanical ways: a restated target, evidence from another period or measure, or a figure on the wrong side of the target. The checks now catch those, and they can only downgrade a verdict. Most rows stay pending, for two reasons: a promise from the newest call has no later call to grade it, and many targets aren't due yet. EVALS breaks down why each one is pending.
 
 ## Deliberately left out
 
@@ -95,7 +98,7 @@ screener.in ──┘   classify · enrich      (committed)  ├─ GET /researc
 cd backend
 cp .env.example .env            # add GEMINI_API_KEY and GROQ_API_KEY
 uv sync
-uv run pytest -q                # 778 tests, no network
+uv run pytest -q                # 837 tests, no network
 uv run uvicorn finn.api.main:app --reload --port 8000
 
 # frontend (Node 22)

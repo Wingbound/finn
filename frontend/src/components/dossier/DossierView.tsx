@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { ResultsGrid } from "@/components/today/ResultsGrid";
 import { stamp } from "@/lib/format";
 import type { Citation, Dossier } from "@/lib/types";
 import { CostLine } from "./CostLine";
@@ -29,6 +30,19 @@ export function DossierView({ dossier }: { dossier: Dossier }) {
       </header>
 
       <LedgerSection dossier={d} onCite={setCite} />
+
+      {d.latest_results ? (
+        <section aria-labelledby="latest" className="pt-8">
+          <h2 id="latest" className="text-section font-semibold">
+            Latest filed quarter
+          </h2>
+          <p className="mt-1 text-ink-2">
+            From the company&rsquo;s XBRL results filing to NSE.
+            {d.ledger?.rows.length ? " Read it beside the promises above." : ""}
+          </p>
+          <ResultsGrid card={d.latest_results} />
+        </section>
+      ) : null}
 
       <section aria-labelledby="snapshot" className="pt-8">
         <h2 id="snapshot" className="text-section font-semibold">

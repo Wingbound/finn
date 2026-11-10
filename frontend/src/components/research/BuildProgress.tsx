@@ -53,12 +53,12 @@ export function BuildProgress({
   };
 
   return (
-    <section aria-live="polite" className="py-4">
+    <section className="py-4">
       <h2 className="text-title font-semibold">Reading {symbol}&rsquo;s calls and annual report</h2>
       <p className="text-caption text-ink-2">
         {phase.kind === "running" ? `Usually 40 to 90 seconds. ${elapsed} s so far.` : `Stopped after ${elapsed} s.`}
       </p>
-      <ol className="mt-3 space-y-1.5 border-l-2 border-rule pl-3">
+      <ol aria-live="polite" className="mt-3 space-y-1.5 border-l-2 border-rule pl-3">
         {lines.map((l, i) => (
           <li key={`${i}-${l}`} className={i === lines.length - 1 && phase.kind === "running" ? "text-ink" : "text-ink-2"}>
             {l}

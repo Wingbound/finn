@@ -2,7 +2,7 @@
  "symbol": "PERSISTENT",
  "name": "Persistent Systems Ltd",
  "basis": "consolidated",
- "built_at": "2026-11-09T21:16:45.445032+05:30",
+ "built_at": "2026-11-10T06:10:28.551497+05:30",
  "sources": [
   {
    "id": "T1",
@@ -474,7 +474,7 @@
   "output_tokens": 0,
   "usd_list_price": 0.0
  },
- "build_seconds": 0.3,
+ "build_seconds": 0.4,
  "guard": {
   "promises_proposed": 16,
   "promises_kept": 12,
@@ -483,7 +483,77 @@
   "verdicts_downgraded": {
    "other_period": 0,
    "restated": 0,
-   "below_target": 0
+   "below_target": 0,
+   "other_measure": 0,
+   "meets_target": 0
   }
+ },
+ "latest_results": {
+  "symbol": "PERSISTENT",
+  "period_end": "2026-09-30",
+  "period_label": "Q2 FY27",
+  "basis": "consolidated",
+  "format": "indas",
+  "audited": true,
+  "compared_qoq": "2026-06-30",
+  "compared_yoy": "2025-09-30",
+  "metrics": [
+   {
+    "key": "revenue",
+    "label": "Revenue",
+    "value": 4663.9,
+    "qoq_pct": 8.4,
+    "yoy_pct": 30.3,
+    "computed": false
+   },
+   {
+    "key": "ebitda",
+    "label": "EBITDA",
+    "value": 633.48,
+    "qoq_pct": -9.1,
+    "yoy_pct": -7.3,
+    "computed": true
+   },
+   {
+    "key": "pbt",
+    "label": "PBT",
+    "value": 453.68,
+    "qoq_pct": -27.2,
+    "yoy_pct": -26.4,
+    "computed": false
+   },
+   {
+    "key": "pat",
+    "label": "PAT",
+    "value": 351.51,
+    "qoq_pct": -27.2,
+    "yoy_pct": -25.4,
+    "computed": false
+   }
+  ],
+  "margins": [
+   {
+    "key": "ebitda_margin",
+    "label": "EBITDA margin",
+    "value_pct": 13.6,
+    "qoq_bps": -261,
+    "yoy_bps": -549
+   },
+   {
+    "key": "pat_margin",
+    "label": "PAT margin",
+    "value_pct": 7.5,
+    "qoq_bps": -369,
+    "yoy_bps": -563
+   }
+  ],
+  "notes": [
+   "EBITDA is computed: revenue from operations minus operating expenses (excludes other income)."
+  ],
+  "sources": [
+   "https://nsearchives.nseindia.com/corporate/xbrl/INTEGRATED_FILING_INDAS_1739401_15102026080919_WEB.xml",
+   "https://nsearchives.nseindia.com/corporate/xbrl/INTEGRATED_FILING_INDAS_1706739_02082026064511_WEB.xml",
+   "https://nsearchives.nseindia.com/corporate/xbrl/INTEGRATED_FILING_INDAS_1548199_14102025081605_WEB.xml"
+  ]
  }
 }

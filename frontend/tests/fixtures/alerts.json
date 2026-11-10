@@ -1,10 +1,40 @@
 {
- "as_of": "2026-11-09T10:44:11.869620+05:30",
+ "as_of": "2026-11-10T02:27:31.611348+05:30",
  "window": {
-  "start": "2026-10-31T18:58:42+05:30",
-  "end": "2026-11-07T18:58:42+05:30"
+  "start": "2026-11-02T23:43:03+05:30",
+  "end": "2026-11-09T23:43:03+05:30"
  },
  "alerts": [
+  {
+   "kind": "volume",
+   "symbol": "AMBER",
+   "date": "2026-11-09",
+   "value": 2.2161859203154117,
+   "threshold": 2.0,
+   "message": "AMBER traded 2.2× its 20-day average volume",
+   "story_id": null,
+   "seq_id": null
+  },
+  {
+   "kind": "volume",
+   "symbol": "TATASTEEL",
+   "date": "2026-11-09",
+   "value": 2.2345977422290426,
+   "threshold": 2.0,
+   "message": "TATASTEEL traded 2.2× its 20-day average volume",
+   "story_id": null,
+   "seq_id": null
+  },
+  {
+   "kind": "volume",
+   "symbol": "VOLTAS",
+   "date": "2026-11-09",
+   "value": 2.890149804475766,
+   "threshold": 2.0,
+   "message": "VOLTAS traded 2.9× its 20-day average volume",
+   "story_id": null,
+   "seq_id": null
+  },
   {
    "kind": "filing",
    "symbol": "AMBER",
@@ -364,76 +394,6 @@
    "message": "Tata Steel Limited has informed the Exchange about  Effective Date  of the Scheme of Amalgamation amongst Tata Steel Limited and Rujuvalika ",
    "story_id": "TATASTEEL:mna:106841469",
    "seq_id": "106841469"
-  },
-  {
-   "kind": "price",
-   "symbol": "AMBER",
-   "date": "2026-11-02",
-   "value": 6.1040068201193565,
-   "threshold": 5.0,
-   "message": "AMBER up 6.1% on the day",
-   "story_id": null,
-   "seq_id": null
-  },
-  {
-   "kind": "volume",
-   "symbol": "LODHA",
-   "date": "2026-11-02",
-   "value": 2.1600905843777616,
-   "threshold": 2.0,
-   "message": "LODHA traded 2.2× its 20-day average volume",
-   "story_id": null,
-   "seq_id": null
-  },
-  {
-   "kind": "volume",
-   "symbol": "RELIANCE",
-   "date": "2026-11-02",
-   "value": 5.83448477751834,
-   "threshold": 2.0,
-   "message": "RELIANCE traded 5.8× its 20-day average volume",
-   "story_id": null,
-   "seq_id": null
-  },
-  {
-   "kind": "price",
-   "symbol": "RELIANCE",
-   "date": "2026-11-02",
-   "value": 11.597559683621084,
-   "threshold": 5.0,
-   "message": "RELIANCE up 11.6% on the day",
-   "story_id": null,
-   "seq_id": null
-  },
-  {
-   "kind": "volume",
-   "symbol": "SUNPHARMA",
-   "date": "2026-11-02",
-   "value": 2.116117685653504,
-   "threshold": 2.0,
-   "message": "SUNPHARMA traded 2.1× its 20-day average volume",
-   "story_id": null,
-   "seq_id": null
-  },
-  {
-   "kind": "price",
-   "symbol": "TATASTEEL",
-   "date": "2026-11-02",
-   "value": 5.829348841215198,
-   "threshold": 5.0,
-   "message": "TATASTEEL up 5.8% on the day",
-   "story_id": null,
-   "seq_id": null
-  },
-  {
-   "kind": "filing",
-   "symbol": "ZYDUSLIFE",
-   "date": "2026-10-31",
-   "value": 90.0,
-   "threshold": 45.0,
-   "message": "Zydus Lifesciences Limited has informed the Exchange about change in Management",
-   "story_id": "ZYDUSLIFE:management_change:106838526",
-   "seq_id": "106838526"
   }
  ]
 }

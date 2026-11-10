@@ -1,5 +1,5 @@
 import { expect, test } from "@playwright/test";
-import { mockApi, watchErrors } from "./mock";
+import { headlineFor, json, mockApi, watchErrors } from "./mock";
 
 test("Today: change window, see why a story ranks, open what FINN set aside", async ({ page }) => {
   const errors = watchErrors(page);
@@ -11,12 +11,12 @@ test("Today: change window, see why a story ranks, open what FINN set aside", as
     },
   });
   await page.goto("/");
-  await expect(page.getByRole("heading", { level: 1 })).toHaveText("7 things matter");
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText(headlineFor("digest-24h.json"));
   expect(bodies[0]).toMatchObject({ hours: 24, floor: "important" });
   expect(bodies[0].subscribed).toContain("results");
 
   await page.getByRole("radio", { name: "7 days" }).click();
-  await expect(page.getByRole("heading", { level: 1 })).toHaveText("27 things matter");
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText(headlineFor("digest-7d.json"));
   expect(bodies.at(-1)).toMatchObject({ hours: 168 });
 
   const first = page.getByRole("article").first();
@@ -37,7 +37,7 @@ test("Today: an empty window says how old the newest filing is", async ({ page }
   await mockApi(page, { digest: () => "digest-empty.json" });
   await page.goto("/");
   await expect(page.getByText("Nothing new in the last 24 hours.")).toBeVisible();
-  await expect(page.getByText(/Newest filing: 7 Nov, 16:58/)).toBeVisible();
+  await expect(page.getByText(/^Newest filing: \d{1,2} [A-Z][a-z]{2}, \d{2}:\d{2}\.$/)).toBeVisible();
 });
 
 test("Today: an unreachable server offers a retry", async ({ page }) => {
@@ -50,7 +50,7 @@ test("Today: an unreachable server offers a retry", async ({ page }) => {
 test("Today: a failed refresh after a window change says so above the older stories", async ({ page }) => {
   await mockApi(page, { digest: () => "digest-24h.json" });
   await page.goto("/");
-  await expect(page.getByRole("heading", { level: 1 })).toHaveText("7 things matter");
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText(headlineFor("digest-24h.json"));
   await page.route("http://api.finn.test/digest", (r) => r.abort("connectionrefused"));
   await page.getByRole("radio", { name: "7 days" }).click();
   const alert = page.getByRole("alert").filter({ hasText: /Couldn.t reach FINN/ });
@@ -60,8 +60,10 @@ test("Today: a failed refresh after a window change says so above the older stor
 
 test("Today: a link to a routine story opens the drawer at it (final review I5)", async ({ page }) => {
   await mockApi(page, { digest: () => "digest-24h.json" });
-  await page.goto("/#story-ZYDUSLIFE%3Apress_release%3A106851457");
-  await expect(page.locator('[id="story-ZYDUSLIFE:press_release:106851457"]')).toBeInViewport();
+  const routine = Object.values(json("digest-24h.json").routine as Record<string, { id: string }[]>).flat();
+  const id = routine[0]!.id;
+  await page.goto(`/#story-${encodeURIComponent(id)}`);
+  await expect(page.locator(`[id="story-${id}"]`)).toBeInViewport();
 });
 
 test("Today: a link to a story outside the window says so (final review I5)", async ({ page }) => {

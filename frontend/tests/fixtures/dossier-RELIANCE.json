@@ -1,0 +1,648 @@
+{
+ "symbol": "RELIANCE",
+ "name": "Reliance Industries Ltd",
+ "basis": "consolidated",
+ "built_at": "2026-11-10T06:10:20.716449+05:30",
+ "sources": [
+  {
+   "id": "T1",
+   "kind": "transcript",
+   "title": "Q2 FY27 earnings call (Nov 2026)",
+   "quarter": "Q2 FY27",
+   "url": "https://www.bseindia.com/stockinfo/AnnPdfOpen.aspx?Pname=8e997741-4d35-4188-933a-cf020fb9c816.pdf"
+  },
+  {
+   "id": "T2",
+   "kind": "transcript",
+   "title": "Q1 FY27 earnings call (Jul 2026)",
+   "quarter": "Q1 FY27",
+   "url": "https://www.bseindia.com/stockinfo/AnnPdfOpen.aspx?Pname=c9d3d96a-8b04-4b41-b454-3f98d1f90702.pdf"
+  },
+  {
+   "id": "T3",
+   "kind": "transcript",
+   "title": "Q4 FY26 earnings call (Apr 2026)",
+   "quarter": "Q4 FY26",
+   "url": "https://www.bseindia.com/stockinfo/AnnPdfOpen.aspx?Pname=971d8c86-397a-4780-b843-5a84d3006d0b.pdf"
+  },
+  {
+   "id": "T4",
+   "kind": "transcript",
+   "title": "Q3 FY26 earnings call (Jan 2026)",
+   "quarter": "Q3 FY26",
+   "url": "https://www.bseindia.com/stockinfo/AnnPdfOpen.aspx?Pname=26290395-526a-441f-a347-c8ac12e4adf3.pdf"
+  },
+  {
+   "id": "AR",
+   "kind": "annual_report",
+   "title": "Annual Report 2026",
+   "quarter": null,
+   "url": "https://www.bseindia.com/xml-data/corpfiling/AttachHis/cc08294f-ec68-4f15-aaa4-c14a3c4bdfb2.pdf"
+  }
+ ],
+ "ledger": {
+  "rows": [
+   {
+    "promise": {
+     "id": "T4-1",
+     "citation": {
+      "source_id": "T4",
+      "page": 6,
+      "quote": "We do plan to expand this to other users as well in the course of time."
+     },
+     "topic": "Gemini Pro offer expansion",
+     "kind": "qualitative",
+     "metric": null,
+     "target_low": null,
+     "target_high": null,
+     "unit": null,
+     "horizon": null,
+     "made_in": "Q3 FY26"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "No later evidence of the outcome yet"
+   },
+   {
+    "promise": {
+     "id": "T4-2",
+     "citation": {
+      "source_id": "T4",
+      "page": 12,
+      "quote": "We will be more than doubling our capacity on beverages this year."
+     },
+     "topic": "beverages capacity expansion",
+     "kind": "qualitative",
+     "metric": "volume_growth",
+     "target_low": null,
+     "target_high": null,
+     "unit": null,
+     "horizon": "this year",
+     "made_in": "Q3 FY26"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "No later evidence of the outcome yet"
+   },
+   {
+    "promise": {
+     "id": "T4-3",
+     "citation": {
+      "source_id": "T4",
+      "page": 12,
+      "quote": "In fact, one of the beverage plants at Kurnool will be ready by March itself."
+     },
+     "topic": "Kurnool beverage plant readiness",
+     "kind": "qualitative",
+     "metric": "other",
+     "target_low": null,
+     "target_high": null,
+     "unit": null,
+     "horizon": "March",
+     "made_in": "Q3 FY26"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "No later evidence of the outcome yet"
+   },
+   {
+    "promise": {
+     "id": "T4-4",
+     "citation": {
+      "source_id": "T4",
+      "page": 13,
+      "quote": "This is currently being launched in four cities, and we plan to expand this in next quarter."
+     },
+     "topic": "noodle segment expansion",
+     "kind": "qualitative",
+     "metric": null,
+     "target_low": null,
+     "target_high": null,
+     "unit": null,
+     "horizon": "next quarter",
+     "made_in": "Q3 FY26"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "No later evidence of the outcome yet"
+   },
+   {
+    "promise": {
+     "id": "T4-5",
+     "citation": {
+      "source_id": "T4",
+      "page": 23,
+      "quote": "During the year, we will start commissioning these factories."
+     },
+     "topic": "battery factory commissioning",
+     "kind": "qualitative",
+     "metric": null,
+     "target_low": null,
+     "target_high": null,
+     "unit": null,
+     "horizon": "this year",
+     "made_in": "Q3 FY26"
+    },
+    "status": "kept",
+    "method": "judged",
+    "actual": null,
+    "evidence": {
+     "source_id": "T3",
+     "page": 19,
+     "quote": "The commissioning of various factories, both solar and battery again are progressing at good pace."
+    },
+    "rationale": "Management confirmed the ongoing commissioning of the solar and battery factories during the year as promised."
+   },
+   {
+    "promise": {
+     "id": "T3-1",
+     "citation": {
+      "source_id": "T3",
+      "page": 26,
+      "quote": "We will continue to build. There's a lot of penetration to be done, especially in the tier two and beyond cities."
+     },
+     "topic": "retail expansion",
+     "kind": "qualitative",
+     "metric": null,
+     "target_low": null,
+     "target_high": null,
+     "unit": null,
+     "horizon": null,
+     "made_in": "Q4 FY26"
+    },
+    "status": "kept",
+    "method": "judged",
+    "actual": null,
+    "evidence": {
+     "source_id": "T1",
+     "page": 8,
+     "quote": "We are growing pretty rapidly in the smaller cities as well."
+    },
+    "rationale": "Management confirmed continued expansion and rapid growth in smaller, tier two and beyond cities."
+   },
+   {
+    "promise": {
+     "id": "T3-2",
+     "citation": {
+      "source_id": "T3",
+      "page": 26,
+      "quote": "And you will also continue to see the productivity increasing."
+     },
+     "topic": "retail productivity",
+     "kind": "qualitative",
+     "metric": null,
+     "target_low": null,
+     "target_high": null,
+     "unit": null,
+     "horizon": null,
+     "made_in": "Q4 FY26"
+    },
+    "status": "kept",
+    "method": "judged",
+    "actual": null,
+    "evidence": {
+     "source_id": "T1",
+     "page": 7,
+     "quote": "As LFL is positive, so we are getting more productivity from the existing space"
+    },
+    "rationale": "Management reported positive like-for-like growth and increased productivity from existing store space."
+   },
+   {
+    "promise": {
+     "id": "T2-1",
+     "citation": {
+      "source_id": "T2",
+      "page": 11,
+      "quote": "For the next quarter, we plan to kind of enter into Australia and African markets."
+     },
+     "topic": "market expansion",
+     "kind": "qualitative",
+     "metric": null,
+     "target_low": null,
+     "target_high": null,
+     "unit": null,
+     "horizon": "next quarter",
+     "made_in": "Q1 FY27"
+    },
+    "status": "kept",
+    "method": "judged",
+    "actual": null,
+    "evidence": {
+     "source_id": "T1",
+     "page": 13,
+     "quote": "Internationally, we are now present in Australia in major supermarkets like Coles and Woolworths. This is again backed by the local production in the Australian market itself. We have launched products in Kenya and African markets, along with the existing markets of Ghana and Nigeria."
+    },
+    "rationale": "Management successfully entered both the Australian and African markets during the quarter."
+   },
+   {
+    "promise": {
+     "id": "T2-2",
+     "citation": {
+      "source_id": "T2",
+      "page": 22,
+      "quote": "At least next 12 months, I think in the next nine to 10 months it will continue."
+     },
+     "topic": "dark store expansion",
+     "kind": "qualitative",
+     "metric": null,
+     "target_low": null,
+     "target_high": null,
+     "unit": null,
+     "horizon": "next 12 months",
+     "made_in": "Q1 FY27"
+    },
+    "status": "kept",
+    "method": "judged",
+    "actual": null,
+    "evidence": {
+     "source_id": "T1",
+     "page": 7,
+     "quote": "We continue to make investments in dark stores and some of our online digital platforms to grow the digital commerce business pretty aggressively."
+    },
+    "rationale": "Management continues dark store investments and expansion during the period."
+   },
+   {
+    "promise": {
+     "id": "T1-1",
+     "citation": {
+      "source_id": "T1",
+      "page": 5,
+      "quote": "And we do expect that to ramp up in the coming quarters."
+     },
+     "topic": "fixed wireless",
+     "kind": "qualitative",
+     "metric": null,
+     "target_low": null,
+     "target_high": null,
+     "unit": null,
+     "horizon": null,
+     "made_in": "Q2 FY27"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "Too recent to judge"
+   },
+   {
+    "promise": {
+     "id": "T1-2",
+     "citation": {
+      "source_id": "T1",
+      "page": 24,
+      "quote": "When it comes to the solar value chain, as indicated, I think our module capacity is now six plus gigawatt, and we will be achieving up to 20 gigawatt early next year."
+     },
+     "topic": "solar module capacity",
+     "kind": "quantitative",
+     "metric": "other",
+     "target_low": 20.0,
+     "target_high": null,
+     "unit": null,
+     "horizon": "early next year",
+     "made_in": "Q2 FY27"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "Too recent to judge"
+   },
+   {
+    "promise": {
+     "id": "T1-3",
+     "citation": {
+      "source_id": "T1",
+      "page": 24,
+      "quote": "Similarly, solar cell is now nearing around 5-gigawatt and we will be achieving again 20-gigawatt capacity sometime first half next year."
+     },
+     "topic": "solar cell capacity",
+     "kind": "quantitative",
+     "metric": "other",
+     "target_low": 20.0,
+     "target_high": null,
+     "unit": null,
+     "horizon": "first half next year",
+     "made_in": "Q2 FY27"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "Too recent to judge"
+   },
+   {
+    "promise": {
+     "id": "T1-4",
+     "citation": {
+      "source_id": "T1",
+      "page": 24,
+      "quote": "On the battery side, in next half year we will commission our BESS facility, which is a pack and container up to 40-gigawatt hour and cell will come sometime I would say late next year, which is again around 35-gigawatt to 40-gigawatt hour."
+     },
+     "topic": "battery facility capacity",
+     "kind": "quantitative",
+     "metric": "other",
+     "target_low": 35.0,
+     "target_high": 40.0,
+     "unit": null,
+     "horizon": "late next year",
+     "made_in": "Q2 FY27"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "Too recent to judge"
+   },
+   {
+    "promise": {
+     "id": "T1-5",
+     "citation": {
+      "source_id": "T1",
+      "page": 25,
+      "quote": "The transmission capacity we will start seeing the connectivity by first half or actually Q1 of next year and we will have the necessary modules installed for that."
+     },
+     "topic": "transmission capacity connectivity",
+     "kind": "qualitative",
+     "metric": null,
+     "target_low": null,
+     "target_high": null,
+     "unit": null,
+     "horizon": "Q1 of next year",
+     "made_in": "Q2 FY27"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "Too recent to judge"
+   },
+   {
+    "promise": {
+     "id": "T1-6",
+     "citation": {
+      "source_id": "T1",
+      "page": 25,
+      "quote": "I think we have already given the indication that we will see the revenues for FY2028 from the new energy complex."
+     },
+     "topic": "new energy revenue",
+     "kind": "qualitative",
+     "metric": null,
+     "target_low": null,
+     "target_high": null,
+     "unit": null,
+     "horizon": "FY2028",
+     "made_in": "Q2 FY27"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "Too recent to judge"
+   },
+   {
+    "promise": {
+     "id": "T1-7",
+     "citation": {
+      "source_id": "T1",
+      "page": 26,
+      "quote": "Plan wise, we are thinking about another 120-megawatt, but that will take some time and in addition, the one that we are doing for one of the hyperscalers that is more building the infra part."
+     },
+     "topic": "data center capacity plan",
+     "kind": "quantitative",
+     "metric": "other",
+     "target_low": 120.0,
+     "target_high": null,
+     "unit": null,
+     "horizon": null,
+     "made_in": "Q2 FY27"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "Too recent to judge"
+   }
+  ],
+  "counts": {
+   "kept": 5,
+   "partly": 0,
+   "missed": 0,
+   "pending": 11,
+   "dropped": 0
+  },
+  "credibility_pct": 100.0,
+  "note": null
+ },
+ "snapshot": {
+  "summary": [
+   {
+    "text": "The company operates in the oil-to-chemicals segment, which benefited from tight global markets and downstream operational excellence.",
+    "citation": {
+     "source_id": "T1",
+     "page": 3,
+     "quote": "So, O2C led the charge with EBITDA up 68%."
+    }
+   },
+   {
+    "text": "The digital services segment provides mobility, home, and enterprise connectivity alongside digital offerings.",
+    "citation": {
+     "source_id": "T1",
+     "page": 4,
+     "quote": "What is important is. We are able to, in our minds at least, we see visibility of hi gh teen growth for Jio, and those are the points that Akash was talking about."
+    }
+   },
+   {
+    "text": "The retail segment focuses on building a scalable digital commerce platform while growing its online presence.",
+    "citation": {
+     "source_id": "T1",
+     "page": 4,
+     "quote": "Retail performance has been, you would have seen the numbers, about 6% revenue increase, about 10% lower on the EBITDA side."
+    }
+   }
+  ]
+ },
+ "trajectory": {
+  "years": [
+   "Mar 2022",
+   "Mar 2023",
+   "Mar 2024",
+   "Mar 2025",
+   "Mar 2026"
+  ],
+  "revenue": [
+   694673.0,
+   876396.0,
+   899041.0,
+   962820.0,
+   1055780.0
+  ],
+  "operating_profit": [
+   108581.0,
+   142318.0,
+   162498.0,
+   165598.0,
+   179065.0
+  ],
+  "margin_pct": [
+   15.630519683361813,
+   16.239006111392566,
+   18.07459281612296,
+   17.199268814524,
+   16.960446305101442
+  ],
+  "pat": [
+   67845.0,
+   74088.0,
+   79020.0,
+   81309.0,
+   95754.0
+  ],
+  "revenue_cagr_pct": 11.032023031385684,
+  "pat_cagr_pct": 8.99580156662032,
+  "margin_change_bps": 133,
+  "read": "growing",
+  "lender": false
+ },
+ "health": {
+  "as_of": "Mar 2026",
+  "debt_to_equity": 0.44573963253431853,
+  "cfo_to_pat_3y": 2.068095109788623,
+  "fcf_3y_cr": 132314.0,
+  "working_capital_days": -66.0,
+  "wc_days_change_3y": 0.0,
+  "roce_pct": 10.0,
+  "flags": [
+   {
+    "level": "good",
+    "text": "Profits are backed by cash (CFO/PAT 2.07)"
+   }
+  ]
+ },
+ "bull": [
+  {
+   "text": "The company has demonstrated steady profitability backed by strong cash flow generation with a net profit CAGR of 9.0%.",
+   "citation": {
+    "source_id": "FACTS",
+    "page": 0,
+    "quote": "Net profit CAGR: 9.0%"
+   }
+  },
+  {
+   "text": "Operating efficiency improved notably during the period, supported by an operating margin expansion of 133 bps.",
+   "citation": {
+    "source_id": "FACTS",
+    "page": 0,
+    "quote": "Operating margin change: +133 bps"
+   }
+  }
+ ],
+ "bear": [
+  {
+   "text": "The retail segment experienced a notable decline in profitability as margins dropped by 140 basis points on a year-on-year basis.",
+   "citation": {
+    "source_id": "T1",
+    "page": 7,
+    "quote": "The margin is down 140 basis points on a Y-o-Y and 10 basis points on a Q-o-Q."
+   }
+  }
+ ],
+ "notes": [],
+ "cost": {
+  "calls": 9,
+  "cached": 9,
+  "input_tokens": 0,
+  "output_tokens": 0,
+  "usd_list_price": 0.0
+ },
+ "build_seconds": 1.0,
+ "guard": {
+  "promises_proposed": 23,
+  "promises_kept": 16,
+  "points_proposed": 6,
+  "points_kept": 6,
+  "verdicts_downgraded": {
+   "other_period": 0,
+   "restated": 0,
+   "below_target": 0,
+   "other_measure": 0,
+   "meets_target": 0
+  }
+ },
+ "latest_results": {
+  "symbol": "RELIANCE",
+  "period_end": "2026-09-30",
+  "period_label": "Q2 FY27",
+  "basis": "consolidated",
+  "format": "indas",
+  "audited": false,
+  "compared_qoq": "2026-06-30",
+  "compared_yoy": "2025-09-30",
+  "metrics": [
+   {
+    "key": "revenue",
+    "label": "Revenue",
+    "value": 332861.0,
+    "qoq_pct": 6.7,
+    "yoy_pct": 28.6,
+    "computed": false
+   },
+   {
+    "key": "ebitda",
+    "label": "EBITDA",
+    "value": 56616.0,
+    "qoq_pct": 19.1,
+    "yoy_pct": 23.4,
+    "computed": true
+   },
+   {
+    "key": "pbt",
+    "label": "PBT",
+    "value": 38613.0,
+    "qoq_pct": 26.1,
+    "yoy_pct": 32.6,
+    "computed": false
+   },
+   {
+    "key": "pat",
+    "label": "PAT",
+    "value": 29550.0,
+    "qoq_pct": 27.4,
+    "yoy_pct": 33.8,
+    "computed": false
+   }
+  ],
+  "margins": [
+   {
+    "key": "ebitda_margin",
+    "label": "EBITDA margin",
+    "value_pct": 17.0,
+    "qoq_bps": 177,
+    "yoy_bps": -71
+   },
+   {
+    "key": "pat_margin",
+    "label": "PAT margin",
+    "value_pct": 8.9,
+    "qoq_bps": 144,
+    "yoy_bps": 34
+   }
+  ],
+  "notes": [
+   "EBITDA is computed: revenue from operations minus operating expenses (excludes other income).",
+   "PAT includes ₹300.00 cr share of profit of associates and joint ventures."
+  ],
+  "sources": [
+   "https://nsearchives.nseindia.com/corporate/xbrl/INTEGRATED_FILING_INDAS_1750537_30102026093254_WEB.xml",
+   "https://nsearchives.nseindia.com/corporate/xbrl/INTEGRATED_FILING_INDAS_1695741_17072026075004_WEB.xml",
+   "https://nsearchives.nseindia.com/corporate/xbrl/INTEGRATED_FILING_INDAS_1552809_17102025073643_WEB.xml"
+  ]
+ }
+}

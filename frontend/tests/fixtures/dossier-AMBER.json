@@ -1,0 +1,795 @@
+{
+ "symbol": "AMBER",
+ "name": "Amber Enterprises India Ltd",
+ "basis": "consolidated",
+ "built_at": "2026-11-10T06:10:26.757498+05:30",
+ "sources": [
+  {
+   "id": "T1",
+   "kind": "transcript",
+   "title": "Q1 FY27 earnings call (Aug 2026)",
+   "quarter": "Q1 FY27",
+   "url": "https://www.bseindia.com/stockinfo/AnnPdfOpen.aspx?Pname=6c6e5825-804b-4323-aa05-34161bc4def2.pdf"
+  },
+  {
+   "id": "T2",
+   "kind": "transcript",
+   "title": "Q4 FY26 earnings call (Jun 2026)",
+   "quarter": "Q4 FY26",
+   "url": "https://www.bseindia.com/stockinfo/AnnPdfOpen.aspx?Pname=e758d7f3-9942-4baf-b20b-0e80b2d6971a.pdf"
+  },
+  {
+   "id": "T3",
+   "kind": "transcript",
+   "title": "Q4 FY26 earnings call (May 2026)",
+   "quarter": "Q4 FY26",
+   "url": "https://www.bseindia.com/stockinfo/AnnPdfOpen.aspx?Pname=469945ff-af54-4664-8bd7-ed051c694aff.pdf"
+  },
+  {
+   "id": "T4",
+   "kind": "transcript",
+   "title": "Q3 FY26 earnings call (Feb 2026)",
+   "quarter": "Q3 FY26",
+   "url": "https://www.bseindia.com/stockinfo/AnnPdfOpen.aspx?Pname=99744db3-5ae9-451c-8d73-b33d28177128.pdf"
+  },
+  {
+   "id": "AR",
+   "kind": "annual_report",
+   "title": "Annual Report 2026",
+   "quarter": null,
+   "url": "https://www.bseindia.com/xml-data/corpfiling/AttachHis/687e644f-ff97-492b-be5a-63050d02fde4.pdf"
+  }
+ ],
+ "ledger": {
+  "rows": [
+   {
+    "promise": {
+     "id": "T4-1",
+     "citation": {
+      "source_id": "T4",
+      "page": 4,
+      "quote": "On the outlook, we believe industry will be flattish this year, while we continue to remain optimistic that this division should grow in the range of 13% to 15% for the full year basis."
+     },
+     "topic": "consumer durable growth",
+     "kind": "qualitative",
+     "metric": "revenue_growth",
+     "target_low": null,
+     "target_high": null,
+     "unit": null,
+     "horizon": "this year",
+     "made_in": "Q3 FY26"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "No verifiable later evidence"
+   },
+   {
+    "promise": {
+     "id": "T4-2",
+     "citation": {
+      "source_id": "T4",
+      "page": 5,
+      "quote": "Backed by a strong order book visibility of INR2,600 crores plus and product portfolio expansion, we remain optimistic of doubling the division's revenue over next 2 financial years."
+     },
+     "topic": "railway division revenue",
+     "kind": "qualitative",
+     "metric": null,
+     "target_low": null,
+     "target_high": null,
+     "unit": null,
+     "horizon": "next 2 financial years",
+     "made_in": "Q3 FY26"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "No later evidence of the outcome yet"
+   },
+   {
+    "promise": {
+     "id": "T4-3",
+     "citation": {
+      "source_id": "T4",
+      "page": 5,
+      "quote": "Commercial production is expected to begin in quarter 4 FY '26."
+     },
+     "topic": "commercial production",
+     "kind": "qualitative",
+     "metric": null,
+     "target_low": null,
+     "target_high": null,
+     "unit": null,
+     "horizon": "Q4 FY '26",
+     "made_in": "Q3 FY26"
+    },
+    "status": "kept",
+    "method": "judged",
+    "actual": null,
+    "evidence": {
+     "source_id": "T1",
+     "page": 4,
+     "quote": "Sidwal's greenfield facility of heating, ventilation, air conditioners, pantry, doors, and gangways in Faridabad is now operational, positioning us well for scalable growth and business expansion."
+    },
+    "rationale": "Commercial production at the Sidwal greenfield facility commenced as expected."
+   },
+   {
+    "promise": {
+     "id": "T4-4",
+     "citation": {
+      "source_id": "T4",
+      "page": 5,
+      "quote": "Commercial production is expected to commence from second half of FY '27, following requested RDSO approvals."
+     },
+     "topic": "commercial production",
+     "kind": "qualitative",
+     "metric": null,
+     "target_low": null,
+     "target_high": null,
+     "unit": null,
+     "horizon": "H2 FY '27",
+     "made_in": "Q3 FY26"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "No later evidence of the outcome yet"
+   },
+   {
+    "promise": {
+     "id": "T4-5",
+     "citation": {
+      "source_id": "T4",
+      "page": 10,
+      "quote": "So current year capex, we are expecting it should be around INR800 crores."
+     },
+     "topic": "capex",
+     "kind": "qualitative",
+     "metric": "capex",
+     "target_low": null,
+     "target_high": null,
+     "unit": null,
+     "horizon": "current year",
+     "made_in": "Q3 FY26"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "No verifiable later evidence"
+   },
+   {
+    "promise": {
+     "id": "T4-6",
+     "citation": {
+      "source_id": "T4",
+      "page": 10,
+      "quote": "And for the next year, the expenditure, which will be capitalized should be around, INR1,100 crores to INR1,200 crores."
+     },
+     "topic": "capex",
+     "kind": "qualitative",
+     "metric": "capex",
+     "target_low": null,
+     "target_high": null,
+     "unit": null,
+     "horizon": "next year",
+     "made_in": "Q3 FY26"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "No later evidence of the outcome yet"
+   },
+   {
+    "promise": {
+     "id": "T4-7",
+     "citation": {
+      "source_id": "T4",
+      "page": 16,
+      "quote": "I believe we should see somewhere about 40% growth kind of a story in Sidwal next year itself."
+     },
+     "topic": "sidwal revenue growth",
+     "kind": "qualitative",
+     "metric": "revenue_growth",
+     "target_low": null,
+     "target_high": null,
+     "unit": null,
+     "horizon": "next year",
+     "made_in": "Q3 FY26"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "No later evidence of the outcome yet"
+   },
+   {
+    "promise": {
+     "id": "T2-1",
+     "citation": {
+      "source_id": "T2",
+      "page": 3,
+      "quote": "On the time line, we expect trial production to commence in quarter 4 of FY '27, with commercial production to start by quarter 1 of FY '28."
+     },
+     "topic": "production timeline",
+     "kind": "qualitative",
+     "metric": null,
+     "target_low": null,
+     "target_high": null,
+     "unit": null,
+     "horizon": "Q4 FY27",
+     "made_in": "Q4 FY26"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "No later evidence of the outcome yet"
+   },
+   {
+    "promise": {
+     "id": "T2-2",
+     "citation": {
+      "source_id": "T2",
+      "page": 3,
+      "quote": "On the scale side, we expect to begin with around 8 million units in year 1, followed by a calibrated phase-wise ramp-up."
+     },
+     "topic": "volume growth",
+     "kind": "quantitative",
+     "metric": "volume_growth",
+     "target_low": 8.0,
+     "target_high": 8.0,
+     "unit": "cr",
+     "horizon": "year 1",
+     "made_in": "Q4 FY26"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "No later evidence of the outcome yet"
+   },
+   {
+    "promise": {
+     "id": "T2-3",
+     "citation": {
+      "source_id": "T2",
+      "page": 8,
+      "quote": "It will be below INR50 crores to start with."
+     },
+     "topic": "capex",
+     "kind": "quantitative",
+     "metric": "capex",
+     "target_low": null,
+     "target_high": 50.0,
+     "unit": "cr",
+     "horizon": null,
+     "made_in": "Q4 FY26"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "No later evidence of the outcome yet"
+   },
+   {
+    "promise": {
+     "id": "T2-4",
+     "citation": {
+      "source_id": "T2",
+      "page": 9,
+      "quote": "So, it will -- that road map is still to be formalized."
+     },
+     "topic": "value addition strategy",
+     "kind": "qualitative",
+     "metric": null,
+     "target_low": null,
+     "target_high": null,
+     "unit": null,
+     "horizon": null,
+     "made_in": "Q4 FY26"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "No later evidence of the outcome yet"
+   },
+   {
+    "promise": {
+     "id": "T3-1",
+     "citation": {
+      "source_id": "T3",
+      "page": 3,
+      "quote": "With trial production expected by quarter 3 FY '28, this will be a state-of-the-art facility strategically located near new Noida Airport."
+     },
+     "topic": "trial production",
+     "kind": "qualitative",
+     "metric": null,
+     "target_low": null,
+     "target_high": null,
+     "unit": null,
+     "horizon": "Q3 FY '28",
+     "made_in": "Q4 FY26"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "No later evidence of the outcome yet"
+   },
+   {
+    "promise": {
+     "id": "T3-2",
+     "citation": {
+      "source_id": "T3",
+      "page": 4,
+      "quote": "Continuing the strong growth momentum, this division is expected to grow by around 40% in FY '27."
+     },
+     "topic": "Electronics division revenue growth",
+     "kind": "quantitative",
+     "metric": "revenue_growth",
+     "target_low": 40.0,
+     "target_high": 40.0,
+     "unit": "%",
+     "horizon": "FY '27",
+     "made_in": "Q4 FY26"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "No later evidence of the outcome yet"
+   },
+   {
+    "promise": {
+     "id": "T3-3",
+     "citation": {
+      "source_id": "T3",
+      "page": 4,
+      "quote": "To sum up, we expect a margin pressure of 50 to 100 bps at consolidated level, which is of temporary in nature and expected to normalize as macro environment improves."
+     },
+     "topic": "consolidated margin pressure",
+     "kind": "quantitative",
+     "metric": "ebitda_margin",
+     "target_low": 50.0,
+     "target_high": 100.0,
+     "unit": "%",
+     "horizon": null,
+     "made_in": "Q4 FY26"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "No later evidence of the outcome yet"
+   },
+   {
+    "promise": {
+     "id": "T3-4",
+     "citation": {
+      "source_id": "T3",
+      "page": 5,
+      "quote": "The division is expected to deliver 30% to 35% revenue growth in FY '27."
+     },
+     "topic": "Railway division revenue growth",
+     "kind": "quantitative",
+     "metric": "revenue_growth",
+     "target_low": 30.0,
+     "target_high": 35.0,
+     "unit": "%",
+     "horizon": "FY '27",
+     "made_in": "Q4 FY26"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "No later evidence of the outcome yet"
+   },
+   {
+    "promise": {
+     "id": "T3-5",
+     "citation": {
+      "source_id": "T3",
+      "page": 6,
+      "quote": "In the current year, we expect to receive INR78 crores under the PLI scheme for the financial year '26."
+     },
+     "topic": "PLI receipt",
+     "kind": "quantitative",
+     "metric": "other",
+     "target_low": 78.0,
+     "target_high": 78.0,
+     "unit": "cr",
+     "horizon": "current year",
+     "made_in": "Q4 FY26"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "No later evidence of the outcome yet"
+   },
+   {
+    "promise": {
+     "id": "T3-6",
+     "citation": {
+      "source_id": "T3",
+      "page": 13,
+      "quote": "We expect that the trial production will start by Q3 and commercial production will start by February, mid of February of next 2027."
+     },
+     "topic": "production timeline",
+     "kind": "qualitative",
+     "metric": null,
+     "target_low": null,
+     "target_high": null,
+     "unit": null,
+     "horizon": "Q3 and February 2027",
+     "made_in": "Q4 FY26"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "No later evidence of the outcome yet"
+   },
+   {
+    "promise": {
+     "id": "T1-1",
+     "citation": {
+      "source_id": "T1",
+      "page": 3,
+      "quote": "On the scale front, we expect to begin with around 8 million units in the first year, followed by a calibrated phase-wise ramp-up and expect to double to almost about 15 million, 16 million in the second year of operations."
+     },
+     "topic": "volume growth",
+     "kind": "quantitative",
+     "metric": "volume_growth",
+     "target_low": 8.0,
+     "target_high": 16.0,
+     "unit": "cr",
+     "horizon": "first and second year of operations",
+     "made_in": "Q1 FY27"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "Too recent to judge"
+   },
+   {
+    "promise": {
+     "id": "T1-2",
+     "citation": {
+      "source_id": "T1",
+      "page": 4,
+      "quote": "Looking ahead, for the full year, we expect the growth in tandem with the RAC industry growth."
+     },
+     "topic": "revenue growth",
+     "kind": "qualitative",
+     "metric": null,
+     "target_low": null,
+     "target_high": null,
+     "unit": null,
+     "horizon": "full year",
+     "made_in": "Q1 FY27"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "Too recent to judge"
+   },
+   {
+    "promise": {
+     "id": "T1-3",
+     "citation": {
+      "source_id": "T1",
+      "page": 4,
+      "quote": "For the full year, we expect this division to deliver growth of about 30% to 35% for the full year, as informed earlier."
+     },
+     "topic": "revenue growth",
+     "kind": "quantitative",
+     "metric": "revenue_growth",
+     "target_low": 30.0,
+     "target_high": 35.0,
+     "unit": "%",
+     "horizon": "full year",
+     "made_in": "Q1 FY27"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "Too recent to judge"
+   },
+   {
+    "promise": {
+     "id": "T1-4",
+     "citation": {
+      "source_id": "T1",
+      "page": 5,
+      "quote": "The division is expected to deliver 30% to 35% revenue growth in financial year '27."
+     },
+     "topic": "revenue growth",
+     "kind": "quantitative",
+     "metric": "revenue_growth",
+     "target_low": 30.0,
+     "target_high": 35.0,
+     "unit": "%",
+     "horizon": "FY27",
+     "made_in": "Q1 FY27"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "Too recent to judge"
+   },
+   {
+    "promise": {
+     "id": "T1-5",
+     "citation": {
+      "source_id": "T1",
+      "page": 10,
+      "quote": "And I think by '29, '30, we expect that we should be having our own CCL plants by then."
+     },
+     "topic": "capex",
+     "kind": "qualitative",
+     "metric": null,
+     "target_low": null,
+     "target_high": null,
+     "unit": null,
+     "horizon": "FY29-FY30",
+     "made_in": "Q1 FY27"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "Too recent to judge"
+   }
+  ],
+  "counts": {
+   "kept": 1,
+   "partly": 0,
+   "missed": 0,
+   "pending": 21,
+   "dropped": 0
+  },
+  "credibility_pct": null,
+  "note": null
+ },
+ "snapshot": {
+  "summary": [
+   {
+    "text": "Amber Enterprises India Limited is a diversified B2B manufacturing solutions provider with a strong presence across Consumer Durables, Electronics, and Railway Subsystems & Defence.",
+    "citation": {
+     "source_id": "AR",
+     "page": 5,
+     "quote": "Amber Enterprises India Limited (‘Amber’ or ‘The Company’ , together with its subsidiaries and joint ventures, the ‘Amber Group’) is a diversified B2B manufacturing solutions provider with a strong presence across Consumer Durables, Electronics, and Railway Subsystems & Defence."
+    }
+   },
+   {
+    "text": "The Consumer Durables segment positions the company as highly backward integrated players in the Room Air Conditioner industry, while also expanding into Light Commercial ACs.",
+    "citation": {
+     "source_id": "AR",
+     "page": 5,
+     "quote": "positioning itself as highly backward integrated players in the Room Air Conditioner (RAC) industry. The Company continues to deepen its capabilities into the component ecosystem, while expanding into Light Commercial ACs."
+    }
+   },
+   {
+    "text": "The Railway Subsystems & Defence segment focuses on integrated, high-reliability solutions comprising HVAC systems and other sub-systems for Railway and Metro applications.",
+    "citation": {
+     "source_id": "AR",
+     "page": 5,
+     "quote": "The Railway Subsystems & Defence segment focuses on integrated, high-reliability solutions comprising HVAC systems and other sub-systems for Railway and Metro applications, along with specialised Precision Cooling solutions for bus, defence, and other applications."
+    }
+   }
+  ]
+ },
+ "trajectory": {
+  "years": [
+   "Mar 2022",
+   "Mar 2023",
+   "Mar 2024",
+   "Mar 2025",
+   "Mar 2026"
+  ],
+  "revenue": [
+   4206.0,
+   6927.0,
+   6729.0,
+   9973.0,
+   12186.0
+  ],
+  "operating_profit": [
+   278.0,
+   422.0,
+   491.0,
+   736.0,
+   865.0
+  ],
+  "margin_pct": [
+   6.609605325725154,
+   6.092103363649488,
+   7.296775152325755,
+   7.379925799659079,
+   7.098309535532578
+  ],
+  "pat": [
+   111.0,
+   164.0,
+   139.0,
+   251.0,
+   226.0
+  ],
+  "revenue_cagr_pct": 30.466188941749884,
+  "pat_cagr_pct": 19.452808506329113,
+  "margin_change_bps": 49,
+  "read": "growing",
+  "lender": false
+ },
+ "health": {
+  "as_of": "Mar 2026",
+  "debt_to_equity": 0.6180237877401646,
+  "cfo_to_pat_3y": 3.1103896103896105,
+  "fcf_3y_cr": -326.0,
+  "working_capital_days": 8.0,
+  "wc_days_change_3y": 27.0,
+  "roce_pct": 10.0,
+  "flags": [
+   {
+    "level": "good",
+    "text": "Profits are backed by cash (CFO/PAT 3.11)"
+   },
+   {
+    "level": "watch",
+    "text": "Working capital days rose from -19 to 8"
+   },
+   {
+    "level": "watch",
+    "text": "Free cash flow was negative over 3 years (−₹326 cr)"
+   }
+  ]
+ },
+ "bull": [
+  {
+   "text": "The company achieved a strong revenue CAGR of 30.5% between March 2022 and March 2026.",
+   "citation": {
+    "source_id": "FACTS",
+    "page": 0,
+    "quote": "Revenue CAGR (Mar 2022–Mar 2026): 30.5%"
+   }
+  },
+  {
+   "text": "Operating margin improved by 49 bps during the measured period.",
+   "citation": {
+    "source_id": "FACTS",
+    "page": 0,
+    "quote": "Operating margin change: +49 bps"
+   }
+  }
+ ],
+ "bear": [
+  {
+   "text": "Free cash flow remained negative over the three-year period at minus 326 crores.",
+   "citation": {
+    "source_id": "FACTS",
+    "page": 0,
+    "quote": "Free cash flow (3y): −₹326 cr"
+   }
+  },
+  {
+   "text": "Working capital days increased from negative 19 to 8 days.",
+   "citation": {
+    "source_id": "FACTS",
+    "page": 0,
+    "quote": "Working capital days rose from -19 to 8"
+   }
+  },
+  {
+   "text": "Out of 22 tracked promises, 21 remain pending, indicating a low resolution rate.",
+   "citation": {
+    "source_id": "FACTS",
+    "page": 0,
+    "quote": "Promise ledger: 1 kept, 0 partly, 0 missed, 21 pending, 0 dropped (1 of 22 promises resolved)"
+   }
+  }
+ ],
+ "notes": [],
+ "cost": {
+  "calls": 9,
+  "cached": 9,
+  "input_tokens": 0,
+  "output_tokens": 0,
+  "usd_list_price": 0.0
+ },
+ "build_seconds": 0.4,
+ "guard": {
+  "promises_proposed": 32,
+  "promises_kept": 22,
+  "points_proposed": 10,
+  "points_kept": 8,
+  "verdicts_downgraded": {
+   "other_period": 0,
+   "restated": 0,
+   "below_target": 0,
+   "other_measure": 0,
+   "meets_target": 0
+  }
+ },
+ "latest_results": {
+  "symbol": "AMBER",
+  "period_end": "2026-06-30",
+  "period_label": "Q1 FY27",
+  "basis": "consolidated",
+  "format": "indas",
+  "audited": false,
+  "compared_qoq": "2026-03-31",
+  "compared_yoy": "2025-06-30",
+  "metrics": [
+   {
+    "key": "revenue",
+    "label": "Revenue",
+    "value": 3887.72,
+    "qoq_pct": -6.3,
+    "yoy_pct": 12.7,
+    "computed": false
+   },
+   {
+    "key": "ebitda",
+    "label": "EBITDA",
+    "value": 312.05,
+    "qoq_pct": -12.9,
+    "yoy_pct": 21.6,
+    "computed": true
+   },
+   {
+    "key": "pbt",
+    "label": "PBT",
+    "value": 44.0,
+    "qoq_pct": -84.2,
+    "yoy_pct": -72.7,
+    "computed": false
+   },
+   {
+    "key": "pat",
+    "label": "PAT",
+    "value": 3.09,
+    "qoq_pct": -98.1,
+    "yoy_pct": -97.1,
+    "computed": false
+   }
+  ],
+  "margins": [
+   {
+    "key": "ebitda_margin",
+    "label": "EBITDA margin",
+    "value_pct": 8.0,
+    "qoq_bps": -61,
+    "yoy_bps": 58
+   },
+   {
+    "key": "pat_margin",
+    "label": "PAT margin",
+    "value_pct": 0.1,
+    "qoq_bps": -383,
+    "yoy_bps": -299
+   }
+  ],
+  "notes": [
+   "EBITDA is computed: revenue from operations minus operating expenses (excludes other income).",
+   "PBT includes an exceptional loss of ₹122.63 cr.",
+   "PAT includes a ₹0.55 cr share of loss of associates and joint ventures."
+  ],
+  "sources": [
+   "https://nsearchives.nseindia.com/corporate/xbrl/INTEGRATED_FILING_INDAS_1714198_14082026014913_WEB.xml",
+   "https://nsearchives.nseindia.com/corporate/xbrl/INTEGRATED_FILING_INDAS_1668197_16052026032506_WEB.xml",
+   "https://nsearchives.nseindia.com/corporate/xbrl/INTEGRATED_FILING_INDAS_1496668_29072025052821_WEB.xml"
+  ]
+ }
+}

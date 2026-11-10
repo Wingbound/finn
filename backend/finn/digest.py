@@ -18,6 +18,7 @@ from finn.enrich.brief import attach_briefs
 from finn.enrich.people import attach_people
 from finn.enrich.results import card_for
 from finn.models import Category, Classification, Filing, ResultsCard, ScoredFiling, Story
+from finn.research.link import attach_promises
 
 log = logging.getLogger(__name__)
 
@@ -124,6 +125,7 @@ def build_digest(
 
     visible = shown + [st for v in routine.values() for st in v]
     attach_results(conn, visible)
+    attach_promises(conn, visible)  # after results: notes need the card
     attach_people(conn, visible)
     attach_briefs(conn, visible)
 

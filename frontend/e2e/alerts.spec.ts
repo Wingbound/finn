@@ -32,7 +32,10 @@ test("Alerts: a filing alert opens its story in Today, on the alert log's own wi
   const href = (await link.getAttribute("href")) as string;
   const id = decodeURIComponent(href.replace("/#story-", ""));
   await link.click();
-  await expect(page.getByRole("radio", { name: /to 7 Nov$/ })).toHaveAttribute("aria-checked", "true");
+  const end = new Intl.DateTimeFormat("en-IN", { timeZone: "Asia/Kolkata", day: "numeric", month: "short" }).format(
+    new Date(json("alerts.json").window.end),
+  );
+  await expect(page.getByRole("radio", { name: new RegExp(`to ${end}$`) })).toHaveAttribute("aria-checked", "true");
   await expect.poll(() => bodies.at(-1)?.start).toBe(json("alerts.json").window.start);
   await expect(page.locator(`[data-story="${id}"]`)).toBeInViewport();
 });

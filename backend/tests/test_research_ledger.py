@@ -4,7 +4,7 @@ import pytest
 
 from finn.llm.providers import LLMError
 from finn.models import Citation, Promise, Source
-from finn.research.ledger import build_ledger, compute_status, parse_horizon
+from finn.research.ledger import _NOT_DUE, build_ledger, compute_status, parse_horizon
 from tests.fakes import FIXTURES, FakeRouter
 
 QUARTERS = ["Q2 FY27", "Q1 FY27", "Q4 FY26", "Q3 FY26"]
@@ -967,7 +967,13 @@ def test_guard_stats_count_each_reason():
     stats: dict = {}
     _guarded("We expect the plant to commence by Q2 this fiscal.", horizon="Q2 FY27", stats=stats)
     _guarded("We expect the plant to commence by Q2 this fiscal.", horizon="Q2 FY27", stats=stats)
-    assert stats["verdicts_downgraded"] == {"other_period": 0, "restated": 2, "below_target": 0}
+    assert stats["verdicts_downgraded"] == {
+        "other_period": 0,
+        "restated": 2,
+        "below_target": 0,
+        "other_measure": 0,
+        "meets_target": 0,
+    }
 
 
 def test_guard_fused_period_label_is_not_a_number():
@@ -1005,3 +1011,123 @@ def test_guard_weak_delivery_cue_before_intention_is_restated():
     ev = "We had planned to commission by Q3 and will now do so in Q4."
     row = _guarded(ev, horizon="Q3 FY26")
     assert row.status == "pending" and row.rationale == _RESTATED_MSG
+
+
+# ---- Plan 6 audit of 16 new dossiers: five more mechanical verdict errors ----
+
+
+def test_guard_passive_future_is_not_delivery():  # MAXHEALTH
+    ev = "100 beds at Max Lucknow : in the existing 468-bed facility will be commissioned over the next 2 quarters."
+    assert _guarded(ev, horizon="next two quarters").rationale == _RESTATED_MSG
+
+
+def test_guard_should_and_a_bare_was_do_not_make_delivery():  # CGPOWER
+    ev = "although our original plan was 2027 financial -- '27, '28 financial year, but I think we should do it at least 1 year before."
+    assert _guarded(ev, horizon="2028").rationale == _RESTATED_MSG
+
+
+def test_guard_is_set_for_is_future():  # PREMIERENE
+    ev = "Our 5.6 gigawatt module line is set for completion in March 2026, 4.8 gigawatt cell line in June 2026."
+    assert _guarded(ev, horizon="September 2026").rationale == _RESTATED_MSG
+
+
+def test_guard_a_past_figure_is_still_delivery():
+    ev = "Revenue was up 18% for the year and we will keep investing in brands."
+    assert _guarded(ev, horizon="FY26").status == "kept"
+
+
+def test_guard_evidence_measuring_something_else_is_pending():  # ULTRACEMCO
+    q = "So, we should have approximately 8 to 9 million tons more coming in this quarter."
+    ev = "During the quarter, we also added 116 megawatts of renewable power, 10 megawatt of waste heat recovery."
+    row = _guarded(ev, quote=q, horizon="this quarter")
+    assert row.status == "pending" and row.rationale == "The later quote measures something else"
+
+
+def test_guard_same_measure_stays_resolved():  # CGPOWER 65,000 MVA
+    q = "And in the next 1 quarter or so, we'll be 65,000 MVA."
+    ev = "the power transformer is already about 75,000 MVA and distribution is about close to 10,000 MVA."
+    assert _guarded(ev, quote=q, horizon="next 1 quarter").status == "kept"
+
+
+def test_guard_missed_with_a_figure_that_meets_the_target_is_pending():  # ZYDUSLIFE
+    q = "We will still track at 23% plus margin in the Quarter 4."
+    ev = "our operating profitability remained robust with an EBITDA margin of 24% despite continued investments."
+    row = _guarded(
+        ev, status="missed", quote=q, horizon="Q4", kind="quantitative", target_low=23.0, unit="%"
+    )
+    assert (
+        row.status == "pending"
+        and row.rationale == "The later figure (24%) meets the target (at least 23%)"
+    )
+
+
+def test_guard_missed_below_target_stays_missed():
+    q = "We will still track at 23% plus margin in the Quarter 4."
+    ev = "our operating profitability came in with an EBITDA margin of 21% this quarter."
+    assert (
+        _guarded(
+            ev,
+            status="missed",
+            quote=q,
+            horizon="Q4",
+            kind="quantitative",
+            target_low=23.0,
+            unit="%",
+        ).status
+        == "missed"
+    )
+
+
+# ---- Plan 6 final review I6/I7: the restated check, both ways ----
+
+
+@pytest.mark.parametrize(
+    "ev",
+    [
+        "EBITDA margin improved to 24.5% in Q2 due to better product mix.",
+        "Revenue increased 18% due to strong volume growth.",
+        "The new capacity came on stream as scheduled.",
+        "We added 300 beds this year and should add 200 more next year.",
+        "Revenue rose 21% year-on-year, and we should do better in the second half.",
+        "We were able to complete the 5 GW line, and production will ramp up next quarter.",
+    ],
+)
+def test_guard_delivered_sentences_stay_kept(ev):
+    assert _guarded(ev, horizon=None).status == "kept", ev
+
+
+@pytest.mark.parametrize(
+    "ev",
+    [
+        "The balance 140 beds will also be commissioned post Diwali.",
+        "The second line will now be completed in Q4.",
+        "The plant should hopefully be commissioned by March.",
+        "The new block is expected to be fully commissioned in Q3.",
+    ],
+)
+def test_guard_an_adverb_after_the_modal_is_still_a_restatement(ev):
+    assert _guarded(ev, horizon=None).rationale == _RESTATED_MSG, ev
+
+
+def test_an_annual_target_judged_mid_year_is_not_yet_due():  # LODHA, Plan 6 review fix pass
+    q = "Our commitment of 20% PAT growth is an annual guidance, not a quarterly one."
+    ev = (
+        "We expect to easily beat our profit guidance of 20% growth. In the first half, having already "
+        "touched INR 2,400 crores, we feel very confident of being able to beat this guidance."
+    )
+    src = [
+        Source(id="G-T1", kind="transcript", title="a", quarter="Q1 FY27", url="u", pages=["p"]),
+        Source(
+            id="G-T2",
+            kind="transcript",
+            title="b",
+            quarter="Q2 FY27",
+            url="u",
+            pages=[f"Opening. {ev} Thanks."],
+        ),
+    ]
+    p = promise(1, "G-T1", "Q1 FY27", horizon="annual")
+    p = p.model_copy(update={"citation": Citation(source_id="G-T1", page=1, quote=q)})
+    j = {"status": "kept", "evidence_quote": ev, "evidence_source": "G-T2", "rationale": "r"}
+    row = build_ledger(FakeRouter(judge({p.id: j})), [p], src, {}, {}).rows[0]
+    assert row.status == "pending" and row.rationale == _NOT_DUE

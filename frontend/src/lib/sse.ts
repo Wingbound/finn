@@ -40,6 +40,15 @@ export class BuildError extends Error {
 
 export const STOPPED = "The build stopped before finishing";
 
+/** The server's build errors, in words a reader can act on; unknown ones pass through. */
+export function friendlyBuildError(detail: string): string {
+  if (/timed out/i.test(detail)) {
+    return "The build ran out of time on the server. Try again: what FINN already read is cached, so it goes faster.";
+  }
+  if (/^build failed/i.test(detail)) return "The build hit an error on the server. Try again in a minute.";
+  return detail;
+}
+
 /**
  * Builds (or fetches the fresh cached) dossier through the SSE endpoint. Uses fetch rather than
  * EventSource so it can be cancelled and still parses a response a proxy buffered whole.
@@ -92,7 +101,8 @@ export async function buildDossier(
         continue; // a garbled frame; the rest of the stream may still finish the build
       }
       if (ev.event === "progress" && typeof payload?.msg === "string") onProgress?.(payload.msg);
-      else if (ev.event === "error") throw new BuildError("error", String(payload?.detail ?? "The build failed"));
+      else if (ev.event === "error")
+        throw new BuildError("error", friendlyBuildError(String(payload?.detail ?? "The build failed")));
       else if (ev.event === "done") {
         const { excerpts = {}, ...dossier } = payload;
         return { dossier: dossier as unknown as Dossier, excerpts: excerpts as Excerpts };

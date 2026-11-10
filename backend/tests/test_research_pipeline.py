@@ -257,3 +257,31 @@ def test_dossier_roundtrip_keeps_pages(seeded):
     got = db.get_dossier(seeded, "PERSISTENT")
     assert isinstance(got, Dossier) and got.sources[0].pages == d.sources[0].pages
     assert [x.symbol for x in db.list_dossiers(seeded)] == ["PERSISTENT"]
+
+
+def test_a_company_without_call_transcripts_says_why_the_ledger_is_empty(seeded, monkeypatch):
+    """Plan 6: some companies (TRENT) hold no earnings calls; the empty ledger must say so."""
+    from finn.models import Source
+    from finn.research import pipeline as pl
+
+    ar = Source(
+        id="AR",
+        kind="annual_report",
+        title="Annual Report 2026",
+        quarter=None,
+        url="u",
+        pages=["Our stores grew."],
+    )
+    monkeypatch.setattr(pl, "collect_sources", lambda *a, **k: ([ar], []))
+    d = build_dossier(
+        seeded,
+        "PERSISTENT",
+        FakeRouter(reply),
+        screener_client=FakeScreener(),
+        doc_client=FailingDocs(),
+    )
+    assert d.ledger is not None and d.ledger.rows == []
+    assert (
+        d.ledger.note
+        == "No earnings-call transcripts were found, so there are no promises to track"
+    )

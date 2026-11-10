@@ -1,0 +1,801 @@
+{
+ "symbol": "LODHA",
+ "name": "Lodha Developers Ltd",
+ "basis": "consolidated",
+ "built_at": "2026-11-10T06:10:27.167659+05:30",
+ "sources": [
+  {
+   "id": "T1",
+   "kind": "transcript",
+   "title": "Q2 FY27 earnings call (Nov 2026)",
+   "quarter": "Q2 FY27",
+   "url": "https://www.bseindia.com/stockinfo/AnnPdfOpen.aspx?Pname=551f2921-f89a-4bb4-922b-db9c29e81f8f.pdf"
+  },
+  {
+   "id": "T2",
+   "kind": "transcript",
+   "title": "Q1 FY27 earnings call (Jul 2026)",
+   "quarter": "Q1 FY27",
+   "url": "https://www.bseindia.com/stockinfo/AnnPdfOpen.aspx?Pname=ad474d98-cf31-430c-b31d-000a080ddb0b.pdf"
+  },
+  {
+   "id": "T3",
+   "kind": "transcript",
+   "title": "Q4 FY26 earnings call (Apr 2026)",
+   "quarter": "Q4 FY26",
+   "url": "https://www.bseindia.com/stockinfo/AnnPdfOpen.aspx?Pname=9fe9fd37-6e80-4b97-b11f-a51bd65f5b5d.pdf"
+  },
+  {
+   "id": "T4",
+   "kind": "transcript",
+   "title": "Q3 FY26 earnings call (Feb 2026)",
+   "quarter": "Q3 FY26",
+   "url": "https://www.bseindia.com/stockinfo/AnnPdfOpen.aspx?Pname=3893d391-5e96-4fc4-960f-cf93f60ccc63.pdf"
+  },
+  {
+   "id": "AR",
+   "kind": "annual_report",
+   "title": "Annual Report 2026",
+   "quarter": null,
+   "url": "https://www.bseindia.com/xml-data/corpfiling/AttachHis/53001054-7340-45ce-8d4b-de2746e0e7e0.pdf"
+  }
+ ],
+ "ledger": {
+  "rows": [
+   {
+    "promise": {
+     "id": "T4-1",
+     "citation": {
+      "source_id": "T4",
+      "page": 4,
+      "quote": "With this, our 9 -month pre-sales stands at about INR  146 billion, which is 70% of our full year guidance, and we remain on track to deliver our presales guidance of INR 210 billion for the year."
+     },
+     "topic": "pre-sales guidance",
+     "kind": "quantitative",
+     "metric": "other",
+     "target_low": 210.0,
+     "target_high": null,
+     "unit": "cr",
+     "horizon": "FY26",
+     "made_in": "Q3 FY26"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "No later evidence of the outcome yet"
+   },
+   {
+    "promise": {
+     "id": "T4-2",
+     "citation": {
+      "source_id": "T4",
+      "page": 4,
+      "quote": "So far, for the 9 months of the fiscal year, we've delivered 4% price growth on a YTD basis, and we are on track to deliver the 5% to 6% price growth for the full year, which is in line with our strategy to have disciplined price growth below wage growth and to keep making sure that affordability is strong and getting better."
+     },
+     "topic": "price growth",
+     "kind": "quantitative",
+     "metric": "other",
+     "target_low": 5.0,
+     "target_high": 6.0,
+     "unit": "%",
+     "horizon": "FY26",
+     "made_in": "Q3 FY26"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "No later evidence of the outcome yet"
+   },
+   {
+    "promise": {
+     "id": "T4-3",
+     "citation": {
+      "source_id": "T4",
+      "page": 8,
+      "quote": "And over the next 3-odd years, we expect the number to be reaching as high as INR 50 crores to INR 60 crores per acre."
+     },
+     "topic": "land values",
+     "kind": "quantitative",
+     "metric": "other",
+     "target_low": 50.0,
+     "target_high": 60.0,
+     "unit": "cr",
+     "horizon": "next 3 years",
+     "made_in": "Q3 FY26"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "No later evidence of the outcome yet"
+   },
+   {
+    "promise": {
+     "id": "T4-4",
+     "citation": {
+      "source_id": "T4",
+      "page": 9,
+      "quote": "In terms of our guidance for the rest of the fiscal, as I mentioned earlier, we remain on track to achieve our guidance of approximately INR  210 billion of presales for the full year with an embedded EBITDA margin of approximately 33%, and therefore an ROE on a pro forma basis of approximately 20%."
+     },
+     "topic": "ebitda margin guidance",
+     "kind": "quantitative",
+     "metric": "ebitda_margin",
+     "target_low": 33.0,
+     "target_high": null,
+     "unit": "%",
+     "horizon": "FY26",
+     "made_in": "Q3 FY26"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "No later evidence of the outcome yet"
+   },
+   {
+    "promise": {
+     "id": "T3-1",
+     "citation": {
+      "source_id": "T3",
+      "page": 6,
+      "quote": "Our guidance for FY ’27, we are guiding to presales of about INR240 billion with an embedded EBITDA margin of 32% to 34%."
+     },
+     "topic": "guidance FY27",
+     "kind": "quantitative",
+     "metric": "other",
+     "target_low": 240.0,
+     "target_high": 240.0,
+     "unit": "cr",
+     "horizon": "FY27",
+     "made_in": "Q4 FY26"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "No verifiable later evidence"
+   },
+   {
+    "promise": {
+     "id": "T3-2",
+     "citation": {
+      "source_id": "T3",
+      "page": 6,
+      "quote": "The estimated annual rental income from these existing assets will be about INR10 billion by fiscal '31, excluding any data center contribution."
+     },
+     "topic": "rental income target",
+     "kind": "quantitative",
+     "metric": "other",
+     "target_low": 10.0,
+     "target_high": 10.0,
+     "unit": "cr",
+     "horizon": "FY31",
+     "made_in": "Q4 FY26"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "No later evidence of the outcome yet"
+   },
+   {
+    "promise": {
+     "id": "T3-3",
+     "citation": {
+      "source_id": "T3",
+      "page": 14,
+      "quote": "We expect over time that we will gain market share as well as have improved conversions on account of the fact that our product and brand are both compelling."
+     },
+     "topic": "market share",
+     "kind": "qualitative",
+     "metric": null,
+     "target_low": null,
+     "target_high": null,
+     "unit": null,
+     "horizon": null,
+     "made_in": "Q4 FY26"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "No verifiable later evidence"
+   },
+   {
+    "promise": {
+     "id": "T3-4",
+     "citation": {
+      "source_id": "T3",
+      "page": 9,
+      "quote": "And as a consequence, we expect the FCF to be therefore, higher."
+     },
+     "topic": "free cash flow",
+     "kind": "qualitative",
+     "metric": null,
+     "target_low": null,
+     "target_high": null,
+     "unit": null,
+     "horizon": null,
+     "made_in": "Q4 FY26"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "No later evidence of the outcome yet"
+   },
+   {
+    "promise": {
+     "id": "T3-5",
+     "citation": {
+      "source_id": "T3",
+      "page": 15,
+      "quote": "So yes, on an overall basis, we would expect that the overall debt levels in the business at the end of fiscal '27 should be somewhat lower than what it is at the end of fiscal '26 in spite of the investments that we make in the build -out of our annuity assets."
+     },
+     "topic": "debt levels",
+     "kind": "qualitative",
+     "metric": null,
+     "target_low": null,
+     "target_high": null,
+     "unit": null,
+     "horizon": "FY27",
+     "made_in": "Q4 FY26"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "No later evidence of the outcome yet"
+   },
+   {
+    "promise": {
+     "id": "T2-1",
+     "citation": {
+      "source_id": "T2",
+      "page": 3,
+      "quote": "Our commitment of 20% PAT growth is an annual guidance, not a quarterly one."
+     },
+     "topic": "PAT growth",
+     "kind": "quantitative",
+     "metric": "pat_growth",
+     "target_low": 20.0,
+     "target_high": 20.0,
+     "unit": "%",
+     "horizon": "annual",
+     "made_in": "Q1 FY27"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "Target not yet due — tracking is not delivery"
+   },
+   {
+    "promise": {
+     "id": "T2-2",
+     "citation": {
+      "source_id": "T2",
+      "page": 4,
+      "quote": "We intend to further monetize about 150 acres over the next 3 to 4 years, which itself will generate close to INR 10,000 crores of sales."
+     },
+     "topic": "land monetization",
+     "kind": "quantitative",
+     "metric": "other",
+     "target_low": 10000.0,
+     "target_high": 10000.0,
+     "unit": "cr",
+     "horizon": "next 3 to 4 years",
+     "made_in": "Q1 FY27"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "No later evidence of the outcome yet"
+   },
+   {
+    "promise": {
+     "id": "T2-3",
+     "citation": {
+      "source_id": "T2",
+      "page": 4,
+      "quote": "Thus, overall, we expect land to be between INR 2,000 crores to INR 3,000 crores of sales every year for the next several years."
+     },
+     "topic": "land monetization sales",
+     "kind": "quantitative",
+     "metric": "other",
+     "target_low": 2000.0,
+     "target_high": 3000.0,
+     "unit": "cr",
+     "horizon": "next several years",
+     "made_in": "Q1 FY27"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "No later evidence of the outcome yet"
+   },
+   {
+    "promise": {
+     "id": "T2-4",
+     "citation": {
+      "source_id": "T2",
+      "page": 4,
+      "quote": "In terms of our guidance for fiscal '27, that is 20% growth on last year's PAT of INR 34.3 billion and hence, approximately INR 41 billion of PAT."
+     },
+     "topic": "PAT guidance",
+     "kind": "quantitative",
+     "metric": "pat_growth",
+     "target_low": 20.0,
+     "target_high": 20.0,
+     "unit": "%",
+     "horizon": "FY27",
+     "made_in": "Q1 FY27"
+    },
+    "status": "pending",
+    "method": "computed",
+    "actual": null,
+    "evidence": null,
+    "rationale": "Actuals for FY27 are not published yet"
+   },
+   {
+    "promise": {
+     "id": "T2-5",
+     "citation": {
+      "source_id": "T2",
+      "page": 5,
+      "quote": "In terms of the rest of the year, we reaffirm our INR 240 billion pre-sales guidance for fiscal '27, and we expect H1 to be 40% to 42% of the full year, as we had mentioned in the start of the year itself."
+     },
+     "topic": "pre-sales guidance",
+     "kind": "quantitative",
+     "metric": "other",
+     "target_low": 240.0,
+     "target_high": 240.0,
+     "unit": "usd_bn",
+     "horizon": "FY27",
+     "made_in": "Q1 FY27"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "No verifiable later evidence"
+   },
+   {
+    "promise": {
+     "id": "T2-6",
+     "citation": {
+      "source_id": "T2",
+      "page": 5,
+      "quote": "We expect pre-sales to be INR 50 billion or more on the back of the planned calendar for this quarter."
+     },
+     "topic": "Q2 pre-sales",
+     "kind": "quantitative",
+     "metric": "other",
+     "target_low": 50.0,
+     "target_high": null,
+     "unit": "usd_bn",
+     "horizon": "Q2",
+     "made_in": "Q1 FY27"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "No verifiable later evidence"
+   },
+   {
+    "promise": {
+     "id": "T2-7",
+     "citation": {
+      "source_id": "T2",
+      "page": 6,
+      "quote": "Of this, about 130 acres has now been sold, and we expect to monetize a further 150 acres over the next 3 to 4 years at an average of about INR 600 million per a cre, generating approximately INR 90 billion of further sales just from Phase 1 of our land."
+     },
+     "topic": "phase 1 land monetization",
+     "kind": "quantitative",
+     "metric": "other",
+     "target_low": 90.0,
+     "target_high": 90.0,
+     "unit": "usd_bn",
+     "horizon": "next 3 to 4 years",
+     "made_in": "Q1 FY27"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "No later evidence of the outcome yet"
+   },
+   {
+    "promise": {
+     "id": "T2-8",
+     "citation": {
+      "source_id": "T2",
+      "page": 6,
+      "quote": "The target is over INR30 billion, i.e., 10x by fiscal '32, of which about INR20 billion plus will come from data centers, INR6 billion from retail and offices and about INR4 billion from warehousing and industrial."
+     },
+     "topic": "annuity rental income",
+     "kind": "quantitative",
+     "metric": "other",
+     "target_low": 30.0,
+     "target_high": 30.0,
+     "unit": "usd_bn",
+     "horizon": "fiscal '32",
+     "made_in": "Q1 FY27"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "No later evidence of the outcome yet"
+   },
+   {
+    "promise": {
+     "id": "T1-1",
+     "citation": {
+      "source_id": "T1",
+      "page": 3,
+      "quote": "The numbers for the second half of the year are likely to be coming with a mix of about INR 6000 crores to INR 7,000 crores of development company pre-sales in both Q3 as well as Q4 and 1 data center land transaction of about INR 1,500 crores in the fourth quarter for the full year number at about INR 24,000 crores of pre-sales."
+     },
+     "topic": "pre-sales guidance",
+     "kind": "quantitative",
+     "metric": "other",
+     "target_low": 24000.0,
+     "target_high": 24000.0,
+     "unit": "cr",
+     "horizon": "FY27",
+     "made_in": "Q2 FY27"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "Too recent to judge"
+   },
+   {
+    "promise": {
+     "id": "T1-2",
+     "citation": {
+      "source_id": "T1",
+      "page": 3,
+      "quote": "Having said that, we expect to easily beat our profit guidance of 20% growth which would have taken us to just over INR 4,000 crores."
+     },
+     "topic": "profit guidance",
+     "kind": "quantitative",
+     "metric": "pat_growth",
+     "target_low": 20.0,
+     "target_high": 20.0,
+     "unit": "%",
+     "horizon": "FY27",
+     "made_in": "Q2 FY27"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "Too recent to judge"
+   },
+   {
+    "promise": {
+     "id": "T1-3",
+     "citation": {
+      "source_id": "T1",
+      "page": 3,
+      "quote": "And therefore, will support an improvement in our return on equity further and will also aid our DevCo to become net debt-free over the next 2 to 3 years, which is in line with our previous guidance."
+     },
+     "topic": "net debt",
+     "kind": "qualitative",
+     "metric": null,
+     "target_low": null,
+     "target_high": null,
+     "unit": null,
+     "horizon": "next 2 to 3 years",
+     "made_in": "Q2 FY27"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "Too recent to judge"
+   },
+   {
+    "promise": {
+     "id": "T1-4",
+     "citation": {
+      "source_id": "T1",
+      "page": 4,
+      "quote": "In the second half, we expect that our operating cash flow as it was in last fiscal, will significantly crank up, and we expect full year that our operating cash flow will be put around INR 85 billion or thereabouts."
+     },
+     "topic": "operating cash flow",
+     "kind": "qualitative",
+     "metric": "other",
+     "target_low": null,
+     "target_high": null,
+     "unit": null,
+     "horizon": "FY27",
+     "made_in": "Q2 FY27"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "Too recent to judge"
+   },
+   {
+    "promise": {
+     "id": "T1-5",
+     "citation": {
+      "source_id": "T1",
+      "page": 5,
+      "quote": "We expect to have the definitive documents executed for the first BTS box of in this fiscal year and to start construction for the boxes also in this fiscal year with a view to delivering those boxes to the end tenant in fiscal '29, and therefore, starting the rental earnings from our data center BTS program in fiscal '29 itself."
+     },
+     "topic": "data center BTS",
+     "kind": "qualitative",
+     "metric": null,
+     "target_low": null,
+     "target_high": null,
+     "unit": null,
+     "horizon": "FY29",
+     "made_in": "Q2 FY27"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "Too recent to judge"
+   },
+   {
+    "promise": {
+     "id": "T1-6",
+     "citation": {
+      "source_id": "T1",
+      "page": 9,
+      "quote": "We expect this number to grow significantly over the next year, especially in operations, in line with our growth ambitions."
+     },
+     "topic": "headcount growth",
+     "kind": "qualitative",
+     "metric": null,
+     "target_low": null,
+     "target_high": null,
+     "unit": null,
+     "horizon": "next year",
+     "made_in": "Q2 FY27"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "Too recent to judge"
+   }
+  ],
+  "counts": {
+   "kept": 0,
+   "partly": 0,
+   "missed": 0,
+   "pending": 23,
+   "dropped": 0
+  },
+  "credibility_pct": null,
+  "note": null
+ },
+ "snapshot": {
+  "summary": [
+   {
+    "text": "Lodha has evolved from a residential developer into a broader platform spanning homes, workplaces and digital infrastructure.",
+    "citation": {
+     "source_id": "AR",
+     "page": 10,
+     "quote": "His vision has guided the Company’s evolution from a residential developer into a broader platform spanning homes, workplaces and digital infrastructure."
+    }
+   },
+   {
+    "text": "Shaishav Dharia serves as Director of Lodha Green Digital Infrastructure and CEO of Extended Eastern Suburbs and Rental Assets.",
+    "citation": {
+     "source_id": "AR",
+     "page": 10,
+     "quote": "Shaishav Dharia is Director-Lodha Green Digital Infrastructure and CEO- Extended Eastern Suburbs & Rental Assets."
+    }
+   }
+  ]
+ },
+ "trajectory": {
+  "years": [
+   "Mar 2022",
+   "Mar 2023",
+   "Mar 2024",
+   "Mar 2025",
+   "Mar 2026"
+  ],
+  "revenue": [
+   9233.0,
+   9470.0,
+   10316.0,
+   13780.0,
+   16676.0
+  ],
+  "operating_profit": [
+   2186.0,
+   2064.0,
+   2665.0,
+   3989.0,
+   4923.0
+  ],
+  "margin_pct": [
+   23.675944979963177,
+   21.795142555438225,
+   25.833656455990695,
+   28.947750362844705,
+   29.52146797793236
+  ],
+  "pat": [
+   1208.0,
+   490.0,
+   1554.0,
+   2767.0,
+   3431.0
+  ],
+  "revenue_cagr_pct": 15.927711519499276,
+  "pat_cagr_pct": 29.81905575424859,
+  "margin_change_bps": 585,
+  "read": "growing",
+  "lender": false
+ },
+ "health": {
+  "as_of": "Mar 2026",
+  "debt_to_equity": 0.42497638065790605,
+  "cfo_to_pat_3y": 0.6497678018575851,
+  "fcf_3y_cr": 4146.0,
+  "working_capital_days": 420.0,
+  "wc_days_change_3y": 33.0,
+  "roce_pct": 16.0,
+  "flags": [
+   {
+    "level": "concern",
+    "text": "Only 65% of profit turned into operating cash over 3 years"
+   },
+   {
+    "level": "watch",
+    "text": "Working capital days rose from 387 to 420"
+   }
+  ]
+ },
+ "bull": [
+  {
+   "text": "Operating margin improved significantly with a 585 basis points increase over the comparative period.",
+   "citation": {
+    "source_id": "FACTS",
+    "page": 0,
+    "quote": "Operating margin change: +585 bps"
+   }
+  },
+  {
+   "text": "The company generated substantial free cash flow totaling INR 4,146 crores over a three-year period.",
+   "citation": {
+    "source_id": "FACTS",
+    "page": 0,
+    "quote": "Free cash flow (3y): ₹4,146 cr"
+   }
+  }
+ ],
+ "bear": [
+  {
+   "text": "Working capital requirements remain high and increased from 387 to 420 days.",
+   "citation": {
+    "source_id": "FACTS",
+    "page": 0,
+    "quote": "Working capital days rose from 387 to 420"
+   }
+  },
+  {
+   "text": "Cash conversion efficiency is suboptimal as only 65% of profit turned into operating cash over three years.",
+   "citation": {
+    "source_id": "FACTS",
+    "page": 0,
+    "quote": "Only 65% of profit turned into operating cash over 3 years"
+   }
+  },
+  {
+   "text": "The company has zero resolved promises out of 23 tracked entries in its promise ledger.",
+   "citation": {
+    "source_id": "FACTS",
+    "page": 0,
+    "quote": "Promise ledger: 0 kept, 0 partly, 0 missed, 23 pending, 0 dropped (0 of 23 promises resolved)"
+   }
+  }
+ ],
+ "notes": [],
+ "cost": {
+  "calls": 9,
+  "cached": 9,
+  "input_tokens": 0,
+  "output_tokens": 0,
+  "usd_list_price": 0.0
+ },
+ "build_seconds": 0.4,
+ "guard": {
+  "promises_proposed": 28,
+  "promises_kept": 23,
+  "points_proposed": 8,
+  "points_kept": 7,
+  "verdicts_downgraded": {
+   "other_period": 0,
+   "restated": 0,
+   "below_target": 0,
+   "other_measure": 0,
+   "meets_target": 0
+  }
+ },
+ "latest_results": {
+  "symbol": "LODHA",
+  "period_end": "2026-09-30",
+  "period_label": "Q2 FY27",
+  "basis": "consolidated",
+  "format": "indas",
+  "audited": false,
+  "compared_qoq": "2026-06-30",
+  "compared_yoy": "2025-09-30",
+  "metrics": [
+   {
+    "key": "revenue",
+    "label": "Revenue",
+    "value": 4467.4,
+    "qoq_pct": -10.6,
+    "yoy_pct": 17.6,
+    "computed": false
+   },
+   {
+    "key": "ebitda",
+    "label": "EBITDA",
+    "value": 1488.3,
+    "qoq_pct": -22.6,
+    "yoy_pct": 34.2,
+    "computed": true
+   },
+   {
+    "key": "pbt",
+    "label": "PBT",
+    "value": 1337.6,
+    "qoq_pct": -24.6,
+    "yoy_pct": 39.1,
+    "computed": false
+   },
+   {
+    "key": "pat",
+    "label": "PAT",
+    "value": 1013.5,
+    "qoq_pct": -26.2,
+    "yoy_pct": 28.3,
+    "computed": false
+   }
+  ],
+  "margins": [
+   {
+    "key": "ebitda_margin",
+    "label": "EBITDA margin",
+    "value_pct": 33.3,
+    "qoq_bps": -516,
+    "yoy_bps": 412
+   },
+   {
+    "key": "pat_margin",
+    "label": "PAT margin",
+    "value_pct": 22.7,
+    "qoq_bps": -479,
+    "yoy_bps": 189
+   }
+  ],
+  "notes": [
+   "EBITDA is computed: revenue from operations minus operating expenses (excludes other income).",
+   "PAT includes ₹4.40 cr share of profit of associates and joint ventures."
+  ],
+  "sources": [
+   "https://nsearchives.nseindia.com/corporate/xbrl/INTEGRATED_FILING_INDAS_1750288_30102026064846_WEB.xml",
+   "https://nsearchives.nseindia.com/corporate/xbrl/INTEGRATED_FILING_INDAS_1701153_24072026065814_WEB.xml",
+   "https://nsearchives.nseindia.com/corporate/xbrl/INTEGRATED_FILING_INDAS_1562006_30102025072636_WEB.xml"
+  ]
+ }
+}

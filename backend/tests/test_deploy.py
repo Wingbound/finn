@@ -236,3 +236,26 @@ def test_health_flags_bad_cors_settings(monkeypatch, tmp_path):
         assert body["ok"] is False and "any site" in body["cors_problems"][0]
     finally:
         get_settings.cache_clear()
+
+
+def test_an_interrupted_seed_copy_leaves_nothing_half_written(tmp_path, monkeypatch):
+    """Plan 5 review M1: copy to a temp file, then rename, so a crash mid-copy can't leave a
+    truncated store that every later request fails on."""
+    from finn.api.seed import copy_seed_if_empty
+
+    target = tmp_path / "store" / "finn.sqlite"
+    real_copy = shutil.copyfile
+
+    def dies_halfway(src, dst):
+        Path(dst).write_bytes(Path(src).read_bytes()[:4096])
+        raise OSError("instance recycled mid-copy")
+
+    monkeypatch.setattr(shutil, "copyfile", dies_halfway)
+    try:
+        copy_seed_if_empty(target, SEED)
+    except OSError:
+        pass
+    assert not target.exists()
+    monkeypatch.setattr(shutil, "copyfile", real_copy)
+    assert copy_seed_if_empty(target, SEED) is True
+    assert db.connect(target).execute("SELECT COUNT(*) FROM filings").fetchone()[0] > 0

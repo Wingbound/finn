@@ -315,7 +315,8 @@ def research_get(symbol: str, conn: Conn) -> dict | JSONResponse:
         return JSONResponse(
             status_code=404, content={"detail": "not built", "build": f"/research/{sym}/build"}
         )
-    return public(d)
+    found = card_or_none(conn, sym)  # the latest filed quarter, when FINN tracks the company
+    return {**public(d), "latest_results": found[0].model_dump(mode="json") if found else None}
 
 
 @app.get("/research/{symbol}/source/{source_id}/{page}")

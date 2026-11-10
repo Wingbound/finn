@@ -17,7 +17,7 @@ export function CitationChip({
     <button
       type="button"
       onClick={() => onOpen(citation)}
-      className="inline-flex min-h-8 items-center rounded-md border border-rule px-2 font-sans text-caption text-pencil not-italic"
+      className="inline-flex min-h-11 items-center rounded-md border border-rule px-2 font-sans text-caption text-pencil not-italic"
     >
       {prefix ? `${prefix} ${label}` : label}
     </button>

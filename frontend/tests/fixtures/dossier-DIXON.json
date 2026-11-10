@@ -2,7 +2,7 @@
  "symbol": "DIXON",
  "name": "Dixon Technologies (India) Ltd",
  "basis": "consolidated",
- "built_at": "2026-11-09T21:16:59.423144+05:30",
+ "built_at": "2026-11-10T06:10:29.099104+05:30",
  "sources": [
   {
    "id": "T1",
@@ -86,7 +86,7 @@
     "method": "judged",
     "actual": null,
     "evidence": null,
-    "rationale": "Target not yet due — tracking is not delivery"
+    "rationale": "The later call restated the target; delivery is not shown yet"
    },
    {
     "promise": {
@@ -545,12 +545,12 @@
  "notes": [],
  "cost": {
   "calls": 9,
-  "cached": 8,
-  "input_tokens": 16436,
-  "output_tokens": 497,
-  "usd_list_price": 0.006173
+  "cached": 9,
+  "input_tokens": 0,
+  "output_tokens": 0,
+  "usd_list_price": 0.0
  },
- "build_seconds": 14.0,
+ "build_seconds": 0.5,
  "guard": {
   "promises_proposed": 32,
   "promises_kept": 16,
@@ -558,8 +558,11 @@
   "points_kept": 7,
   "verdicts_downgraded": {
    "other_period": 0,
-   "restated": 3,
-   "below_target": 0
+   "restated": 4,
+   "below_target": 0,
+   "other_measure": 0,
+   "meets_target": 0
   }
- }
+ },
+ "latest_results": null
 }

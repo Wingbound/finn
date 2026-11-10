@@ -1,0 +1,575 @@
+{
+ "symbol": "ZYDUSLIFE",
+ "name": "Zydus Lifesciences Ltd",
+ "basis": "consolidated",
+ "built_at": "2026-11-10T06:10:21.837976+05:30",
+ "sources": [
+  {
+   "id": "T1",
+   "kind": "transcript",
+   "title": "Q2 FY27 earnings call (Nov 2026)",
+   "quarter": "Q2 FY27",
+   "url": "https://www.bseindia.com/stockinfo/AnnPdfOpen.aspx?Pname=0673a358-a878-4882-ae44-84cb3358631b.pdf"
+  },
+  {
+   "id": "T2",
+   "kind": "transcript",
+   "title": "Q1 FY27 earnings call (Aug 2026)",
+   "quarter": "Q1 FY27",
+   "url": "https://www.bseindia.com/stockinfo/AnnPdfOpen.aspx?Pname=bcb4a0b1-3ded-4b04-897c-a56ae9a760e0.pdf"
+  },
+  {
+   "id": "T3",
+   "kind": "transcript",
+   "title": "Q4 FY26 earnings call (May 2026)",
+   "quarter": "Q4 FY26",
+   "url": "https://www.bseindia.com/stockinfo/AnnPdfOpen.aspx?Pname=010501ea-6ffc-42c9-b93f-b2e236c4e384.pdf"
+  },
+  {
+   "id": "T4",
+   "kind": "transcript",
+   "title": "Q3 FY26 earnings call (Feb 2026)",
+   "quarter": "Q3 FY26",
+   "url": "https://www.bseindia.com/stockinfo/AnnPdfOpen.aspx?Pname=208d131f-2674-4235-853a-010b3847599d.pdf"
+  },
+  {
+   "id": "AR",
+   "kind": "annual_report",
+   "title": "Annual Report 2026",
+   "quarter": null,
+   "url": "https://www.bseindia.com/xml-data/corpfiling/AttachHis/3b825406-a2d1-44a7-9e41-10f5c876d22f.pdf"
+  }
+ ],
+ "ledger": {
+  "rows": [
+   {
+    "promise": {
+     "id": "T4-1",
+     "citation": {
+      "source_id": "T4",
+      "page": 7,
+      "quote": "And the NDA for the product is expected to be filed with the USFDA in 2026."
+     },
+     "topic": "NDA filing",
+     "kind": "qualitative",
+     "metric": null,
+     "target_low": null,
+     "target_high": null,
+     "unit": null,
+     "horizon": "2026",
+     "made_in": "Q3 FY26"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "No later evidence of the outcome yet"
+   },
+   {
+    "promise": {
+     "id": "T4-2",
+     "citation": {
+      "source_id": "T4",
+      "page": 15,
+      "quote": "In the next 3 to 4 years we want to have a thousand crore plus business on vaccines, for sure."
+     },
+     "topic": "vaccines business target",
+     "kind": "qualitative",
+     "metric": "other",
+     "target_low": null,
+     "target_high": null,
+     "unit": null,
+     "horizon": "next 3 to 4 years",
+     "made_in": "Q3 FY26"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "No later evidence of the outcome yet"
+   },
+   {
+    "promise": {
+     "id": "T4-3",
+     "citation": {
+      "source_id": "T4",
+      "page": 13,
+      "quote": "We will still track at 23% plus margin in the Quarter 4."
+     },
+     "topic": "EBITDA margin",
+     "kind": "quantitative",
+     "metric": "ebitda_margin",
+     "target_low": 23.0,
+     "target_high": null,
+     "unit": "%",
+     "horizon": "Q4",
+     "made_in": "Q3 FY26"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "The later figure (24%) meets the target (at least 23%)"
+   },
+   {
+    "promise": {
+     "id": "T3-1",
+     "citation": {
+      "source_id": "T3",
+      "page": 8,
+      "quote": "We do expect that in spite of a high base of FY26 for North America, we will still see a growth, single digit growth, in the North American business aided by the portfolio."
+     },
+     "topic": "North America revenue growth",
+     "kind": "qualitative",
+     "metric": "revenue_growth",
+     "target_low": null,
+     "target_high": null,
+     "unit": null,
+     "horizon": "FY27",
+     "made_in": "Q4 FY26"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "No later evidence of the outcome yet"
+   },
+   {
+    "promise": {
+     "id": "T3-2",
+     "citation": {
+      "source_id": "T3",
+      "page": 9,
+      "quote": "In India, we have now consistently demonstrated better than market growth and we are thinking , we will outperform the market by 200 -400 basis points versus the current IPM."
+     },
+     "topic": "India market outperformance",
+     "kind": "quantitative",
+     "metric": "other",
+     "target_low": 200.0,
+     "target_high": 400.0,
+     "unit": "%",
+     "horizon": "FY27",
+     "made_in": "Q4 FY26"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "The later figure (20) is below the target (200–400)"
+   },
+   {
+    "promise": {
+     "id": "T3-3",
+     "citation": {
+      "source_id": "T3",
+      "page": 9,
+      "quote": "I think FY27 , looking at competition, also Revlimid competition, Mirabegron competition, expenses related to Saro launch, we are expecting margins in excess of 24%."
+     },
+     "topic": "EBITDA margin",
+     "kind": "quantitative",
+     "metric": "ebitda_margin",
+     "target_low": 24.0,
+     "target_high": null,
+     "unit": "%",
+     "horizon": "FY27",
+     "made_in": "Q4 FY26"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "No later evidence of the outcome yet"
+   },
+   {
+    "promise": {
+     "id": "T3-4",
+     "citation": {
+      "source_id": "T3",
+      "page": 18,
+      "quote": "We will hope to see launch in second quarter of FY27 in China."
+     },
+     "topic": "Desidustat launch in China",
+     "kind": "qualitative",
+     "metric": null,
+     "target_low": null,
+     "target_high": null,
+     "unit": null,
+     "horizon": "Q2 FY27",
+     "made_in": "Q4 FY26"
+    },
+    "status": "kept",
+    "method": "judged",
+    "actual": null,
+    "evidence": {
+     "source_id": "T2",
+     "page": 13,
+     "quote": "So, yes, I think we achieved the milestone of getting it approved in China now. We have supplied now API for formulation manufacturing in the market."
+    },
+    "rationale": "Management achieved the regulatory approval and supply milestone for Desidustat in China as anticipated."
+   },
+   {
+    "promise": {
+     "id": "T2-1",
+     "citation": {
+      "source_id": "T2",
+      "page": 5,
+      "quote": "As our branded business continues to gain scale across markets, we expect their share to exceed two-third of our overall revenue over the medium term."
+     },
+     "topic": "revenue mix",
+     "kind": "qualitative",
+     "metric": null,
+     "target_low": null,
+     "target_high": null,
+     "unit": null,
+     "horizon": "medium term",
+     "made_in": "Q1 FY27"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "No later evidence of the outcome yet"
+   },
+   {
+    "promise": {
+     "id": "T2-2",
+     "citation": {
+      "source_id": "T2",
+      "page": 9,
+      "quote": "So, right now, we are guiding for around ₹1,500-₹1,600 crores capex."
+     },
+     "topic": "capex",
+     "kind": "quantitative",
+     "metric": "capex",
+     "target_low": 1500.0,
+     "target_high": 1600.0,
+     "unit": "cr",
+     "horizon": "FY27",
+     "made_in": "Q1 FY27"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "No later evidence of the outcome yet"
+   },
+   {
+    "promise": {
+     "id": "T2-3",
+     "citation": {
+      "source_id": "T2",
+      "page": 17,
+      "quote": "Ideally, we would want to be improving our EBITDA margins to 28-30% range as we move closer to the 5-year period."
+     },
+     "topic": "ebitda margin",
+     "kind": "quantitative",
+     "metric": "ebitda_margin",
+     "target_low": 28.0,
+     "target_high": 30.0,
+     "unit": "%",
+     "horizon": "5 years",
+     "made_in": "Q1 FY27"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "No later evidence of the outcome yet"
+   },
+   {
+    "promise": {
+     "id": "T1-1",
+     "citation": {
+      "source_id": "T1",
+      "page": 5,
+      "quote": "Despite these investments, our operating profitability remained robust and we are on track to deliver a 24% plus EBITDA margin in line with our FY27 expectations."
+     },
+     "topic": "ebitda margin",
+     "kind": "quantitative",
+     "metric": "ebitda_margin",
+     "target_low": 24.0,
+     "target_high": null,
+     "unit": "%",
+     "horizon": "FY27",
+     "made_in": "Q2 FY27"
+    },
+    "status": "pending",
+    "method": "computed",
+    "actual": null,
+    "evidence": null,
+    "rationale": "Actuals for FY27 are not published yet"
+   },
+   {
+    "promise": {
+     "id": "T1-2",
+     "citation": {
+      "source_id": "T1",
+      "page": 9,
+      "quote": "And as I said, we are still guiding for a single digit growth on constant currency terms on the high base of FY26."
+     },
+     "topic": "US revenue growth",
+     "kind": "qualitative",
+     "metric": "revenue_growth",
+     "target_low": null,
+     "target_high": null,
+     "unit": null,
+     "horizon": "FY26",
+     "made_in": "Q2 FY27"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "Too recent to judge"
+   },
+   {
+    "promise": {
+     "id": "T1-3",
+     "citation": {
+      "source_id": "T1",
+      "page": 11,
+      "quote": "Yes, we maintain that guidance of 24% EBITDA margin for the full year."
+     },
+     "topic": "ebitda margin",
+     "kind": "quantitative",
+     "metric": "ebitda_margin",
+     "target_low": 24.0,
+     "target_high": null,
+     "unit": "%",
+     "horizon": "FY27",
+     "made_in": "Q2 FY27"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "Too recent to judge"
+   }
+  ],
+  "counts": {
+   "kept": 1,
+   "partly": 0,
+   "missed": 0,
+   "pending": 12,
+   "dropped": 0
+  },
+  "credibility_pct": null,
+  "note": null
+ },
+ "snapshot": {
+  "summary": [
+   {
+    "text": "Zydus Lifesciences is a global, innovation-driven lifesciences company that develops pathbreaking therapies and solutions addressing unmet medical needs across prevention, early diagnosis, and effective disease management.",
+    "citation": {
+     "source_id": "AR",
+     "page": 8,
+     "quote": "Zydus Lifesciences is a global, innovation-driven lifesciences company, committed to advancing scientific research and innovation to deliver transformative healthcare outcomes. The Company develops pathbreaking therapies and solutions that address unmet medical needs and enhance quality of life, across prevention, early diagnosis, and effective disease management."
+    }
+   },
+   {
+    "text": "The company's operations encompass research and development, manufacturing, marketing, and distribution of a diverse portfolio including generics, branded generics, specialty formulations, biosimilars, vaccines, and active pharmaceutical ingredients.",
+    "citation": {
+     "source_id": "AR",
+     "page": 8,
+     "quote": "Zydus’ operations encompass research and development, manufacturing, marketing, and distribution of a diverse portfolio, including generics, branded generics, specialty formulations, biosimilars, vaccines, and active pharmaceutical ingredients (APIs)."
+    }
+   },
+   {
+    "text": "In the pharmaceutical space, the company's branded formulations business in India sustained market outperformance with a strong 19% year-on-year growth during the quarter.",
+    "citation": {
+     "source_id": "T1",
+     "page": 3,
+     "quote": "In India, our branded formulations business sustained market outperformance with a strong 19% year -on-year growth during the quarter."
+    }
+   }
+  ]
+ },
+ "trajectory": {
+  "years": [
+   "Mar 2022",
+   "Mar 2023",
+   "Mar 2024",
+   "Mar 2025",
+   "Mar 2026"
+  ],
+  "revenue": [
+   15110.0,
+   17237.0,
+   19547.0,
+   23242.0,
+   27148.0
+  ],
+  "operating_profit": [
+   3342.0,
+   3860.0,
+   5384.0,
+   7058.0,
+   8475.0
+  ],
+  "margin_pct": [
+   22.11780277961615,
+   22.393687996751176,
+   27.543868624341332,
+   30.367438258325446,
+   31.217769264770883
+  ],
+  "pat": [
+   4618.0,
+   2092.0,
+   3973.0,
+   4673.0,
+   5124.0
+  ],
+  "revenue_cagr_pct": 15.775947536635847,
+  "pat_cagr_pct": 2.6334193402353545,
+  "margin_change_bps": 910,
+  "read": "growing",
+  "lender": false
+ },
+ "health": {
+  "as_of": "Mar 2026",
+  "debt_to_equity": 0.46090292121569787,
+  "cfo_to_pat_3y": 0.8782861292665214,
+  "fcf_3y_cr": 6922.0,
+  "working_capital_days": -40.0,
+  "wc_days_change_3y": -110.0,
+  "roce_pct": 21.0,
+  "flags": []
+ },
+ "bull": [
+  {
+   "text": "Consolidated revenues grew 29% year-on-year to ₹79.1 billion during the second quarter of FY27.",
+   "citation": {
+    "source_id": "T1",
+    "page": 3,
+    "quote": "We registered consolidated revenues of ₹79.1 billion, up 29% on a year -on-year basis."
+   }
+  },
+  {
+   "text": "The India branded formulations business maintained market outperformance with a strong 19% year-on-year growth during the quarter.",
+   "citation": {
+    "source_id": "T1",
+    "page": 3,
+    "quote": "In India, our branded formulations business sustained market outperformance with a strong 19% year -on-year growth during the quarter."
+   }
+  }
+ ],
+ "bear": [
+  {
+   "text": "USFDA inspections at the SEZ-II, Ahmedabad and Moraiya facilities concluded with one observation and five observations respectively.",
+   "citation": {
+    "source_id": "T1",
+    "page": 4,
+    "quote": "On the operations front, recently , the USFDA inspected our formulations manufacturing facilities at SEZ-II, Ahmedabad and Moraiya which concluded with one observation and five observations respectively."
+   }
+  },
+  {
+   "text": "The company experienced a decline in products that had very significant gross margins.",
+   "citation": {
+    "source_id": "T1",
+    "page": 10,
+    "quote": "The second thing is also that we had also very significant gross margin products that came down."
+   }
+  },
+  {
+   "text": "Annual commercial expenses for Saroglitazar are expected to be around $100 million every year.",
+   "citation": {
+    "source_id": "T1",
+    "page": 8,
+    "quote": "So, we expect our commercial expense to be around $100 million every year."
+   }
+  }
+ ],
+ "notes": [],
+ "cost": {
+  "calls": 9,
+  "cached": 9,
+  "input_tokens": 0,
+  "output_tokens": 0,
+  "usd_list_price": 0.0
+ },
+ "build_seconds": 0.5,
+ "guard": {
+  "promises_proposed": 28,
+  "promises_kept": 13,
+  "points_proposed": 10,
+  "points_kept": 8,
+  "verdicts_downgraded": {
+   "other_period": 0,
+   "restated": 0,
+   "below_target": 1,
+   "other_measure": 0,
+   "meets_target": 1
+  }
+ },
+ "latest_results": {
+  "symbol": "ZYDUSLIFE",
+  "period_end": "2026-09-30",
+  "period_label": "Q2 FY27",
+  "basis": "consolidated",
+  "format": "indas",
+  "audited": false,
+  "compared_qoq": "2026-06-30",
+  "compared_yoy": "2025-09-30",
+  "metrics": [
+   {
+    "key": "revenue",
+    "label": "Revenue",
+    "value": 7909.6,
+    "qoq_pct": -1.3,
+    "yoy_pct": 29.2,
+    "computed": false
+   },
+   {
+    "key": "ebitda",
+    "label": "EBITDA",
+    "value": 1894.5,
+    "qoq_pct": -1.8,
+    "yoy_pct": -6.0,
+    "computed": true
+   },
+   {
+    "key": "pbt",
+    "label": "PBT",
+    "value": 1234.2,
+    "qoq_pct": -5.5,
+    "yoy_pct": -26.9,
+    "computed": false
+   },
+   {
+    "key": "pat",
+    "label": "PAT",
+    "value": 927.7,
+    "qoq_pct": -6.3,
+    "yoy_pct": -25.1,
+    "computed": false
+   }
+  ],
+  "margins": [
+   {
+    "key": "ebitda_margin",
+    "label": "EBITDA margin",
+    "value_pct": 24.0,
+    "qoq_bps": -11,
+    "yoy_bps": -897
+   },
+   {
+    "key": "pat_margin",
+    "label": "PAT margin",
+    "value_pct": 11.7,
+    "qoq_bps": -62,
+    "yoy_bps": -850
+   }
+  ],
+  "notes": [
+   "EBITDA is computed: revenue from operations minus operating expenses (excludes other income).",
+   "PBT includes an exceptional gain of ₹1.30 cr.",
+   "PAT includes ₹27.50 cr share of profit of associates and joint ventures."
+  ],
+  "sources": [
+   "https://nsearchives.nseindia.com/corporate/xbrl/INTEGRATED_FILING_INDAS_1753077_04112026073431_WEB.xml",
+   "https://nsearchives.nseindia.com/corporate/xbrl/INTEGRATED_FILING_INDAS_1712104_11082026072500_WEB.xml",
+   "https://nsearchives.nseindia.com/corporate/xbrl/INTEGRATED_FILING_INDAS_1567128_06112025062119_WEB.xml"
+  ]
+ }
+}

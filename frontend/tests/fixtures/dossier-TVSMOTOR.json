@@ -1,0 +1,643 @@
+{
+ "symbol": "TVSMOTOR",
+ "name": "TVS Motor Company Ltd",
+ "basis": "consolidated",
+ "built_at": "2026-11-10T06:10:23.643627+05:30",
+ "sources": [
+  {
+   "id": "T1",
+   "kind": "transcript",
+   "title": "Q2 FY27 earnings call (Nov 2026)",
+   "quarter": "Q2 FY27",
+   "url": "https://www.bseindia.com/stockinfo/AnnPdfOpen.aspx?Pname=dcdbf519-3256-4420-8db0-e0fdbfa493b0.pdf"
+  },
+  {
+   "id": "T2",
+   "kind": "transcript",
+   "title": "Q1 FY27 earnings call (Jul 2026)",
+   "quarter": "Q1 FY27",
+   "url": "https://www.bseindia.com/stockinfo/AnnPdfOpen.aspx?Pname=e99280ca-79c3-4fa1-8188-f0f34294abfa.pdf"
+  },
+  {
+   "id": "T3",
+   "kind": "transcript",
+   "title": "Q4 FY26 earnings call (May 2026)",
+   "quarter": "Q4 FY26",
+   "url": "https://www.bseindia.com/stockinfo/AnnPdfOpen.aspx?Pname=d60c3c01-cbb0-4df1-9cba-9e23ccc6fc27.pdf"
+  },
+  {
+   "id": "T4",
+   "kind": "transcript",
+   "title": "Q3 FY26 earnings call (Feb 2026)",
+   "quarter": "Q3 FY26",
+   "url": "https://www.bseindia.com/stockinfo/AnnPdfOpen.aspx?Pname=53c3b829-4568-4cca-a559-e584d7253eed.pdf"
+  },
+  {
+   "id": "AR",
+   "kind": "annual_report",
+   "title": "Annual Report 2026",
+   "quarter": null,
+   "url": "https://www.bseindia.com/xml-data/corpfiling/AttachHis/4e988d1e-e2c9-40c8-aa8d-8760675c59d6.pdf"
+  }
+ ],
+ "ledger": {
+  "rows": [
+   {
+    "promise": {
+     "id": "T4-1",
+     "citation": {
+      "source_id": "T4",
+      "page": 13,
+      "quote": "The capex will be around INR 1700 crores or slightly around that because we are also now looking at increasing some of the areas capacity given the kind of growth what we have seen, okay?"
+     },
+     "topic": "capex",
+     "kind": "quantitative",
+     "metric": "capex",
+     "target_low": 1700.0,
+     "target_high": 1700.0,
+     "unit": "cr",
+     "horizon": "FY26",
+     "made_in": "Q3 FY26"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "No later evidence of the outcome yet"
+   },
+   {
+    "promise": {
+     "id": "T3-1",
+     "citation": {
+      "source_id": "T3",
+      "page": 7,
+      "quote": "See, we are expecting a good single-digit growth on the industry this year."
+     },
+     "topic": "industry growth",
+     "kind": "qualitative",
+     "metric": null,
+     "target_low": null,
+     "target_high": null,
+     "unit": null,
+     "horizon": "this year",
+     "made_in": "Q4 FY26"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "No later evidence of the outcome yet"
+   },
+   {
+    "promise": {
+     "id": "T3-2",
+     "citation": {
+      "source_id": "T3",
+      "page": 9,
+      "quote": "Immediately, we are looking at increasing the capacity by another 1.5 million, to go to somewhere around 8.3 million because the demand is good and first time we have to add significant capacity in the next 12 months."
+     },
+     "topic": "capacity expansion",
+     "kind": "quantitative",
+     "metric": "other",
+     "target_low": 8.3,
+     "target_high": null,
+     "unit": "cr",
+     "horizon": "next 12 months",
+     "made_in": "Q4 FY26"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "No later evidence of the outcome yet"
+   },
+   {
+    "promise": {
+     "id": "T3-3",
+     "citation": {
+      "source_id": "T3",
+      "page": 11,
+      "quote": "Next year, the investments will be much lower. It will be maybe another INR500 crores, INR600 crores lower than this INR 2,400 because we are very confident that many of the investments whatever we have made is going to start yielding better revenues and start getting results for us."
+     },
+     "topic": "investments",
+     "kind": "quantitative",
+     "metric": "capex",
+     "target_low": 500.0,
+     "target_high": 600.0,
+     "unit": "cr",
+     "horizon": "next year",
+     "made_in": "Q4 FY26"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "No later evidence of the outcome yet"
+   },
+   {
+    "promise": {
+     "id": "T3-4",
+     "citation": {
+      "source_id": "T3",
+      "page": 11,
+      "quote": "So all put together, the capex for next year for TVS Motor will be likely to be around INR3,500 crores."
+     },
+     "topic": "capex",
+     "kind": "quantitative",
+     "metric": "capex",
+     "target_low": 3500.0,
+     "target_high": null,
+     "unit": "cr",
+     "horizon": "next year",
+     "made_in": "Q4 FY26"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "No later evidence of the outcome yet"
+   },
+   {
+    "promise": {
+     "id": "T3-5",
+     "citation": {
+      "source_id": "T3",
+      "page": 11,
+      "quote": "We have now moved maybe around 40,000 and we will soon move to 50,000 per month."
+     },
+     "topic": "EV volume growth",
+     "kind": "quantitative",
+     "metric": "volume_growth",
+     "target_low": 50000.0,
+     "target_high": null,
+     "unit": null,
+     "horizon": "soon",
+     "made_in": "Q4 FY26"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "No verifiable later evidence"
+   },
+   {
+    "promise": {
+     "id": "T2-1",
+     "citation": {
+      "source_id": "T2",
+      "page": 5,
+      "quote": "We are investing behind capacity, and we are confident that we will be able to significantly improve these numbers quarter after quarter on 2-wheelers, equally on 3-wheelers."
+     },
+     "topic": "capacity and sales growth",
+     "kind": "qualitative",
+     "metric": null,
+     "target_low": null,
+     "target_high": null,
+     "unit": null,
+     "horizon": null,
+     "made_in": "Q1 FY27"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "No later evidence of the outcome yet"
+   },
+   {
+    "promise": {
+     "id": "T2-2",
+     "citation": {
+      "source_id": "T2",
+      "page": 6,
+      "quote": "Q2 industry is likely to do very well and 2-wheeler industry. I'm very sure it will maintain the same momentum, double -digit growth is minimum what we are expecting in the market, very healthy ICE demand and EV could be similar to the growth what we have witnessed in Q1."
+     },
+     "topic": "industry growth",
+     "kind": "qualitative",
+     "metric": null,
+     "target_low": null,
+     "target_high": null,
+     "unit": null,
+     "horizon": "Q2",
+     "made_in": "Q1 FY27"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "No verifiable later evidence"
+   },
+   {
+    "promise": {
+     "id": "T2-3",
+     "citation": {
+      "source_id": "T2",
+      "page": 6,
+      "quote": "And we are pretty confident that you will see July, August, September same momentum, a slightly better momentum than Q1 to continue."
+     },
+     "topic": "sales momentum",
+     "kind": "qualitative",
+     "metric": null,
+     "target_low": null,
+     "target_high": null,
+     "unit": null,
+     "horizon": "Q2",
+     "made_in": "Q1 FY27"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "No verifiable later evidence"
+   },
+   {
+    "promise": {
+     "id": "T2-4",
+     "citation": {
+      "source_id": "T2",
+      "page": 12,
+      "quote": "So this is a big, big increase, and that's why we are also investing somewhere around, including our new products, we are investing about INR 3,500 crores, new products plus all the capacity expansion, which is going to come over the last , next one quarter is over second quarter, third quarter."
+     },
+     "topic": "capex",
+     "kind": "quantitative",
+     "metric": "capex",
+     "target_low": 3500.0,
+     "target_high": 3500.0,
+     "unit": "cr",
+     "horizon": null,
+     "made_in": "Q1 FY27"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "No later evidence of the outcome yet"
+   },
+   {
+    "promise": {
+     "id": "T2-5",
+     "citation": {
+      "source_id": "T2",
+      "page": 12,
+      "quote": "By fourth quarter, we will reach is 8.3 million capacity."
+     },
+     "topic": "capacity target",
+     "kind": "quantitative",
+     "metric": "other",
+     "target_low": 8.3,
+     "target_high": 8.3,
+     "unit": "cr",
+     "horizon": "Q4",
+     "made_in": "Q1 FY27"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "No later evidence of the outcome yet"
+   },
+   {
+    "promise": {
+     "id": "T2-6",
+     "citation": {
+      "source_id": "T2",
+      "page": 17,
+      "quote": "And I'm confident that Q2 will be a much better quarter than Q1."
+     },
+     "topic": "quarterly performance",
+     "kind": "qualitative",
+     "metric": null,
+     "target_low": null,
+     "target_high": null,
+     "unit": null,
+     "horizon": "Q2",
+     "made_in": "Q1 FY27"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "No verifiable later evidence"
+   },
+   {
+    "promise": {
+     "id": "T1-1",
+     "citation": {
+      "source_id": "T1",
+      "page": 4,
+      "quote": "You will see much higher growth from TVS in quarter 3 and quarter 4."
+     },
+     "topic": "growth",
+     "kind": "qualitative",
+     "metric": null,
+     "target_low": null,
+     "target_high": null,
+     "unit": null,
+     "horizon": "Q3 and Q4",
+     "made_in": "Q2 FY27"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "Too recent to judge"
+   },
+   {
+    "promise": {
+     "id": "T1-2",
+     "citation": {
+      "source_id": "T1",
+      "page": 6,
+      "quote": "India launch is expected to be in the forthcoming months."
+     },
+     "topic": "product launch",
+     "kind": "qualitative",
+     "metric": null,
+     "target_low": null,
+     "target_high": null,
+     "unit": null,
+     "horizon": "forthcoming months",
+     "made_in": "Q2 FY27"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "Too recent to judge"
+   },
+   {
+    "promise": {
+     "id": "T1-3",
+     "citation": {
+      "source_id": "T1",
+      "page": 7,
+      "quote": "And this momentum is likely to continue even in Q3."
+     },
+     "topic": "growth",
+     "kind": "qualitative",
+     "metric": null,
+     "target_low": null,
+     "target_high": null,
+     "unit": null,
+     "horizon": "Q3",
+     "made_in": "Q2 FY27"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "Too recent to judge"
+   },
+   {
+    "promise": {
+     "id": "T1-4",
+     "citation": {
+      "source_id": "T1",
+      "page": 7,
+      "quote": "It will grow and TVS with the kind of portfolios what we have and the capacity what we are enhancing, we are very confident that we will be ahead of the industry in the forthcoming quarter and in Q4 now before I conclude, I just wanted to once again explain the demerger in detail."
+     },
+     "topic": "market share",
+     "kind": "qualitative",
+     "metric": null,
+     "target_low": null,
+     "target_high": null,
+     "unit": null,
+     "horizon": "forthcoming quarter and Q4",
+     "made_in": "Q2 FY27"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "Too recent to judge"
+   },
+   {
+    "promise": {
+     "id": "T1-5",
+     "citation": {
+      "source_id": "T1",
+      "page": 8,
+      "quote": "And fortunately, you know we have already planned for the next level of capacity expansion to about 80,000."
+     },
+     "topic": "capacity",
+     "kind": "quantitative",
+     "metric": "other",
+     "target_low": null,
+     "target_high": 80000.0,
+     "unit": null,
+     "horizon": null,
+     "made_in": "Q2 FY27"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "Too recent to judge"
+   }
+  ],
+  "counts": {
+   "kept": 0,
+   "partly": 0,
+   "missed": 0,
+   "pending": 17,
+   "dropped": 0
+  },
+  "credibility_pct": null,
+  "note": null
+ },
+ "snapshot": {
+  "summary": [
+   {
+    "text": "TVS Motor Company is a leading global mobility solutions brand serving personal and commercial mobility needs across markets.",
+    "citation": {
+     "source_id": "AR",
+     "page": 3,
+     "quote": "TVS Motor Company is a leading global mobility \nsolutions brand, serving personal and commercial \nmobility needs across markets."
+    }
+   },
+   {
+    "text": "The company provides a versatile portfolio spanning electric vehicles, internal combustion engines, CNG, and biofuels like ethanol.",
+    "citation": {
+     "source_id": "AR",
+     "page": 10,
+     "quote": "TVSM leads the transition toward green energy with a versatile portfolio spanning \nElectric Vehicles (EV), CNG, and biofuels like ethanol."
+    }
+   }
+  ]
+ },
+ "trajectory": {
+  "years": [
+   "Mar 2022",
+   "Mar 2023",
+   "Mar 2024",
+   "Mar 2025",
+   "Mar 2026"
+  ],
+  "revenue": [
+   24355.0,
+   31974.0,
+   38779.0,
+   44089.0,
+   56070.0
+  ],
+  "operating_profit": [
+   2755.0,
+   4027.0,
+   5435.0,
+   6588.0,
+   8352.0
+  ],
+  "margin_pct": [
+   11.311845616916443,
+   12.594608119096767,
+   14.01531756878723,
+   14.942502665063847,
+   14.895666131621187
+  ],
+  "pat": [
+   731.0,
+   1309.0,
+   1779.0,
+   2380.0,
+   3186.0
+  ],
+  "revenue_cagr_pct": 23.178696940913923,
+  "pat_cagr_pct": 44.48810613323453,
+  "margin_change_bps": 358,
+  "read": "growing",
+  "lender": false
+ },
+ "health": {
+  "as_of": "Mar 2026",
+  "debt_to_equity": 3.4282279142707788,
+  "cfo_to_pat_3y": 0.5605173587474472,
+  "fcf_3y_cr": -2599.0,
+  "working_capital_days": -37.0,
+  "wc_days_change_3y": 12.0,
+  "roce_pct": 17.0,
+  "flags": [
+   {
+    "level": "concern",
+    "text": "Debt is 3.4× equity"
+   },
+   {
+    "level": "concern",
+    "text": "Only 56% of profit turned into operating cash over 3 years"
+   },
+   {
+    "level": "watch",
+    "text": "Free cash flow was negative over 3 years (−₹2,599 cr)"
+   }
+  ]
+ },
+ "bull": [
+  {
+   "text": "Operating revenue grew by 44% from INR 11,905 crores to INR 17,103 crores in Q2 FY27.",
+   "citation": {
+    "source_id": "T1",
+    "page": 3,
+    "quote": "Revenue grew from INR11,905 crores to INR17,103 crores, 44% growth."
+   }
+  }
+ ],
+ "bear": [
+  {
+   "text": "Free cash flow was negative over the three-year period at minus 2,599 crore rupees.",
+   "citation": {
+    "source_id": "FACTS",
+    "page": 0,
+    "quote": "Free cash flow (3y): −₹2,599 cr"
+   }
+  }
+ ],
+ "notes": [],
+ "cost": {
+  "calls": 9,
+  "cached": 9,
+  "input_tokens": 0,
+  "output_tokens": 0,
+  "usd_list_price": 0.0
+ },
+ "build_seconds": 0.5,
+ "guard": {
+  "promises_proposed": 25,
+  "promises_kept": 17,
+  "points_proposed": 6,
+  "points_kept": 4,
+  "verdicts_downgraded": {
+   "other_period": 0,
+   "restated": 0,
+   "below_target": 0,
+   "other_measure": 0,
+   "meets_target": 0
+  }
+ },
+ "latest_results": {
+  "symbol": "TVSMOTOR",
+  "period_end": "2026-09-30",
+  "period_label": "Q2 FY27",
+  "basis": "consolidated",
+  "format": "indas",
+  "audited": false,
+  "compared_qoq": "2026-06-30",
+  "compared_yoy": "2025-09-30",
+  "metrics": [
+   {
+    "key": "revenue",
+    "label": "Revenue",
+    "value": 19474.44,
+    "qoq_pct": 19.5,
+    "yoy_pct": 38.6,
+    "computed": false
+   },
+   {
+    "key": "ebitda",
+    "label": "EBITDA",
+    "value": 2725.5,
+    "qoq_pct": 15.6,
+    "yoy_pct": 28.4,
+    "computed": true
+   },
+   {
+    "key": "pbt",
+    "label": "PBT",
+    "value": 1795.6,
+    "qoq_pct": 15.1,
+    "yoy_pct": 45.3,
+    "computed": false
+   },
+   {
+    "key": "pat",
+    "label": "PAT",
+    "value": 1219.45,
+    "qoq_pct": 15.3,
+    "yoy_pct": 46.4,
+    "computed": false
+   }
+  ],
+  "margins": [
+   {
+    "key": "ebitda_margin",
+    "label": "EBITDA margin",
+    "value_pct": 14.0,
+    "qoq_bps": -47,
+    "yoy_bps": -111
+   },
+   {
+    "key": "pat_margin",
+    "label": "PAT margin",
+    "value_pct": 6.3,
+    "qoq_bps": -23,
+    "yoy_bps": 34
+   }
+  ],
+  "notes": [
+   "EBITDA is computed: revenue from operations minus operating expenses (excludes other income).",
+   "PAT includes a ₹4.46 cr share of loss of associates and joint ventures."
+  ],
+  "sources": [
+   "https://nsearchives.nseindia.com/corporate/xbrl/INTEGRATED_FILING_INDAS_1748258_28102026082728_WEB.xml",
+   "https://nsearchives.nseindia.com/corporate/xbrl/INTEGRATED_FILING_INDAS_1698356_21072026044356_WEB.xml",
+   "https://nsearchives.nseindia.com/corporate/xbrl/INTEGRATED_FILING_INDAS_1559201_28102025075317_WEB.xml"
+  ]
+ }
+}

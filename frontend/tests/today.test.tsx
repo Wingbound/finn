@@ -67,7 +67,7 @@ describe("StoryList", () => {
 });
 
 describe("StaleNotice", () => {
-  it("says how old the newest filing is and offers wider windows", () => {
+  it("says how old the newest filing is and offers wider windows", async () => {
     const d = load<Digest>("digest-empty.json");
     const widen = vi.fn();
     render(
@@ -79,7 +79,9 @@ describe("StaleNotice", () => {
       />,
     );
     expect(screen.getByText("Nothing new in the last 24 hours.")).toBeInTheDocument();
-    expect(screen.getByText(/Newest filing: 7 Nov, 16:58/)).toBeInTheDocument();
+    const { stamp } = await import("@/lib/format");
+    const expected = `Newest filing: ${stamp(d.latest_filing_at!, new Date("2026-11-09T09:00:00+05:30"))}.`;
+    expect(screen.getByText(expected)).toBeInTheDocument();
     fireEvent.click(screen.getByRole("button", { name: "Show 7 days" }));
     expect(widen).toHaveBeenCalledWith({ kind: "hours", hours: 168 });
   });

@@ -1,8 +1,27 @@
 [
  {
+  "symbol": "AMBER",
+  "name": "Amber Enterprises India Ltd",
+  "built_at": "2026-11-10T06:10:26.757498+05:30",
+  "counts": {
+   "sources": 5,
+   "ledger_rows": 22,
+   "bull": 2,
+   "bear": 3,
+   "notes": 0,
+   "ledger": {
+    "kept": 1,
+    "partly": 0,
+    "missed": 0,
+    "pending": 21,
+    "dropped": 0
+   }
+  }
+ },
+ {
   "symbol": "BAJFINANCE",
   "name": "Bajaj Finance Ltd",
-  "built_at": "2026-11-09T21:17:12.283739+05:30",
+  "built_at": "2026-11-10T06:10:30.883412+05:30",
   "counts": {
    "sources": 5,
    "ledger_rows": 19,
@@ -19,9 +38,28 @@
   }
  },
  {
+  "symbol": "CGPOWER",
+  "name": "CG Power & Industrial Solutions Ltd",
+  "built_at": "2026-11-10T06:10:26.332381+05:30",
+  "counts": {
+   "sources": 5,
+   "ledger_rows": 15,
+   "bull": 2,
+   "bear": 3,
+   "notes": 0,
+   "ledger": {
+    "kept": 2,
+    "partly": 0,
+    "missed": 0,
+    "pending": 13,
+    "dropped": 0
+   }
+  }
+ },
+ {
   "symbol": "DIXON",
   "name": "Dixon Technologies (India) Ltd",
-  "built_at": "2026-11-09T21:16:59.423144+05:30",
+  "built_at": "2026-11-10T06:10:29.099104+05:30",
   "counts": {
    "sources": 5,
    "ledger_rows": 16,
@@ -40,7 +78,7 @@
  {
   "symbol": "HDFCBANK",
   "name": "HDFC Bank Ltd",
-  "built_at": "2026-11-09T21:17:11.935047+05:30",
+  "built_at": "2026-11-10T06:10:30.363833+05:30",
   "counts": {
    "sources": 5,
    "ledger_rows": 7,
@@ -59,7 +97,7 @@
  {
   "symbol": "IDEA",
   "name": "Vodafone Idea Ltd",
-  "built_at": "2026-11-09T21:17:25.652379+05:30",
+  "built_at": "2026-11-10T06:10:31.307040+05:30",
   "counts": {
    "sources": 5,
    "ledger_rows": 11,
@@ -76,9 +114,28 @@
   }
  },
  {
+  "symbol": "IDFCFIRSTB",
+  "name": "IDFC First Bank Ltd",
+  "built_at": "2026-11-10T06:10:25.955528+05:30",
+  "counts": {
+   "sources": 5,
+   "ledger_rows": 12,
+   "bull": 3,
+   "bear": 2,
+   "notes": 0,
+   "ledger": {
+    "kept": 0,
+    "partly": 0,
+    "missed": 0,
+    "pending": 12,
+    "dropped": 0
+   }
+  }
+ },
+ {
   "symbol": "INDIGO",
   "name": "Interglobe Aviation Ltd",
-  "built_at": "2026-11-09T21:17:11.591191+05:30",
+  "built_at": "2026-11-10T06:10:29.932534+05:30",
   "counts": {
    "sources": 4,
    "ledger_rows": 12,
@@ -95,9 +152,66 @@
   }
  },
  {
+  "symbol": "LODHA",
+  "name": "Lodha Developers Ltd",
+  "built_at": "2026-11-10T06:10:27.167659+05:30",
+  "counts": {
+   "sources": 5,
+   "ledger_rows": 23,
+   "bull": 2,
+   "bear": 3,
+   "notes": 0,
+   "ledger": {
+    "kept": 0,
+    "partly": 0,
+    "missed": 0,
+    "pending": 23,
+    "dropped": 0
+   }
+  }
+ },
+ {
+  "symbol": "M&M",
+  "name": "Mahindra & Mahindra Ltd",
+  "built_at": "2026-11-10T06:10:23.177691+05:30",
+  "counts": {
+   "sources": 5,
+   "ledger_rows": 13,
+   "bull": 2,
+   "bear": 2,
+   "notes": 0,
+   "ledger": {
+    "kept": 0,
+    "partly": 0,
+    "missed": 0,
+    "pending": 13,
+    "dropped": 0
+   }
+  }
+ },
+ {
+  "symbol": "MAXHEALTH",
+  "name": "Max Healthcare Institute Ltd",
+  "built_at": "2026-11-10T06:10:25.437601+05:30",
+  "counts": {
+   "sources": 5,
+   "ledger_rows": 20,
+   "bull": 2,
+   "bear": 2,
+   "notes": 0,
+   "ledger": {
+    "kept": 0,
+    "partly": 0,
+    "missed": 0,
+    "pending": 20,
+    "dropped": 0
+   }
+  }
+ },
+ {
   "symbol": "PERSISTENT",
   "name": "Persistent Systems Ltd",
-  "built_at": "2026-11-09T21:16:45.445032+05:30",
+  "built_at": "2026-11-10T06:10:28.551497+05:30",
   "counts": {
    "sources": 5,
    "ledger_rows": 12,
@@ -116,7 +230,7 @@
  {
   "symbol": "POLYCAB",
   "name": "Polycab India Ltd",
-  "built_at": "2026-11-09T21:16:59.830145+05:30",
+  "built_at": "2026-11-10T06:10:29.505566+05:30",
   "counts": {
    "sources": 5,
    "ledger_rows": 17,
@@ -128,6 +242,196 @@
     "partly": 0,
     "missed": 0,
     "pending": 17,
+    "dropped": 0
+   }
+  }
+ },
+ {
+  "symbol": "PREMIERENE",
+  "name": "Premier Energies Ltd",
+  "built_at": "2026-11-10T06:10:27.622863+05:30",
+  "counts": {
+   "sources": 5,
+   "ledger_rows": 17,
+   "bull": 3,
+   "bear": 2,
+   "notes": 0,
+   "ledger": {
+    "kept": 1,
+    "partly": 0,
+    "missed": 1,
+    "pending": 15,
+    "dropped": 0
+   }
+  }
+ },
+ {
+  "symbol": "RELIANCE",
+  "name": "Reliance Industries Ltd",
+  "built_at": "2026-11-10T06:10:20.716449+05:30",
+  "counts": {
+   "sources": 5,
+   "ledger_rows": 16,
+   "bull": 2,
+   "bear": 1,
+   "notes": 0,
+   "ledger": {
+    "kept": 5,
+    "partly": 0,
+    "missed": 0,
+    "pending": 11,
+    "dropped": 0
+   }
+  }
+ },
+ {
+  "symbol": "SUNPHARMA",
+  "name": "Sun Pharmaceutical Industries Ltd",
+  "built_at": "2026-11-10T06:10:22.235395+05:30",
+  "counts": {
+   "sources": 5,
+   "ledger_rows": 20,
+   "bull": 3,
+   "bear": 3,
+   "notes": 0,
+   "ledger": {
+    "kept": 0,
+    "partly": 0,
+    "missed": 0,
+    "pending": 20,
+    "dropped": 0
+   }
+  }
+ },
+ {
+  "symbol": "TATASTEEL",
+  "name": "Tata Steel Ltd",
+  "built_at": "2026-11-10T06:10:24.944613+05:30",
+  "counts": {
+   "sources": 5,
+   "ledger_rows": 16,
+   "bull": 2,
+   "bear": 3,
+   "notes": 0,
+   "ledger": {
+    "kept": 2,
+    "partly": 0,
+    "missed": 0,
+    "pending": 14,
+    "dropped": 0
+   }
+  }
+ },
+ {
+  "symbol": "TECHM",
+  "name": "Tech Mahindra Ltd",
+  "built_at": "2026-11-10T06:10:21.282790+05:30",
+  "counts": {
+   "sources": 5,
+   "ledger_rows": 9,
+   "bull": 3,
+   "bear": 2,
+   "notes": 0,
+   "ledger": {
+    "kept": 1,
+    "partly": 0,
+    "missed": 0,
+    "pending": 8,
+    "dropped": 0
+   }
+  }
+ },
+ {
+  "symbol": "TRENT",
+  "name": "Trent Ltd",
+  "built_at": "2026-11-10T06:10:24.237332+05:30",
+  "counts": {
+   "sources": 1,
+   "ledger_rows": 0,
+   "bull": 2,
+   "bear": 3,
+   "notes": 0,
+   "ledger": {
+    "kept": 0,
+    "partly": 0,
+    "missed": 0,
+    "pending": 0,
+    "dropped": 0
+   }
+  }
+ },
+ {
+  "symbol": "TVSMOTOR",
+  "name": "TVS Motor Company Ltd",
+  "built_at": "2026-11-10T06:10:23.643627+05:30",
+  "counts": {
+   "sources": 5,
+   "ledger_rows": 17,
+   "bull": 1,
+   "bear": 1,
+   "notes": 0,
+   "ledger": {
+    "kept": 0,
+    "partly": 0,
+    "missed": 0,
+    "pending": 17,
+    "dropped": 0
+   }
+  }
+ },
+ {
+  "symbol": "ULTRACEMCO",
+  "name": "UltraTech Cement Ltd",
+  "built_at": "2026-11-10T06:10:24.005266+05:30",
+  "counts": {
+   "sources": 5,
+   "ledger_rows": 18,
+   "bull": 3,
+   "bear": 3,
+   "notes": 0,
+   "ledger": {
+    "kept": 0,
+    "partly": 0,
+    "missed": 0,
+    "pending": 17,
+    "dropped": 1
+   }
+  }
+ },
+ {
+  "symbol": "VOLTAS",
+  "name": "Voltas Ltd",
+  "built_at": "2026-11-10T06:10:22.555615+05:30",
+  "counts": {
+   "sources": 5,
+   "ledger_rows": 7,
+   "bull": 3,
+   "bear": 2,
+   "notes": 0,
+   "ledger": {
+    "kept": 1,
+    "partly": 0,
+    "missed": 0,
+    "pending": 6,
+    "dropped": 0
+   }
+  }
+ },
+ {
+  "symbol": "ZYDUSLIFE",
+  "name": "Zydus Lifesciences Ltd",
+  "built_at": "2026-11-10T06:10:21.837976+05:30",
+  "counts": {
+   "sources": 5,
+   "ledger_rows": 13,
+   "bull": 2,
+   "bear": 3,
+   "notes": 0,
+   "ledger": {
+    "kept": 1,
+    "partly": 0,
+    "missed": 0,
+    "pending": 12,
     "dropped": 0
    }
   }

@@ -1,0 +1,567 @@
+{
+ "symbol": "M&M",
+ "name": "Mahindra & Mahindra Ltd",
+ "basis": "consolidated",
+ "built_at": "2026-11-10T06:10:23.177691+05:30",
+ "sources": [
+  {
+   "id": "T1",
+   "kind": "transcript",
+   "title": "Q1 FY27 earnings call (Aug 2026)",
+   "quarter": "Q1 FY27",
+   "url": "https://www.bseindia.com/stockinfo/AnnPdfOpen.aspx?Pname=f451beeb-32aa-45da-8e1a-417884693047.pdf"
+  },
+  {
+   "id": "T2",
+   "kind": "transcript",
+   "title": "Q4 FY26 earnings call (May 2026)",
+   "quarter": "Q4 FY26",
+   "url": "https://www.bseindia.com/stockinfo/AnnPdfOpen.aspx?Pname=6d65d81e-ab74-4196-8fc3-f78ef9e3af9d.pdf"
+  },
+  {
+   "id": "T3",
+   "kind": "transcript",
+   "title": "Q3 FY26 earnings call (Feb 2026)",
+   "quarter": "Q3 FY26",
+   "url": "https://www.bseindia.com/stockinfo/AnnPdfOpen.aspx?Pname=5ceb5575-dd97-489b-9c43-5e0c1deff006.pdf"
+  },
+  {
+   "id": "T4",
+   "kind": "transcript",
+   "title": "Q2 FY26 earnings call (Nov 2025)",
+   "quarter": "Q2 FY26",
+   "url": "https://www.bseindia.com/stockinfo/AnnPdfOpen.aspx?Pname=a935377d-5627-472b-8cd6-605b32ea0cb6.pdf"
+  },
+  {
+   "id": "AR",
+   "kind": "annual_report",
+   "title": "Annual Report 2026",
+   "quarter": null,
+   "url": "https://www.bseindia.com/xml-data/corpfiling/AttachHis/44de8025-5ba1-4dfd-b7ef-ed83aa31bd7e.pdf"
+  }
+ ],
+ "ledger": {
+  "rows": [
+   {
+    "promise": {
+     "id": "T4-1",
+     "citation": {
+      "source_id": "T4",
+      "page": 14,
+      "quote": "For LCV, I just answered that in a way to say we think it will be low double digits for the full year."
+     },
+     "topic": "LCV growth outlook",
+     "kind": "qualitative",
+     "metric": "volume_growth",
+     "target_low": null,
+     "target_high": null,
+     "unit": null,
+     "horizon": "FY26",
+     "made_in": "Q2 FY26"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "No later evidence of the outcome yet"
+   },
+   {
+    "promise": {
+     "id": "T3-1",
+     "citation": {
+      "source_id": "T3",
+      "page": 8,
+      "quote": "And then in 2028 , depending on how quickly we are able to get actual possession of the land and productionize it, we would probably add , in year 1 at least 8,000 to 10,000 more."
+     },
+     "topic": "capacity",
+     "kind": "quantitative",
+     "metric": "volume_growth",
+     "target_low": 8000.0,
+     "target_high": 10000.0,
+     "unit": null,
+     "horizon": "2028",
+     "made_in": "Q3 FY26"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "No later evidence of the outcome yet"
+   },
+   {
+    "promise": {
+     "id": "T3-2",
+     "citation": {
+      "source_id": "T3",
+      "page": 8,
+      "quote": "It will ramp up to 500,000 over a period of time."
+     },
+     "topic": "capacity",
+     "kind": "quantitative",
+     "metric": "volume_growth",
+     "target_low": 500000.0,
+     "target_high": 500000.0,
+     "unit": null,
+     "horizon": null,
+     "made_in": "Q3 FY26"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "No later evidence of the outcome yet"
+   },
+   {
+    "promise": {
+     "id": "T3-3",
+     "citation": {
+      "source_id": "T3",
+      "page": 12,
+      "quote": "It is on track to deliver what it has to in its first phase which ends by F27 and it has to get to a 15% EBIT margin."
+     },
+     "topic": "ebit margin",
+     "kind": "quantitative",
+     "metric": "ebitda_margin",
+     "target_low": 15.0,
+     "target_high": 15.0,
+     "unit": "%",
+     "horizon": "F27",
+     "made_in": "Q3 FY26"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "No later evidence of the outcome yet"
+   },
+   {
+    "promise": {
+     "id": "T3-4",
+     "citation": {
+      "source_id": "T3",
+      "page": 17,
+      "quote": "So that is where we are on EV, it will be very watchful and calibrated."
+     },
+     "topic": "EV strategy",
+     "kind": "qualitative",
+     "metric": null,
+     "target_low": null,
+     "target_high": null,
+     "unit": null,
+     "horizon": null,
+     "made_in": "Q3 FY26"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "No later evidence of the outcome yet"
+   },
+   {
+    "promise": {
+     "id": "T2-1",
+     "citation": {
+      "source_id": "T2",
+      "page": 10,
+      "quote": "And that, we believe, over the next 2 years, will again improve international business profitability."
+     },
+     "topic": "profitability",
+     "kind": "qualitative",
+     "metric": null,
+     "target_low": null,
+     "target_high": null,
+     "unit": null,
+     "horizon": null,
+     "made_in": "Q4 FY26"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "No later evidence of the outcome yet"
+   },
+   {
+    "promise": {
+     "id": "T2-2",
+     "citation": {
+      "source_id": "T2",
+      "page": 11,
+      "quote": "So, basically, by F31, we are expecting 7 plus 3, 10 launches in LCVs."
+     },
+     "topic": "new launches",
+     "kind": "quantitative",
+     "metric": "other",
+     "target_low": 10.0,
+     "target_high": null,
+     "unit": null,
+     "horizon": "F31",
+     "made_in": "Q4 FY26"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "No later evidence of the outcome yet"
+   },
+   {
+    "promise": {
+     "id": "T2-3",
+     "citation": {
+      "source_id": "T2",
+      "page": 11,
+      "quote": "So, by F31, we can expect 10 new ICE and 6 new BEVs."
+     },
+     "topic": "new launches",
+     "kind": "quantitative",
+     "metric": "other",
+     "target_low": 10.0,
+     "target_high": 6.0,
+     "unit": null,
+     "horizon": "F31",
+     "made_in": "Q4 FY26"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "No later evidence of the outcome yet"
+   },
+   {
+    "promise": {
+     "id": "T2-4",
+     "citation": {
+      "source_id": "T2",
+      "page": 11,
+      "quote": "F27 Outlook, we are expecting tractor to be mid -single digit, around 5%."
+     },
+     "topic": "volume_growth",
+     "kind": "quantitative",
+     "metric": "volume_growth",
+     "target_low": 5.0,
+     "target_high": 5.0,
+     "unit": "%",
+     "horizon": "F27",
+     "made_in": "Q4 FY26"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "No later evidence of the outcome yet"
+   },
+   {
+    "promise": {
+     "id": "T2-5",
+     "citation": {
+      "source_id": "T2",
+      "page": 12,
+      "quote": "On the SUV side, we are expecting mid-to-high teens."
+     },
+     "topic": "revenue_growth",
+     "kind": "qualitative",
+     "metric": "revenue_growth",
+     "target_low": null,
+     "target_high": null,
+     "unit": null,
+     "horizon": "F27",
+     "made_in": "Q4 FY26"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "No later evidence of the outcome yet"
+   },
+   {
+    "promise": {
+     "id": "T1-1",
+     "citation": {
+      "source_id": "T1",
+      "page": 4,
+      "quote": "We will come out with the next phase for Tech Mahindra as we close this phase that we talked about, which is by end of FY27 we get to 15% EBIT margin and then we talk about the next phase as we go from there."
+     },
+     "topic": "ebit margin",
+     "kind": "quantitative",
+     "metric": "ebitda_margin",
+     "target_low": 15.0,
+     "target_high": 15.0,
+     "unit": "%",
+     "horizon": "FY27",
+     "made_in": "Q1 FY27"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "Too recent to judge"
+   },
+   {
+    "promise": {
+     "id": "T1-2",
+     "citation": {
+      "source_id": "T1",
+      "page": 16,
+      "quote": "And that's why when we codified our strategy three years ago, it was to say what does relevance mean in the market? And how should we actually achieve that? And we codified that we want to be a 10,000 crores company pre-sales by FY30."
+     },
+     "topic": "sales target",
+     "kind": "quantitative",
+     "metric": "other",
+     "target_low": 10000.0,
+     "target_high": 10000.0,
+     "unit": "cr",
+     "horizon": "FY30",
+     "made_in": "Q1 FY27"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "Too recent to judge"
+   },
+   {
+    "promise": {
+     "id": "T1-3",
+     "citation": {
+      "source_id": "T1",
+      "page": 18,
+      "quote": "And we are targeting a ₹3 lakh crore book by 2031."
+     },
+     "topic": "aum target",
+     "kind": "qualitative",
+     "metric": "other",
+     "target_low": null,
+     "target_high": null,
+     "unit": null,
+     "horizon": "2031",
+     "made_in": "Q1 FY27"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "Too recent to judge"
+   }
+  ],
+  "counts": {
+   "kept": 0,
+   "partly": 0,
+   "missed": 0,
+   "pending": 13,
+   "dropped": 0
+  },
+  "credibility_pct": null,
+  "note": null
+ },
+ "snapshot": {
+  "summary": [
+   {
+    "text": "Mahindra & Mahindra Ltd. operates a core business focused on mobility products and farm solutions, offering SUVs, pick-ups, commercial vehicles, tractors, farm machinery, gensets, and construction equipment.",
+    "citation": {
+     "source_id": "AR",
+     "page": 9,
+     "quote": "Our core business is mobility products and farm solutions. Since assembling our ﬁrst vehicle in 1947, we have grown rapidly. Today, we offer a wide range of products and solutions ranging from SUVs, pick-ups, commercial vehicles and tractors to farm machinery, gensets and construction equipment."
+    }
+   },
+   {
+    "text": "The Mahindra Group provides products, services, and solutions across industries divided into three key segments: Auto, Farm, and Services.",
+    "citation": {
+     "source_id": "AR",
+     "page": 9,
+     "quote": "It offers a wide range of products, services and solutions across industries under three key segments — Auto, Farm and Services."
+    }
+   }
+  ]
+ },
+ "trajectory": {
+  "years": [
+   "Mar 2022",
+   "Mar 2023",
+   "Mar 2024",
+   "Mar 2025",
+   "Mar 2026"
+  ],
+  "revenue": [
+   90171.0,
+   121362.0,
+   139078.0,
+   159211.0,
+   198639.0
+  ],
+  "operating_profit": [
+   14683.0,
+   20325.0,
+   24892.0,
+   30518.0,
+   36980.0
+  ],
+  "margin_pct": [
+   16.28350578345588,
+   16.74741681910318,
+   17.89787025985418,
+   19.168273548938203,
+   18.616686551986266
+  ],
+  "pat": [
+   7253.0,
+   11374.0,
+   12270.0,
+   14073.0,
+   18622.0
+  ],
+  "revenue_cagr_pct": 21.828643486184873,
+  "pat_cagr_pct": 26.58351794913103,
+  "margin_change_bps": 233,
+  "read": "growing",
+  "lender": false
+ },
+ "health": {
+  "as_of": "Mar 2026",
+  "debt_to_equity": 1.4708959472378271,
+  "cfo_to_pat_3y": 0.20467029912153897,
+  "fcf_3y_cr": -19391.0,
+  "working_capital_days": -40.0,
+  "wc_days_change_3y": -26.0,
+  "roce_pct": 15.0,
+  "flags": [
+   {
+    "level": "concern",
+    "text": "Debt is 1.5× equity"
+   },
+   {
+    "level": "concern",
+    "text": "Only 20% of profit turned into operating cash over 3 years"
+   },
+   {
+    "level": "watch",
+    "text": "Free cash flow was negative over 3 years (−₹19,391 cr)"
+   }
+  ]
+ },
+ "bull": [
+  {
+   "text": "The company recorded an operating margin increase of 233 basis points over the specified period.",
+   "citation": {
+    "source_id": "FACTS",
+    "page": 0,
+    "quote": "Operating margin change: +233 bps"
+   }
+  },
+  {
+   "text": "Working capital days showed a positive efficiency measure at minus 40 days.",
+   "citation": {
+    "source_id": "FACTS",
+    "page": 0,
+    "quote": "Working capital days: -40"
+   }
+  }
+ ],
+ "bear": [
+  {
+   "text": "Free cash flow remained negative over the three-year period at minus 19,391 crore rupees.",
+   "citation": {
+    "source_id": "FACTS",
+    "page": 0,
+    "quote": "Free cash flow was negative over 3 years (−₹19,391 cr)"
+   }
+  },
+  {
+   "text": "Only 20% of profit was converted into operating cash over the three-year duration.",
+   "citation": {
+    "source_id": "FACTS",
+    "page": 0,
+    "quote": "Only 20% of profit turned into operating cash over 3 years"
+   }
+  }
+ ],
+ "notes": [],
+ "cost": {
+  "calls": 9,
+  "cached": 9,
+  "input_tokens": 0,
+  "output_tokens": 0,
+  "usd_list_price": 0.0
+ },
+ "build_seconds": 0.6,
+ "guard": {
+  "promises_proposed": 24,
+  "promises_kept": 13,
+  "points_proposed": 8,
+  "points_kept": 6,
+  "verdicts_downgraded": {
+   "other_period": 0,
+   "restated": 0,
+   "below_target": 0,
+   "other_measure": 0,
+   "meets_target": 0
+  }
+ },
+ "latest_results": {
+  "symbol": "M&M",
+  "period_end": "2026-09-30",
+  "period_label": "Q2 FY27",
+  "basis": "consolidated",
+  "format": "indas",
+  "audited": false,
+  "compared_qoq": "2026-06-30",
+  "compared_yoy": "2025-09-30",
+  "metrics": [
+   {
+    "key": "revenue",
+    "label": "Revenue",
+    "value": 57553.13,
+    "qoq_pct": -1.1,
+    "yoy_pct": 24.8,
+    "computed": false
+   },
+   {
+    "key": "ebitda",
+    "label": "EBITDA",
+    "value": 10221.46,
+    "qoq_pct": -3.3,
+    "yoy_pct": 14.5,
+    "computed": true
+   },
+   {
+    "key": "pbt",
+    "label": "PBT",
+    "value": 6894.67,
+    "qoq_pct": -5.0,
+    "yoy_pct": 23.4,
+    "computed": false
+   },
+   {
+    "key": "pat",
+    "label": "PAT",
+    "value": 5166.77,
+    "qoq_pct": -13.9,
+    "yoy_pct": 30.4,
+    "computed": false
+   }
+  ],
+  "margins": [
+   {
+    "key": "ebitda_margin",
+    "label": "EBITDA margin",
+    "value_pct": 17.8,
+    "qoq_bps": -40,
+    "yoy_bps": -161
+   },
+   {
+    "key": "pat_margin",
+    "label": "PAT margin",
+    "value_pct": 9.0,
+    "qoq_bps": -133,
+    "yoy_bps": 38
+   }
+  ],
+  "notes": [
+   "EBITDA is computed: revenue from operations minus operating expenses (excludes other income).",
+   "PAT includes ₹470.03 cr share of profit of associates and joint ventures."
+  ],
+  "sources": [
+   "https://nsearchives.nseindia.com/corporate/xbrl/INTEGRATED_FILING_INDAS_1753734_05112026054042_WEB.xml",
+   "https://nsearchives.nseindia.com/corporate/xbrl/INTEGRATED_FILING_INDAS_1705129_30072026041119_WEB.xml",
+   "https://nsearchives.nseindia.com/corporate/xbrl/INTEGRATED_FILING_INDAS_1565191_04112025075824_WEB.xml"
+  ]
+ }
+}

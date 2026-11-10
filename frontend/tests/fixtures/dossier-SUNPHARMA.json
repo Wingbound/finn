@@ -1,0 +1,741 @@
+{
+ "symbol": "SUNPHARMA",
+ "name": "Sun Pharmaceutical Industries Ltd",
+ "basis": "consolidated",
+ "built_at": "2026-11-10T06:10:22.235395+05:30",
+ "sources": [
+  {
+   "id": "T1",
+   "kind": "transcript",
+   "title": "Q2 FY27 earnings call (Nov 2026)",
+   "quarter": "Q2 FY27",
+   "url": "https://www.bseindia.com/stockinfo/AnnPdfOpen.aspx?Pname=fe431adc-0e1a-48ee-9c2b-b6e39cba04e4.pdf"
+  },
+  {
+   "id": "T2",
+   "kind": "transcript",
+   "title": "Q1 FY27 earnings call (Aug 2026)",
+   "quarter": "Q1 FY27",
+   "url": "https://www.bseindia.com/stockinfo/AnnPdfOpen.aspx?Pname=34be7c92-1d9f-4010-ba30-2344c959bc5e.pdf"
+  },
+  {
+   "id": "T3",
+   "kind": "transcript",
+   "title": "Q4 FY26 earnings call (May 2026)",
+   "quarter": "Q4 FY26",
+   "url": "https://www.bseindia.com/stockinfo/AnnPdfOpen.aspx?Pname=287022b2-8de5-487d-8d0d-77b819ee3eb4.pdf"
+  },
+  {
+   "id": "T4",
+   "kind": "transcript",
+   "title": "Q4 FY26 earnings call (May 2026)",
+   "quarter": "Q4 FY26",
+   "url": "https://www.bseindia.com/stockinfo/AnnPdfOpen.aspx?Pname=293c1789-7308-4864-982a-192b016de087.pdf"
+  },
+  {
+   "id": "AR",
+   "kind": "annual_report",
+   "title": "Annual Report 2026",
+   "quarter": null,
+   "url": "https://www.bseindia.com/xml-data/corpfiling/AttachHis/cb65dea5-416a-4f98-95e2-0b58761b7442.pdf"
+  }
+ ],
+ "ledger": {
+  "rows": [
+   {
+    "promise": {
+     "id": "T3-1",
+     "citation": {
+      "source_id": "T3",
+      "page": 6,
+      "quote": "We expect our FY27 R&D spend to be 6% to 7% of the sales for the next year."
+     },
+     "topic": "R&D spend",
+     "kind": "quantitative",
+     "metric": "other",
+     "target_low": 6.0,
+     "target_high": 7.0,
+     "unit": "%",
+     "horizon": "FY27",
+     "made_in": "Q4 FY26"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "No later evidence of the outcome yet"
+   },
+   {
+    "promise": {
+     "id": "T3-2",
+     "citation": {
+      "source_id": "T3",
+      "page": 6,
+      "quote": "We expect the acquisition to be completed in Q4 FY27."
+     },
+     "topic": "acquisition timeline",
+     "kind": "qualitative",
+     "metric": null,
+     "target_low": null,
+     "target_high": null,
+     "unit": null,
+     "horizon": "Q4 FY27",
+     "made_in": "Q4 FY26"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "No later evidence of the outcome yet"
+   },
+   {
+    "promise": {
+     "id": "T3-3",
+     "citation": {
+      "source_id": "T3",
+      "page": 17,
+      "quote": "Yes. We expect the effective tax rate to be in the range of 25%."
+     },
+     "topic": "effective tax rate",
+     "kind": "quantitative",
+     "metric": "other",
+     "target_low": 25.0,
+     "target_high": 25.0,
+     "unit": "%",
+     "horizon": "next year",
+     "made_in": "Q4 FY26"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "No later evidence of the outcome yet"
+   },
+   {
+    "promise": {
+     "id": "T4-1",
+     "citation": {
+      "source_id": "T4",
+      "page": 4,
+      "quote": "However, we will remain focused on finding a way to paying down the debt as early as possible."
+     },
+     "topic": "debt reduction",
+     "kind": "qualitative",
+     "metric": null,
+     "target_low": null,
+     "target_high": null,
+     "unit": null,
+     "horizon": null,
+     "made_in": "Q4 FY26"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "No later evidence of the outcome yet"
+   },
+   {
+    "promise": {
+     "id": "T4-2",
+     "citation": {
+      "source_id": "T4",
+      "page": 9,
+      "quote": "There are also significant potential synergies that could come out, which we have highlighted could be in the range of about $350 million which could be materialized in the next two to four years."
+     },
+     "topic": "cost synergies",
+     "kind": "quantitative",
+     "metric": "other",
+     "target_low": 350.0,
+     "target_high": 350.0,
+     "unit": "usd_mn",
+     "horizon": "next two to four years",
+     "made_in": "Q4 FY26"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "No later evidence of the outcome yet"
+   },
+   {
+    "promise": {
+     "id": "T4-3",
+     "citation": {
+      "source_id": "T4",
+      "page": 9,
+      "quote": "We also see that Sun from a net cash positive position post this acquisition will get into a net debt by EBITDA of 2.3x."
+     },
+     "topic": "net debt to ebitda",
+     "kind": "quantitative",
+     "metric": "other",
+     "target_low": 2.3,
+     "target_high": 2.3,
+     "unit": "x",
+     "horizon": null,
+     "made_in": "Q4 FY26"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "No later evidence of the outcome yet"
+   },
+   {
+    "promise": {
+     "id": "T4-4",
+     "citation": {
+      "source_id": "T4",
+      "page": 9,
+      "quote": "In terms of the transaction overview, this transaction will get closed at $14 per share which represents an equity value of $3.99 billion and an enterprise value of $11.75 billion."
+     },
+     "topic": "acquisition value",
+     "kind": "quantitative",
+     "metric": "other",
+     "target_low": 11.75,
+     "target_high": 11.75,
+     "unit": "usd_bn",
+     "horizon": null,
+     "made_in": "Q4 FY26"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "No later evidence of the outcome yet"
+   },
+   {
+    "promise": {
+     "id": "T4-5",
+     "citation": {
+      "source_id": "T4",
+      "page": 9,
+      "quote": "The financing is going to be partly out of our own cash surplus which could be in the range of $2 billion to $2.5 billion and the balance would be funded through the committed financing from our banks."
+     },
+     "topic": "acquisition financing",
+     "kind": "quantitative",
+     "metric": "other",
+     "target_low": 2.0,
+     "target_high": 2.5,
+     "unit": "usd_bn",
+     "horizon": null,
+     "made_in": "Q4 FY26"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "No later evidence of the outcome yet"
+   },
+   {
+    "promise": {
+     "id": "T4-6",
+     "citation": {
+      "source_id": "T4",
+      "page": 20,
+      "quote": "It will take a period of two to four years to get the full potential of the synergies."
+     },
+     "topic": "synergies realization timeframe",
+     "kind": "qualitative",
+     "metric": "other",
+     "target_low": null,
+     "target_high": null,
+     "unit": null,
+     "horizon": "two to four years",
+     "made_in": "Q4 FY26"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "No later evidence of the outcome yet"
+   },
+   {
+    "promise": {
+     "id": "T2-1",
+     "citation": {
+      "source_id": "T2",
+      "page": 4,
+      "quote": "Going forward, and until Organon closing, we expect the tax rate to be in a similar range as in Q1."
+     },
+     "topic": "tax rate",
+     "kind": "qualitative",
+     "metric": null,
+     "target_low": null,
+     "target_high": null,
+     "unit": null,
+     "horizon": null,
+     "made_in": "Q1 FY27"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "No later evidence of the outcome yet"
+   },
+   {
+    "promise": {
+     "id": "T2-2",
+     "citation": {
+      "source_id": "T2",
+      "page": 6,
+      "quote": "We expect the acquisition to be completed in Q4 of financial year '27 and an integration management office has been working on day one preparedness."
+     },
+     "topic": "deal closing",
+     "kind": "qualitative",
+     "metric": null,
+     "target_low": null,
+     "target_high": null,
+     "unit": null,
+     "horizon": "Q4 FY27",
+     "made_in": "Q1 FY27"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "No later evidence of the outcome yet"
+   },
+   {
+    "promise": {
+     "id": "T2-3",
+     "citation": {
+      "source_id": "T2",
+      "page": 7,
+      "quote": "We would expect to see similar next quarter."
+     },
+     "topic": "seasonality",
+     "kind": "qualitative",
+     "metric": null,
+     "target_low": null,
+     "target_high": null,
+     "unit": null,
+     "horizon": "next quarter",
+     "made_in": "Q1 FY27"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "No later evidence of the outcome yet"
+   },
+   {
+    "promise": {
+     "id": "T2-4",
+     "citation": {
+      "source_id": "T2",
+      "page": 8,
+      "quote": "We have already guided for the annual number. And I think we should be able to meet those numbers."
+     },
+     "topic": "R&D spend",
+     "kind": "qualitative",
+     "metric": null,
+     "target_low": null,
+     "target_high": null,
+     "unit": null,
+     "horizon": "full year",
+     "made_in": "Q1 FY27"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "No later evidence of the outcome yet"
+   },
+   {
+    "promise": {
+     "id": "T2-5",
+     "citation": {
+      "source_id": "T2",
+      "page": 10,
+      "quote": "Think we should stick on to the high single-digit growth for the full year."
+     },
+     "topic": "revenue growth",
+     "kind": "qualitative",
+     "metric": "revenue_growth",
+     "target_low": null,
+     "target_high": null,
+     "unit": null,
+     "horizon": "full year",
+     "made_in": "Q1 FY27"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "No later evidence of the outcome yet"
+   },
+   {
+    "promise": {
+     "id": "T2-6",
+     "citation": {
+      "source_id": "T2",
+      "page": 17,
+      "quote": "And we expect this range to sort of continue for some time until we have the Organon transaction completed."
+     },
+     "topic": "tax rate",
+     "kind": "qualitative",
+     "metric": null,
+     "target_low": null,
+     "target_high": null,
+     "unit": null,
+     "horizon": null,
+     "made_in": "Q1 FY27"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "No later evidence of the outcome yet"
+   },
+   {
+    "promise": {
+     "id": "T1-1",
+     "citation": {
+      "source_id": "T1",
+      "page": 4,
+      "quote": "We are planning for a soft launch in November with a full launch in the following months."
+     },
+     "topic": "Ilumya launch",
+     "kind": "qualitative",
+     "metric": null,
+     "target_low": null,
+     "target_high": null,
+     "unit": null,
+     "horizon": "November",
+     "made_in": "Q2 FY27"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "Too recent to judge"
+   },
+   {
+    "promise": {
+     "id": "T1-2",
+     "citation": {
+      "source_id": "T1",
+      "page": 5,
+      "quote": "We are now on track to close the transaction as per earlier communicated timelines, that is Q4 of FY27."
+     },
+     "topic": "Organon acquisition",
+     "kind": "qualitative",
+     "metric": null,
+     "target_low": null,
+     "target_high": null,
+     "unit": null,
+     "horizon": "Q4 of FY27",
+     "made_in": "Q2 FY27"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "Too recent to judge"
+   },
+   {
+    "promise": {
+     "id": "T1-3",
+     "citation": {
+      "source_id": "T1",
+      "page": 8,
+      "quote": "So we expect that to pick up because we are putting in place appropriate infrastructure in place for that."
+     },
+     "topic": "R&D spend",
+     "kind": "qualitative",
+     "metric": null,
+     "target_low": null,
+     "target_high": null,
+     "unit": null,
+     "horizon": "second half of the year",
+     "made_in": "Q2 FY27"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "Too recent to judge"
+   },
+   {
+    "promise": {
+     "id": "T1-4",
+     "citation": {
+      "source_id": "T1",
+      "page": 9,
+      "quote": "So what I said is that we expect the R&D spend to significantly ramp up in the subsequent quarter."
+     },
+     "topic": "R&D spend",
+     "kind": "qualitative",
+     "metric": null,
+     "target_low": null,
+     "target_high": null,
+     "unit": null,
+     "horizon": "subsequent quarter",
+     "made_in": "Q2 FY27"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "Too recent to judge"
+   },
+   {
+    "promise": {
+     "id": "T1-5",
+     "citation": {
+      "source_id": "T1",
+      "page": 9,
+      "quote": "And our expectation is that as that ramps up, we should be able to meet the overall guidance that we've shared with people."
+     },
+     "topic": "R&D spend",
+     "kind": "qualitative",
+     "metric": null,
+     "target_low": null,
+     "target_high": null,
+     "unit": null,
+     "horizon": "full year",
+     "made_in": "Q2 FY27"
+    },
+    "status": "pending",
+    "method": "judged",
+    "actual": null,
+    "evidence": null,
+    "rationale": "Too recent to judge"
+   }
+  ],
+  "counts": {
+   "kept": 0,
+   "partly": 0,
+   "missed": 0,
+   "pending": 20,
+   "dropped": 0
+  },
+  "credibility_pct": null,
+  "note": null
+ },
+ "snapshot": {
+  "summary": [
+   {
+    "text": "Sun Pharma is a leading global pharmaceutical company with a diversified presence across innovative medicines, branded generics, generics and active pharmaceutical ingredients (APIs).",
+    "citation": {
+     "source_id": "AR",
+     "page": 5,
+     "quote": "Sun Pharma is a leading global pharmaceutical company with a diversified presence across innovative medicines, branded generics, generics and active pharmaceutical ingredients (APIs)."
+    }
+   },
+   {
+    "text": "Our business spans innovative medicines, branded generics, generics, APIs and consumer healthcare products, enabling us to serve a wide range of therapeutic needs across patient populations and healthcare systems.",
+    "citation": {
+     "source_id": "AR",
+     "page": 6,
+     "quote": "Our business spans innovative medicines, branded generics, generics, APIs and consumer healthcare products, enabling us to serve a wide range of therapeutic needs across patient populations and healthcare systems."
+    }
+   }
+  ]
+ },
+ "trajectory": {
+  "years": [
+   "Mar 2022",
+   "Mar 2023",
+   "Mar 2024",
+   "Mar 2025",
+   "Mar 2026"
+  ],
+  "revenue": [
+   38654.0,
+   43886.0,
+   48497.0,
+   52578.0,
+   58462.0
+  ],
+  "operating_profit": [
+   10258.0,
+   11650.0,
+   13018.0,
+   15114.0,
+   16501.0
+  ],
+  "margin_pct": [
+   26.538003828840484,
+   26.546051132479608,
+   26.84289749881436,
+   28.745863288828026,
+   28.22517190653758
+  ],
+  "pat": [
+   3389.0,
+   8513.0,
+   9610.0,
+   10965.0,
+   11509.0
+  ],
+  "revenue_cagr_pct": 10.897002260705445,
+  "pat_cagr_pct": 35.75052107933077,
+  "margin_change_bps": 169,
+  "read": "growing",
+  "lender": false
+ },
+ "health": {
+  "as_of": "Mar 2026",
+  "debt_to_equity": 0.0553667584061266,
+  "cfo_to_pat_3y": 1.2039022565764868,
+  "fcf_3y_cr": 30875.0,
+  "working_capital_days": 54.0,
+  "wc_days_change_3y": 14.0,
+  "roce_pct": 21.0,
+  "flags": [
+   {
+    "level": "good",
+    "text": "Virtually debt-free (D/E 0.06)"
+   },
+   {
+    "level": "good",
+    "text": "Profits are backed by cash (CFO/PAT 1.20)"
+   }
+  ]
+ },
+ "bull": [
+  {
+   "text": "The balance sheet remains exceptionally strong, characterized by a robust net cash position of USD 3.3 billion at the consolidated level.",
+   "citation": {
+    "source_id": "T1",
+    "page": 4,
+    "quote": "Balance sheet continues to be strong with a net cash of USD3.3 billion at the consolidated level."
+   }
+  },
+  {
+   "text": "The India formulations business demonstrated strong performance by recording a notable 17.3% growth rate during the second quarter.",
+   "citation": {
+    "source_id": "T1",
+    "page": 5,
+    "quote": "The sales of India formulations were INR55,523 million for the quarter, recording a growth of 17.3%."
+   }
+  },
+  {
+   "text": "Operating efficiency is further evidenced by a healthy return on capital employed of 21.0% achieved across operations.",
+   "citation": {
+    "source_id": "FACTS",
+    "page": 0,
+    "quote": "ROCE: 21.0%"
+   }
+  }
+ ],
+ "bear": [
+  {
+   "text": "US business revenues declined by 8.2% during the quarter largely due to ongoing erosion from lenalidomide sales.",
+   "citation": {
+    "source_id": "T1",
+    "page": 5,
+    "quote": "Overall, the US business reported sales of USD455 million for the quarter, declining by 8.2%. This decline is largely due to lenalidomide erosion."
+   }
+  },
+  {
+   "text": "The company experienced higher operational headwinds, reflected in an effective tax rate of 28.3% compared to 24.7% in the previous year period.",
+   "citation": {
+    "source_id": "T1",
+    "page": 4,
+    "quote": "Effective tax rate for the quarter was 28.3% versus 24.7% in Q2 FY26."
+   }
+  },
+  {
+   "text": "Reported net profit after tax for Q2 FY27 stood at INR 19,885 million, tracking lower than adjusted net profit figures due to exceptional items.",
+   "citation": {
+    "source_id": "T1",
+    "page": 4,
+    "quote": "Reported net profit after tax for Q2 FY27 was INR19,885 million, while adjusted net profit for the quarter was INR31,620 million."
+   }
+  }
+ ],
+ "notes": [],
+ "cost": {
+  "calls": 9,
+  "cached": 9,
+  "input_tokens": 0,
+  "output_tokens": 0,
+  "usd_list_price": 0.0
+ },
+ "build_seconds": 0.4,
+ "guard": {
+  "promises_proposed": 27,
+  "promises_kept": 20,
+  "points_proposed": 8,
+  "points_kept": 8,
+  "verdicts_downgraded": {
+   "other_period": 0,
+   "restated": 0,
+   "below_target": 0,
+   "other_measure": 0,
+   "meets_target": 0
+  }
+ },
+ "latest_results": {
+  "symbol": "SUNPHARMA",
+  "period_end": "2026-09-30",
+  "period_label": "Q2 FY27",
+  "basis": "consolidated",
+  "format": "indas",
+  "audited": false,
+  "compared_qoq": "2026-06-30",
+  "compared_yoy": "2025-09-30",
+  "metrics": [
+   {
+    "key": "revenue",
+    "label": "Revenue",
+    "value": 16198.71,
+    "qoq_pct": 5.9,
+    "yoy_pct": 11.9,
+    "computed": false
+   },
+   {
+    "key": "ebitda",
+    "label": "EBITDA",
+    "value": 4743.89,
+    "qoq_pct": 7.4,
+    "yoy_pct": 4.8,
+    "computed": true
+   },
+   {
+    "key": "pbt",
+    "label": "PBT",
+    "value": 3159.37,
+    "qoq_pct": -22.9,
+    "yoy_pct": -24.2,
+    "computed": false
+   },
+   {
+    "key": "pat",
+    "label": "PAT",
+    "value": 1995.07,
+    "qoq_pct": -31.2,
+    "yoy_pct": -36.2,
+    "computed": false
+   }
+  ],
+  "margins": [
+   {
+    "key": "ebitda_margin",
+    "label": "EBITDA margin",
+    "value_pct": 29.3,
+    "qoq_bps": 41,
+    "yoy_bps": -198
+   },
+   {
+    "key": "pat_margin",
+    "label": "PAT margin",
+    "value_pct": 12.3,
+    "qoq_bps": -665,
+    "yoy_bps": -927
+   }
+  ],
+  "notes": [
+   "EBITDA is computed: revenue from operations minus operating expenses (excludes other income).",
+   "PBT includes an exceptional loss of ₹1,268.83 cr.",
+   "PAT includes a ₹6.51 cr share of loss of associates and joint ventures."
+  ],
+  "sources": [
+   "https://nsearchives.nseindia.com/corporate/xbrl/INTEGRATED_FILING_INDAS_1750394_30102026073426_WEB.xml",
+   "https://nsearchives.nseindia.com/corporate/xbrl/INTEGRATED_FILING_INDAS_1706221_31072026062408_WEB.xml",
+   "https://nsearchives.nseindia.com/corporate/xbrl/INTEGRATED_FILING_INDAS_1566095_05112025070548_WEB.xml"
+  ]
+ }
+}

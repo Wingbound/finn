@@ -1,0 +1,247 @@
+{
+ "symbol": "TRENT",
+ "name": "Trent Ltd",
+ "basis": "consolidated",
+ "built_at": "2026-11-10T06:10:24.237332+05:30",
+ "sources": [
+  {
+   "id": "AR",
+   "kind": "annual_report",
+   "title": "Annual Report 2026",
+   "quarter": null,
+   "url": "https://www.bseindia.com/xml-data/corpfiling/AttachHis/c3f6fa4a-3c51-453e-b634-3c3ef98f7361.pdf"
+  }
+ ],
+ "ledger": {
+  "rows": [],
+  "counts": {
+   "kept": 0,
+   "partly": 0,
+   "missed": 0,
+   "pending": 0,
+   "dropped": 0
+  },
+  "credibility_pct": null,
+  "note": "No earnings-call transcripts were found, so there are no promises to track"
+ },
+ "snapshot": {
+  "summary": [
+   {
+    "text": "Our core fashion brands, Westside and Zudio, continued to deliver strong, complementary growth across segments.",
+    "citation": {
+     "source_id": "AR",
+     "page": 9,
+     "quote": "Our core fashion brands - Westside and Zudio - continued to deliver strong, complementary growth across segments."
+    }
+   },
+   {
+    "text": "Our food and grocery business, Star continues to evolve in a significant way, building on the Trent playbook.",
+    "citation": {
+     "source_id": "AR",
+     "page": 9,
+     "quote": "Our food and grocery business, Star continues to evolve in a significant way, building on the Trent playbook."
+    }
+   },
+   {
+    "text": "Own brands now contribute to 73% of Star’s revenues and remain the core differentiating proposition of the brand.",
+    "citation": {
+     "source_id": "AR",
+     "page": 9,
+     "quote": "Own brands now contribute to 73% of Star’s revenues and remain the core differentiating proposition of the brand."
+    }
+   }
+  ]
+ },
+ "trajectory": {
+  "years": [
+   "Mar 2022",
+   "Mar 2023",
+   "Mar 2024",
+   "Mar 2025",
+   "Mar 2026"
+  ],
+  "revenue": [
+   4498.0,
+   8242.0,
+   12375.0,
+   17135.0,
+   20074.0
+  ],
+  "operating_profit": [
+   595.0,
+   1114.0,
+   1971.0,
+   2820.0,
+   3745.0
+  ],
+  "margin_pct": [
+   13.228101378390395,
+   13.516136859985439,
+   15.927272727272726,
+   16.457543040560257,
+   18.655972900269006
+  ],
+  "pat": [
+   35.0,
+   394.0,
+   1477.0,
+   1534.0,
+   1721.0
+  ],
+  "revenue_cagr_pct": 45.34617835496297,
+  "pat_cagr_pct": 164.80623494981037,
+  "margin_change_bps": 543,
+  "read": "growing",
+  "lender": false
+ },
+ "health": {
+  "as_of": "Mar 2026",
+  "debt_to_equity": 0.36664280601288474,
+  "cfo_to_pat_3y": 1.1999154691462384,
+  "fcf_3y_cr": 2685.0,
+  "working_capital_days": -2.0,
+  "wc_days_change_3y": -31.0,
+  "roce_pct": 28.0,
+  "flags": [
+   {
+    "level": "good",
+    "text": "Profits are backed by cash (CFO/PAT 1.20)"
+   }
+  ]
+ },
+ "bull": [
+  {
+   "text": "The company demonstrated strong financial performance with a revenue CAGR of 45.3% between March 2022 and March 2026.",
+   "citation": {
+    "source_id": "FACTS",
+    "page": 0,
+    "quote": "Revenue CAGR (Mar 2022–Mar 2026): 45.3%"
+   }
+  },
+  {
+   "text": "Net profits exhibited substantial growth with a CAGR of 164.8% over the period.",
+   "citation": {
+    "source_id": "FACTS",
+    "page": 0,
+    "quote": "Net profit CAGR: 164.8%"
+   }
+  }
+ ],
+ "bear": [
+  {
+   "text": "The operating margin change stood at positive 543 bps.",
+   "citation": {
+    "source_id": "FACTS",
+    "page": 0,
+    "quote": "Operating margin change: +543 bps"
+   }
+  },
+  {
+   "text": "The company maintains a debt to equity ratio of 0.366643.",
+   "citation": {
+    "source_id": "FACTS",
+    "page": 0,
+    "quote": "Debt to equity: 0.366643"
+   }
+  },
+  {
+   "text": "Working capital days were recorded at minus 2.",
+   "citation": {
+    "source_id": "FACTS",
+    "page": 0,
+    "quote": "Working capital days: -2"
+   }
+  }
+ ],
+ "notes": [],
+ "cost": {
+  "calls": 2,
+  "cached": 2,
+  "input_tokens": 0,
+  "output_tokens": 0,
+  "usd_list_price": 0.0
+ },
+ "build_seconds": 0.2,
+ "guard": {
+  "promises_proposed": 0,
+  "promises_kept": 0,
+  "points_proposed": 9,
+  "points_kept": 8,
+  "verdicts_downgraded": {
+   "other_period": 0,
+   "restated": 0,
+   "below_target": 0,
+   "other_measure": 0,
+   "meets_target": 0
+  }
+ },
+ "latest_results": {
+  "symbol": "TRENT",
+  "period_end": "2026-09-30",
+  "period_label": "Q2 FY27",
+  "basis": "consolidated",
+  "format": "indas",
+  "audited": false,
+  "compared_qoq": "2026-06-30",
+  "compared_yoy": "2025-09-30",
+  "metrics": [
+   {
+    "key": "revenue",
+    "label": "Revenue",
+    "value": 5873.14,
+    "qoq_pct": 2.1,
+    "yoy_pct": 21.9,
+    "computed": false
+   },
+   {
+    "key": "ebitda",
+    "label": "EBITDA",
+    "value": 1078.09,
+    "qoq_pct": -4.5,
+    "yoy_pct": 31.9,
+    "computed": true
+   },
+   {
+    "key": "pbt",
+    "label": "PBT",
+    "value": 640.12,
+    "qoq_pct": -8.8,
+    "yoy_pct": 33.9,
+    "computed": false
+   },
+   {
+    "key": "pat",
+    "label": "PAT",
+    "value": 468.09,
+    "qoq_pct": -9.6,
+    "yoy_pct": 25.4,
+    "computed": false
+   }
+  ],
+  "margins": [
+   {
+    "key": "ebitda_margin",
+    "label": "EBITDA margin",
+    "value_pct": 18.4,
+    "qoq_bps": -126,
+    "yoy_bps": 140
+   },
+   {
+    "key": "pat_margin",
+    "label": "PAT margin",
+    "value_pct": 8.0,
+    "qoq_bps": -103,
+    "yoy_bps": 22
+   }
+  ],
+  "notes": [
+   "EBITDA is computed: revenue from operations minus operating expenses (excludes other income).",
+   "PAT includes a ₹21.06 cr share of loss of associates and joint ventures."
+  ],
+  "sources": [
+   "https://nsearchives.nseindia.com/corporate/xbrl/INTEGRATED_FILING_INDAS_1749321_29102026074823_WEB.xml",
+   "https://nsearchives.nseindia.com/corporate/xbrl/INTEGRATED_FILING_INDAS_1709071_06082026050711_WEB.xml",
+   "https://nsearchives.nseindia.com/corporate/xbrl/INTEGRATED_FILING_INDAS_1568155_07112025053948_WEB.xml"
+  ]
+ }
+}
