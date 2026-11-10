@@ -181,6 +181,7 @@ def _holding_row(h, bars) -> dict:
 def portfolio(conn: Conn, now: Now) -> dict:
     return {
         "as_of": db.get_meta(conn, "prices_as_of"),
+        "source": db.get_meta(conn, "prices_source"),
         "holdings": [
             _holding_row(h, _completed_history(conn, h.symbol, now)) for h in load_portfolio()
         ],

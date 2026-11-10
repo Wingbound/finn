@@ -21,3 +21,16 @@ def _fresh_build_limits():
     yield
     api_main._inflight.clear()
     api_main._recent.clear()
+
+
+@pytest.fixture(autouse=True)
+def _no_live_nse_prices(monkeypatch):
+    """Tests never call NSE's MCP server: the refresh sees it return nothing, so the Yahoo
+    path (patched per test) behaves as it always has. tests/test_nse_prices.py tests the
+    client itself against recorded responses."""
+    import scripts.refresh as refresh_mod
+    from finn.ingest.nse_mcp import NseResult
+
+    # No hasattr guard: if the import is renamed, this fails loudly instead of letting tests
+    # reach the network.
+    monkeypatch.setattr(refresh_mod, "fetch_nse_eod", lambda holdings, **k: NseResult([], {}, {}))

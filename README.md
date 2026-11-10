@@ -38,7 +38,7 @@ Every claim carries a citation chip that opens the source page with the quote hi
 ```
 NSE filings ──┐                         ┌─ POST /digest      (clustered, ranked, windowed)
 NSE XBRL ─────┤                         ├─ POST /alerts      (rules sent by the phone)
-Yahoo EOD ────┼─► refresh (daily) ─► SQLite snapshot ─┤─ GET /results/{sym}
+NSE EOD (MCP) ┼─► refresh (daily) ─► SQLite snapshot ─┤─ GET /results/{sym}
 screener.in ──┘   classify · enrich      (committed)  ├─ GET /research/{sym}
                   research builds                     └─ GET /research/{sym}/build  (SSE, live)
 ```
@@ -50,6 +50,7 @@ screener.in ──┘   classify · enrich      (committed)  ├─ GET /researc
 - **Frontend.** Next.js, React 19 and Tailwind, installable as a PWA.
   - It uses no component or chart library.
   - A service worker keeps the last answers, so Today still opens offline.
+- **Prices come from NSE too.** The daily refresh asks NSE's own MCP server (`mcp.nseindia.in`, the end-of-day "bhavcopy" service) for 3 months of OHLCV per holding. It is free and needs no key, and Yahoo is the fallback for any symbol it misses. NSE describes this data as for educational and research use; a production product would license it. With this, filings, results and prices all come from NSE.
 - **Arithmetic never goes to a model.** QoQ, YoY, margins, CAGR, debt to equity, cash conversion and the ledger's computed grades are all Python.
 
 ### Models and cost
