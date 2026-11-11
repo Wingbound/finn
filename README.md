@@ -99,7 +99,7 @@ screener.in ──┘   classify · enrich      (committed)  ├─ GET /researc
 cd backend
 cp .env.example .env            # add GEMINI_API_KEY and GROQ_API_KEY
 uv sync
-uv run pytest -q                # 837 tests, no network
+uv run pytest -q                # 897 tests, no network
 uv run uvicorn finn.api.main:app --reload --port 8000
 
 # frontend (Node 22)
@@ -114,11 +114,13 @@ To refresh the data, run `uv run python scripts/refresh.py --days 3 --out seed/f
 
 ## How this was built
 
-FINN was built with Claude Code over one week, in five plans:
+FINN was built with Claude Code over one week, in seven plans:
 1. the push backend;
 2. enrichment;
 3. research;
 4. the frontend;
-5. deployment.
+5. deployment;
+6. "one loop", which puts management's promises on the results cards;
+7. end-of-day prices from NSE.
 
-Each plan was written first and then executed test-first. Plans 1 to 3 ran with a fresh subagent per task and a reviewer after each task. Plan 4 ran inline with one final review. The plans are in `docs/superpowers/plans/`. The task ledgers, briefs, reviews and the redacted session transcripts are in `ai-history/`.
+Each plan was written first and then executed test-first. Plans 1 to 3 ran with a fresh subagent per task and a reviewer after each task. Plans 4 to 7 ran inline, each with one final review. `CLAUDE.md` holds the working rules and current status for anyone continuing in Claude Code. The plans are in `docs/superpowers/plans/`. The task ledgers, briefs, reviews and the redacted session transcripts are in `ai-history/`.
