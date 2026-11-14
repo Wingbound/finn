@@ -71,3 +71,16 @@ test("Today: a link to a story outside the window says so (final review I5)", as
   await page.goto("/#story-NOPE%3Aresults%3A1");
   await expect(page.getByText("That story is outside this window.")).toBeVisible();
 });
+
+test("Today: a quiet 24 hours points at what the last 7 days hold (Plan 8)", async ({ page }) => {
+  const errors = watchErrors(page);
+  await mockApi(page, { digest: (b) => (b.hours === 168 ? "digest-7d.json" : "digest-quiet.json") });
+  await page.goto("/");
+  await expect(page.getByText("Quiet 24 hours.")).toBeVisible();
+  const n = json("digest-7d.json").stories.length;
+  await expect(page.getByText(`Over the last 7 days, ${n} things mattered.`)).toBeVisible();
+  await page.getByRole("button", { name: "Show 7 days" }).click();
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText(headlineFor("digest-7d.json"));
+  await expect(page.getByRole("radio", { name: "7 days" })).toHaveAttribute("aria-checked", "true");
+  expect(errors).toEqual([]);
+});

@@ -1,11 +1,17 @@
 import { day, stamp } from "@/lib/format";
 import type { WindowChoice } from "@/lib/store";
+import type { Digest } from "@/lib/types";
 
 const PRESETS = [
   { hours: 72, label: "Show 3 days" },
   { hours: 168, label: "Show 7 days" },
 ];
 const HOUR = 3_600_000;
+
+/** Empty means nothing at all: a window holding only noise still shows its noise list. */
+export function isEmptyWindow(counts: Digest["counts"]): boolean {
+  return counts.shown === 0 && counts.routine === 0 && counts.hidden === 0;
+}
 
 /**
  * An empty window is usually a quiet market or an old snapshot: say which, and offer only

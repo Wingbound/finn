@@ -4,8 +4,9 @@ import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 import { ErrorState, Skeleton } from "@/components/States";
 import { FloorControl } from "@/components/today/FloorControl";
 import { Header } from "@/components/today/Header";
+import { QuietTeaser } from "@/components/today/QuietTeaser";
 import { RoutineDrawer } from "@/components/today/RoutineDrawer";
-import { StaleNotice } from "@/components/today/StaleNotice";
+import { StaleNotice, isEmptyWindow } from "@/components/today/StaleNotice";
 import { StoryList } from "@/components/today/StoryList";
 import { WindowPicker } from "@/components/today/WindowPicker";
 import { useDigest } from "@/lib/hooks";
@@ -65,7 +66,11 @@ export default function TodayPage() {
     setDrawer(true);
     requestAnimationFrame(() => document.getElementById("routine")?.scrollIntoView({ behavior: "smooth" }));
   };
-  const empty = data && data.counts.shown === 0 && data.counts.routine === 0;
+  const empty = !!data && isEmptyWindow(data.counts);
+  // Nothing at this level in a short preset window: ask what the last 7 days hold.
+  const quiet = !!data && !empty && data.stories.length === 0 && win.kind === "hours" && win.hours < 168;
+  const week = useDigest(quiet ? { hours: 168, floor, subscribed: rules.categories } : null);
+  const weekCount = week.data?.stories.length ?? 0;
 
   const inStories = !!target && !!data?.stories.some((st) => st.id === target);
   const inRoutine = !!target && Object.values(data?.routine ?? {}).some((list) => list?.some((st) => st.id === target));
@@ -82,7 +87,7 @@ export default function TodayPage() {
   return (
     <>
       {data && !empty ? <Header counts={data.counts} onOpenRoutine={openDrawer} /> : null}
-      {empty ? (
+      {empty && data ? (
         <StaleNotice latest={data.latest_filing_at} window={win} onChoose={setWin} />
       ) : null}
       {!data && !error ? <h1 className="sr-only">Today</h1> : null}
@@ -112,6 +117,8 @@ export default function TodayPage() {
         <>
           {data.stories.length ? (
             <StoryList stories={data.stories} subscribed={rules.categories} />
+          ) : quiet && weekCount > 0 && win.kind === "hours" ? (
+            <QuietTeaser hours={win.hours} count={weekCount} onShow={() => setWin({ kind: "hours", hours: 168 })} />
           ) : (
             <p className="border-t border-rule py-6 text-ink-2">
               Nothing at this level. Lower the bar to Everything, or widen the window.
