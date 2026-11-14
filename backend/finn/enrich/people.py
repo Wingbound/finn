@@ -120,9 +120,13 @@ def enrich_people(conn: sqlite3.Connection, client, router, since: datetime) -> 
     retried on the next refresh.
     """
     res = EnrichResult()
-    for f, _cls in db.filings_missing_enrichment(conn, KIND, {"management_change"}, since):
+    for f, cls in db.filings_missing_enrichment(conn, KIND, {"management_change"}, since):
+        if cls.noise:  # noise is hidden from the digest: no model call for it
+            continue
         try:
-            text = get_doc_text(conn, client, f.pdf_url) if f.pdf_url else (f.nse_summary or "")
+            text = get_doc_text(conn, client, f.pdf_url) if f.pdf_url else ""
+            # a scanned or oversize PDF has no text; NSE's own summary may still name the people
+            text = text if text.strip() else (f.nse_summary or "")
             if not text.strip():
                 db.save_enrichment(conn, f.seq_id, KIND, {"people": [], "reason": "no text"}, None)
                 res.empty += 1

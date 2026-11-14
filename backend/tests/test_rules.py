@@ -329,3 +329,16 @@ def test_sast_pledge_disclosure_is_pledging(subject):
 def test_sast_without_pledge_stays_insider_trading():
     c = classify_rules(_filing(SAST, "Disclosure under Regulation 29(2) for acquisition of shares"))
     assert (c.category, c.subtype) == ("insider_trading", "sast")
+
+
+def test_lookback_needs_the_ten_sessions_volume_alerts_need():
+    # Plan 8: with fewer than MIN_VOLUME_HISTORY prior bars a volume alert can never fire
+    import pytest
+    from pydantic import ValidationError
+
+    from finn.alerts import MIN_VOLUME_HISTORY
+    from finn.models import Rules
+
+    with pytest.raises(ValidationError):
+        Rules(lookback=MIN_VOLUME_HISTORY - 1)
+    assert Rules(lookback=MIN_VOLUME_HISTORY).lookback == MIN_VOLUME_HISTORY

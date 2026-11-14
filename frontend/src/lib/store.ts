@@ -28,7 +28,7 @@ export const DEFAULT_RULES: Rules = {
 export const LIMITS = {
   volume_multiple: [1, 10],
   price_move_pct: [1, 20],
-  lookback: [5, 250],
+  lookback: [10, 250], // the API needs >= 10 prior sessions for a volume alert
 } as const;
 
 export type WindowChoice = { kind: "hours"; hours: number } | { kind: "range"; start: string; end: string };

@@ -129,7 +129,7 @@ class SymbolOverride(BaseModel):
 class Rules(BaseModel):
     volume_multiple: float = Field(2.0, gt=0, le=100)
     price_move_pct: float = Field(5.0, gt=0, le=100)
-    lookback: int = Field(20, ge=5, le=250)
+    lookback: int = Field(20, ge=10, le=250)  # volume alerts need >= 10 prior sessions
     categories: set[Category] = Field(
         default_factory=lambda: {
             "results",
