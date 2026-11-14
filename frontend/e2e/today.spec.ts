@@ -1,5 +1,5 @@
 import { expect, test } from "@playwright/test";
-import { headlineFor, json, mockApi, watchErrors } from "./mock";
+import { fixture, headlineFor, json, mockApi, watchErrors } from "./mock";
 
 test("Today: change window, see why a story ranks, open what FINN set aside", async ({ page }) => {
   const errors = watchErrors(page);
@@ -83,4 +83,19 @@ test("Today: a quiet 24 hours points at what the last 7 days hold (Plan 8)", asy
   await expect(page.getByRole("heading", { level: 1 })).toHaveText(headlineFor("digest-7d.json"));
   await expect(page.getByRole("radio", { name: "7 days" })).toHaveAttribute("aria-checked", "true");
   expect(errors).toEqual([]);
+});
+
+test("Today: an update in flight doesn't move the stories (Plan 8)", async ({ page }) => {
+  await mockApi(page, { digest: () => "digest-7d.json" });
+  await page.goto("/");
+  const first = page.getByRole("article").first();
+  await expect(first).toBeVisible();
+  const before = (await first.boundingBox())?.y;
+  await page.route("**/digest", async (route) => {
+    await new Promise((r) => setTimeout(r, 1500));
+    await route.fulfill({ status: 200, contentType: "application/json", body: fixture("digest-7d.json") });
+  });
+  await page.getByRole("radio", { name: "3 days" }).click();
+  await expect(page.getByRole("status").filter({ hasText: "Updating" })).toBeAttached();
+  expect((await first.boundingBox())?.y).toBe(before);
 });

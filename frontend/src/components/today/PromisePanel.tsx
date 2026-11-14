@@ -1,4 +1,7 @@
+"use client";
+
 import Link from "next/link";
+import { useId, useState } from "react";
 import { symbolPath } from "@/lib/api";
 import { level, pct } from "@/lib/format";
 import type { PaceNote, PromiseNote } from "@/lib/types";
@@ -36,16 +39,35 @@ export function noteMeta(n: PromiseNote): string {
   return `${parts.join(". ")}.`;
 }
 
+/** Long quotes start at three lines; the target can sit past them, so they open in full. */
+function Quote({ text }: { text: string }) {
+  const [open, setOpen] = useState(false);
+  const long = text.split(/\s+/).length > 30;
+  return (
+    <>
+      <blockquote className={`quote ${open || !long ? "" : "line-clamp-3"}`}>&ldquo;{text}&rdquo;</blockquote>
+      {long ? (
+        <button type="button" className="min-h-11 text-caption text-pencil" onClick={() => setOpen((v) => !v)} aria-expanded={open}>
+          {open ? "Show less" : "Show more"}
+        </button>
+      ) : null}
+    </>
+  );
+}
+
 /** What management said on its calls, beside the quarter it just filed. */
 export function PromisePanel({ symbol, notes }: { symbol: string; notes: PromiseNote[] }) {
+  const title = useId();
   if (!notes.length) return null;
   return (
-    <section aria-label="What management said" className="mt-3 border-l-2 border-pencil pl-3">
-      <h4 className="text-caption font-semibold">What management said</h4>
+    <section aria-labelledby={title} className="mt-3 border-l-2 border-pencil pl-3">
+      <p id={title} className="text-caption font-semibold">
+        What management said
+      </p>
       <ul className="mt-1 space-y-2.5">
         {notes.map((n) => (
           <li key={`${n.citation.source_id}-${n.citation.page}-${n.quote.slice(0, 24)}`}>
-            <blockquote className="quote line-clamp-3">&ldquo;{n.quote}&rdquo;</blockquote>
+            <Quote text={n.quote} />
             <p className="text-caption text-ink-2">{noteMeta(n)}</p>
             {n.pace ? <p className="text-caption font-medium">{paceSentence(n.pace)}</p> : null}
           </li>

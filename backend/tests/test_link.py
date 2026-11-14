@@ -572,3 +572,55 @@ def test_a_corrupt_dossier_gives_no_notes(tmp_path):  # M5
     st = _story("ABC")
     attach_promises(conn, [st])
     assert st.promises == []
+
+
+# Plan 8: a results card shows the company's own promises, not one about another listed company
+TECHM_QUOTE = (
+    "We will come out with the next phase for Tech Mahindra as we close this phase that we "
+    "talked about, which is by end of FY27 we get to 15% EBIT margin."
+)
+
+
+def test_a_promise_about_another_company_is_left_off_the_card():
+    rows = [row(TECHM_QUOTE, metric="other", lo=15.0, hi=None, n=1), row(REVENUE_FY27, n=2)]
+    notes = promise_notes(dossier(rows, symbol="M&M"), card(), others={"tech mahindra"})
+    assert [nt.quote for nt in notes] == [REVENUE_FY27]
+
+
+def test_a_quote_naming_the_company_itself_stays():
+    own = "Mahindra & Mahindra will grow revenue 15% to 18% in FY27."
+    notes = promise_notes(dossier([row(own)], symbol="M&M"), card(), others={"tech mahindra"})
+    assert [nt.quote for nt in notes] == [own]
+
+
+def test_attach_promises_skips_promises_naming_another_known_company(tmp_path):
+    conn = db.connect(tmp_path / "x.sqlite")
+    db.init_db(conn)
+    rows = [row(TECHM_QUOTE, metric="other", lo=15.0, hi=None, n=1), row(REVENUE_FY27, n=2)]
+    mm = dossier(rows, symbol="M&M").model_copy(update={"name": "Mahindra & Mahindra Ltd"})
+    db.save_dossier(conn, mm)
+    st = _story("M&M")
+    attach_promises(conn, [st])
+    assert [nt.quote for nt in st.promises] == [REVENUE_FY27]
+
+
+def test_on_the_snapshot_mm_card_does_not_quote_tech_mahindra():
+    import sqlite3
+    from pathlib import Path
+
+    from finn.digest import card_or_none
+    from finn.research.link import company_names, other_names
+
+    seed = Path(__file__).resolve().parent.parent / "seed" / "finn.sqlite"
+    conn = sqlite3.connect(f"{seed.as_uri()}?mode=ro&immutable=1", uri=True)  # no -wal files
+    conn.row_factory = sqlite3.Row
+    try:
+        d = db.get_dossier(conn, "M&M")
+        found = card_or_none(conn, "M&M")
+        assert d is not None and found is not None
+        others = other_names(company_names(conn), "M&M")
+        assert "tech mahindra" in others and not any("mahindra & mahindra" in n for n in others)
+        quotes = [nt.quote.casefold() for nt in promise_notes(d, found[0], others=others)]
+        assert quotes and not any("tech mahindra" in q for q in quotes)
+    finally:
+        conn.close()

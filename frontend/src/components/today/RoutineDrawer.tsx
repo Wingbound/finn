@@ -18,7 +18,7 @@ export function RoutineDrawer({
   const groups = Object.entries(digest.routine) as [Category, Digest["stories"]][];
   return (
     <section id="routine" className="border-t border-rule pt-6 pb-4">
-      <p className="text-section font-semibold">You&rsquo;re caught up.</p>
+      <h2 className="text-section font-semibold">You&rsquo;re caught up.</h2>
       {digest.counts.routine + digest.counts.hidden > 0 ? (
         <button type="button" onClick={onToggle} aria-expanded={open} className="mt-1 min-h-11 text-pencil">
           {open ? "Hide" : "Show"} what FINN set aside ({digest.counts.routine + digest.counts.hidden})

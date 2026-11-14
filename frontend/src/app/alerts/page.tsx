@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { AlertLog } from "@/components/alerts/AlertLog";
-import { Holdings, priceCaption } from "@/components/alerts/Holdings";
+import { Holdings, latestSession, priceCaption } from "@/components/alerts/Holdings";
 import { RulesSheet } from "@/components/alerts/RulesSheet";
 import { ErrorState, Skeleton } from "@/components/States";
 import { day, plural } from "@/lib/format";
@@ -64,7 +64,7 @@ export default function AlertsPage() {
           Holdings
         </h2>
         {portfolio.data?.as_of ? (
-          <p className="pb-2 text-caption text-ink-2">{priceCaption(portfolio.data.as_of, portfolio.data.source ?? null)}</p>
+          <p className="pb-2 text-caption text-ink-2">{priceCaption(latestSession(portfolio.data.holdings), portfolio.data.source ?? null)}</p>
         ) : null}
         {portfolio.error && !portfolio.data ? <ErrorState message={portfolio.error.message} onRetry={() => portfolio.mutate()} /> : null}
         {!portfolio.data && !portfolio.error ? <Skeleton lines={6} label="Loading holdings" /> : null}

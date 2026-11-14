@@ -4,7 +4,6 @@ import Link from "next/link";
 import { useState } from "react";
 import { symbolPath } from "@/lib/api";
 import { categoryLabel, cleanSubject, day, storyCategory } from "@/lib/format";
-import { KEYS, writeStore } from "@/lib/store";
 import type { Alert } from "@/lib/types";
 
 const SHOWN = 8;
@@ -36,8 +35,8 @@ export function AlertLog({ alerts, window }: { alerts: Alert[]; window: { start:
                 <p className="font-semibold">{a.symbol}</p>
                 {a.kind === "filing" && a.story_id ? (
                   <Link
-                    href={`/#story-${encodeURIComponent(a.story_id)}`}
-                    onClick={() => writeStore(KEYS.window, { kind: "range", start: window.start, end: window.end })}
+                    // the alert log's week, for this visit only: the reader's own Today window stays
+                    href={`/?from=${encodeURIComponent(window.start)}&to=${encodeURIComponent(window.end)}#story-${encodeURIComponent(a.story_id)}`}
                     className="line-clamp-2 text-pencil"
                   >
                     {text}

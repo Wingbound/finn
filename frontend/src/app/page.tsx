@@ -15,11 +15,13 @@ import {
   DEFAULT_RULES,
   DEFAULT_WINDOW,
   KEYS,
+  rangeFromSearch,
   useStored,
   validateFloor,
   validateRules,
   validateWindow,
 } from "@/lib/store";
+import type { WindowChoice } from "@/lib/store";
 import type { DigestRequest } from "@/lib/types";
 
 function subscribeHash(onChange: () => void) {
@@ -51,11 +53,20 @@ export default function TodayPage() {
   const hash = useSyncExternalStore(subscribeHash, () => window.location.hash, () => "");
   const target = storyFromHash(hash);
   const scrolled = useRef(false);
+  // An alert's own week arrives as ?from=&to=: shown for this visit, never saved over the
+  // reader's window. Picking a window drops it.
+  const search = useSyncExternalStore(subscribeHash, () => window.location.search, () => "");
+  const once = rangeFromSearch(search);
+  const active: WindowChoice = once ?? win;
+  const choose = (w: WindowChoice) => {
+    if (once) window.history.replaceState(null, "", "/");
+    setWin(w);
+  };
 
   const ready = rulesReady && floorReady && winReady;
   const req: DigestRequest | null = ready
     ? {
-        ...(win.kind === "hours" ? { hours: win.hours } : { start: win.start, end: win.end }),
+        ...(active.kind === "hours" ? { hours: active.hours } : { start: active.start, end: active.end }),
         floor,
         subscribed: rules.categories,
       }
@@ -68,7 +79,7 @@ export default function TodayPage() {
   };
   const empty = !!data && isEmptyWindow(data.counts);
   // Nothing at this level in a short preset window: ask what the last 7 days hold.
-  const quiet = !!data && !empty && data.stories.length === 0 && win.kind === "hours" && win.hours < 168;
+  const quiet = !!data && !empty && data.stories.length === 0 && active.kind === "hours" && active.hours < 168;
   const week = useDigest(quiet ? { hours: 168, floor, subscribed: rules.categories } : null);
   const weekCount = week.data?.stories.length ?? 0;
 
@@ -88,19 +99,19 @@ export default function TodayPage() {
     <>
       {data && !empty ? <Header counts={data.counts} onOpenRoutine={openDrawer} /> : null}
       {empty && data ? (
-        <StaleNotice latest={data.latest_filing_at} window={win} onChoose={setWin} />
+        <StaleNotice latest={data.latest_filing_at} window={active} onChoose={choose} />
       ) : null}
       {!data && !error ? <h1 className="sr-only">Today</h1> : null}
 
       <div className="space-y-2 pb-2">
-        <WindowPicker value={win} onChange={setWin} />
+        <WindowPicker value={active} onChange={choose} />
         <FloorControl value={floor} onChange={setFloor} />
       </div>
-      {isValidating && data ? (
-        <p role="status" className="text-caption text-ink-2">
-          Updating
-        </p>
-      ) : null}
+      {/* Always mounted and visually hidden: a line appearing above the stories would shift
+          them on every refresh. The list dims instead while the new window loads. */}
+      <p role="status" className="sr-only">
+        {isValidating && data ? "Updating" : ""}
+      </p>
 
       {outside ? <p className="py-2 text-ink-2">That story is outside this window.</p> : null}
       {error && !data ? <ErrorState message={error.message} onRetry={() => mutate()} /> : null}
@@ -114,11 +125,11 @@ export default function TodayPage() {
       {isLoading && !data ? <Skeleton label="Loading today's filings" /> : null}
 
       {data && !empty ? (
-        <>
+        <div aria-busy={isValidating} className={`transition-opacity ${isValidating ? "opacity-60" : ""}`}>
           {data.stories.length ? (
             <StoryList stories={data.stories} subscribed={rules.categories} />
-          ) : quiet && weekCount > 0 && win.kind === "hours" ? (
-            <QuietTeaser hours={win.hours} count={weekCount} onShow={() => setWin({ kind: "hours", hours: 168 })} />
+          ) : quiet && weekCount > 0 && active.kind === "hours" ? (
+            <QuietTeaser hours={active.hours} count={weekCount} onShow={() => choose({ kind: "hours", hours: 168 })} />
           ) : (
             <p className="border-t border-rule py-6 text-ink-2">
               Nothing at this level. Lower the bar to Everything, or widen the window.
@@ -132,7 +143,7 @@ export default function TodayPage() {
               setDrawer(!drawerOpen);
             }}
           />
-        </>
+        </div>
       ) : null}
     </>
   );

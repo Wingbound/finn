@@ -92,6 +92,15 @@ export function validateWindow(v: unknown): WindowChoice | null {
   return null;
 }
 
+/** A one-off window from a link's ?from=&to= (an alert's week): used for that visit, never saved. */
+export function rangeFromSearch(search: string): WindowChoice | null {
+  const p = new URLSearchParams(search);
+  const start = p.get("from");
+  const end = p.get("to");
+  if (!start || !end) return null;
+  return validateWindow({ kind: "range", start, end });
+}
+
 export function validateSeen(v: unknown): string[] | null {
   return Array.isArray(v) ? v.filter((x): x is string => typeof x === "string").slice(-SEEN_CAP) : null;
 }

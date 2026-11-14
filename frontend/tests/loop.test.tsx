@@ -1,5 +1,5 @@
 // Plan 6: results cards show what management said; dossiers show the latest filed quarter.
-import { render, screen, within } from "@testing-library/react";
+import { fireEvent, render, screen, within } from "@testing-library/react";
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import { SWRConfig } from "swr";
@@ -111,5 +111,30 @@ describe("a dossier", () => {
   it("leaves the section out when there is no card", () => {
     render(wrap(<DossierView dossier={load<Dossier>("dossier-INDIGO.json")} />));
     expect(screen.queryByRole("region", { name: "Latest filed quarter" })).toBeNull();
+  });
+});
+
+describe("PromisePanel quotes and headings (Plan 8)", () => {
+  const long = Array.from({ length: 12 }, (_, i) => `Clause ${i} of what management said about growth.`).join(" ");
+
+  it("lets a long quote open in full, so a target past the third line can be read", () => {
+    render(<PromisePanel symbol="ABC" notes={[note({ quote: long })]} />);
+    const quote = screen.getByText(/Clause 0/);
+    expect(quote.className).toContain("line-clamp-3");
+    const more = screen.getByRole("button", { name: "Show more" });
+    fireEvent.click(more);
+    expect(more).toHaveAttribute("aria-expanded", "true");
+    expect(screen.getByText(/Clause 0/).className).not.toContain("line-clamp-3");
+  });
+
+  it("offers no button for a short quote", () => {
+    render(<PromisePanel symbol="ABC" notes={[note()]} />);
+    expect(screen.queryByRole("button", { name: "Show more" })).toBeNull();
+  });
+
+  it("names its region from its visible title without adding a heading level", () => {
+    render(<PromisePanel symbol="ABC" notes={[note()]} />);
+    expect(screen.getByRole("region", { name: "What management said" })).toBeInTheDocument();
+    expect(screen.queryByRole("heading", { level: 4 })).toBeNull();
   });
 });
