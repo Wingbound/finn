@@ -18,7 +18,7 @@ What I built
 
 FINN does both parts of the brief.
 
-On the push side, it classifies every NSE filing for an 18-stock portfolio, using rules first and an LLM only for what the rules miss. It then scores the filings and groups them into stories. The Today screen says how many things matter, strikes through the routine filings, and ends with "You're caught up." Results cards show Revenue, EBITDA, PBT and PAT with QoQ and YoY changes computed from NSE's XBRL, and banks and NBFCs get their own lines. A management-change card carries the person's profile as written in the filing. Alerts follow thresholds and filing types that you set on the phone, on prices from NSE's own end-of-day service (Yahoo only as a fallback), so filings, results and prices all come from NSE.
+On the push side, it classifies every NSE filing for an 18-stock portfolio, using rules first and an LLM only for what the rules miss. It then scores the filings and groups them into stories. The Today screen says how many things matter, strikes through the routine filings, and ends with "You're caught up." Results cards show Revenue, EBITDA, PBT and PAT with QoQ and YoY changes computed from NSE's XBRL, and banks and NBFCs get their own lines. A management-change card carries the person's profile as written in the filing. Alerts follow thresholds and filing types that you set on the phone, on prices from NSE's own end-of-day service (Yahoo only as a fallback), so filings, results and prices all come from NSE. On a quiet day Today says so and shows what the last week held. A Listen button reads the brief aloud in about a minute, in the phone's own voice, at no cost.
 
 On the pull side, FINN reads the last four earnings calls and the latest annual report of any NSE company and builds a dossier. The dossier opens with a Promise Ledger: each thing management said it would do, quoted with its page and graded against the calls that came after. Every claim has a citation that opens the source page with the quote highlighted.
 
@@ -33,7 +33,7 @@ Key decisions and trade-offs
 
 What I left out
 
-I left out intraday data and news or broker sentiment, since the brief asks for primary sources. I also left out BSE filings (its API refuses automated clients), logins and portfolio P&L. A dossier built live for a new company is cached on the server instance that built it, not in a shared store.
+I left out intraday data and news or broker sentiment, since the brief asks for primary sources. I also left out BSE filings (its API refuses automated clients), logins and portfolio P&L. The brief suggests a web background for a new appointee; neither free tier includes web search, so the card quotes the profile the company filed under SEBI's disclosure rules. A dossier built live for a new company is cached on the server instance that built it, not in a shared store.
 
 Where I would take it next
 

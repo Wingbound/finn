@@ -2,7 +2,7 @@
 
 FINN is a mobile-first investor agent built for the ENAM Holdings AI Engineer build challenge. It has two halves:
 
-- **Push:** a daily digest of NSE filings for an 18-stock portfolio, results cards with QoQ and YoY changes, and price and volume alerts.
+- **Push:** a digest of NSE filings for an 18-stock portfolio, results cards with QoQ and YoY changes, and price and volume alerts.
 - **Pull:** a research dossier for any NSE company, built from its earnings calls and annual report, which opens with a Promise Ledger.
 
 Read `README.md` for the product, `docs/DESIGN.md` for the decisions, `docs/EVALS.md` for the measured results and `docs/PROJECT_BRIEF.md` for the brief.
@@ -19,7 +19,7 @@ Read `README.md` for the product, `docs/DESIGN.md` for the decisions, `docs/EVAL
 - **API:** https://finn-peach.vercel.app (FastAPI on Vercel Python functions, in `backend/`).
 - **Deploys:** both redeploy from `main` on every push.
 - **Data:** the API serves a read-only SQLite snapshot, `backend/seed/finn.sqlite`.
-- **Refresh:** `.github/workflows/refresh.yml` runs daily at 06:00 IST, and can be run by hand with `gh workflow run refresh.yml`. It runs `scripts/refresh.py` and commits the new snapshot as github-actions[bot]. Pull with `--rebase` before pushing, because the bot commits to `main`.
+- **Refresh:** `.github/workflows/refresh.yml` runs every 3 hours on weekdays (06:47 to 21:47 IST) and once a day at weekends, and can be run by hand with `gh workflow run refresh.yml`. It runs `scripts/refresh.py` and commits the new snapshot as github-actions[bot], only when `scripts/seed_changed.py` finds new data. Pull with `--rebase` before pushing, because the bot commits to `main`.
 - **Prices:** these come from NSE's end-of-day MCP server (`finn/ingest/nse_mcp.py`), with Yahoo as the fallback for any symbol NSE can't serve. NSE's terms allow educational and research use only.
 
 ## Commands
@@ -45,7 +45,7 @@ LIVE_URL=https://finn-qx98.vercel.app LIVE_API=https://finn-peach.vercel.app \
 
 ## How work is done here
 
-- **Plans first.** Each change is written up as a plan in `docs/superpowers/plans/` (Plans 1 to 7 so far), then built test-first.
+- **Plans first.** Each change is written up as a plan in `docs/superpowers/plans/` (Plans 1 to 8 so far), then built test-first.
 - **Reviews.** A final code review runs before merging to `main`.
 - **History.** After a plan merges, its task ledger and reviews are archived to `ai-history/planN-*/`.
 - **Feature branches.** Work happens on a feature branch, which merges into `main` once its tests pass. Pushing to `main` deploys the site.
@@ -63,7 +63,7 @@ The repo and its history are public, and graders read both.
 - **AI history is redacted.** Session transcripts are exported with `backend/scripts/export_history.py`, which redacts emails, entry numbers, home paths and anything shaped like a key. The user reads each export before it is published here.
 - **Ask first** before anything that publishes or is hard to undo, such as rewriting history, force-pushing or making a repo public.
 
-## Status (11 Nov 2026)
+## Status (14 Nov 2026)
 
 - **Plans 1 to 7 are merged and deployed:**
   - the push backend;
@@ -72,11 +72,11 @@ The repo and its history are public, and graders read both.
   - the frontend;
   - deployment;
   - "one loop" (promises shown on results cards);
-  - NSE prices.
-- **Tests:** 897 backend and 201 frontend, all passing. The live Playwright checks pass.
+  - NSE prices;
+  - the final audit (Plan 8): bug fixes, the quiet-day view and Listen.
+- **Tests:** 911 backend, 216 frontend unit and 39 end-to-end, all passing. The live Playwright checks pass.
 - **Data:** all 18 holdings have dossiers (23 dossiers in total). A second hand audit found 0 wrong verdicts among the 23 resolved ones.
 - **Known gaps:**
-  - The "as of" time on prices is the fetch time, not the last session's date.
   - The NSE client takes the last SSE `data:` line without matching the request id.
   - A live dossier build is cached only on the server instance that built it.
 
