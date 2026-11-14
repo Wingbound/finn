@@ -33,19 +33,19 @@ log = logging.getLogger(__name__)
 MAX_NOTES = 3
 
 # Company names as quotes write them: "Tech Mahindra Ltd" -> "tech mahindra". A trailing
-# "(India)", "India" or "Company" goes too ("Dixon Technologies (India) Ltd" -> "dixon technologies").
-_NAME_TAIL = re.compile(r"(?:\s+(?:ltd\.?|limited))+$|\s+\(?india\)?$|\s+company$")
+# "(India)", "India" or "Company" also goes when two or more words remain ("Dixon Technologies
+# (India) Ltd" -> "dixon technologies"), never down to one common word ("Coal India" -> "coal").
+_LEGAL = re.compile(r"(?:\s+(?:ltd\.?|limited))+$")
+_TAIL = re.compile(r"\s+\(?india\)?$|\s+company$")
 
 
 def _bare_names(name: str) -> set[str]:
-    out, cur = set(), normalize(name)
-    while cur:
-        out.add(cur)
-        nxt = _NAME_TAIL.sub("", cur).strip()
-        if nxt == cur:
-            break
+    base = _LEGAL.sub("", normalize(name)).strip()
+    out, cur = {base}, base
+    while (nxt := _TAIL.sub("", cur).strip()) != cur and len(nxt.split()) >= 2:
+        out.add(nxt)
         cur = nxt
-    return {n for n in out if not re.search(r"\b(?:ltd|limited)\.?$", n)}
+    return {n for n in out if n}
 
 
 def company_names(conn: sqlite3.Connection) -> dict[str, set[str]]:
@@ -53,8 +53,15 @@ def company_names(conn: sqlite3.Connection) -> dict[str, set[str]]:
     names: dict[str, set[str]] = {}
     for h in load_portfolio():
         names.setdefault(h.symbol, set()).update(_bare_names(h.name))
-    rows = conn.execute("SELECT symbol, json_extract(payload_json, '$.name') FROM dossiers")
-    for sym, name in rows.fetchall():
+    try:  # a malformed payload must cost only its own name, never the digest
+        rows = conn.execute(
+            "SELECT symbol, json_extract(payload_json, '$.name') FROM dossiers"
+            " WHERE json_valid(payload_json)"
+        ).fetchall()
+    except sqlite3.Error as e:
+        log.warning("company names: dossiers unreadable: %s", type(e).__name__)
+        rows = []
+    for sym, name in rows:
         if name:
             names.setdefault(sym, set()).update(_bare_names(name))
     return names

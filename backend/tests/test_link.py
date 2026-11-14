@@ -624,3 +624,36 @@ def test_on_the_snapshot_mm_card_does_not_quote_tech_mahindra():
         assert quotes and not any("tech mahindra" in q for q in quotes)
     finally:
         conn.close()
+
+
+def test_a_name_is_never_cut_down_to_a_common_word(tmp_path):
+    # Final review: "Coal India Ltd" must not become "coal", or a live COALINDIA build would
+    # hide every promise that mentions coal on another company's card.
+    from finn.research.link import company_names
+
+    conn = db.connect(tmp_path / "x.sqlite")
+    db.init_db(conn)
+    for sym, name in [
+        ("COALINDIA", "Coal India Ltd"),
+        ("DIXON", "Dixon Technologies (India) Ltd"),
+        ("POLYCAB", "Polycab India Ltd"),
+    ]:
+        db.save_dossier(conn, dossier([], symbol=sym).model_copy(update={"name": name}))
+    names = company_names(conn)
+    assert names["COALINDIA"] == {"coal india"}
+    assert "dixon technologies" in names["DIXON"]
+    assert "polycab india" in names["POLYCAB"] and "polycab" not in names["POLYCAB"]
+
+
+def test_a_corrupt_dossier_row_does_not_take_the_digest_down(tmp_path):
+    # Final review: json_extract over a malformed payload raised and 500'd /digest
+    conn = db.connect(tmp_path / "x.sqlite")
+    db.init_db(conn)
+    db.save_dossier(conn, dossier([row(REVENUE_FY27)]))
+    conn.execute(
+        "INSERT INTO dossiers (symbol, built_at, payload_json) VALUES ('BAD', '2026-11-09', '{not json')"
+    )
+    conn.commit()
+    st = _story("ABC")
+    attach_promises(conn, [st])
+    assert [nt.quote for nt in st.promises] == [REVENUE_FY27]

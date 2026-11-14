@@ -82,8 +82,13 @@ export default function TodayPage() {
   const empty = !!data && isEmptyWindow(data.counts);
   // Nothing at this level in a short preset window: ask what the last 7 days hold.
   const quiet = !!data && !empty && data.stories.length === 0 && active.kind === "hours" && active.hours < 168;
-  const week = useDigest(quiet ? { hours: 168, floor, subscribed: rules.categories } : null);
+  const week = useDigest(quiet ? { hours: 168, floor, subscribed: rules.categories } : null, { keepPrevious: false });
   const weekCount = week.data?.stories.length ?? 0;
+  // Until both answers are in, the slot stays empty: no "Nothing at this level" flash before
+  // the teaser, and no teaser over a window that is still loading.
+  const weekSettled = !!week.data && !week.isValidating;
+  const teaser = quiet && !isValidating && weekSettled && weekCount > 0;
+  const waiting = quiet && (isValidating || !weekSettled);
 
   const inStories = !!target && !!data?.stories.some((st) => st.id === target);
   const inRoutine = !!target && Object.values(data?.routine ?? {}).some((list) => list?.some((st) => st.id === target));
@@ -137,8 +142,10 @@ export default function TodayPage() {
         <div aria-busy={isValidating} className={`transition-opacity ${isValidating ? "opacity-60" : ""}`}>
           {data.stories.length ? (
             <StoryList stories={data.stories} subscribed={rules.categories} />
-          ) : quiet && weekCount > 0 && active.kind === "hours" ? (
+          ) : teaser && active.kind === "hours" ? (
             <QuietTeaser hours={active.hours} count={weekCount} onShow={() => choose({ kind: "hours", hours: 168 })} />
+          ) : waiting && !week.error ? (
+            <div className="min-h-24 border-t border-rule" aria-hidden="true" />
           ) : (
             <p className="border-t border-rule py-6 text-ink-2">
               Nothing at this level. Lower the bar to Everything, or widen the window.

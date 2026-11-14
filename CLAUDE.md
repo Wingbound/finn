@@ -74,7 +74,7 @@ The repo and its history are public, and graders read both.
   - "one loop" (promises shown on results cards);
   - NSE prices;
   - the final audit (Plan 8): bug fixes, the quiet-day view and Listen.
-- **Tests:** 911 backend, 216 frontend unit and 39 end-to-end, all passing. The live Playwright checks pass.
+- **Tests:** 914 backend, 219 frontend unit and 40 end-to-end, all passing. The live Playwright checks pass.
 - **Data:** all 18 holdings have dossiers (23 dossiers in total). A second hand audit found 0 wrong verdicts among the 23 resolved ones.
 - **Known gaps:**
   - The NSE client takes the last SSE `data:` line without matching the request id.

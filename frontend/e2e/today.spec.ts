@@ -116,3 +116,21 @@ test("Today: Listen reads the brief aloud in the phone's own voice (Plan 8)", as
   expect(spoken[0]).toBe(`${json("digest-7d.json").counts.shown} things matter in the last 7 days.`);
   expect(spoken.at(-1)).toBe("You're caught up.");
 });
+
+test("Today: on a quiet day the teaser arrives without a 'Nothing at this level' flash (final review)", async ({ page }) => {
+  await mockApi(page);
+  await page.route("**/digest", async (route) => {
+    const body = route.request().postDataJSON() as { hours?: number };
+    if (body.hours === 168) await new Promise((r) => setTimeout(r, 1200));
+    await route.fulfill({
+      status: 200,
+      contentType: "application/json",
+      body: fixture(body.hours === 168 ? "digest-7d.json" : "digest-quiet.json"),
+    });
+  });
+  await page.goto("/");
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText("Nothing matters yet");
+  expect(await page.getByText(/Nothing at this level/).count()).toBe(0); // no retry: a snapshot
+  await expect(page.getByText("Quiet 24 hours.")).toBeVisible();
+  expect(await page.getByText(/Nothing at this level/).count()).toBe(0);
+});

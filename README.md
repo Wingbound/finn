@@ -102,7 +102,7 @@ screener.in ──┘   classify · enrich      (committed)  ├─ GET /researc
 cd backend
 cp .env.example .env            # add GEMINI_API_KEY and GROQ_API_KEY
 uv sync
-uv run pytest -q                # 911 tests, no network
+uv run pytest -q                # 914 tests, no network
 uv run uvicorn finn.api.main:app --reload --port 8000
 
 # frontend (Node 22)

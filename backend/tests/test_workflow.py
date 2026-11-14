@@ -90,3 +90,12 @@ def test_only_clean_or_partial_refreshes_go_on_to_commit():
     assert 'case "$code" in' in run
     assert "0|1)" in run
     assert "*)" in run and run.count("exit 1") >= 2
+
+
+def test_a_conflicting_rebase_gives_way_instead_of_overwriting_main():
+    # Final review I1: "-X theirs" let the bot's snapshot silently replace a newer one on main
+    steps = _wf()["jobs"]["refresh"]["steps"]
+    commit = next(s for s in steps if "git commit" in s.get("run", ""))["run"]
+    assert "theirs" not in commit and "-X" not in commit
+    assert "git rebase --abort" in commit
+    assert commit.index("git rebase --abort") < commit.index("git push")

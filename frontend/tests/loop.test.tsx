@@ -3,7 +3,7 @@ import { fireEvent, render, screen, within } from "@testing-library/react";
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import { SWRConfig } from "swr";
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import { DossierView } from "@/components/dossier/DossierView";
 import { PromisePanel, paceSentence } from "@/components/today/PromisePanel";
 import { StoryCard } from "@/components/today/StoryCard";
@@ -115,21 +115,40 @@ describe("a dossier", () => {
 });
 
 describe("PromisePanel quotes and headings (Plan 8)", () => {
-  const long = Array.from({ length: 12 }, (_, i) => `Clause ${i} of what management said about growth.`).join(" ");
+  // jsdom has no layout: give clamped quotes a measured height, as a phone would
+  function layout(scrollHeight: number, clientHeight: number) {
+    const sh = vi.spyOn(HTMLElement.prototype, "scrollHeight", "get").mockReturnValue(scrollHeight);
+    const ch = vi.spyOn(HTMLElement.prototype, "clientHeight", "get").mockReturnValue(clientHeight);
+    return () => {
+      sh.mockRestore();
+      ch.mockRestore();
+    };
+  }
+  const short = "Revenue to grow 15% to 18% in FY27 on the new plant and exports, with margins steady near sixteen percent.";
 
-  it("lets a long quote open in full, so a target past the third line can be read", () => {
-    render(<PromisePanel symbol="ABC" notes={[note({ quote: long })]} />);
-    const quote = screen.getByText(/Clause 0/);
-    expect(quote.className).toContain("line-clamp-3");
-    const more = screen.getByRole("button", { name: "Show more" });
-    fireEvent.click(more);
-    expect(more).toHaveAttribute("aria-expanded", "true");
-    expect(screen.getByText(/Clause 0/).className).not.toContain("line-clamp-3");
+  it("offers Show more whenever the clamped quote overflows, however few its words (final review I2)", () => {
+    const restore = layout(96, 72);
+    try {
+      render(<PromisePanel symbol="ABC" notes={[note({ quote: short })]} />);
+      const quote = screen.getByText(/Revenue to grow/);
+      expect(quote.className).toContain("line-clamp-3");
+      const more = screen.getByRole("button", { name: "Show more" });
+      fireEvent.click(more);
+      expect(more).toHaveAttribute("aria-expanded", "true");
+      expect(screen.getByText(/Revenue to grow/).className).not.toContain("line-clamp-3");
+    } finally {
+      restore();
+    }
   });
 
-  it("offers no button for a short quote", () => {
-    render(<PromisePanel symbol="ABC" notes={[note()]} />);
-    expect(screen.queryByRole("button", { name: "Show more" })).toBeNull();
+  it("offers no button when the quote fits in three lines", () => {
+    const restore = layout(72, 72);
+    try {
+      render(<PromisePanel symbol="ABC" notes={[note({ quote: short })]} />);
+      expect(screen.queryByRole("button", { name: "Show more" })).toBeNull();
+    } finally {
+      restore();
+    }
   });
 
   it("names its region from its visible title without adding a heading level", () => {

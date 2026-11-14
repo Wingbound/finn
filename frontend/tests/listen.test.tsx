@@ -44,12 +44,14 @@ describe("briefScript (Plan 8)", () => {
 describe("ListenButton (Plan 8)", () => {
   afterEach(() => vi.unstubAllGlobals());
 
-  function stubSpeech() {
+  function stubSpeech(voices = [{ lang: "en-US", name: "US" }, { lang: "en-IN", name: "India" }]) {
     const spoken: string[] = [];
     const synth = {
+      speaking: false,
+      pending: false,
       speak: vi.fn((u: { text: string }) => spoken.push(u.text)),
       cancel: vi.fn(),
-      getVoices: () => [{ lang: "en-US", name: "US" }, { lang: "en-IN", name: "India" }],
+      getVoices: () => voices,
     };
     class Utterance {
       text: string;
@@ -76,6 +78,31 @@ describe("ListenButton (Plan 8)", () => {
     const first = synth.speak.mock.calls[0]![0] as unknown as { voice: { lang: string } };
     expect(first.voice.lang).toBe("en-IN");
     await act(async () => fireEvent.click(screen.getByRole("button", { name: "Stop listening" })));
+    expect(synth.cancel).toHaveBeenCalled();
+    expect(screen.getByRole("button", { name: "Listen" })).toBeInTheDocument();
+  });
+
+  it("speaks at once when nothing is playing: no cancel right before speak (final review)", async () => {
+    const { synth } = stubSpeech();
+    render(<ListenButton lines={["One line."]} />);
+    await act(async () => fireEvent.click(await screen.findByRole("button", { name: "Listen" })));
+    expect(synth.speak).toHaveBeenCalledTimes(1);
+    expect(synth.cancel).not.toHaveBeenCalled();
+  });
+
+  it("finds an Indian English voice an Android phone lists as en_IN (final review)", async () => {
+    const { synth } = stubSpeech([{ lang: "en_US", name: "US" }, { lang: "en_IN", name: "India" }]);
+    render(<ListenButton lines={["One line."]} />);
+    await act(async () => fireEvent.click(await screen.findByRole("button", { name: "Listen" })));
+    expect((synth.speak.mock.calls[0]![0] as unknown as { voice: { name: string } }).voice.name).toBe("India");
+  });
+
+  it("stops reading when the brief changes, e.g. after a window change (final review)", async () => {
+    const { synth } = stubSpeech();
+    const { rerender } = render(<ListenButton lines={["24 hours."]} />);
+    await act(async () => fireEvent.click(await screen.findByRole("button", { name: "Listen" })));
+    expect(screen.getByRole("button", { name: "Stop listening" })).toBeInTheDocument();
+    await act(async () => rerender(<ListenButton lines={["7 days."]} />));
     expect(synth.cancel).toHaveBeenCalled();
     expect(screen.getByRole("button", { name: "Listen" })).toBeInTheDocument();
   });

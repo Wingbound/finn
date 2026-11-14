@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useId, useState } from "react";
+import { useCallback, useId, useState } from "react";
 import { symbolPath } from "@/lib/api";
 import { level, pct } from "@/lib/format";
 import type { PaceNote, PromiseNote } from "@/lib/types";
@@ -39,14 +39,31 @@ export function noteMeta(n: PromiseNote): string {
   return `${parts.join(". ")}.`;
 }
 
-/** Long quotes start at three lines; the target can sit past them, so they open in full. */
+/** Quotes start at three lines; when the text runs past them (the target can sit there), a
+ *  button opens it in full. Overflow is measured, not guessed from a word count: on a phone
+ *  about twenty words already fill three lines. */
 function Quote({ text }: { text: string }) {
   const [open, setOpen] = useState(false);
-  const long = text.split(/\s+/).length > 30;
+  const [overflows, setOverflows] = useState(false);
+  const measure = useCallback(
+    (el: HTMLElement | null) => {
+      if (!el || open) return;
+      const check = () => setOverflows(el.scrollHeight > el.clientHeight + 1);
+      check();
+      void document.fonts?.ready.then(check); // the serif arrives after first paint
+      if (typeof ResizeObserver === "undefined") return;
+      const ro = new ResizeObserver(check);
+      ro.observe(el);
+      return () => ro.disconnect();
+    },
+    [open],
+  );
   return (
     <>
-      <blockquote className={`quote ${open || !long ? "" : "line-clamp-3"}`}>&ldquo;{text}&rdquo;</blockquote>
-      {long ? (
+      <blockquote ref={measure} className={`quote ${open ? "" : "line-clamp-3"}`}>
+        &ldquo;{text}&rdquo;
+      </blockquote>
+      {open || overflows ? (
         <button type="button" className="min-h-11 text-caption text-pencil" onClick={() => setOpen((v) => !v)} aria-expanded={open}>
           {open ? "Show less" : "Show more"}
         </button>
