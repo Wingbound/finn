@@ -218,14 +218,14 @@ Deploy (both on Vercel, imported from the GitHub repo):
 
 ## 9. Submission checklist (due Sun 15 Nov 2026)
 
-- [ ] **Mobile-first prototype link.** Deployed and easy to try on a phone. Test on a real phone first, and check that the first load works after the API has been idle (a cold start).
-- [ ] **GitHub repository** (public), with a README containing the live link, architecture, eval and cost numbers, and how to run.
-- [ ] **AI build history.** Claude Code session exports (`ai-history/`, redacted, reviewed by me) and/or share links for any other LLM chats used.
-- [ ] **Covering email writeup**, short, covering:
-  - [ ] what I built
-  - [ ] key decisions and trade-offs
-  - [ ] what I deliberately left out
-  - [ ] where I'd take it next
+- [x] **Mobile-first prototype link.** https://finn-qx98.vercel.app, tested on a phone on 14 Nov. Deployed and easy to try on a phone. Test on a real phone first, and check that the first load works after the API has been idle (a cold start).
+- [x] **GitHub repository** (public, github.com/Wingbound/finn), with a README containing the live link, architecture, eval and cost numbers, and how to run.
+- [x] **AI build history.** Claude Code session exports (`ai-history/`, redacted) and/or share links for any other LLM chats used.
+- [x] **Covering email writeup** (`docs/COVER_EMAIL.md`), short, covering:
+  - [x] what I built
+  - [x] key decisions and trade-offs
+  - [x] what I deliberately left out
+  - [x] where I'd take it next
 - [ ] Email to **assessment@enam.com**
 - [ ] Subject exactly: **IIT Delhi – AI Engineer - 2027**
 - [ ] Links and attachments included, and sent before the deadline.

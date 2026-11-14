@@ -18,7 +18,7 @@ from datetime import date, datetime, timedelta
 
 import httpx
 
-from finn.models import PriceBar
+from finn.models import IST, PriceBar
 from finn.portfolio import Holding
 
 log = logging.getLogger(__name__)
@@ -169,7 +169,7 @@ def fetch_nse_eod(
     stale (last session over STALE_DAYS old) counts as failed, with its bars kept in
     `partial`, so the caller can try another source first. After BREAKER_FAILURES transport
     failures in a row the rest are failed at once: a hung server must not stall the refresh."""
-    today = today or datetime.now().date()
+    today = today or datetime.now(IST).date()  # the cron runs at UTC night: IST's date
     own = client is None
     http = client or httpx.Client(timeout=TIMEOUT_S)
     out = NseResult(bars=[], failed={}, partial={})

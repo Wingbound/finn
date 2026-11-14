@@ -1,5 +1,5 @@
 import { expect, test } from "@playwright/test";
-import { headlineFor, json, mockApi, watchErrors } from "./mock";
+import { fixture, headlineFor, json, mockApi, watchErrors } from "./mock";
 
 test("Today: change window, see why a story ranks, open what FINN set aside", async ({ page }) => {
   const errors = watchErrors(page);
@@ -70,4 +70,67 @@ test("Today: a link to a story outside the window says so (final review I5)", as
   await mockApi(page, { digest: () => "digest-24h.json" });
   await page.goto("/#story-NOPE%3Aresults%3A1");
   await expect(page.getByText("That story is outside this window.")).toBeVisible();
+});
+
+test("Today: a quiet 24 hours points at what the last 7 days hold (Plan 8)", async ({ page }) => {
+  const errors = watchErrors(page);
+  await mockApi(page, { digest: (b) => (b.hours === 168 ? "digest-7d.json" : "digest-quiet.json") });
+  await page.goto("/");
+  await expect(page.getByText("Quiet 24 hours.")).toBeVisible();
+  const n = json("digest-7d.json").stories.length;
+  await expect(page.getByText(`Over the last 7 days, ${n} things mattered.`)).toBeVisible();
+  await page.getByRole("button", { name: "Show 7 days" }).click();
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText(headlineFor("digest-7d.json"));
+  await expect(page.getByRole("radio", { name: "7 days" })).toHaveAttribute("aria-checked", "true");
+  expect(errors).toEqual([]);
+});
+
+test("Today: an update in flight doesn't move the stories (Plan 8)", async ({ page }) => {
+  await mockApi(page, { digest: () => "digest-7d.json" });
+  await page.goto("/");
+  const first = page.getByRole("article").first();
+  await expect(first).toBeVisible();
+  const before = (await first.boundingBox())?.y;
+  await page.route("**/digest", async (route) => {
+    await new Promise((r) => setTimeout(r, 1500));
+    await route.fulfill({ status: 200, contentType: "application/json", body: fixture("digest-7d.json") });
+  });
+  await page.getByRole("radio", { name: "3 days" }).click();
+  await expect(page.getByRole("status").filter({ hasText: "Updating" })).toBeAttached();
+  expect((await first.boundingBox())?.y).toBe(before);
+});
+
+test("Today: Listen reads the brief aloud in the phone's own voice (Plan 8)", async ({ page }) => {
+  await page.addInitScript(() => {
+    const spoken: string[] = [];
+    (window as unknown as { __spoken: string[] }).__spoken = spoken;
+    Object.defineProperty(window, "speechSynthesis", {
+      value: { speak: (u: { text: string }) => spoken.push(u.text), cancel: () => {}, getVoices: () => [] },
+    });
+  });
+  await mockApi(page, { digest: () => "digest-7d.json" });
+  await page.goto("/");
+  await page.getByRole("button", { name: "Listen" }).click();
+  await expect(page.getByRole("button", { name: "Stop listening" })).toBeVisible();
+  const spoken = await page.evaluate(() => (window as unknown as { __spoken: string[] }).__spoken);
+  expect(spoken[0]).toBe(`${json("digest-7d.json").counts.shown} things matter in the last 7 days.`);
+  expect(spoken.at(-1)).toBe("You're caught up.");
+});
+
+test("Today: on a quiet day the teaser arrives without a 'Nothing at this level' flash (final review)", async ({ page }) => {
+  await mockApi(page);
+  await page.route("**/digest", async (route) => {
+    const body = route.request().postDataJSON() as { hours?: number };
+    if (body.hours === 168) await new Promise((r) => setTimeout(r, 1200));
+    await route.fulfill({
+      status: 200,
+      contentType: "application/json",
+      body: fixture(body.hours === 168 ? "digest-7d.json" : "digest-quiet.json"),
+    });
+  });
+  await page.goto("/");
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText("Nothing matters yet");
+  expect(await page.getByText(/Nothing at this level/).count()).toBe(0); // no retry: a snapshot
+  await expect(page.getByText("Quiet 24 hours.")).toBeVisible();
+  expect(await page.getByText(/Nothing at this level/).count()).toBe(0);
 });

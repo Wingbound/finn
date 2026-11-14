@@ -4,7 +4,8 @@ import { join } from "node:path";
 import { describe, expect, it, vi } from "vitest";
 import { Header } from "@/components/today/Header";
 import { ResultsGrid } from "@/components/today/ResultsGrid";
-import { StaleNotice } from "@/components/today/StaleNotice";
+import { QuietTeaser } from "@/components/today/QuietTeaser";
+import { StaleNotice, isEmptyWindow } from "@/components/today/StaleNotice";
 import { StoryList } from "@/components/today/StoryList";
 import { KEYS } from "@/lib/store";
 import type { Digest, ResultsCard } from "@/lib/types";
@@ -124,5 +125,27 @@ describe("story times (final review M3, re-graded)", () => {
     render(<StoryCard story={story} seen={false} onToggleSeen={() => {}} now={now} />);
     expect(screen.getByText(/^\d{1,2} [A-Z][a-z]{2}, \d{2}:\d{2}$/)).toBeInTheDocument();
     expect(screen.queryByText(/d ago$/)).toBeNull();
+  });
+});
+
+describe("QuietTeaser (Plan 8 Task 1)", () => {
+  it("names the quiet window and points at what the last 7 days hold", () => {
+    const show = vi.fn();
+    const { rerender } = render(<QuietTeaser hours={24} count={12} onShow={show} />);
+    expect(screen.getByText("Quiet 24 hours.")).toBeInTheDocument();
+    expect(screen.getByText("Over the last 7 days, 12 things mattered.")).toBeInTheDocument();
+    fireEvent.click(screen.getByRole("button", { name: "Show 7 days" }));
+    expect(show).toHaveBeenCalledTimes(1);
+    rerender(<QuietTeaser hours={72} count={1} onShow={show} />);
+    expect(screen.getByText("Quiet 3 days.")).toBeInTheDocument();
+    expect(screen.getByText("Over the last 7 days, 1 thing mattered.")).toBeInTheDocument();
+  });
+});
+
+describe("isEmptyWindow (Plan 8 Task 1)", () => {
+  it("counts a window holding only noise as not empty, so the noise list stays reachable", () => {
+    expect(isEmptyWindow({ shown: 0, routine: 0, hidden: 0, filings: 0 })).toBe(true);
+    expect(isEmptyWindow({ shown: 0, routine: 0, hidden: 2, filings: 2 })).toBe(false);
+    expect(isEmptyWindow({ shown: 0, routine: 1, hidden: 0, filings: 1 })).toBe(false);
   });
 });

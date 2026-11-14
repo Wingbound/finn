@@ -26,3 +26,13 @@ test("Research: Dig in on a company with no dossier offers a build", async ({ pa
   await page.goto("/research/TATASTEEL");
   await expect(page.getByRole("button", { name: "Build a dossier" })).toBeVisible();
 });
+
+test("Research: cancelling a build drops ?build=1, so a reload doesn't start another (Plan 8)", async ({ page }) => {
+  await mockApi(page, { missingDossiers: ["PIDILITIND"] });
+  await page.route("**/research/PIDILITIND/build", () => {}); // the build never answers
+  await page.goto("/research/PIDILITIND?build=1");
+  await page.getByRole("button", { name: "Cancel" }).click();
+  await expect(page).toHaveURL(/\/research\/PIDILITIND$/);
+  await page.reload();
+  await expect(page.getByRole("button", { name: "Build a dossier" })).toBeVisible();
+});

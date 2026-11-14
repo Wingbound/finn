@@ -44,7 +44,7 @@ describe("writeStore", () => {
 describe("validateRules", () => {
   it("clamps out-of-range numbers to the UI's bounds", () => {
     const r = validateRules({ ...DEFAULT_RULES, volume_multiple: 0.1, price_move_pct: 500, lookback: 3 });
-    expect(r).toMatchObject({ volume_multiple: 1, price_move_pct: 20, lookback: 5 });
+    expect(r).toMatchObject({ volume_multiple: 1, price_move_pct: 20, lookback: 10 });
   });
   it("drops unknown categories and bad overrides", () => {
     const r = validateRules({
@@ -127,5 +127,13 @@ describe("blocked storage across remounts (final review I2)", () => {
     });
     expect(second.result.current[0].volume_multiple).toBe(1);
     expect(readStore(KEYS.rules, DEFAULT_RULES, validateRules).volume_multiple).toBe(1);
+  });
+});
+
+describe("lookback floor (Plan 8)", () => {
+  it("clamps a stored lookback to the 10 sessions the API accepts", async () => {
+    const { validateRules, DEFAULT_RULES } = await import("@/lib/store");
+    expect(validateRules({ ...DEFAULT_RULES, lookback: 5 })?.lookback).toBe(10);
+    expect(validateRules({ ...DEFAULT_RULES, lookback: 30 })?.lookback).toBe(30);
   });
 });

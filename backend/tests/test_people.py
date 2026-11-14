@@ -297,3 +297,30 @@ def test_unreadable_people_payload_leaves_digest_building(conn, payload):
     conn.commit()
     (story,) = [s for s in _voltas_digest(conn)["stories"] if s.category == "management_change"]
     assert story.people == []
+
+
+# Plan 8: a filing whose PDF has no text (scanned, or too large) still has NSE's summary
+def test_summary_used_when_the_pdf_has_no_text(conn):
+    _seed(conn, _filing(summary="Noel N. Tata retires as Chairman."))
+    db.save_doc_text(conn, URL, "")
+    router = FakeRouter(_reply(TATA_ROW))
+    res = enrich_people(conn, FakeNSE({}, {}), router, SINCE)
+    assert res.done == 1 and res.empty == 0
+    assert db.get_enrichments(conn, ["V1"], "people")["V1"]["people"][0]["name"] == "Noel N. Tata"
+
+
+def test_noise_filings_are_not_sent_to_the_model(conn):
+    f = _filing(pdf_url=None, summary="Noel N. Tata retires as Chairman.")
+    db.upsert_filings(conn, [f])
+    db.save_classifications(
+        conn,
+        {
+            f.seq_id: Classification(
+                category="management_change", noise=True, by="rules", confidence=1.0
+            )
+        },
+    )
+    router = FakeRouter(_reply(TATA_ROW))
+    res = enrich_people(conn, FakeNSE({}, {}), router, SINCE)
+    assert res.done == 0 and router.calls == []
+    assert db.get_enrichments(conn, ["V1"], "people") == {}

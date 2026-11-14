@@ -39,6 +39,9 @@ export class BuildError extends Error {
 }
 
 export const STOPPED = "The build stopped before finishing";
+export const TOO_LONG = "The build ran past its time limit";
+/** The server gives up at 285 s; past this the client stops waiting (the build may still save). */
+export const BUILD_TIMEOUT_MS = 300_000;
 
 /** The server's build errors, in words a reader can act on; unknown ones pass through. */
 export function friendlyBuildError(detail: string): string {
@@ -55,15 +58,40 @@ export function friendlyBuildError(detail: string): string {
  */
 export async function buildDossier(
   symbol: string,
+  {
+    onProgress,
+    signal,
+    timeoutMs = BUILD_TIMEOUT_MS,
+  }: { onProgress?: (msg: string) => void; signal?: AbortSignal; timeoutMs?: number },
+): Promise<{ dossier: Dossier; excerpts: Excerpts }> {
+  let timer: ReturnType<typeof setTimeout> | undefined;
+  const deadline = new Promise<never>((_, reject) => {
+    timer = setTimeout(() => reject(new BuildError("incomplete", TOO_LONG)), timeoutMs);
+  });
+  deadline.catch(() => {}); // only ever awaited through a race
+  try {
+    return await readBuild(symbol, { onProgress, signal }, deadline);
+  } finally {
+    clearTimeout(timer);
+  }
+}
+
+async function readBuild(
+  symbol: string,
   { onProgress, signal }: { onProgress?: (msg: string) => void; signal?: AbortSignal },
+  deadline: Promise<never>,
 ): Promise<{ dossier: Dossier; excerpts: Excerpts }> {
   let res: Response;
   try {
-    res = await fetch(`${API_BASE}/research/${symbolPath(symbol)}/build`, {
-      headers: { accept: "text/event-stream" },
-      signal,
-    });
+    res = await Promise.race([
+      fetch(`${API_BASE}/research/${symbolPath(symbol)}/build`, {
+        headers: { accept: "text/event-stream" },
+        signal,
+      }),
+      deadline,
+    ]);
   } catch (e) {
+    if (e instanceof BuildError) throw e;
     if (signal?.aborted) throw e;
     throw new BuildError("error", "Couldn't reach FINN's server");
   }
@@ -84,8 +112,12 @@ export async function buildDossier(
   for (;;) {
     let chunk: ReadableStreamReadResult<Uint8Array>;
     try {
-      chunk = await reader.read();
+      chunk = await Promise.race([reader.read(), deadline]);
     } catch (e) {
+      if (e instanceof BuildError) {
+        reader.cancel().catch(() => {});
+        throw e;
+      }
       if (signal?.aborted) throw e;
       throw new BuildError("incomplete", STOPPED); // the connection dropped mid-stream
     }

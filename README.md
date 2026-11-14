@@ -22,6 +22,8 @@ FINN is a phone-first investing assistant for a portfolio of Indian listed compa
 - **Story cards.** Results get a Revenue, EBITDA, PBT and PAT grid with QoQ and YoY, computed from NSE's XBRL, not read by a model. Lenders get their own lines. Management changes get the person's profile, taken verbatim from the filing. Deals, fund-raises and litigation get a one-line brief with grounded facts.
 - **Results meet promises.** Under a results grid, FINN shows the company's open promises from its own calls, quoted with call and page. When the quote names the same line, a pace sentence sets this quarter beside the target, for example "This quarter: revenue +21.6% YoY, above the 15–18% target. One quarter, not the full year." It never grades a promise. The dossier, in turn, shows the latest filed quarter under its ledger.
 - **The end.** The feed closes with "You're caught up."
+- **Quiet days.** When nothing in the last 24 hours reaches the chosen level, Today says so and shows what the last 7 days held, one tap away.
+- **Listen.** A Listen button reads the brief aloud in about a minute, using the phone's own voice: how much matters, the top stories in screen order (results as their filed growth figures), and what was set aside. It runs in the browser, so it costs nothing.
 
 **Alerts.** You set the rules (a volume multiple, a price move, which filing types count, per-stock overrides). They live on your phone and go to the server with each request, so the server keeps no user state.
 
@@ -38,7 +40,7 @@ Every claim carries a citation chip that opens the source page with the quote hi
 ```
 NSE filings ──┐                         ┌─ POST /digest      (clustered, ranked, windowed)
 NSE XBRL ─────┤                         ├─ POST /alerts      (rules sent by the phone)
-NSE EOD (MCP) ┼─► refresh (daily) ─► SQLite snapshot ─┤─ GET /results/{sym}
+NSE EOD (MCP) ┼─► refresh (3 hrs) ─► SQLite snapshot ─┤─ GET /results/{sym}
 screener.in ──┘   classify · enrich      (committed)  ├─ GET /research/{sym}
                   research builds                     └─ GET /research/{sym}/build  (SSE, live)
 ```
@@ -46,11 +48,11 @@ screener.in ──┘   classify · enrich      (committed)  ├─ GET /researc
 - **Backend.** Python 3.12, FastAPI, SQLite and httpx, deployed as a Vercel Python function.
   - The API serves a committed SQLite snapshot and copies it into `/tmp` on a cold start.
   - Only search and live research builds reach the network at request time.
-  - A GitHub Actions job refreshes the snapshot every morning at 06:00 IST and commits it. Vercel redeploys from that commit.
+  - A GitHub Actions job refreshes the snapshot every 3 hours on weekdays (06:47 to 21:47 IST) and once a day at weekends. It commits only when the data changed, and Vercel redeploys from that commit.
 - **Frontend.** Next.js, React 19 and Tailwind, installable as a PWA.
   - It uses no component or chart library.
   - A service worker keeps the last answers, so Today still opens offline.
-- **Prices come from NSE too.** The daily refresh asks NSE's own MCP server (`mcp.nseindia.in`, the end-of-day "bhavcopy" service) for 3 months of OHLCV per holding. It is free and needs no key, and Yahoo is the fallback for any symbol it misses. NSE describes this data as for educational and research use; a production product would license it. With this, filings, results and prices all come from NSE.
+- **Prices come from NSE too.** The refresh asks NSE's own MCP server (`mcp.nseindia.in`, the end-of-day "bhavcopy" service) for 3 months of OHLCV per holding. It is free and needs no key, and Yahoo is the fallback for any symbol it misses. NSE describes this data as for educational and research use; a production product would license it. With this, filings, results and prices all come from NSE.
 - **Arithmetic never goes to a model.** QoQ, YoY, margins, CAGR, debt to equity, cash conversion and the ledger's computed grades are all Python.
 
 ### Models and cost
@@ -84,6 +86,7 @@ screener.in ──┘   classify · enrich      (committed)  ├─ GET /researc
 - Accounts, logins and server-side user state: settings stay on the device.
 - BSE as a filing source: its API refused automated clients.
 - Portfolio P&L.
+- A web background for newly appointed people. Neither free tier offers web search (Gemini's Google Search grounding returned 429 on 14 Nov; Groq lists no search models for this key), so the card quotes the profile the company filed under SEBI's disclosure rules.
 
 ## Known limits
 
@@ -99,7 +102,7 @@ screener.in ──┘   classify · enrich      (committed)  ├─ GET /researc
 cd backend
 cp .env.example .env            # add GEMINI_API_KEY and GROQ_API_KEY
 uv sync
-uv run pytest -q                # 897 tests, no network
+uv run pytest -q                # 914 tests, no network
 uv run uvicorn finn.api.main:app --reload --port 8000
 
 # frontend (Node 22)
@@ -114,13 +117,14 @@ To refresh the data, run `uv run python scripts/refresh.py --days 3 --out seed/f
 
 ## How this was built
 
-FINN was built with Claude Code over one week, in seven plans:
+FINN was built with Claude Code over one week, in eight plans:
 1. the push backend;
 2. enrichment;
 3. research;
 4. the frontend;
 5. deployment;
 6. "one loop", which puts management's promises on the results cards;
-7. end-of-day prices from NSE.
+7. end-of-day prices from NSE;
+8. a final audit against the brief: bug fixes, the quiet-day view and Listen.
 
-Each plan was written first and then executed test-first. Plans 1 to 3 ran with a fresh subagent per task and a reviewer after each task. Plans 4 to 7 ran inline, each with one final review. `CLAUDE.md` holds the working rules and current status for anyone continuing in Claude Code. The plans are in `docs/superpowers/plans/`. The task ledgers, briefs, reviews and the redacted session transcripts are in `ai-history/`.
+Each plan was written first and then executed test-first. Plans 1 to 3 ran with a fresh subagent per task and a reviewer after each task. Plans 4 to 8 ran inline, each with one final review. `CLAUDE.md` holds the working rules and current status for anyone continuing in Claude Code. The plans are in `docs/superpowers/plans/`. The task ledgers, briefs, reviews and the redacted session transcripts are in `ai-history/`.

@@ -72,35 +72,52 @@ describe("AlertLog", () => {
 });
 
 describe("alert links (final review I5)", () => {
-  it("open Today on the alert log's own window", async () => {
+  it("open Today on the alert log's own window, for that visit only (Plan 8)", async () => {
     const { AlertLog } = await import("@/components/alerts/AlertLog");
     const { readFileSync } = await import("node:fs");
     const { join } = await import("node:path");
     const data = JSON.parse(readFileSync(join(__dirname, "fixtures", "alerts.json"), "utf8"));
     render(<AlertLog alerts={data.alerts} window={data.window} />);
-    const link = screen.getAllByRole("link").find((a) => a.getAttribute("href")?.startsWith("/#story-")) as HTMLElement;
+    const link = screen.getAllByRole("link").find((a) => a.getAttribute("href")?.includes("#story-")) as HTMLElement;
+    const href = link.getAttribute("href") as string;
+    const url = new URL(href, "https://finn.test");
+    expect(url.pathname).toBe("/");
+    expect(url.searchParams.get("from")).toBe(data.window.start);
+    expect(url.searchParams.get("to")).toBe(data.window.end);
+    expect(url.hash.startsWith("#story-")).toBe(true);
     fireEvent.click(link);
-    expect(JSON.parse(localStorage.getItem(KEYS.window) ?? "null")).toEqual({
-      kind: "range",
-      start: data.window.start,
-      end: data.window.end,
-    });
+    expect(localStorage.getItem(KEYS.window)).toBeNull(); // the reader's own window is untouched
+  });
+});
+
+describe("rangeFromSearch (Plan 8)", () => {
+  it("reads a one-off window from ?from=&to=, and ignores anything malformed", async () => {
+    const { rangeFromSearch } = await import("@/lib/store");
+    const start = "2026-11-06T11:24:22+05:30";
+    const end = "2026-11-13T11:24:22+05:30";
+    const q = `?from=${encodeURIComponent(start)}&to=${encodeURIComponent(end)}`;
+    expect(rangeFromSearch(q)).toEqual({ kind: "range", start, end });
+    expect(rangeFromSearch("")).toBeNull();
+    expect(rangeFromSearch("?from=yesterday&to=today")).toBeNull();
+    expect(rangeFromSearch(`?from=${encodeURIComponent(end)}&to=${encodeURIComponent(start)}`)).toBeNull();
   });
 });
 
 describe("price provenance (Plan 7)", () => {
-  it("names where the prices came from", async () => {
+  it("names where the prices came from and the session they close (Plan 8)", async () => {
     const { priceCaption } = await import("@/components/alerts/Holdings");
-    const now = new Date("2026-11-10T09:00:00+05:30");
-    expect(priceCaption("2026-11-10T06:02:00+05:30", "NSE end-of-day", now)).toBe(
-      "Prices: NSE end-of-day. As of 10 Nov, 06:02. Day change and volume use the last full session.",
+    const now = new Date("2026-11-13T09:00:00+05:30");
+    expect(priceCaption("2026-11-12", "NSE end-of-day", now)).toBe("Prices: NSE end-of-day. Close of 12 Nov.");
+    expect(priceCaption("2026-11-12", "NSE end-of-day (Yahoo for 3); 2 not updated", now)).toBe(
+      "Prices: NSE end-of-day (Yahoo for 3); 2 not updated. Close of 12 Nov.",
     );
-    expect(priceCaption("2026-11-10T06:02:00+05:30", "NSE end-of-day (Yahoo for 3); 2 not updated", now)).toBe(
-      "Prices: NSE end-of-day (Yahoo for 3); 2 not updated. As of 10 Nov, 06:02. Day change and volume use the last full session.",
-    );
-    expect(priceCaption("2026-11-10T06:02:00+05:30", null, now)).toBe(
-      "Prices as of 10 Nov, 06:02. Day change and volume use the last full session.",
-    );
+    expect(priceCaption("2026-11-12", null, now)).toBe("Prices at the close of 12 Nov.");
     expect(priceCaption(null, null, now)).toBeNull();
+  });
+  it("takes the session from the newest row, not from when FINN fetched (Plan 8)", async () => {
+    const { latestSession } = await import("@/components/alerts/Holdings");
+    expect(latestSession([{ date: "2026-11-11" }, { date: "2026-11-12" }, { date: null }])).toBe("2026-11-12");
+    expect(latestSession([{ date: null }])).toBeNull();
+    expect(latestSession([])).toBeNull();
   });
 });

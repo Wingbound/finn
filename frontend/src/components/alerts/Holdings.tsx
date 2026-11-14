@@ -1,15 +1,19 @@
 import Link from "next/link";
 import { symbolPath } from "@/lib/api";
-import { pct, rupees, stamp, times } from "@/lib/format";
+import { day, pct, rupees, times } from "@/lib/format";
 import type { PortfolioRow, Rules } from "@/lib/types";
 import { Sparkline } from "./Sparkline";
 
-/** Where the prices came from, and when: NSE's own end-of-day data, or Yahoo as the fallback. */
-export function priceCaption(asOf: string | null, source: string | null, now: Date = new Date()): string | null {
-  if (!asOf) return null;
-  const when = stamp(asOf, now);
-  const lead = source ? `Prices: ${source}. As of ${when}.` : `Prices as of ${when}.`;
-  return `${lead} Day change and volume use the last full session.`;
+/** The newest trading session in the rows (YYYY-MM-DD), or null. */
+export function latestSession(rows: { date: string | null }[]): string | null {
+  return rows.reduce<string | null>((max, r) => (r.date && (!max || r.date > max) ? r.date : max), null);
+}
+
+/** Where the prices came from, and which session's close they are (not when FINN fetched them). */
+export function priceCaption(session: string | null, source: string | null, now: Date = new Date()): string | null {
+  if (!session) return null;
+  const when = day(session, now);
+  return source ? `Prices: ${source}. Close of ${when}.` : `Prices at the close of ${when}.`;
 }
 
 export function Holdings({ rows, rules, flagged }: { rows: PortfolioRow[]; rules: Rules; flagged: Set<string> }) {

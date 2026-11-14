@@ -28,9 +28,9 @@ test("Alerts: a filing alert opens its story in Today, on the alert log's own wi
     onRequest: (path, body) => path === "/digest" && bodies.push(body),
   });
   await page.goto("/alerts");
-  const link = page.locator('a[href^="/#story-"]').first();
+  const link = page.locator('a[href*="#story-"]').first();
   const href = (await link.getAttribute("href")) as string;
-  const id = decodeURIComponent(href.replace("/#story-", ""));
+  const id = decodeURIComponent(href.slice(href.indexOf("#story-") + "#story-".length));
   await link.click();
   const end = new Intl.DateTimeFormat("en-IN", { timeZone: "Asia/Kolkata", day: "numeric", month: "short" }).format(
     new Date(json("alerts.json").window.end),
@@ -38,6 +38,9 @@ test("Alerts: a filing alert opens its story in Today, on the alert log's own wi
   await expect(page.getByRole("radio", { name: new RegExp(`to ${end}$`) })).toHaveAttribute("aria-checked", "true");
   await expect.poll(() => bodies.at(-1)?.start).toBe(json("alerts.json").window.start);
   await expect(page.locator(`[data-story="${id}"]`)).toBeInViewport();
+  // Plan 8: that week was for this visit; the reader's own window is unchanged
+  await page.goto("/");
+  await expect(page.getByRole("radio", { name: "24 hours" })).toHaveAttribute("aria-checked", "true");
 });
 
 test("Alerts: a failed refresh after saving rules says so", async ({ page }) => {

@@ -28,7 +28,7 @@ export const DEFAULT_RULES: Rules = {
 export const LIMITS = {
   volume_multiple: [1, 10],
   price_move_pct: [1, 20],
-  lookback: [5, 250],
+  lookback: [10, 250], // the API needs >= 10 prior sessions for a volume alert
 } as const;
 
 export type WindowChoice = { kind: "hours"; hours: number } | { kind: "range"; start: string; end: string };
@@ -90,6 +90,15 @@ export function validateWindow(v: unknown): WindowChoice | null {
     return Number.isFinite(s) && Number.isFinite(e) && s <= e ? { kind: "range", start: v.start, end: v.end } : null;
   }
   return null;
+}
+
+/** A one-off window from a link's ?from=&to= (an alert's week): used for that visit, never saved. */
+export function rangeFromSearch(search: string): WindowChoice | null {
+  const p = new URLSearchParams(search);
+  const start = p.get("from");
+  const end = p.get("to");
+  if (!start || !end) return null;
+  return validateWindow({ kind: "range", start, end });
 }
 
 export function validateSeen(v: unknown): string[] | null {

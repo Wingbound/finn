@@ -149,10 +149,20 @@ def refresh(conn: sqlite3.Connection, days: int = 30, use_llm: bool = True) -> d
     enrich: dict[str, dict] = {}
     try:
         client = NSEClient()
+    except Exception as e:  # noqa: BLE001 - enrichment must never block the snapshot
+        errors.append(f"financials: {type(e).__name__}: {e}")
+        print(f"NSE client failed, so financials and enrichment were skipped: {e}")
+        client = None
+    if client is not None:
         try:
-            fin = ingest_financials(conn, client, [h.symbol for h in holdings])
-            financials = {"fetched": fin.fetched, "skipped": fin.skipped, "failed": fin.failed}
-            errors += [f"financials: {sym}: {why}" for sym, why in fin.failed.items()]
+            # Each stage fails on its own: a financials crash must not skip people or briefs.
+            try:
+                fin = ingest_financials(conn, client, [h.symbol for h in holdings])
+                financials = {"fetched": fin.fetched, "skipped": fin.skipped, "failed": fin.failed}
+                errors += [f"financials: {sym}: {why}" for sym, why in fin.failed.items()]
+            except Exception as e:  # noqa: BLE001 - one stage failing must not block the next
+                errors.append(f"financials: {type(e).__name__}: {e}")
+                print(f"financials stage failed: {type(e).__name__}: {e}")
             if router is not None:
                 _enrich_stage(
                     "people", lambda: enrich_people(conn, client, router, since), enrich, errors
@@ -165,9 +175,6 @@ def refresh(conn: sqlite3.Connection, days: int = 30, use_llm: bool = True) -> d
                 )
         finally:
             client.close()
-    except Exception as e:  # noqa: BLE001 - enrichment must never block the snapshot
-        errors.append(f"financials: {type(e).__name__}: {e}")
-        print(f"financials/enrichment stage failed: {type(e).__name__}: {e}")
 
     summary = {
         "filings_new": filings_new,

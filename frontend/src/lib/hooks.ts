@@ -25,11 +25,13 @@ async function orNull<T>(p: Promise<T>): Promise<T | null> {
   }
 }
 
-export function useDigest(req: DigestRequest | null) {
+export function useDigest(req: DigestRequest | null, { keepPrevious = true }: { keepPrevious?: boolean } = {}) {
   return useSWR<Digest, ApiError>(
     req ? ["digest", JSON.stringify(req)] : null,
     () => apiPost<Digest>("/digest", req),
-    { keepPreviousData: true }, // a window change keeps the old stories up until the new ones land
+    // a window change keeps the old stories up until the new ones land; a count that must
+    // match its request (the quiet-day teaser) passes keepPrevious: false
+    { keepPreviousData: keepPrevious },
   );
 }
 

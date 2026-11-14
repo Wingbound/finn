@@ -260,7 +260,6 @@ def filing(
 
 
 # ---- research dossiers ----
-CACHE_MINUTES = 10
 KEPT_STORED = "Live rebuild was incomplete; showing the last complete dossier"
 
 
@@ -291,9 +290,11 @@ def research_list(conn: Conn) -> list[dict]:
 @app.get("/research/search")
 def research_search(q: Annotated[str, Query(min_length=1)]) -> list[dict]:
     try:
-        return screener.search(q)
+        hits = screener.search(q)
     except screener.ScreenerError as e:
         raise HTTPException(status_code=502, detail=str(e)) from e
+    # screener lists BSE-only companies under a numeric code: FINN builds from NSE symbols only
+    return [h for h in hits if not str(h.get("symbol", "")).isdigit()]
 
 
 # NSE symbols are letters, digits, "&" and "-" (M&M, BAJAJ-AUTO). Anything else, such as a
@@ -446,15 +447,13 @@ def _run_build(sym: str, q: queue.Queue) -> None:
 @app.get("/research/{symbol}/build")
 def research_build(symbol: str, conn: Conn) -> StreamingResponse:
     sym = _symbol(symbol)
-    cached = db.get_dossier(conn, sym)
-    fresh = cached is not None and datetime.now(IST) - cached.built_at < timedelta(
-        minutes=CACHE_MINUTES
-    )
+    # A stored dossier is served as it is, whatever its age: a rebuild costs ~9 model calls
+    # and can change the hand-audited verdicts. Only companies not yet stored build live.
+    stored = db.get_dossier(conn, sym)
     q: queue.Queue = queue.Queue()
-    if fresh:
-        assert cached is not None
-        q.put(("progress", {"msg": "Using cached dossier"}))
-        q.put(_done(cached))
+    if stored is not None:
+        q.put(("progress", {"msg": "Using the saved dossier"}))
+        q.put(_done(stored))
         q.put(_DONE)
     elif (refused := _admit(sym)) is not None:
         q.put(("error", {"detail": refused}))

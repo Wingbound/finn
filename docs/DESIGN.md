@@ -2,6 +2,8 @@
 
 ## Context
 
+> This is the design as approved on 8 Nov. Two things changed later: the backend moved from Hugging Face Spaces to Vercel (see Hosting below), and the build ran as eight plans (`docs/superpowers/plans/`). Steps below that mention Hugging Face are the original plan.
+
 This is the design for the ENAM Holdings AI Engineer Build Challenge. The task: build **FINN**, a mobile-first financial investment agent with **Push** (proactive digest + threshold alerts) and **Pull** (on-demand company research grounded only in annual reports + concall transcripts). Released 8 Nov 2026, **due 15 Nov 2026**. ENAM grades creativity, product sense, judgment and architecture — not completeness. "Thin-but-working beats broad-but-broken"; a demo that doesn't run is the worst outcome; cost efficiency (model routing, caching, chunking) earns bonus points; the AI build history (this Claude Code session) is itself a deliverable.
 
 User decisions (8 Nov): LLMs = **Gemini (free) + Groq (free)**; backend hosting = **Hugging Face Spaces**; frontend = Vercel; Claude makes the product/design calls, user reviews this plan.

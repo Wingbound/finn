@@ -400,3 +400,22 @@ class _Closing:
 
     def close(self):
         pass
+
+
+def test_enrichment_still_runs_when_the_financials_stage_crashes(
+    conn, keyless, fin_env, monkeypatch
+):
+    # Plan 8: one stage failing must not skip the others
+    from tests.fakes import FakeNSE
+
+    def crash(*a, **k):
+        raise RuntimeError("boom")
+
+    monkeypatch.setattr(refresh_mod, "NSEClient", lambda: _Closing(FakeNSE({}, {})))
+    monkeypatch.setattr(refresh_mod, "ingest_financials", crash)
+    monkeypatch.setattr(refresh_mod, "_router", lambda conn, use_llm: _StubRouter())
+    monkeypatch.setattr(refresh_mod, "enrich_people", lambda *a, **k: EnrichResult(done=1))
+    monkeypatch.setattr(refresh_mod, "enrich_briefs", lambda *a, **k: EnrichResult(done=2))
+    summary = refresh(conn, use_llm=True)
+    assert "financials: RuntimeError: boom" in summary["errors"]
+    assert summary["enrich"]["people"]["done"] == 1 and summary["enrich"]["briefs"]["done"] == 2

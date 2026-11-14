@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 import json
-from datetime import date
+from datetime import UTC, date
 from pathlib import Path
 
 import httpx
@@ -349,3 +349,29 @@ def test_the_label_says_when_symbols_were_not_updated(conn, quiet, monkeypatch):
     monkeypatch.setattr(refresh_mod, "fetch_eod", boom)
     refresh_mod.refresh(conn, use_llm=False)
     assert db.get_meta(conn, "prices_source") == "NSE end-of-day; 2 not updated"
+
+
+@respx.mock
+def test_today_is_the_ist_date(monkeypatch):  # Plan 8
+    # The cron runs at 19:47 UTC = 01:17 IST: "today" is the IST date, so a last session on
+    # 6 Nov is 8 days old (stale), not the 7 a UTC date would make it.
+    from datetime import datetime
+
+    class Clock(datetime):
+        @classmethod
+        def now(cls, tz=None):
+            utc = datetime(2026, 11, 13, 19, 47, tzinfo=UTC)
+            return utc.replace(tzinfo=None) if tz is None else utc.astimezone(tz)
+
+    monkeypatch.setattr(nse_mcp, "datetime", Clock)
+    respx.post(MCP_URL).mock(
+        side_effect=_serve(
+            lambda sym: httpx.Response(
+                200,
+                text=_rows(60, date(2026, 11, 6)),
+                headers={"content-type": "text/event-stream"},
+            )
+        )
+    )
+    res = fetch_nse_eod([_holding("OLD")])
+    assert "last session 2026-11-06" in res.failed.get("OLD", "")

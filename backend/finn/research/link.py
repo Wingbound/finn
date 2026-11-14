@@ -16,6 +16,7 @@ from pydantic import ValidationError
 from finn import db
 from finn.enrich.grounding import normalize, numbers_grounded
 from finn.models import Dossier, LedgerRow, PaceNote, Promise, PromiseNote, ResultsCard, Story
+from finn.portfolio import load_portfolio
 from finn.research.ledger import (
     _MISMATCH,
     _REL_YEAR,
@@ -30,6 +31,54 @@ from finn.research.ledger import (
 log = logging.getLogger(__name__)
 
 MAX_NOTES = 3
+
+# Company names as quotes write them: "Tech Mahindra Ltd" -> "tech mahindra". A trailing
+# "(India)", "India" or "Company" also goes when two or more words remain ("Dixon Technologies
+# (India) Ltd" -> "dixon technologies"), never down to one common word ("Coal India" -> "coal").
+_LEGAL = re.compile(r"(?:\s+(?:ltd\.?|limited))+$")
+_TAIL = re.compile(r"\s+\(?india\)?$|\s+company$")
+
+
+def _bare_names(name: str) -> set[str]:
+    base = _LEGAL.sub("", normalize(name)).strip()
+    out, cur = {base}, base
+    while (nxt := _TAIL.sub("", cur).strip()) != cur and len(nxt.split()) >= 2:
+        out.add(nxt)
+        cur = nxt
+    return {n for n in out if n}
+
+
+def company_names(conn: sqlite3.Connection) -> dict[str, set[str]]:
+    """{symbol: bare names} for every company FINN knows: the portfolio and stored dossiers."""
+    names: dict[str, set[str]] = {}
+    for h in load_portfolio():
+        names.setdefault(h.symbol, set()).update(_bare_names(h.name))
+    try:  # a malformed payload must cost only its own name, never the digest
+        rows = conn.execute(
+            "SELECT symbol, json_extract(payload_json, '$.name') FROM dossiers"
+            " WHERE json_valid(payload_json)"
+        ).fetchall()
+    except sqlite3.Error as e:
+        log.warning("company names: dossiers unreadable: %s", type(e).__name__)
+        rows = []
+    for sym, name in rows:
+        if name:
+            names.setdefault(sym, set()).update(_bare_names(name))
+    return names
+
+
+def other_names(names: dict[str, set[str]], symbol: str) -> set[str]:
+    """Names of companies other than `symbol`, minus any that sit inside its own names."""
+    own = names.get(symbol, set())
+    return {
+        n for sym, ns in names.items() if sym != symbol for n in ns if not any(n in o for o in own)
+    }
+
+
+def _names_other(quote: str, others: set[str] | frozenset[str]) -> bool:
+    text = normalize(quote)
+    return any(re.search(rf"(?<!\w){re.escape(n)}(?!\w)", text) for n in others)
+
 
 # The quote itself must name the results line; the extractor's `metric` label alone is not
 # enough (it calls AUM growth and PRASK "revenue_growth").
@@ -309,11 +358,22 @@ def _note(r: LedgerRow, d: Dossier, card: ResultsCard) -> PromiseNote:
     )
 
 
-def promise_notes(d: Dossier, card: ResultsCard, limit: int = MAX_NOTES) -> list[PromiseNote]:
-    """The company's open promises that matter for this card, best first."""
+def promise_notes(
+    d: Dossier,
+    card: ResultsCard,
+    limit: int = MAX_NOTES,
+    others: set[str] | frozenset[str] = frozenset(),
+) -> list[PromiseNote]:
+    """The company's open promises that matter for this card, best first. A promise whose quote
+    names another company in `others` (a listed subsidiary's target, said on the parent's call)
+    stays in the dossier's ledger but is not this company's to show beside its results."""
     if d.ledger is None:
         return []
-    open_rows = [r for r in d.ledger.rows if r.status == "pending"]
+    open_rows = [
+        r
+        for r in d.ledger.rows
+        if r.status == "pending" and not _names_other(r.promise.citation.quote, others)
+    ]
     open_rows.sort(key=lambda r: _rank(r, card))
     # The same guidance repeated on one call, or on two, is one note; keep the copy that
     # carries a pace sentence, in the place of the first.
@@ -336,6 +396,7 @@ def promise_notes(d: Dossier, card: ResultsCard, limit: int = MAX_NOTES) -> list
 def attach_promises(conn: sqlite3.Connection, stories: list[Story]) -> None:
     """Give each results story with a card its company's open promises (one lookup a symbol)."""
     cache: dict[str, Dossier | None] = {}
+    names: dict[str, set[str]] | None = None
     for st in stories:
         if st.category != "results" or st.results is None:
             continue
@@ -349,4 +410,6 @@ def attach_promises(conn: sqlite3.Connection, stories: list[Story]) -> None:
                 cache[st.symbol] = None
         d = cache[st.symbol]
         if d is not None:
-            st.promises = promise_notes(d, st.results)
+            if names is None:
+                names = company_names(conn)
+            st.promises = promise_notes(d, st.results, others=other_names(names, st.symbol))
