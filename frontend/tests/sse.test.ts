@@ -87,3 +87,19 @@ describe("refused builds (Plan 5 review I1)", () => {
     await expect(buildDossier("TCS?X", {})).rejects.toMatchObject({ kind: "error", detail: "Not an NSE symbol" });
   });
 });
+
+describe("a build that never answers (Plan 8)", () => {
+  it("gives up after the time limit as incomplete, so the reader can check for a saved copy", async () => {
+    vi.useFakeTimers();
+    try {
+      const body = new ReadableStream<Uint8Array>({ start() {} }); // opens, then says nothing
+      vi.stubGlobal("fetch", vi.fn(async () => new Response(body, { status: 200 })));
+      const p = buildDossier("SLOW", { timeoutMs: 1000 });
+      const seen = expect(p).rejects.toMatchObject({ kind: "incomplete", detail: "The build ran past its time limit" });
+      await vi.advanceTimersByTimeAsync(1001);
+      await seen;
+    } finally {
+      vi.useRealTimers();
+    }
+  });
+});

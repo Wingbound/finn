@@ -107,6 +107,17 @@ def test_search_proxies(env, monkeypatch):
     assert client.get("/research/search?q=tata").json() == [{"name": "tata"}]
 
 
+def test_search_drops_bse_only_codes(env, monkeypatch):
+    # Plan 8: screener lists BSE-only companies under a numeric code, which FINN can't build.
+    client, _ = env
+    hits = [
+        {"name": "Asian Warehousing Ltd", "symbol": "543927", "url": "/company/543927/"},
+        {"name": "Asian Paints Ltd", "symbol": "ASIANPAINT", "url": "/company/ASIANPAINT/"},
+    ]
+    monkeypatch.setattr(api_main.screener, "search", lambda q: hits)
+    assert [h["symbol"] for h in client.get("/research/search?q=asian").json()] == ["ASIANPAINT"]
+
+
 def test_build_streams_progress_then_done(env, monkeypatch):
     client, path = env
 
@@ -151,34 +162,32 @@ def test_build_unexpected_error(env, monkeypatch):
     assert ev[-1][0] == "error"
 
 
-def test_build_uses_fresh_cache(env, monkeypatch):
+@pytest.mark.parametrize("age_min", [3, 3 * 24 * 60])
+def test_build_serves_a_stored_dossier_of_any_age(env, monkeypatch, age_min):
+    # Plan 8: a stored dossier is never rebuilt by a tap. A rebuild costs ~9 model calls and
+    # can change hand-audited verdicts; any company not yet stored still builds live.
     client, path = env
-    save(path, dossier(age_min=3))
+    save(path, dossier(age_min=age_min))
 
     def fake(*a, **k):
         raise AssertionError("must not rebuild")
 
     monkeypatch.setattr(api_main, "build_dossier", fake)
     ev = events(client.get("/research/ABC/build").text)
-    assert ev[0] == ("progress", {"msg": "Using cached dossier"})
+    assert ev[0] == ("progress", {"msg": "Using the saved dossier"})
     assert ev[1][0] == "done" and ev[1][1]["symbol"] == "ABC"
 
 
-def test_build_rebuilds_stale_cache(env, monkeypatch):
-    client, path = env
-    save(path, dossier(age_min=30))
-    monkeypatch.setattr(api_main, "build_dossier", lambda conn, s, r, **k: dossier(s))
-    ev = events(client.get("/research/ABC/build").text)
-    assert [e for e, _ in ev] == ["done"]
-
-
 def test_degraded_rebuild_keeps_stored_dossier(env, monkeypatch):
-    client, path = env
+    # Reachable when a live build resolves to a symbol that is already stored.
+    _, path = env
     old = dossier(age_min=30)
     save(path, old)
     bad = dossier().model_copy(update={"notes": ["Snapshot unavailable (model unavailable)"]})
     monkeypatch.setattr(api_main, "build_dossier", lambda conn, s, r, **k: bad)
-    ev = events(client.get("/research/ABC/build").text)
+    q = api_main.queue.Queue()
+    api_main._build_worker("ABC", q)
+    ev = [item for item in iter(q.get_nowait, api_main._DONE)]
     msg = "Live rebuild was incomplete; showing the last complete dossier"
     assert ev[-2] == ("progress", {"msg": msg})
     assert ev[-1][0] == "done" and ev[-1][1]["notes"] == []
