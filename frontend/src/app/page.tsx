@@ -4,11 +4,13 @@ import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 import { ErrorState, Skeleton } from "@/components/States";
 import { FloorControl } from "@/components/today/FloorControl";
 import { Header } from "@/components/today/Header";
+import { ListenButton } from "@/components/today/ListenButton";
 import { QuietTeaser } from "@/components/today/QuietTeaser";
 import { RoutineDrawer } from "@/components/today/RoutineDrawer";
 import { StaleNotice, isEmptyWindow } from "@/components/today/StaleNotice";
 import { StoryList } from "@/components/today/StoryList";
 import { WindowPicker } from "@/components/today/WindowPicker";
+import { briefScript } from "@/lib/briefScript";
 import { useDigest } from "@/lib/hooks";
 import {
   DEFAULT_FLOOR,
@@ -97,7 +99,14 @@ export default function TodayPage() {
 
   return (
     <>
-      {data && !empty ? <Header counts={data.counts} onOpenRoutine={openDrawer} /> : null}
+      {data && !empty ? (
+        <>
+          <Header counts={data.counts} onOpenRoutine={openDrawer} />
+          <div className="-mt-3 pb-3">
+            <ListenButton lines={briefScript(data)} />
+          </div>
+        </>
+      ) : null}
       {empty && data ? (
         <StaleNotice latest={data.latest_filing_at} window={active} onChoose={choose} />
       ) : null}

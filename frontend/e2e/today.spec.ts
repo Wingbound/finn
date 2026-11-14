@@ -99,3 +99,20 @@ test("Today: an update in flight doesn't move the stories (Plan 8)", async ({ pa
   await expect(page.getByRole("status").filter({ hasText: "Updating" })).toBeAttached();
   expect((await first.boundingBox())?.y).toBe(before);
 });
+
+test("Today: Listen reads the brief aloud in the phone's own voice (Plan 8)", async ({ page }) => {
+  await page.addInitScript(() => {
+    const spoken: string[] = [];
+    (window as unknown as { __spoken: string[] }).__spoken = spoken;
+    Object.defineProperty(window, "speechSynthesis", {
+      value: { speak: (u: { text: string }) => spoken.push(u.text), cancel: () => {}, getVoices: () => [] },
+    });
+  });
+  await mockApi(page, { digest: () => "digest-7d.json" });
+  await page.goto("/");
+  await page.getByRole("button", { name: "Listen" }).click();
+  await expect(page.getByRole("button", { name: "Stop listening" })).toBeVisible();
+  const spoken = await page.evaluate(() => (window as unknown as { __spoken: string[] }).__spoken);
+  expect(spoken[0]).toBe(`${json("digest-7d.json").counts.shown} things matter in the last 7 days.`);
+  expect(spoken.at(-1)).toBe("You're caught up.");
+});
