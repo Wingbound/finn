@@ -479,6 +479,16 @@ The frontend is at https://finn-qx98.vercel.app and the API at https://finn-peac
   - On GitHub's runners, all 18 holdings came from NSE and none from Yahoo, with no errors.
   - `/portfolio` returns `source: "NSE end-of-day"`, and the Alerts screen reads "Prices: NSE end-of-day. As of 10 Nov, 06:55."
   - A symbol whose NSE history is under 40 sessions, or more than a week old, goes to Yahoo. After three transport failures in a row, NSE is skipped for the rest of the run, so a hung server can't stall the refresh.
+- **Final audit (Plan 8, 14 Nov).** The brief was re-read requirement by requirement; every required deliverable was already shipped. The fixes came from live probes and a code read, and were checked on the deployed site at 390×844:
+  - **Quiet days.** The live 24-hour window held one routine filing and read "Nothing matters yet". Today now says "Quiet 24 hours. Over the last 7 days, 16 things mattered." with a one-tap "Show 7 days". The refresh runs every 3 hours on weekdays and commits only when the data changed.
+  - **M&M's results card** led with a Tech Mahindra promise said on M&M's call. A promise whose quote names another known company now stays in the ledger but leaves the card. Across the 23 dossiers only that one row is affected.
+  - **Saved dossiers are never rebuilt by a tap** (a rebuild costs about 9 model calls and can change audited verdicts). A live build of a company not in the snapshot still works: Asian Paints built in 135 s with 9 calls, 5 sources and 18 graded promises (7 kept, 1 missed, 1 dropped, 9 pending).
+  - **Prices name their session:** "Prices: NSE end-of-day. Close of 12 Nov." instead of the fetch time.
+  - **Long promise quotes** get "Show more" whenever they overflow three lines. On the live 7-day view, every overflowing quote has the button.
+  - **Listen** reads the brief aloud with the browser's own voice, so it costs nothing.
+  - **Web bios for new appointees were not added.** A Gemini call with Google Search grounding returned 429 while plain calls worked, and Groq lists no web-search models for this key. The card keeps the profile filed under SEBI's disclosure rules.
+  - **The new refresh on GitHub** (run 43538597662): 9 new filings, all 18 prices from NSE, "Snapshot data changed.", committed and pushed after the rebase step. Its one error is known: NSE has no financials filing on file for TVSMOTOR.
+  - **Tests:** 914 backend, 219 frontend unit and 40 end-to-end (including axe checks), all passing. The live Playwright checks pass, and the console showed no errors or warnings.
 
 A live build is saved only on the instance that ran it, so another instance can answer 404 for it later. The app keeps a dossier it built in the current tab whatever the server says.
 
